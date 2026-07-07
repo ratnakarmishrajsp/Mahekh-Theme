@@ -24,8 +24,8 @@
 
   @media screen and (min-width: 990px) {
     .making-process__grid {
-      grid-template-columns: 0.9fr 1.1fr;
-      gap: 7rem;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 8rem;
     }
   }
 
@@ -34,17 +34,24 @@
     border-radius: 12px;
     overflow: hidden;
     border: 1px solid rgba(var(--color-foreground), 0.08);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.03);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.04);
+    animation: floatIllustration 6s ease-in-out infinite;
+  }
+
+  @keyframes floatIllustration {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
   }
 
   /* Elegant thin gold frame inside image */
   .making-process__image-wrapper::before {
     content: '';
     position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
     border: 1px solid rgba(var(--color-foreground), 0.1);
     pointer-events: none;
     border-radius: 8px;
@@ -56,11 +63,11 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transition: transform 0.6s ease;
   }
 
   .making-process__image-wrapper:hover .making-process__image {
-    transform: scale(1.03);
+    transform: scale(1.04);
   }
 
   .making-process__content {
@@ -70,7 +77,7 @@
   }
 
   .making-process__title-wrapper {
-    margin-bottom: 3rem;
+    margin-bottom: 3.5rem;
   }
 
   .making-process__subtitle {
@@ -78,19 +85,21 @@
     font-size: 1.3rem;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.25em;
     color: rgba(var(--color-foreground), 0.7);
   }
 
   .making-process__title {
     margin: 0;
     line-height: 1.25;
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
   }
 
   .making-process__timeline {
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: 3.5rem;
     position: relative;
     padding-left: 2rem;
     border-left: 1px solid rgba(var(--color-foreground), 0.08);
@@ -105,35 +114,55 @@
   .making-process__step {
     position: relative;
     transition: transform 0.3s ease;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid transparent;
   }
 
   .making-process__step:hover {
-    transform: translateX(6px);
+    transform: translateX(8px);
+    background: rgba(var(--color-foreground), 0.015);
+    border-color: rgba(var(--color-foreground), 0.05);
   }
 
-  /* Scent node dot on the timeline */
+  /* Pulsating timeline node */
   .making-process__step::before {
     content: '';
     position: absolute;
-    top: 0.5rem;
-    left: -2.05rem;
+    top: 2.1rem;
+    left: -2.5rem;
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background: rgb(var(--color-foreground));
+    background: #cca43b;
     border: 2px solid rgb(var(--color-background));
-    transition: background 0.3s ease, transform 0.3s ease;
+    z-index: 2;
+    box-shadow: 0 0 0 0 rgba(204, 164, 59, 0.4);
+    transition: transform 0.3s ease;
   }
 
   @media screen and (min-width: 750px) {
     .making-process__step::before {
-      left: -3.05rem;
+      left: -3.5rem;
+      top: 2.1rem;
     }
   }
 
   .making-process__step:hover::before {
-    background: #cca43b; /* Gold accent on hover */
     transform: scale(1.3);
+    animation: pulseDot 1.5s infinite;
+  }
+
+  @keyframes pulseDot {
+    0% {
+      box-shadow: 0 0 0 0 rgba(204, 164, 59, 0.6);
+    }
+    70% {
+      box-shadow: 0 0 0 10px rgba(204, 164, 59, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(204, 164, 59, 0);
+    }
   }
 
   .making-process__step-header {
@@ -144,7 +173,7 @@
   }
 
   .making-process__step-num {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: #cca43b; /* Luxury gold color */
     letter-spacing: 0.1em;
@@ -161,8 +190,8 @@
   .making-process__step-desc {
     margin: 0;
     font-size: 1.4rem;
-    line-height: 1.6;
-    opacity: 0.85;
+    line-height: 1.65;
+    opacity: 0.8;
   }
 {%- endstyle -%}
 
