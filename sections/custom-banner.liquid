@@ -1,0 +1,210 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .custom-banner {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    display: block;
+  }
+
+  .custom-banner__link {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .custom-banner__media {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .custom-banner__media--mobile {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .custom-banner__media--desktop {
+      display: none;
+    }
+    .custom-banner__media--mobile {
+      display: block;
+    }
+  }
+
+  /* Premium subtle zoom on hover */
+  .custom-banner:hover .custom-banner__media {
+    transform: scale(1.015);
+  }
+
+  .custom-banner__overlay-content {
+    position: absolute;
+    bottom: 3rem;
+    left: 5%;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  @media screen and (max-width: 749px) {
+    .custom-banner__overlay-content {
+      bottom: 2rem;
+      left: 5%;
+      right: 5%;
+      align-items: center;
+      text-align: center;
+    }
+  }
+{%- endstyle -%}
+
+<div class="custom-banner color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  {%- if section.settings.link != blank -%}
+    <a href="{{ section.settings.link }}" class="custom-banner__link">
+  {%- endif -%}
+
+    {%- if section.settings.image_desktop != blank -%}
+      <img
+        src="{{ section.settings.image_desktop | image_url: width: 2400 }}"
+        alt="{{ section.settings.image_desktop.alt | escape }}"
+        loading="eager"
+        width="1920"
+        height="800"
+        class="custom-banner__media custom-banner__media--desktop"
+      >
+    {%- else -%}
+      <img
+        src="{{ 'mahekh-banner.png' | asset_url }}"
+        alt="Mahekh Kannauj Legacy Banner"
+        loading="eager"
+        width="1920"
+        height="960"
+        class="custom-banner__media custom-banner__media--desktop"
+      >
+    {%- endif -%}
+
+    {%- if section.settings.image_mobile != blank -%}
+      <img
+        src="{{ section.settings.image_mobile | image_url: width: 1000 }}"
+        alt="{{ section.settings.image_mobile.alt | escape }}"
+        loading="eager"
+        width="750"
+        height="1000"
+        class="custom-banner__media custom-banner__media--mobile"
+      >
+    {%- else -%}
+      {% comment %} Fallback to desktop image on mobile {% endcomment %}
+      {%- if section.settings.image_desktop != blank -%}
+        <img
+          src="{{ section.settings.image_desktop | image_url: width: 1200 }}"
+          alt="{{ section.settings.image_desktop.alt | escape }}"
+          loading="eager"
+          width="1200"
+          height="600"
+          class="custom-banner__media custom-banner__media--mobile"
+        >
+      {%- else -%}
+        <img
+          src="{{ 'mahekh-banner.png' | asset_url }}"
+          alt="Mahekh Kannauj Legacy Banner"
+          loading="eager"
+          width="1200"
+          height="600"
+          class="custom-banner__media custom-banner__media--mobile"
+        >
+      {%- endif -%}
+    {%- endif -%}
+
+  {%- if section.settings.link != blank -%}
+    </a>
+  {%- endif -%}
+
+  {%- if section.settings.button_label != blank and section.settings.link != blank -%}
+    <div class="custom-banner__overlay-content">
+      <a href="{{ section.settings.link }}" class="button button--primary" style="box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
+        {{ section.settings.button_label | escape }}
+      </a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Custom Premium Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Desktop Banner Image",
+      "info": "Leave blank to use the default Mahekh Legacy banner."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile Banner Image (Optional)",
+      "info": "Upload a vertical/cropped banner image for mobile screens to avoid text cropping."
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Banner Link"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Overlay Button Label (Optional)"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "label": "Padding Bottom"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Premium Banner"
+    }
+  ]
+}
+{% endschema %}

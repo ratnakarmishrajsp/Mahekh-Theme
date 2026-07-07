@@ -1,0 +1,370 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .product-reviews {
+    text-align: center;
+  }
+
+  .product-reviews__title-wrapper {
+    margin-bottom: 4rem;
+  }
+
+  .product-reviews__subtitle {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.3rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(var(--color-foreground), 0.7);
+  }
+
+  .product-reviews__title {
+    margin: 0;
+  }
+
+  .product-reviews__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  @media screen and (min-width: 750px) {
+    .product-reviews__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .product-reviews__grid {
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+      gap: 3rem;
+    }
+  }
+
+  .product-reviews__card {
+    background: transparent;
+    border: 1px solid rgba(var(--color-foreground), 0.08);
+    border-radius: 8px;
+    padding: 2.5rem 2rem;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+  }
+
+  .product-reviews__card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(var(--color-foreground), 0.2);
+    box-shadow: 0 10px 25px rgba(var(--color-foreground), 0.03);
+  }
+
+  .product-reviews__card-top {
+    margin-bottom: 1.5rem;
+  }
+
+  .product-reviews__stars {
+    display: flex;
+    gap: 0.2rem;
+    color: #cca43b; /* Premium gold star color */
+    margin-bottom: 1.2rem;
+  }
+
+  .product-reviews__star {
+    width: 16px;
+    height: 16px;
+  }
+
+  .product-reviews__quote {
+    font-size: 1.45rem;
+    line-height: 1.6;
+    margin: 0;
+    opacity: 0.85;
+    font-style: italic;
+  }
+
+  .product-reviews__card-bottom {
+    border-top: 1px solid rgba(var(--color-foreground), 0.06);
+    padding-top: 1.5rem;
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .product-reviews__author-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-reviews__author {
+    font-weight: 600;
+    font-size: 1.35rem;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.2rem 0;
+    text-transform: uppercase;
+  }
+
+  .product-reviews__meta {
+    font-size: 1.15rem;
+    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .product-reviews__verified-badge {
+    background: #e8f7ed;
+    color: #0a8f3e;
+    padding: 0.2rem 0.6rem;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .product-reviews__image-wrapper {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid rgba(var(--color-foreground), 0.08);
+  }
+
+  .product-reviews__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+{%- endstyle -%}
+
+<div class="product-reviews color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    
+    {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
+      <div class="product-reviews__title-wrapper text-center">
+        {%- if section.settings.subtitle != blank -%}
+          <p class="product-reviews__subtitle">{{ section.settings.subtitle | escape }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="product-reviews__title inline-richtext {{ section.settings.heading_size }}">
+            {{ section.settings.title | escape }}
+          </h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="product-reviews__grid">
+      {%- for block in section.blocks -%}
+        <div class="product-reviews__card" {{ block.shopify_attributes }}>
+          <div class="product-reviews__card-top">
+            {%- if block.settings.rating > 0 -%}
+              <div class="product-reviews__stars" aria-label="{{ block.settings.rating }} stars out of 5">
+                {%- for i in (1..block.settings.rating) -%}
+                  <svg class="product-reviews__star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+            
+            {%- if block.settings.quote != blank -%}
+              <blockquote class="product-reviews__quote body">
+                <p>"{{ block.settings.quote | escape }}"</p>
+              </blockquote>
+            {%- endif -%}
+          </div>
+
+          <div class="product-reviews__card-bottom">
+            <div class="product-reviews__author-info">
+              <span class="product-reviews__author">{{ block.settings.author | escape }}</span>
+              <div class="product-reviews__meta">
+                {%- if block.settings.verified_buyer -%}
+                  <span class="product-reviews__verified-badge">✔ Verified</span>
+                {%- endif -%}
+                {%- if block.settings.location != blank -%}
+                  <span>{{ block.settings.location | escape }}</span>
+                {%- endif -%}
+              </div>
+            </div>
+
+            {%- if block.settings.image != blank -%}
+              <div class="product-reviews__image-wrapper">
+                <img
+                  src="{{ block.settings.image | image_url: width: 100 }}"
+                  alt="Customer Review Image"
+                  loading="lazy"
+                  width="48"
+                  height="48"
+                  class="product-reviews__image"
+                >
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Bespoke Product Reviews",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Patron Testimonials"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "TRUST & APPRECIATION"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Reviews Columns on Desktop"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "label": "Padding Bottom"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review Card",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5,
+          "label": "Star Rating"
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Review Quote",
+          "default": "A truly majestic fragrance. The notes open with a beautiful spice and settle into a long-lasting, deep sandalwood base that remains on the skin for hours."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name",
+          "default": "Devendra Mishra"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location",
+          "default": "Varanasi"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified_buyer",
+          "label": "Show Verified Badge",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Review Image (Optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bespoke Product Reviews",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "author": "Rohan Gupta",
+            "location": "Lucknow",
+            "quote": "This Kasturi Attar has a soul. Its sillage is warm and projection is balanced. The packaging looks premium and fits a royal collection."
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "author": "Anjali Sen",
+            "location": "Bangalore",
+            "quote": "Pure concentrated oil without any sticky feeling. It lasts all day on clothes. Incredible craft from Kannauj."
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "author": "Vikram Singh",
+            "location": "Jaipur",
+            "quote": "Very close to traditional sandalwood base. Free from alcohol, so it does not irritate my skin. 5 stars on quality."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

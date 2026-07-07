@@ -1,18 +1,10 @@
 {
   "sections": {
-    "custom_hero_homepage": {
-      "type": "custom-hero",
+    "custom_banner_homepage": {
+      "type": "custom-banner",
       "settings": {
-        "subheading": "100% Pure Concentrated Attars",
-        "heading": "Kannauj's Finest Liquid Gold",
-        "heading_size": "h0",
-        "description": "Experience the rich heritage of traditional Indian perfumery. Handcrafted in copper stills, our attars are completely alcohol-free, long-lasting, and skin-friendly.",
-        "button_label": "Explore Collection",
-        "product": "mahekh-kasturi-attar-long-lasting-exotic-musk-fragrance",
-        "bg_image_opacity": 15,
-        "color_scheme": "scheme-2",
-        "padding_top": 60,
-        "padding_bottom": 60
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "custom_usp_grid_homepage": {
@@ -314,7 +306,7 @@
     }
   },
   "order": [
-    "custom_hero_homepage",
+    "custom_banner_homepage",
     "custom_usp_grid_homepage",
     "custom_categories_homepage",
     "featured_product_UXN8fm",

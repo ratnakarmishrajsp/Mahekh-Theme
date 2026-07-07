@@ -1,0 +1,361 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .making-process {
+    position: relative;
+  }
+
+  .making-process__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 990px) {
+    .making-process__grid {
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 7rem;
+    }
+  }
+
+  .making-process__image-wrapper {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(var(--color-foreground), 0.08);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.03);
+  }
+
+  /* Elegant thin gold frame inside image */
+  .making-process__image-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px solid rgba(var(--color-foreground), 0.1);
+    pointer-events: none;
+    border-radius: 8px;
+    z-index: 1;
+  }
+
+  .making-process__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .making-process__image-wrapper:hover .making-process__image {
+    transform: scale(1.03);
+  }
+
+  .making-process__content {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .making-process__title-wrapper {
+    margin-bottom: 3rem;
+  }
+
+  .making-process__subtitle {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.3rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: rgba(var(--color-foreground), 0.7);
+  }
+
+  .making-process__title {
+    margin: 0;
+    line-height: 1.25;
+  }
+
+  .making-process__timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    position: relative;
+    padding-left: 2rem;
+    border-left: 1px solid rgba(var(--color-foreground), 0.08);
+  }
+
+  @media screen and (min-width: 750px) {
+    .making-process__timeline {
+      padding-left: 3rem;
+    }
+  }
+
+  .making-process__step {
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+
+  .making-process__step:hover {
+    transform: translateX(6px);
+  }
+
+  /* Scent node dot on the timeline */
+  .making-process__step::before {
+    content: '';
+    position: absolute;
+    top: 0.5rem;
+    left: -2.05rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgb(var(--color-foreground));
+    border: 2px solid rgb(var(--color-background));
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+
+  @media screen and (min-width: 750px) {
+    .making-process__step::before {
+      left: -3.05rem;
+    }
+  }
+
+  .making-process__step:hover::before {
+    background: #cca43b; /* Gold accent on hover */
+    transform: scale(1.3);
+  }
+
+  .making-process__step-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .making-process__step-num {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #cca43b; /* Luxury gold color */
+    letter-spacing: 0.1em;
+  }
+
+  .making-process__step-title {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.6rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .making-process__step-desc {
+    margin: 0;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    opacity: 0.85;
+  }
+{%- endstyle -%}
+
+<div class="making-process color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    <div class="making-process__grid">
+      
+      {% comment %} Left side illustration of distillation {% endcomment %}
+      <div class="making-process__image-wrapper" style="aspect-ratio: {{ section.settings.image_aspect_ratio }};">
+        {%- if section.settings.image != blank -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 1000 }}"
+            alt="{{ section.settings.image.alt | escape }}"
+            loading="lazy"
+            class="making-process__image"
+            width="500"
+            height="500"
+          >
+        {%- else -%}
+          <img
+            src="{{ 'deg-bhapka.png' | asset_url }}"
+            alt="Traditional Deg Bhapka Distillation Process"
+            loading="lazy"
+            class="making-process__image"
+            width="500"
+            height="500"
+          >
+        {%- endif -%}
+      </div>
+
+      {% comment %} Right side step timeline {% endcomment %}
+      <div class="making-process__content">
+        <div class="making-process__title-wrapper">
+          {%- if section.settings.subtitle != blank -%}
+            <span class="making-process__subtitle">{{ section.settings.subtitle | escape }}</span>
+          {%- endif -%}
+          {%- if section.settings.title != blank -%}
+            <h2 class="making-process__title inline-richtext {{ section.settings.heading_size }}">
+              {{ section.settings.title | escape }}
+            </h2>
+          {%- endif -%}
+        </div>
+
+        <div class="making-process__timeline">
+          
+          <div class="making-process__step">
+            <div class="making-process__step-header">
+              <span class="making-process__step-num">STEP 01</span>
+              <h3 class="making-process__step-title">{{ section.settings.step_1_title }}</h3>
+            </div>
+            <p class="making-process__step-desc body">{{ section.settings.step_1_desc }}</p>
+          </div>
+
+          <div class="making-process__step">
+            <div class="making-process__step-header">
+              <span class="making-process__step-num">STEP 02</span>
+              <h3 class="making-process__step-title">{{ section.settings.step_2_title }}</h3>
+            </div>
+            <p class="making-process__step-desc body">{{ section.settings.step_2_desc }}</p>
+          </div>
+
+          <div class="making-process__step">
+            <div class="making-process__step-header">
+              <span class="making-process__step-num">STEP 03</span>
+              <h3 class="making-process__step-title">{{ section.settings.step_3_title }}</h3>
+            </div>
+            <p class="making-process__step-desc body">{{ section.settings.step_3_desc }}</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Attar Distillation Process",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Process Image / Illustration",
+      "info": "Upload an illustration showing the distillation process. Leave blank for default."
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Image Aspect Ratio",
+      "options": [
+        { "value": "1 / 1", "label": "Square (1:1)" },
+        { "value": "4 / 3", "label": "Standard (4:3)" },
+        { "value": "4 / 5", "label": "Vertical (4:5)" }
+      ],
+      "default": "1 / 1"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "CRAFTSMANSHIP & ORIGINS"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "How We Distill Our Premium Attars"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "text",
+      "id": "step_1_title",
+      "label": "Step 1 Title",
+      "default": "Raw Floral Harvest"
+    },
+    {
+      "type": "textarea",
+      "id": "step_1_desc",
+      "label": "Step 1 Description",
+      "default": "Fresh rose, jasmine, or khus roots are hand-picked at dawn in Kannauj when the fragrance concentration is highest, and immediately sent to distillation."
+    },
+    {
+      "type": "text",
+      "id": "step_2_title",
+      "label": "Step 2 Title",
+      "default": "Copper Clay Distillation (Deg)"
+    },
+    {
+      "type": "textarea",
+      "id": "step_2_desc",
+      "label": "Step 2 Description",
+      "default": "Petals are mixed with water in copper pots (Degs), sealed tightly using clay and cotton ropes, and heated gently over a wood-fire furnace."
+    },
+    {
+      "type": "text",
+      "id": "step_3_title",
+      "label": "Step 3 Title",
+      "default": "Clay Condensation (Bhapka)"
+    },
+    {
+      "type": "textarea",
+      "id": "step_3_desc",
+      "label": "Step 3 Description",
+      "default": "Fragrant vapor travels through bamboo pipes into cold clay receivers (Bhapkas) submerged in water. Scent is captured drop by drop in pure sandalwood base oil."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "label": "Padding Bottom"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Attar Distillation Process"
+    }
+  ]
+}
+{% endschema %}
