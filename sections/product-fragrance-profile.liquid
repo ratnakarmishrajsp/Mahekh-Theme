@@ -11,13 +11,13 @@
     }
   }
 
-  /* Royal Fragrance Profile Theme */
+  /* Premium Ivory-Cream and Gold Fragrance Profile Theme */
   .fragrance-profile {
     position: relative;
-    background: radial-gradient(circle at center, #18120f 0%, #0d0908 100%) !important;
-    color: #f5f0e6 !important;
-    border-top: 1px solid rgba(204, 164, 59, 0.1);
-    border-bottom: 1px solid rgba(204, 164, 59, 0.1);
+    background: #faf8f5 !important; /* Premium Ivory-Cream */
+    color: #121212 !important;
+    border-top: 1px solid rgba(204, 164, 59, 0.15);
+    border-bottom: 1px solid rgba(204, 164, 59, 0.15);
   }
 
   .fragrance-profile__grid {
@@ -46,15 +46,13 @@
     text-transform: uppercase;
     letter-spacing: 0.25em;
     color: #cca43b !important;
-    font-family: 'Playfair Display', serif;
     font-style: italic;
   }
 
   .fragrance-profile__title {
     margin: 0;
-    font-family: 'Playfair Display', serif;
     font-weight: 600;
-    color: #ffffff;
+    color: #121212 !important;
   }
 
   /* Scent Notes Pyramid styling */
@@ -69,16 +67,17 @@
     gap: 2rem;
     padding: 2.2rem;
     border-radius: 8px;
-    border: 1px solid rgba(204, 164, 59, 0.1);
-    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(204, 164, 59, 0.15);
+    background: #ffffff; /* White card layout */
     transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.01);
   }
 
   .fragrance-profile__note-card:hover {
     border-color: #cca43b;
     transform: translateX(6px);
     background: rgba(204, 164, 59, 0.02);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
   }
 
   .fragrance-profile__note-badge {
@@ -116,22 +115,21 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: rgba(255,255,255,0.6);
+    color: #cca43b !important; /* Gold highlights */
   }
 
   .fragrance-profile__note-ingredients {
     margin: 0;
     font-size: 1.6rem;
     font-weight: 700;
-    color: #ffffff;
-    font-family: 'Playfair Display', serif;
+    color: #121212 !important;
   }
 
   .fragrance-profile__note-desc {
     margin: 0;
     font-size: 1.35rem;
     line-height: 1.5;
-    color: #d1cbbd;
+    color: #4a453e !important;
   }
 
   /* Center Illustration: Pure Gold Drop */
@@ -147,12 +145,12 @@
     position: relative;
     width: 100%;
     max-width: 260px;
-    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; /* Organic drops shape border */
+    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
     overflow: hidden;
     border: 1px solid rgba(204, 164, 59, 0.15);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.03);
     animation: floatDrop 5s ease-in-out infinite;
-    background: rgba(204, 164, 59, 0.02);
+    background: #ffffff;
   }
 
   /* Gold frame inside the drop card */
@@ -173,7 +171,7 @@
     width: 100%;
     height: auto;
     display: block;
-    mix-blend-mode: screen; /* Blends pure drop light into dark bg */
+    mix-blend-mode: multiply; /* Blends white background into cream canvas */
     transition: transform 0.6s ease;
   }
 
@@ -191,12 +189,13 @@
   .fragrance-profile__performance {
     padding: 3.5rem 3rem;
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.01);
-    border: 1px solid rgba(204, 164, 59, 0.1);
+    background: #ffffff;
+    border: 1px solid rgba(204, 164, 59, 0.15);
     display: flex;
     flex-direction: column;
     gap: 2.8rem;
     justify-content: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.01);
   }
 
   .fragrance-profile__gauge {
@@ -216,11 +215,11 @@
   }
 
   .fragrance-profile__gauge-label {
-    color: rgba(255,255,255,0.7);
+    color: #121212 !important;
   }
 
   .fragrance-profile__gauge-value {
-    color: #cca43b; /* Gold highlights */
+    color: #cca43b;
     font-weight: bold;
   }
 
@@ -228,7 +227,7 @@
     position: relative;
     width: 100%;
     height: 6px;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.05); /* Light gray bar track */
     border-radius: 3px;
     overflow: hidden;
   }
@@ -236,8 +235,8 @@
   .fragrance-profile__bar-fill {
     height: 100%;
     border-radius: 3px;
-    background: linear-gradient(90deg, #cca43b, #f1cb64); /* Pure gold gradients */
-    box-shadow: 0 0 8px rgba(204, 164, 59, 0.4);
+    background: linear-gradient(90deg, #cca43b, #f1cb64);
+    box-shadow: 0 0 8px rgba(204, 164, 59, 0.2);
     transition: width 1s ease-out;
   }
 
@@ -245,7 +244,7 @@
     display: flex;
     justify-content: space-between;
     font-size: 1.1rem;
-    opacity: 0.4;
+    opacity: 0.5;
     padding-top: 0.2rem;
   }
 
@@ -261,14 +260,13 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: rgba(255,255,255,0.6);
+    color: #cca43b !important;
   }
 
   .fragrance-profile__best-suited-text {
     margin: 0;
     font-size: 1.45rem;
-    color: #ffffff;
-    font-family: 'Playfair Display', serif;
+    color: #121212 !important;
     font-style: italic;
   }
 {%- endstyle -%}
