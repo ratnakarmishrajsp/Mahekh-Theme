@@ -27,12 +27,25 @@
 
   .custom-banner__media {
     width: 100%;
-    height: auto;
     display: block;
-    object-fit: cover;
-    transition: transform 0.5s ease;
+    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
   }
 
+  /* Desktop height settings */
+  {%- if section.settings.desktop_height == 'adapt' -%}
+    .custom-banner__media--desktop {
+      height: auto;
+      object-fit: contain;
+    }
+  {%- else -%}
+    .custom-banner__media--desktop {
+      height: {{ section.settings.desktop_height }};
+      object-fit: cover;
+      object-position: {{ section.settings.desktop_alignment }};
+    }
+  {%- endif -%}
+
+  /* Mobile height settings */
   .custom-banner__media--mobile {
     display: none;
   }
@@ -43,12 +56,20 @@
     }
     .custom-banner__media--mobile {
       display: block;
+      {%- if section.settings.mobile_height == 'adapt' -%}
+        height: auto;
+        object-fit: contain;
+      {%- else -%}
+        height: {{ section.settings.mobile_height }};
+        object-fit: cover;
+        object-position: {{ section.settings.mobile_alignment }};
+      {%- endif -%}
     }
   }
 
   /* Premium subtle zoom on hover */
   .custom-banner:hover .custom-banner__media {
-    transform: scale(1.015);
+    transform: scale(1.02);
   }
 
   .custom-banner__overlay-content {
@@ -83,7 +104,7 @@
         alt="{{ section.settings.image_desktop.alt | escape }}"
         loading="eager"
         width="1920"
-        height="800"
+        height="960"
         class="custom-banner__media custom-banner__media--desktop"
       >
     {%- else -%}
@@ -155,10 +176,63 @@
       "info": "Leave blank to use the default Mahekh Legacy banner."
     },
     {
+      "type": "select",
+      "id": "desktop_height",
+      "label": "Desktop Banner Height",
+      "options": [
+        { "value": "adapt", "label": "Adapt to Image Aspect Ratio" },
+        { "value": "400px", "label": "400px (Short)" },
+        { "value": "500px", "label": "500px (Medium)" },
+        { "value": "600px", "label": "600px (Large)" },
+        { "value": "700px", "label": "700px (Extra Large)" },
+        { "value": "800px", "label": "800px (Full Screen)" }
+      ],
+      "default": "adapt"
+    },
+    {
+      "type": "select",
+      "id": "desktop_alignment",
+      "label": "Desktop Image Position",
+      "info": "Controls which part of the banner is visible when cropping.",
+      "options": [
+        { "value": "left center", "label": "Left Centered" },
+        { "value": "center center", "label": "Centered" },
+        { "value": "right center", "label": "Right Centered" }
+      ],
+      "default": "center center"
+    },
+    {
       "type": "image_picker",
       "id": "image_mobile",
       "label": "Mobile Banner Image (Optional)",
       "info": "Upload a vertical/cropped banner image for mobile screens to avoid text cropping."
+    },
+    {
+      "type": "select",
+      "id": "mobile_height",
+      "label": "Mobile Banner Height",
+      "options": [
+        { "value": "adapt", "label": "Adapt to Image Aspect Ratio" },
+        { "value": "250px", "label": "250px (Short)" },
+        { "value": "300px", "label": "300px (Medium)" },
+        { "value": "350px", "label": "350px (Large)" },
+        { "value": "400px", "label": "400px (Tall)" },
+        { "value": "450px", "label": "450px (Extra Tall)" },
+        { "value": "500px", "label": "500px (Super Tall)" }
+      ],
+      "default": "350px"
+    },
+    {
+      "type": "select",
+      "id": "mobile_alignment",
+      "label": "Mobile Image Position",
+      "info": "Best set to 'Left Centered' for the default Mahekh banner to ensure text is visible on mobile.",
+      "options": [
+        { "value": "left center", "label": "Left Centered (Recommended)" },
+        { "value": "center center", "label": "Centered" },
+        { "value": "right center", "label": "Right Centered" }
+      ],
+      "default": "left center"
     },
     {
       "type": "url",
