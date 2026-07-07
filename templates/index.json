@@ -1,0 +1,326 @@
+{
+  "sections": {
+    "custom_hero_homepage": {
+      "type": "custom-hero",
+      "settings": {
+        "subheading": "100% Pure Concentrated Attars",
+        "heading": "Kannauj's Finest Liquid Gold",
+        "heading_size": "h0",
+        "description": "Experience the rich heritage of traditional Indian perfumery. Handcrafted in copper stills, our attars are completely alcohol-free, long-lasting, and skin-friendly.",
+        "button_label": "Explore Collection",
+        "product": "mahekh-kasturi-attar-long-lasting-exotic-musk-fragrance",
+        "bg_image_opacity": 15,
+        "color_scheme": "scheme-2",
+        "padding_top": 60,
+        "padding_bottom": 60
+      }
+    },
+    "custom_usp_grid_homepage": {
+      "type": "custom-usp-grid",
+      "settings": {
+        "title": "Pure & Authentic Fragrances",
+        "heading_size": "h1",
+        "subtitle": "The Mahekh Standard",
+        "columns_desktop": 4,
+        "show_borders": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      },
+      "blocks": {
+        "usp_1": {
+          "type": "usp",
+          "settings": {
+            "icon": "perfume",
+            "title": "100% Alcohol-Free",
+            "text": "Pure concentrated perfume oil that is gentle on your skin."
+          }
+        },
+        "usp_2": {
+          "type": "usp",
+          "settings": {
+            "icon": "stopwatch",
+            "title": "Long Lasting",
+            "text": "Carefully selected ingredients that keep you fragrant all day long."
+          }
+        },
+        "usp_3": {
+          "type": "usp",
+          "settings": {
+            "icon": "leaf",
+            "title": "Natural Craftsmanship",
+            "text": "Traditional steam distillation process (Deg-Bhapka) from Kannauj."
+          }
+        },
+        "usp_4": {
+          "type": "usp",
+          "settings": {
+            "icon": "heart",
+            "title": "Premium & Pure",
+            "text": "No animal testing, crafted with clean and authentic ingredients."
+          }
+        }
+      },
+      "block_order": [
+        "usp_1",
+        "usp_2",
+        "usp_3",
+        "usp_4"
+      ]
+    },
+    "custom_categories_homepage": {
+      "type": "custom-category-cards",
+      "settings": {
+        "title": "Shop By Fragrance Notes",
+        "heading_size": "h1",
+        "subtitle": "Find your signature scent profile",
+        "card_shape": "arch",
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      },
+      "blocks": {
+        "cat_1": {
+          "type": "category",
+          "settings": {
+            "title": "Royal Oudh",
+            "subtitle": "Warm & Intense"
+          }
+        },
+        "cat_2": {
+          "type": "category",
+          "settings": {
+            "title": "Classic Rose",
+            "subtitle": "Floral & Romantic"
+          }
+        },
+        "cat_3": {
+          "type": "category",
+          "settings": {
+            "title": "Earthy Khus",
+            "subtitle": "Fresh & Calming"
+          }
+        },
+        "cat_4": {
+          "type": "category",
+          "settings": {
+            "title": "Exotic Musk",
+            "subtitle": "Powdery & Sensual"
+          }
+        }
+      },
+      "block_order": [
+        "cat_1",
+        "cat_2",
+        "cat_3",
+        "cat_4"
+      ]
+    },
+    "featured_product_UXN8fm": {
+      "type": "featured-product",
+      "blocks": {
+        "text_YVBLPJ": {
+          "type": "text",
+          "settings": {
+            "text": "{{ section.settings.product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title_FRcHL6": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h1"
+          }
+        },
+        "price_JwPjmx": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker_XGJ3H3": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector_HLHUg3": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons_qJgy7e": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        }
+      },
+      "block_order": [
+        "text_YVBLPJ",
+        "title_FRcHL6",
+        "price_JwPjmx",
+        "variant_picker_XGJ3H3",
+        "quantity_selector_HLHUg3",
+        "buy_buttons_qJgy7e"
+      ],
+      "name": "t:sections.featured-product.presets.name",
+      "settings": {
+        "product": "mahekh-kasturi-attar-long-lasting-exotic-musk-fragrance",
+        "color_scheme": "scheme-2",
+        "secondary_background": false,
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_collection_miQLWj": {
+      "type": "featured-collection",
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "collection": "best-selling-attars",
+        "products_to_show": 4,
+        "title": "Best Selling Attars",
+        "heading_size": "h1",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "columns_desktop": 4,
+        "enable_desktop_slider": false,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "color_scheme": "scheme-2",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "custom_heritage_homepage": {
+      "type": "custom-heritage",
+      "settings": {
+        "image_aspect_ratio": "1 \/ 1",
+        "layout": "image_left",
+        "subtitle": "THE ART OF DEG & BHAPKA",
+        "title": "Distilled In Kannauj, Perfume Capital of India",
+        "heading_size": "h1",
+        "text": "<p>Since ancient times, Kannauj has kept the heritage of perfume distillation alive. Using the traditional Deg-Bhapka process, flowers and natural raw materials are distilled in copper pots over wood fires, sending fragrant steam to rest in cold clay containers base-filled with sandalwood oil.<\/p><p>Mahekh preserves this pure artisan process, providing long-lasting attars free from chemicals and alcohol.<\/p>",
+        "button_label": "Explore Our Process",
+        "color_scheme": "scheme-2",
+        "padding_top": 44,
+        "padding_bottom": 44
+      }
+    },
+    "custom_testimonials_homepage": {
+      "type": "custom-testimonials",
+      "settings": {
+        "title": "Loved By Fragrance Lovers",
+        "heading_size": "h1",
+        "subtitle": "REVIEWS & TESTIMONIALS",
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      },
+      "blocks": {
+        "test_1": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "quote": "I have tried many luxury Oudh fragrances, but Mahekh's Oudh attar is outstanding. It is 100% alcohol-free and lasts more than 10 hours on my skin. Worth every rupee!",
+            "author": "Aarav Mehta",
+            "location": "Mumbai",
+            "verified_buyer": true
+          }
+        },
+        "test_2": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "quote": "The Classic Rose attar smells exactly like fresh Kannauj roses. It's clean, non-greasy, and incredibly soothing. Very premium quality packaging too.",
+            "author": "Priya Patel",
+            "location": "Ahmedabad",
+            "verified_buyer": true
+          }
+        },
+        "test_3": {
+          "type": "testimonial",
+          "settings": {
+            "rating": 5,
+            "quote": "Highly recommend the Ruh Khus. It has a beautiful earthy aroma that cools the mind instantly. Authentic Kannauj distillation shine through.",
+            "author": "Kabir Sen",
+            "location": "Kolkata",
+            "verified_buyer": true
+          }
+        }
+      },
+      "block_order": [
+        "test_1",
+        "test_2",
+        "test_3"
+      ]
+    },
+    "custom_faq_homepage": {
+      "type": "custom-faq",
+      "settings": {
+        "title": "Frequently Asked Questions",
+        "heading_size": "h1",
+        "subtitle": "HAVE QUESTIONS?",
+        "content_width": 800,
+        "open_first": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      },
+      "blocks": {
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "How should I apply concentrated attar oil?",
+            "answer": "<p>Apply a few drops of attar to your pulse points, such as your wrists, behind the ears, and inner elbows. Gently dab the oil on the skin without rubbing too vigorously. Rubbing can break down the fragrance molecules.<\/p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "Is it safe to apply attar on clothes?",
+            "answer": "<p>Attar contains pure essential oils, so applying it directly to light-colored or delicate clothing can sometimes leave a faint oil stain. We recommend applying it on pulse points. If you want to use it on clothes, apply a small amount to the inner seams or use it on dark fabrics.<\/p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "How long does Mahekh attar last?",
+            "answer": "<p>Due to its high concentration of pure oils and traditional steam distillation process, our attars typically last between 8 to 12 hours on skin, and even longer on fabric. The exact duration depends on the specific note profile (e.g., Oudh and Amber profiles last longer than light Floral profiles).<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3"
+      ]
+    }
+  },
+  "order": [
+    "custom_hero_homepage",
+    "custom_usp_grid_homepage",
+    "custom_categories_homepage",
+    "featured_product_UXN8fm",
+    "featured_collection_miQLWj",
+    "custom_heritage_homepage",
+    "custom_testimonials_homepage",
+    "custom_faq_homepage"
+  ]
+}

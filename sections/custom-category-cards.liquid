@@ -1,0 +1,303 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .custom-categories {
+    text-align: center;
+  }
+
+  .custom-categories__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .custom-categories__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    width: calc(50% - 1rem);
+    max-width: 220px;
+    transition: transform 0.3s ease;
+  }
+
+  @media screen and (min-width: 750px) {
+    .custom-categories__card {
+      width: calc(25% - 1.5rem);
+    }
+  }
+
+  .custom-categories__image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: rgba(var(--color-foreground), 0.05);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    border: 1px solid rgba(var(--color-foreground), 0.08);
+  }
+
+  /* Shapes */
+  .custom-categories__image-wrapper--circle {
+    border-radius: 50%;
+  }
+
+  .custom-categories__image-wrapper--arch {
+    border-radius: 120px 120px 0 0;
+    aspect-ratio: 1 / 1.3;
+  }
+
+  .custom-categories__image-wrapper--square {
+    border-radius: 8px;
+  }
+
+  .custom-categories__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .custom-categories__card:hover .custom-categories__image {
+    transform: scale(1.08);
+  }
+
+  .custom-categories__card:hover {
+    transform: translateY(-4px);
+  }
+
+  .custom-categories__card:hover .custom-categories__image-wrapper {
+    box-shadow: 0 10px 20px rgba(var(--color-foreground), 0.05);
+    border-color: rgba(var(--color-foreground), 0.2);
+  }
+
+  .custom-categories__title {
+    margin: 1.5rem 0 0.5rem 0;
+    font-weight: 600;
+    font-size: 1.6rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .custom-categories__subtitle {
+    margin: 0;
+    font-size: 1.2rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .custom-categories__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    transition: background 0.3s ease;
+  }
+
+  .custom-categories__card:hover .custom-categories__overlay {
+    background: rgba(0, 0, 0, 0.25);
+  }
+{%- endstyle -%}
+
+<div class="custom-categories color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
+      <div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin text-center" style="margin-bottom: 3.5rem; display: flex; flex-direction: column; align-items: center;">
+        {%- if section.settings.subtitle != blank -%}
+          <p class="image-with-text__text image-with-text__text--caption" style="margin: 0 0 0.5rem 0; font-size: 1.3rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(var(--color-foreground), 0.7);">
+            {{ section.settings.subtitle | escape }}
+          </p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="title inline-richtext {{ section.settings.heading_size }}" style="margin: 0;">
+            {{ section.settings.title | escape }}
+          </h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="custom-categories__grid">
+      {%- for block in section.blocks -%}
+        <a href="{{ block.settings.link | default: '#' }}" class="custom-categories__card" {{ block.shopify_attributes }}>
+          <div class="custom-categories__image-wrapper custom-categories__image-wrapper--{{ section.settings.card_shape }}">
+            {%- if block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 440 }}"
+                alt="{{ block.settings.image.alt | escape }}"
+                loading="lazy"
+                width="220"
+                height="220"
+                class="custom-categories__image"
+              >
+            {%- else -%}
+              {%- assign placeholder_image_index = forloop.index | minus: 1 | modulo: 3 | plus: 1 -%}
+              {{ 'collection-' | append: placeholder_image_index | placeholder_svg_tag: 'placeholder-svg custom-categories__image' }}
+            {%- endif -%}
+            <div class="custom-categories__overlay"></div>
+          </div>
+          {%- if block.settings.title != blank -%}
+            <h3 class="custom-categories__title h5">{{ block.settings.title | escape }}</h3>
+          {%- endif -%}
+          {%- if block.settings.subtitle != blank -%}
+            <p class="custom-categories__subtitle">{{ block.settings.subtitle | escape }}</p>
+          {%- endif -%}
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom Category Cards",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Shop By Fragrance Notes"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "Find your signature scent profile"
+    },
+    {
+      "type": "select",
+      "id": "card_shape",
+      "label": "Card Shape",
+      "options": [
+        { "value": "circle", "label": "Circular" },
+        { "value": "arch", "label": "Arched (Luxury look)" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "arch"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36,
+      "label": "Padding Bottom"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Category Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Fragrance Family"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtitle / Note",
+          "default": "Woody & Rich"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Category Cards",
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "title": "Royal Oudh",
+            "subtitle": "Warm & Intense"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Classic Rose",
+            "subtitle": "Floral & Romantic"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Earthy Khus",
+            "subtitle": "Fresh & Calming"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "title": "Exotic Musk",
+            "subtitle": "Powdery & Sensual"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

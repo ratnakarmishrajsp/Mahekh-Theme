@@ -1,0 +1,271 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .custom-faq {
+    position: relative;
+  }
+
+  .custom-faq__wrapper {
+    max-width: {{ section.settings.content_width }}px;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .custom-faq__title-wrapper {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .custom-faq__accordion-group {
+    border-top: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+
+  .custom-faq__details {
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+
+  .custom-faq__summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.2rem 1rem;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1.6rem;
+    letter-spacing: 0.03em;
+    list-style: none; /* Hide default arrow */
+    user-select: none;
+    position: relative;
+    transition: color 0.3s ease;
+  }
+
+  .custom-faq__summary::-webkit-details-marker {
+    display: none; /* Hide Safari default arrow */
+  }
+
+  .custom-faq__summary:hover {
+    color: rgba(var(--color-foreground), 0.8);
+  }
+
+  .custom-faq__icon {
+    width: 14px;
+    height: 14px;
+    color: rgb(var(--color-foreground));
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+    margin-left: 1.5rem;
+  }
+
+  .custom-faq__icon svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+
+  .custom-faq__details[open] .custom-faq__icon {
+    transform: rotate(45deg); /* Modern plus icon rotates to cross */
+  }
+
+  .custom-faq__content {
+    padding: 0 1rem 2.2rem 1rem;
+    line-height: 1.7;
+    font-size: 1.45rem;
+    opacity: 0.85;
+  }
+
+  .custom-faq__content p {
+    margin: 0 0 1rem 0;
+  }
+  .custom-faq__content p:last-child {
+    margin-bottom: 0;
+  }
+{%- endstyle -%}
+
+<div class="custom-faq color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    
+    <div class="custom-faq__wrapper">
+      {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
+        <div class="custom-faq__title-wrapper title-wrapper--no-top-margin">
+          {%- if section.settings.subtitle != blank -%}
+            <p class="image-with-text__text image-with-text__text--caption" style="margin: 0 0 0.5rem 0; font-size: 1.3rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(var(--color-foreground), 0.7);">
+              {{ section.settings.subtitle | escape }}
+            </p>
+          {%- endif -%}
+          {%- if section.settings.title != blank -%}
+            <h2 class="title inline-richtext {{ section.settings.heading_size }}" style="margin: 0;">
+              {{ section.settings.title | escape }}
+            </h2>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="custom-faq__accordion-group">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.question != blank and block.settings.answer != blank -%}
+            <details 
+              class="custom-faq__details" 
+              id="FAQDetails-{{ section.id }}-{{ forloop.index }}" 
+              {{ block.shopify_attributes }}
+              {% if forloop.first and section.settings.open_first %}open{% endif %}
+            >
+              <summary class="custom-faq__summary h4">
+                {{ block.settings.question | escape }}
+                <span class="custom-faq__icon">
+                  {% comment %} Simple lightweight Plus SVG icon {% endcomment %}
+                  <svg viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+                    <line x1="7" y1="0" x2="7" y2="14" />
+                    <line x1="0" y1="7" x2="14" y2="7" />
+                  </svg>
+                </span>
+              </summary>
+              <div class="custom-faq__content rte body">
+                {{ block.settings.answer }}
+              </div>
+            </details>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom FAQ Accordion",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "HAVE QUESTIONS?"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "min": 600,
+      "max": 1000,
+      "step": 50,
+      "default": 800,
+      "unit": "px",
+      "label": "Maximum Width of FAQ Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first",
+      "label": "Open the first question by default",
+      "default": true
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36,
+      "label": "Padding Bottom"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "What is the difference between Attar and Perfume?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Attar is pure concentrated perfume oil derived from flowers and natural ingredients. It is completely alcohol-free and has a rich oil base that stays close to the skin. Perfumes are usually alcohol-based sprays which evaporate faster and can dry the skin.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom FAQ Accordion",
+      "blocks": [
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How should I apply concentrated attar oil?",
+            "answer": "<p>Apply a few drops of attar to your pulse points, such as your wrists, behind the ears, and inner elbows. Gently dab the oil on the skin without rubbing too vigorously. Rubbing can break down the fragrance molecules.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Is it safe to apply attar on clothes?",
+            "answer": "<p>Attar contains pure essential oils, so applying it directly to light-colored or delicate clothing can sometimes leave a faint oil stain. We recommend applying it on pulse points. If you want to use it on clothes, apply a small amount to the inner seams or use it on dark fabrics.</p>"
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How long does Mahekh attar last?",
+            "answer": "<p>Due to its high concentration of pure oils and traditional steam distillation process, our attars typically last between 8 to 12 hours on skin, and even longer on fabric. The exact duration depends on the specific note profile (e.g., Oudh and Amber profiles last longer than light Floral profiles).</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

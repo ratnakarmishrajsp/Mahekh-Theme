@@ -1,0 +1,449 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .custom-testimonials {
+    text-align: center;
+    position: relative;
+  }
+
+  .custom-testimonials__slider-wrapper {
+    position: relative;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .custom-testimonials__slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .custom-testimonials__slider::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+  }
+
+  .custom-testimonials__slide {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    padding: 3rem 2rem;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .custom-testimonials__slide {
+      padding: 4rem 5rem;
+    }
+  }
+
+  .custom-testimonials__card {
+    background: transparent;
+    border: 1px solid rgba(var(--color-foreground), 0.08);
+    border-radius: 8px;
+    padding: 3rem 2rem;
+    width: 100%;
+    max-width: 750px;
+    box-shadow: 0 4px 12px rgba(var(--color-foreground), 0.02);
+    position: relative;
+  }
+
+  @media screen and (min-width: 750px) {
+    .custom-testimonials__card {
+      padding: 4.5rem 4rem;
+    }
+  }
+
+  .custom-testimonials__card::before {
+    content: '“';
+    position: absolute;
+    top: 1.5rem;
+    left: 2.5rem;
+    font-size: 8rem;
+    font-family: serif;
+    color: rgba(var(--color-foreground), 0.05);
+    line-height: 1;
+  }
+
+  .custom-testimonials__stars {
+    display: flex;
+    gap: 0.2rem;
+    margin-bottom: 2rem;
+    justify-content: center;
+    color: #cca43b; /* Premium gold star color */
+  }
+
+  .custom-testimonials__star {
+    width: 18px;
+    height: 18px;
+  }
+
+  .custom-testimonials__quote {
+    font-size: 1.6rem;
+    line-height: 1.7;
+    font-style: italic;
+    margin: 0 0 2rem 0;
+    opacity: 0.9;
+  }
+
+  @media screen and (min-width: 750px) {
+    .custom-testimonials__quote {
+      font-size: 1.8rem;
+    }
+  }
+
+  .custom-testimonials__author {
+    font-weight: 600;
+    font-size: 1.4rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .custom-testimonials__meta {
+    font-size: 1.2rem;
+    opacity: 0.6;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .custom-testimonials__verified-icon {
+    display: inline-flex;
+    color: #4bb543;
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+  }
+
+  .custom-testimonials__product-link {
+    margin-top: 1.5rem;
+    display: inline-block;
+    font-size: 1.3rem;
+    color: rgba(var(--color-foreground), 0.7);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color 0.3s;
+  }
+
+  .custom-testimonials__product-link:hover {
+    color: rgb(var(--color-foreground));
+  }
+
+  /* Slider Nav Dots */
+  .custom-testimonials__nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+  }
+
+  .custom-testimonials__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(var(--color-foreground), 0.2);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+
+  .custom-testimonials__dot.is-active,
+  .custom-testimonials__dot:hover {
+    background: rgba(var(--color-foreground), 0.8);
+    transform: scale(1.2);
+  }
+{%- endstyle -%}
+
+<div class="custom-testimonials color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    
+    {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
+      <div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin text-center" style="margin-bottom: 2rem; display: flex; flex-direction: column; align-items: center;">
+        {%- if section.settings.subtitle != blank -%}
+          <p class="image-with-text__text image-with-text__text--caption" style="margin: 0 0 0.5rem 0; font-size: 1.3rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(var(--color-foreground), 0.7);">
+            {{ section.settings.subtitle | escape }}
+          </p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="title inline-richtext {{ section.settings.heading_size }}" style="margin: 0;">
+            {{ section.settings.title | escape }}
+          </h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="custom-testimonials__slider-wrapper" id="TestimonialWrapper-{{ section.id }}">
+      <div class="custom-testimonials__slider" id="TestimonialSlider-{{ section.id }}">
+        {%- for block in section.blocks -%}
+          <div 
+            class="custom-testimonials__slide" 
+            id="TestimonialSlide-{{ section.id }}-{{ forloop.index }}" 
+            {{ block.shopify_attributes }}
+          >
+            <div class="custom-testimonials__card">
+              
+              {%- if block.settings.rating > 0 -%}
+                <div class="custom-testimonials__stars" aria-label="{{ block.settings.rating }} stars out of 5">
+                  {%- for i in (1..block.settings.rating) -%}
+                    <svg class="custom-testimonials__star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.quote != blank -%}
+                <blockquote class="custom-testimonials__quote body">
+                  <p>{{ block.settings.quote | escape }}</p>
+                </blockquote>
+              {%- endif -%}
+
+              {%- if block.settings.author != blank -%}
+                <p class="custom-testimonials__author">{{ block.settings.author | escape }}</p>
+              {%- endif -%}
+
+              <div class="custom-testimonials__meta">
+                {%- if block.settings.verified_buyer -%}
+                  <span class="custom-testimonials__verified">
+                    <svg class="custom-testimonials__verified-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    Verified Buyer
+                  </span>
+                {%- endif -%}
+                {%- if block.settings.verified_buyer and block.settings.location != blank -%}
+                  <span>•</span>
+                {%- endif -%}
+                {%- if block.settings.location != blank -%}
+                  <span>{{ block.settings.location | escape }}</span>
+                {%- endif -%}
+              </div>
+
+              {%- if block.settings.product != blank -%}
+                <a href="{{ block.settings.product.url }}" class="custom-testimonials__product-link">
+                  Reviewed: {{ block.settings.product.title | escape }}
+                </a>
+              {%- endif -%}
+
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if section.blocks.size > 1 -%}
+        <div class="custom-testimonials__nav">
+          {%- for block in section.blocks -%}
+            <button 
+              type="button" 
+              class="custom-testimonials__dot{% if forloop.first %} is-active{% endif %}" 
+              data-index="{{ forloop.index0 }}" 
+              aria-label="Go to slide {{ forloop.index }}"
+            ></button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{%- if section.blocks.size > 1 -%}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const slider = document.getElementById('TestimonialSlider-{{ section.id }}');
+      const dots = document.querySelectorAll('#TestimonialWrapper-{{ section.id }} .custom-testimonials__dot');
+      
+      if (!slider || dots.length === 0) return;
+
+      const slideWidth = slider.querySelector('.custom-testimonials__slide').clientWidth;
+
+      // Handle dot clicks
+      dots.forEach(dot => {
+        dot.addEventListener('click', function() {
+          const index = parseInt(this.getAttribute('data-index'));
+          slider.scrollTo({
+            left: slideWidth * index,
+            behavior: 'smooth'
+          });
+          updateActiveDot(index);
+        });
+      });
+
+      // Handle scroll snap alignment sync
+      let scrollTimeout;
+      slider.addEventListener('scroll', function() {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(function() {
+          const scrolledLeft = slider.scrollLeft;
+          const currentSlideIndex = Math.round(scrolledLeft / slider.querySelector('.custom-testimonials__slide').clientWidth);
+          updateActiveDot(currentSlideIndex);
+        }, 100);
+      });
+
+      function updateActiveDot(index) {
+        dots.forEach(dot => dot.classList.remove('is-active'));
+        if (dots[index]) {
+          dots[index].classList.add('is-active');
+        }
+      }
+    });
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Custom Testimonials",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Loved By Fragrance Lovers"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "REVIEWS & TESTIMONIALS"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36,
+      "label": "Padding Bottom"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5,
+          "label": "Star Rating"
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Review Quote",
+          "default": "Absolutely wonderful! The fragrance has a beautiful depth. It is long-lasting, pure, and I get so many compliments. Will purchase again!"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author Name",
+          "default": "Rahul Sharma"
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Author Location",
+          "default": "New Delhi"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified_buyer",
+          "label": "Show Verified Buyer Badge",
+          "default": true
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Reviewed Product (Optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Testimonials",
+      "blocks": [
+        {
+          "type": "testimonial",
+          "settings": {
+            "author": "Aarav Mehta",
+            "location": "Mumbai",
+            "quote": "I have tried many luxury Oudh fragrances, but Mahekh's Oudh attar is outstanding. It is 100% alcohol-free and lasts more than 10 hours on my skin. Worth every rupee!"
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "author": "Priya Patel",
+            "location": "Ahmedabad",
+            "quote": "The Classic Rose attar smells exactly like fresh Kannauj roses. It's clean, non-greasy, and incredibly soothing. Very premium quality packaging too."
+          }
+        },
+        {
+          "type": "testimonial",
+          "settings": {
+            "author": "Kabir Sen",
+            "location": "Kolkata",
+            "quote": "Highly recommend the Ruh Khus. It has a beautiful earthy aroma that cools the mind instantly. Authentic Kannauj distillation shine through."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

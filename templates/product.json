@@ -1,0 +1,214 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "variant_picker_VXpTRR": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "buy_buttons_YKNBFb": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "seedgrow_whatsapp_chat_app_block_AtLN6F": {
+          "type": "shopify:\/\/apps\/seedgrow-whatsapp-chat\/blocks\/app-block\/b85b5e45-9cea-417a-9b9e-0aa961ccf3ef",
+          "settings": {
+            "button_label": "Need help? Chat with us",
+            "button_style": "round",
+            "background_color": "#2db742",
+            "text_color": "#ffffff"
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "collapsible_tab_shipping": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping & Delivery",
+            "icon": "truck",
+            "content": "<p>We offer fast delivery across India. Orders are typically shipped within 24-48 hours and delivered in 3-7 business days. Free shipping is available on all prepaid orders.<\/p>"
+          }
+        },
+        "collapsible_tab_kannauj": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "The Kannauj Heritage",
+            "icon": "leaf",
+            "content": "<p>Each drop of Mahekh attar is distilled using traditional copper pots (Degs) and clay receivers (Bhapkas) in Kannauj, the perfume capital of India. We source only the purest natural blossoms and ingredients.<\/p>"
+          }
+        },
+        "custom_liquid_QjDbaD": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<div class=\"mahekh-review-slider\">\n\n    <div class=\"review-header\">\n        ⭐ Trusted Customer Reviews\n    <\/div>\n\n    <div class=\"review-track\" id=\"reviewTrack\">\n\n        <div class=\"review-card\">\n            <div class=\"review-name\">Rahul Sharma <span class=\"verified\">✔ Verified Buyer<\/span><\/div>\n            <div class=\"stars\">★★★★★<\/div>\n            <p>Absolutely amazing fragrance. Lasted for more than 10 hours. Premium quality attar.<\/p>\n        <\/div>\n\n        <div class=\"review-card\">\n            <div class=\"review-name\">Aman Verma <span class=\"verified\">✔ Verified Buyer<\/span><\/div>\n            <div class=\"stars\">★★★★★<\/div>\n            <p>Very smooth and luxurious scent. Packaging was excellent.<\/p>\n        <\/div>\n\n        <div class=\"review-card\">\n            <div class=\"review-name\">Rohit Singh <span class=\"verified\">✔ Verified Buyer<\/span><\/div>\n            <div class=\"stars\">★★★★★<\/div>\n            <p>One of the best attars I have purchased online. Highly recommended.<\/p>\n        <\/div>\n\n        <div class=\"review-card\">\n            <div class=\"review-name\">Arjun Mishra <span class=\"verified\">✔ Verified Buyer<\/span><\/div>\n            <div class=\"stars\">★★★★★<\/div>\n            <p>Elegant musk fragrance. Received compliments throughout the day.<\/p>\n        <\/div>\n\n        <div class=\"review-card\">\n            <div class=\"review-name\">Vivek Tiwari <span class=\"verified\">✔ Verified Buyer<\/span><\/div>\n            <div class=\"stars\">★★★★★<\/div>\n            <p>The scent profile feels rich and premium. Worth every penny.<\/p>\n        <\/div>\n\n        <div class=\"review-card\">\n            <div class=\"review-name\">Nitin Yadav <span class=\"verified\">✔ Verified Buyer<\/span><\/div>\n            <div class=\"stars\">★★★★★<\/div>\n            <p>Long-lasting fragrance with a sophisticated aroma. Loved it.<\/p>\n        <\/div>\n\n        <div class=\"review-card\">\n            <div class=\"review-name\">Saurabh Pandey <span class=\"verified\">✔ Verified Buyer<\/span><\/div>\n            <div class=\"stars\">★★★★★<\/div>\n            <p>Beautiful blend. Smells expensive and unique.<\/p>\n        <\/div>\n\n        <div class=\"review-card\">\n            <div class=\"review-name\">Deepak Gupta <span class=\"verified\">✔ Verified Buyer<\/span><\/div>\n            <div class=\"stars\">★★★★★<\/div>\n            <p>Yaar fragrance bahut premium hai. Pure din kapdo me mehak bani rahi.<\/p>\n        <\/div>\n\n        <div class=\"review-card\">\n            <div class=\"review-name\">Ankit Srivastava <span class=\"verified\">✔ Verified Buyer<\/span><\/div>\n            <div class=\"stars\">★★★★★<\/div>\n            <p>Packaging aur fragrance dono top class nikle. Paisa vasool.<\/p>\n        <\/div>\n\n        <div class=\"review-card\">\n            <div class=\"review-name\">Shubham Tripathi <span class=\"verified\">✔ Verified Buyer<\/span><\/div>\n            <div class=\"stars\">★★★★★<\/div>\n            <p>Kasturi attar ki quality expected se bhi better nikli. Bahut badhiya.<\/p>\n        <\/div>\n\n    <\/div>\n\n<\/div>\n\n<style>\n.mahekh-review-slider{\n    background:linear-gradient(135deg,#fffdf7,#fff8ea);\n    border:1px solid #e6d4a3;\n    border-radius:18px;\n    padding:20px;\n    overflow:hidden;\n    margin:20px 0;\n    position:relative;\n}\n\n.mahekh-review-slider::before{\n    content:'';\n    position:absolute;\n    top:0;\n    left:-100%;\n    width:100%;\n    height:100%;\n    background:linear-gradient(\n        90deg,\n        transparent,\n        rgba(255,255,255,0.35),\n        transparent\n    );\n    animation:shine 5s infinite;\n}\n\n@keyframes shine{\n    100%{\n        left:100%;\n    }\n}\n\n.review-header{\n    text-align:center;\n    font-size:22px;\n    font-weight:700;\n    color:#222;\n    margin-bottom:20px;\n}\n\n.review-track{\n    display:flex;\n    gap:15px;\n    width:max-content;\n    animation:scrollReviews 45s linear infinite;\n}\n\n.review-track:hover{\n    animation-play-state:paused;\n}\n\n.review-card{\n    width:320px;\n    min-width:320px;\n    background:#ffffff;\n    border-radius:16px;\n    padding:18px;\n    box-shadow:0 5px 15px rgba(0,0,0,0.08);\n    border:1px solid #f2ead0;\n}\n\n.review-name{\n    font-size:15px;\n    font-weight:700;\n    color:#222;\n    margin-bottom:10px;\n}\n\n.verified{\n    background:#e8f7ed;\n    color:#0a8f3e;\n    padding:4px 8px;\n    border-radius:30px;\n    font-size:11px;\n    font-weight:700;\n    margin-left:5px;\n    white-space:nowrap;\n}\n\n.stars{\n    color:#ffb400;\n    font-size:18px;\n    margin-bottom:10px;\n    letter-spacing:1px;\n}\n\n.review-card p{\n    font-size:14px;\n    line-height:1.6;\n    color:#555;\n    margin:0;\n}\n\n@keyframes scrollReviews{\n    0%{\n        transform:translateX(0);\n    }\n    100%{\n        transform:translateX(-50%);\n    }\n}\n\n@media(max-width:768px){\n\n.review-card{\n    width:280px;\n    min-width:280px;\n}\n\n.review-header{\n    font-size:18px;\n}\n\n.review-card p{\n    font-size:13px;\n}\n\n}\n<\/style>\n\n<script>\ndocument.addEventListener(\"DOMContentLoaded\", function(){\n\n    const track = document.getElementById(\"reviewTrack\");\n\n    if(track){\n        track.innerHTML += track.innerHTML;\n    }\n\n});\n<\/script>"
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "variant_picker_VXpTRR",
+        "price",
+        "buy_buttons_YKNBFb",
+        "seedgrow_whatsapp_chat_app_block_AtLN6F",
+        "description",
+        "collapsible_tab_shipping",
+        "collapsible_tab_kannauj",
+        "custom_liquid_QjDbaD"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-2",
+        "media_size": "small",
+        "constrain_to_viewport": false,
+        "media_fit": "cover",
+        "gallery_layout": "thumbnail_slider",
+        "mobile_thumbnails": "hide",
+        "media_position": "right",
+        "image_zoom": "lightbox",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "product_fragrance_profile_section": {
+      "type": "product-fragrance-profile",
+      "settings": {
+        "title": "Fragrance Profile",
+        "heading_size": "h1",
+        "subtitle": "Scent Anatomy",
+        "top_note_label": "Top Note",
+        "top_note_ingredients": "Saffron, Cardamom",
+        "top_note_desc": "The opening notes provide a luxurious spicy warmth upon application.",
+        "heart_note_label": "Heart Note",
+        "heart_note_ingredients": "Kannauj Rose, Jasmine",
+        "heart_note_desc": "The core of the fragrance reveals elegant floral layers that smooth the spices.",
+        "base_note_label": "Base Note",
+        "base_note_ingredients": "Royal Oudh, Sandalwood, Musk",
+        "base_note_desc": "The deep, rich foundation remains on your skin for hours with a warm, woody trail.",
+        "longevity_hours": 10,
+        "sillage_rating": 4,
+        "sillage_text": "Strong / Radiating",
+        "intensity_rating": 4,
+        "intensity_text": "Warm & Rich",
+        "best_suited_label": "Best Suited For",
+        "best_suited": "Special occasions, cool evenings, and ceremonial wear.",
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "product_application_guide_section": {
+      "type": "product-application-guide",
+      "settings": {
+        "title": "How To Apply Concentrated Attar",
+        "heading_size": "h1",
+        "subtitle": "LONGEVITY GUIDE",
+        "step_1_title": "Apply on Pulse Points",
+        "step_1_desc": "Apply the perfume oil directly to pulse points (wrists, inner elbows, neck, and behind ears). Body heat in these spots diffuses the scent naturally.",
+        "step_2_title": "Dab, Don't Rub",
+        "step_2_desc": "Gently dab the oil on your skin. Never rub wrists together, as rubbing friction breaks down the delicate top note molecules and reduces scent longevity.",
+        "step_3_title": "Moisturize First",
+        "step_3_desc": "Fragrance lasts significantly longer on moisturized skin. Apply an unscented moisturizer or lotion to pulse points before dabbing your attar.",
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "custom_usp_grid_section": {
+      "type": "custom-usp-grid",
+      "settings": {
+        "title": "Pure & Authentic Fragrances",
+        "heading_size": "h1",
+        "subtitle": "The Mahekh Standard",
+        "columns_desktop": 4,
+        "show_borders": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      },
+      "blocks": {
+        "usp_1": {
+          "type": "usp",
+          "settings": {
+            "icon": "perfume",
+            "title": "100% Alcohol-Free",
+            "text": "Pure concentrated perfume oil that is gentle on your skin."
+          }
+        },
+        "usp_2": {
+          "type": "usp",
+          "settings": {
+            "icon": "stopwatch",
+            "title": "Long Lasting",
+            "text": "Carefully selected ingredients that keep you fragrant all day long."
+          }
+        },
+        "usp_3": {
+          "type": "usp",
+          "settings": {
+            "icon": "leaf",
+            "title": "Natural Craftsmanship",
+            "text": "Traditional steam distillation process (Deg-Bhapka) from Kannauj."
+          }
+        },
+        "usp_4": {
+          "type": "usp",
+          "settings": {
+            "icon": "heart",
+            "title": "Premium & Pure",
+            "text": "No animal testing, crafted with clean and authentic ingredients."
+          }
+        }
+      },
+      "block_order": [
+        "usp_1",
+        "usp_2",
+        "usp_3",
+        "usp_4"
+      ]
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "Other industry favorites",
+        "heading_size": "h2",
+        "products_to_show": 5,
+        "columns_desktop": 5,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 36,
+        "padding_bottom": 44
+      }
+    }
+  },
+  "order": [
+    "main",
+    "product_fragrance_profile_section",
+    "product_application_guide_section",
+    "custom_usp_grid_section",
+    "related-products"
+  ]
+}
