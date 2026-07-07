@@ -47,29 +47,29 @@
          .map(([key, value]) => `${key}: ${value} !important;`)
          .join(" ");
  
-       // Define the animation keyframes if needed
-       let animationRule = "";
-       if (styles.animation === "horizontal-jiggle") {
-         animationRule = `
-           @keyframes horizontal-jiggle {
-             0%, 100% { transform: translateX(0); }
-             25% { transform: translateX(-5px); }
-             50% { transform: translateX(5px); }
-             75% { transform: translateX(-5px); }
-           }
-         `;
-       }
- 
-       // Base CSS rule for the class
-       let cssRule = `
-         ${animationRule}
- 
-         .${className} {
-           ${stylesString}
-           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-           ${styles.animation === "horizontal-jiggle" ? "animation: horizontal-jiggle 1s ease-in-out infinite;" : ""}
-         }
-       `;
+        // Define the animation keyframes for highlight pulse
+        let animationRule = `
+          @keyframes srPulseHighlight {
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important; }
+            50% { transform: scale(1.02); box-shadow: 0 8px 22px rgba(204, 164, 59, 0.4) !important; }
+          }
+        `;
+  
+        // Base CSS rule for the class
+        let cssRule = `
+          ${animationRule}
+  
+          .${className} {
+            ${stylesString}
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+            animation: srPulseHighlight 2.5s infinite ease-in-out !important;
+            transition: all 0.3s ease !important;
+          }
+          .${className}:hover {
+            transform: scale(1.02) !important;
+            filter: brightness(1.05) !important;
+          }
+        `;
  
        // If 'text' key exists, append additional CSS rules
        if (styles.text) {
