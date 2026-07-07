@@ -171,6 +171,23 @@
         "padding_bottom": 36
       }
     },
+    "custom_making_process_homepage": {
+      "type": "product-making-process",
+      "settings": {
+        "subtitle": "CRAFTSMANSHIP & ORIGINS",
+        "title": "How We Distill Our Premium Attars",
+        "heading_size": "h1",
+        "step_1_title": "Raw Floral Harvest",
+        "step_1_desc": "Fresh rose, jasmine, or khus roots are hand-picked at dawn in Kannauj when the fragrance concentration is highest, and immediately sent to distillation.",
+        "step_2_title": "Copper Clay Distillation (Deg)",
+        "step_2_desc": "Petals are mixed with water in copper pots (Degs), sealed tightly using clay and cotton ropes, and heated gently over a wood-fire furnace.",
+        "step_3_title": "Clay Condensation (Bhapka)",
+        "step_3_desc": "Fragrant vapor travels through bamboo pipes into cold clay receivers (Bhapkas) submerged in water. Scent is captured drop by drop in pure sandalwood base oil.",
+        "color_scheme": "scheme-2",
+        "padding_top": 44,
+        "padding_bottom": 44
+      }
+    },
     "featured_collection_miQLWj": {
       "type": "featured-collection",
       "name": "t:sections.featured-collection.presets.name",
@@ -310,6 +327,7 @@
     "custom_usp_grid_homepage",
     "custom_categories_homepage",
     "featured_product_UXN8fm",
+    "custom_making_process_homepage",
     "featured_collection_miQLWj",
     "custom_heritage_homepage",
     "custom_testimonials_homepage",
