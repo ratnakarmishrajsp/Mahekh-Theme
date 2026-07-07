@@ -154,6 +154,21 @@
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
+          {%- assign has_conversion_urgency = false -%}
+          {%- assign has_social_proof = false -%}
+          {%- assign has_trust_badges = false -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'conversion_urgency' -%}
+              {%- assign has_conversion_urgency = true -%}
+            {%- endif -%}
+            {%- if block.type == 'social_proof' -%}
+              {%- assign has_social_proof = true -%}
+            {%- endif -%}
+            {%- if block.type == 'trust_badges' -%}
+              {%- assign has_trust_badges = true -%}
+            {%- endif -%}
+          {%- endfor -%}
+
           {%- for block in section.blocks -%}
             {%- case block.type -%}
               {%- when '@app' -%}
@@ -209,6 +224,17 @@
                     {{ form | payment_terms }}
                   {%- endform -%}
                 </div>
+                {%- if has_conversion_urgency == false -%}
+                  <div class="product__conversion-urgency">
+                    <div class="urgency-stock-ticker">
+                      <span class="pulse-red-dot"></span>
+                      <span class="ticker-text">Only <strong class="highlight-urgency" id="UrgencyStockCount">9</strong> sets left in this handcrafted batch!</span>
+                    </div>
+                    <div class="urgency-shipping-countdown">
+                      📦 Order within <strong class="highlight-urgency" id="UrgencyCountdown">00h 00m 00s</strong> to dispatch tomorrow morning!
+                    </div>
+                  </div>
+                {%- endif -%}
               {%- when 'inventory' -%}
                 <p
                   class="product__inventory{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.inventory_management != 'shopify' %} visibility-hidden{% endif %}"
@@ -554,6 +580,42 @@
                   section_id: section.id,
                   show_pickup_availability: true
                 -%}
+                {%- if has_social_proof == false -%}
+                  <div class="product__social-proof">
+                    <div class="social-live-view">
+                      <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px; margin-right:8px; vertical-align:middle; color:#cca43b; fill:none;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                      <span id="LiveViewCount" style="color:#cca43b; font-weight:700; margin-right:4px;">14</span> people are looking at this fragrance right now
+                    </div>
+                    <div class="social-recent-purchase" id="RecentPurchaseTicker" style="transition: opacity 0.5s ease-in-out;">
+                      🛒 Recent order: Priya from Mumbai bought this combo 8 mins ago!
+                    </div>
+                  </div>
+                {%- endif -%}
+                {%- if has_trust_badges == false -%}
+                  <div class="product__trust-badges">
+                    <div class="trust-badge-item">
+                      <span class="trust-badge-icon">💳</span>
+                      <div class="trust-badge-text">
+                        <strong>Prepaid Discount</strong>
+                        <span>Prepay and get ₹100 OFF Instantly!</span>
+                      </div>
+                    </div>
+                    <div class="trust-badge-item">
+                      <span class="trust-badge-icon">🚚</span>
+                      <div class="trust-badge-text">
+                        <strong>COD Available</strong>
+                        <span>Cash on Delivery active nationwide.</span>
+                      </div>
+                    </div>
+                    <div class="trust-badge-item">
+                      <span class="trust-badge-icon">🌿</span>
+                      <div class="trust-badge-text">
+                        <strong>100% Skin Safe</strong>
+                        <span>Alcohol-free &amp; paraben-free oils.</span>
+                      </div>
+                    </div>
+                  </div>
+                {%- endif -%}
               {%- when 'conversion_urgency' -%}
                 <div class="product__conversion-urgency" {{ block.shopify_attributes }}>
                   <div class="urgency-stock-ticker">
