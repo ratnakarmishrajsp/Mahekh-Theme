@@ -157,6 +157,7 @@
           {%- assign has_conversion_urgency = false -%}
           {%- assign has_social_proof = false -%}
           {%- assign has_trust_badges = false -%}
+          {%- assign has_whatsapp_button = false -%}
           {%- for block in section.blocks -%}
             {%- if block.type == 'conversion_urgency' -%}
               {%- assign has_conversion_urgency = true -%}
@@ -166,6 +167,9 @@
             {%- endif -%}
             {%- if block.type == 'trust_badges' -%}
               {%- assign has_trust_badges = true -%}
+            {%- endif -%}
+            {%- if block.type == 'whatsapp_button' -%}
+              {%- assign has_whatsapp_button = true -%}
             {%- endif -%}
           {%- endfor -%}
 
@@ -286,7 +290,29 @@
                     {%- endif -%}
                   {%- endif -%}
                 </p>
+              {%- when 'whatsapp_button' -%}
+                <div class="product__whatsapp-order" {{ block.shopify_attributes }}>
+                  {%- assign wa_phone = block.settings.phone_number | default: '918076045585' -%}
+                  {%- assign wa_text = block.settings.prefilled_text | default: 'Hello Mahekh, I would like to order the Mahekh Premium Attar Combo (Katcha Bela + Kesar Chandan + Mogra). Please assist me with my order!' | url_param_escape -%}
+                  <a href="https://wa.me/{{ wa_phone }}?text={{ wa_text }}" target="_blank" class="whatsapp-order-btn">
+                    <svg class="whatsapp-icon" viewBox="0 0 24 24" width="22" height="22" fill="#fff">
+                      <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.006 5.282 5.289-.002 11.795 0c3.148.002 6.11 1.229 8.342 3.463 2.23 2.236 3.451 5.201 3.447 8.35-.008 6.516-5.29 11.802-11.796 11.802-2.007-.001-3.97-.514-5.717-1.488L0 24zm6.49-4.523c1.657.982 3.277 1.498 4.907 1.499 5.378 0 9.754-4.374 9.76-9.758.002-2.609-1.01-5.06-2.852-6.904C16.46 2.47 14.004 1.455 11.8 1.451c-5.38 0-9.757 4.374-9.764 9.758-.002 1.738.459 3.43 1.332 4.937L2.33 21.68l5.776-1.517c-1.637.95-3.05 1.503-4.56 1.499zM17.5 14.2c-.3-.15-1.8-.9-2.1-1-.3-.15-.5-.2-.7.1s-.8.9-1 1.2c-.2.25-.4.3-.7.15-1.4-.7-2.5-1.3-3.5-3-.3-.45.3-.4.8-.9.2-.2.2-.4.1-.6s-1-2.4-1.3-3.2c-.3-.8-.7-.7-.9-.7h-.7c-.25 0-.6.1-.9.4s-1.1 1.1-1.1 2.7 1.2 3.1 1.4 3.3c.2.2 2.3 3.6 5.7 5.1.8.3 1.5.5 2 .7.8.25 1.6.2 2.2.1.7-.1 1.8-.7 2.1-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.35z"/>
+                    </svg>
+                    <span>{{ block.settings.button_text | default: 'Order on WhatsApp' | escape }}</span>
+                  </a>
+                </div>
               {%- when 'description' -%}
+                {%- if has_whatsapp_button == false -%}
+                  <div class="product__whatsapp-order">
+                    {%- assign wa_text = 'Hello Mahekh, I would like to order the Mahekh Premium Attar Combo (Katcha Bela + Kesar Chandan + Mogra). Please assist me with my order!' | url_param_escape -%}
+                    <a href="https://wa.me/918076045585?text={{ wa_text }}" target="_blank" class="whatsapp-order-btn">
+                      <svg class="whatsapp-icon" viewBox="0 0 24 24" width="22" height="22" fill="#fff">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.006 5.282 5.289-.002 11.795 0c3.148.002 6.11 1.229 8.342 3.463 2.23 2.236 3.451 5.201 3.447 8.35-.008 6.516-5.29 11.802-11.796 11.802-2.007-.001-3.97-.514-5.717-1.488L0 24zm6.49-4.523c1.657.982 3.277 1.498 4.907 1.499 5.378 0 9.754-4.374 9.76-9.758.002-2.609-1.01-5.06-2.852-6.904C16.46 2.47 14.004 1.455 11.8 1.451c-5.38 0-9.757 4.374-9.764 9.758-.002 1.738.459 3.43 1.332 4.937L2.33 21.68l5.776-1.517c-1.637.95-3.05 1.503-4.56 1.499zM17.5 14.2c-.3-.15-1.8-.9-2.1-1-.3-.15-.5-.2-.7.1s-.8.9-1 1.2c-.2.25-.4.3-.7.15-1.4-.7-2.5-1.3-3.5-3-.3-.45.3-.4.8-.9.2-.2.2-.4.1-.6s-1-2.4-1.3-3.2c-.3-.8-.7-.7-.9-.7h-.7c-.25 0-.6.1-.9.4s-1.1 1.1-1.1 2.7 1.2 3.1 1.4 3.3c.2.2 2.3 3.6 5.7 5.1.8.3 1.5.5 2 .7.8.25 1.6.2 2.2.1.7-.1 1.8-.7 2.1-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.35z"/>
+                      </svg>
+                      <span>Order on WhatsApp</span>
+                    </a>
+                  </div>
+                {%- endif -%}
                 {%- if product.description != blank -%}
                   <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }}>
                     {{ product.description }}
@@ -2310,6 +2336,31 @@
       "name": "Trust Badges",
       "limit": 1,
       "settings": []
+    },
+    {
+      "type": "whatsapp_button",
+      "name": "WhatsApp Order Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "phone_number",
+          "default": "918076045585",
+          "label": "WhatsApp Phone Number (with country code)"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "default": "Order on WhatsApp",
+          "label": "Button Label"
+        },
+        {
+          "type": "textarea",
+          "id": "prefilled_text",
+          "default": "Hello Mahekh, I would like to order the Mahekh Premium Attar Combo (Katcha Bela + Kesar Chandan + Mogra). Please assist me with my order!",
+          "label": "Pre-filled Message"
+        }
+      ]
     }
   ],
   "settings": [
@@ -2613,6 +2664,57 @@
     font-size: 1.2rem;
     color: #4a453e;
     line-height: 1.4;
+  }
+
+  /* WhatsApp Order Button styling */
+  .product__whatsapp-order {
+    margin: 2.5rem 0;
+    text-align: left;
+  }
+
+  .whatsapp-order-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+    background: #25d366;
+    color: #ffffff !important;
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 1.5rem 3rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    animation: waPulse 2s infinite ease-in-out;
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .whatsapp-order-btn:hover {
+    background: #20ba5a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+  }
+
+  .whatsapp-icon {
+    fill: #ffffff;
+    animation: waIconShake 1.5s infinite ease-in-out;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  @keyframes waPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3); }
+    50% { transform: scale(1.03); box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5); }
+  }
+
+  @keyframes waIconShake {
+    0%, 100% { transform: rotate(0); }
+    25% { transform: rotate(-8deg); }
+    75% { transform: rotate(8deg); }
   }
 
   /* Mobile Sticky Buy Bar */
