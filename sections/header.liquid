@@ -45,16 +45,29 @@
   .list-menu--inline {
     display: inline-flex;
     flex-wrap: wrap;
+    justify-content: center; /* Center menu items */
+    gap: 3rem; /* Elegant spacing */
+    margin: 0 auto;
   }
 
   summary.list-menu__item {
-    padding-right: 2.7rem;
+    padding-right: 2rem;
   }
 
   .list-menu__item {
     display: flex;
     align-items: center;
     line-height: calc(1 + 0.3 / var(--font-body-scale));
+    font-weight: 700 !important; /* Bold menu text */
+    text-transform: uppercase; /* Upper case for luxury feel */
+    letter-spacing: 0.08em; /* Premium character spacing */
+    font-size: 1.3rem !important;
+    color: #121212 !important; /* Rich solid color */
+    transition: color 0.3s ease;
+  }
+
+  .list-menu__item:hover {
+    color: #cca43b !important; /* Glow to gold on hover! */
   }
 
   .list-menu__item--link {
