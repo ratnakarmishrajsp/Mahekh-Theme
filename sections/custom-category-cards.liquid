@@ -11,27 +11,14 @@
     }
   }
 
-  /* Royal Dark-Amber Theme for Category Cards */
+  /* Ivory-Cream and Gold Theme for Category Cards */
   .custom-categories {
     text-align: center;
-    background: radial-gradient(circle at center, #1b1512 0%, #0e0a08 100%) !important; /* Deep Royal Amber-Charcoal */
-    color: #f9f6f0 !important;
+    background: #faf8f5 !important; /* Premium Ivory-Cream background */
+    color: #121212 !important;
     position: relative;
     border-top: 1px solid rgba(204, 164, 59, 0.15);
     border-bottom: 1px solid rgba(204, 164, 59, 0.15);
-  }
-
-  .custom-categories::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: radial-gradient(rgba(204, 164, 59, 0.04) 1px, transparent 1px);
-    background-size: 24px 24px;
-    pointer-events: none;
-    opacity: 0.8;
   }
 
   .custom-categories__grid {
@@ -64,10 +51,10 @@
     position: relative;
     width: 100%;
     overflow: hidden;
-    background-color: rgba(255, 255, 255, 0.02);
+    background-color: #ffffff;
     transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     border: 1px solid rgba(204, 164, 59, 0.15); /* Gold outline */
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
   }
 
   /* Shapes */
@@ -117,7 +104,7 @@
   }
 
   .custom-categories__card:hover .custom-categories__image-wrapper {
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(204, 164, 59, 0.15);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.06), 0 0 15px rgba(204, 164, 59, 0.15);
     border-color: #cca43b; /* Gold glow on hover */
   }
 
@@ -127,7 +114,7 @@
     font-size: 1.5rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #ffffff !important;
+    color: #121212 !important;
     font-family: 'Playfair Display', serif;
   }
 
@@ -137,7 +124,7 @@
     opacity: 0.8;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #e5dec9 !important; /* Soft ivory color */
+    color: #cca43b !important; /* Gold subtitle accent */
   }
 
   .custom-categories__overlay {
@@ -146,13 +133,13 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.15);
+    background: rgba(0, 0, 0, 0.02);
     transition: background 0.3s ease;
     z-index: 1;
   }
 
   .custom-categories__card:hover .custom-categories__overlay {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.05);
   }
 
   .custom-categories__subtitle-text {
@@ -172,7 +159,7 @@
           </p>
         {%- endif -%}
         {%- if section.settings.title != blank -%}
-          <h2 class="title inline-richtext {{ section.settings.heading_size }}" style="margin: 0; font-family: 'Playfair Display', serif; font-weight: 600; color: #ffffff; letter-spacing: 0.03em;">
+          <h2 class="title inline-richtext {{ section.settings.heading_size }}" style="margin: 0; font-family: 'Playfair Display', serif; font-weight: 600; color: #121212; letter-spacing: 0.03em;">
             {{ section.settings.title | escape }}
           </h2>
         {%- endif -%}
@@ -193,8 +180,18 @@
                 class="custom-categories__image"
               >
             {%- else -%}
-              {%- assign placeholder_image_index = forloop.index | minus: 1 | modulo: 3 | plus: 1 -%}
-              {{ 'collection-' | append: placeholder_image_index | placeholder_svg_tag: 'placeholder-svg custom-categories__image' }}
+              {%- assign index_val = forloop.index -%}
+              {%- if index_val == 1 -%}
+                <img src="{{ 'note-oudh.png' | asset_url }}" alt="Royal Oudh Note" class="custom-categories__image" loading="lazy" width="220" height="280">
+              {%- elsif index_val == 2 -%}
+                <img src="{{ 'note-rose.png' | asset_url }}" alt="Classic Rose Note" class="custom-categories__image" loading="lazy" width="220" height="280">
+              {%- elsif index_val == 3 -%}
+                <img src="{{ 'note-khus.png' | asset_url }}" alt="Earthy Khus Note" class="custom-categories__image" loading="lazy" width="220" height="280">
+              {%- elsif index_val == 4 -%}
+                <img src="{{ 'note-musk.png' | asset_url }}" alt="Exotic Musk Note" class="custom-categories__image" loading="lazy" width="220" height="280">
+              {%- else -%}
+                {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg custom-categories__image' }}
+              {%- endif -%}
             {%- endif -%}
             <div class="custom-categories__overlay"></div>
           </div>
