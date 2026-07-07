@@ -31,7 +31,8 @@
             "button_label": "Need help? Chat with us",
             "button_style": "round",
             "background_color": "#2db742",
-            "text_color": "#ffffff"
+            "text_color": "#ffffff",
+            "phone_number": "919321868526"
           }
         },
         "description": {
@@ -67,6 +68,14 @@
         "trust_badges_mahekh": {
           "type": "trust_badges",
           "settings": {}
+        },
+        "whatsapp_button_mahekh": {
+          "type": "whatsapp_button",
+          "settings": {
+            "phone_number": "919321868526",
+            "button_text": "Order on WhatsApp",
+            "prefilled_text": "Hello Mahekh, I would like to order the Mahekh Premium Attar Combo (Katcha Bela + Kesar Chandan + Mogra). Please assist me with my order!"
+          }
         }
       },
       "block_order": [
@@ -75,6 +84,7 @@
         "price",
         "conversion_urgency_mahekh",
         "buy_buttons_YKNBFb",
+        "whatsapp_button_mahekh",
         "social_proof_mahekh",
         "trust_badges_mahekh",
         "seedgrow_whatsapp_chat_app_block_AtLN6F",
