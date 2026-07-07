@@ -5,11 +5,30 @@
 
  <!-- BTN - CUST - SCRIPT - START  -->
  <input type="hidden" value="true" id="shiprocketCheckoutBtnStylesCheck"/>
- <style>
-  .shiprocket-headless{
-  width:100%!important;
-}
- </style>
+  <style>
+   .shiprocket-headless {
+     width: 100% !important;
+     display: block !important;
+     transition: all 0.3s ease !important;
+     animation: srPulseHighlight 2.5s infinite ease-in-out !important;
+   }
+   
+   .shiprocket-headless:hover {
+     transform: scale(1.02) !important;
+     filter: brightness(1.05) !important;
+   }
+
+   @keyframes srPulseHighlight {
+     0%, 100% {
+       transform: scale(1);
+       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+     }
+     50% {
+       transform: scale(1.018);
+       box-shadow: 0 8px 22px rgba(204, 164, 59, 0.35) !important;
+     }
+   }
+  </style>
  <script>
    let btnStyles = null;
    {% if shop.metafields.shiprocketCheckoutButton.shiprocketCheckoutButtonStyles %}
