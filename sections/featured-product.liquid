@@ -42,7 +42,29 @@
       }
     }
 
-    /* Luxury Featured Product Overrides */
+    /* Luxury Featured Product Cream/Gold Theme Overrides */
+    .featured-product {
+      background: #faf8f5 !important; /* Premium Ivory-Cream background */
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      border: 1px solid rgba(204, 164, 59, 0.15); /* Gold outline for the entire section card */
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    }
+
+    @media screen and (min-width: 750px) {
+      .featured-product {
+        padding: 5rem 4rem;
+      }
+    }
+
+    #ProductInfo-{{ section.id }} {
+      background: #ffffff;
+      padding: 3rem;
+      border-radius: 8px;
+      border: 1px solid rgba(204, 164, 59, 0.15); /* Gold frame for product details */
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.02);
+    }
+
     #ProductInfo-{{ section.id }} .product__title h1,
     #ProductInfo-{{ section.id }} .product__title h2 {
       font-family: 'Playfair Display', serif !important;
