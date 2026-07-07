@@ -53,13 +53,30 @@
             "icon": "leaf",
             "content": "<p>Each drop of Mahekh attar is distilled using traditional copper pots (Degs) and clay receivers (Bhapkas) in Kannauj, the perfume capital of India. We source only the purest natural blossoms and ingredients.<\/p>"
           }
+        },
+        "conversion_urgency_mahekh": {
+          "type": "conversion_urgency",
+          "settings": {
+            "stock_threshold": 9
+          }
+        },
+        "social_proof_mahekh": {
+          "type": "social_proof",
+          "settings": {}
+        },
+        "trust_badges_mahekh": {
+          "type": "trust_badges",
+          "settings": {}
         }
       },
       "block_order": [
         "title",
         "variant_picker_VXpTRR",
         "price",
+        "conversion_urgency_mahekh",
         "buy_buttons_YKNBFb",
+        "social_proof_mahekh",
+        "trust_badges_mahekh",
         "seedgrow_whatsapp_chat_app_block_AtLN6F",
         "description",
         "collapsible_tab_shipping",
