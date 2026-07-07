@@ -1,16 +1,14 @@
 <div class="mh-lux-wrapper">
-  <!-- Scoped CSS Stylesheet for White/Gold Theme & Smooth Animations -->
+  <!-- Scoped CSS Stylesheet (White & Gold Theme, Inherited Fonts, Lift & Pulse Animations) -->
   <style>
     .mh-lux-wrapper {
-      font-family: inherit;
-      background-color: #ffffff; /* Pristine White Background */
-      color: #1a1a1a; /* Rich Black Text */
-      padding: 3rem 1rem;
+      background-color: #ffffff; /* White background */
+      color: #1a1a1a; /* Black text */
+      padding: 2.5rem 1rem;
       max-width: 100%;
-      overflow-x: hidden;
       box-sizing: border-box;
-      line-height: 1.6;
-      animation: mhFadeInUp 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+      line-height: 1.7;
+      animation: mhFadeIn 0.8s ease-out forwards;
     }
 
     .mh-lux-wrapper *,
@@ -19,148 +17,106 @@
       box-sizing: inherit;
     }
 
-    @keyframes mhFadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    @keyframes mhFadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Typography */
-    .mh-lux-heading-large {
-      font-size: 2.4rem;
-      font-weight: 600;
-      line-height: 1.25;
+    /* Standardized typography inheriting theme fonts and natural sizes */
+    .mh-lux-title-large {
+      font-size: 2.5rem;
+      font-weight: 700;
       margin: 0 0 1rem 0;
       color: #121212;
       text-align: center;
-      letter-spacing: 0.01em;
+      letter-spacing: -0.02em;
     }
 
-    .mh-lux-heading-medium {
-      font-size: 1.9rem;
-      font-weight: 600;
-      line-height: 1.3;
-      margin: 0 0 1.2rem 0;
+    .mh-lux-title-medium {
+      font-size: 1.85rem;
+      font-weight: 700;
+      margin: 0 0 1.5rem 0;
       color: #121212;
       text-align: center;
-    }
-
-    .mh-lux-heading-small {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin: 0 0 0.8rem 0;
-      color: #121212;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
     }
 
     .mh-lux-subtitle {
       font-style: italic;
-      color: #cca43b; /* Premium Metallic Gold */
+      color: #cca43b; /* Premium Gold */
       font-size: 1.25rem;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.8rem;
       display: block;
       text-align: center;
     }
 
     .mh-lux-text {
-      font-size: 1.35rem;
-      color: #4a4a4a; /* Soft Charcoal */
-      margin: 0 0 1.5rem 0;
+      color: #4a4a4a;
+      margin-bottom: 1.5rem;
       text-align: center;
     }
 
-    /* Layout Containers */
     .mh-lux-container {
-      max-width: 760px;
-      margin: 0 auto 4rem auto;
+      max-width: 780px;
+      margin: 0 auto 4.5rem auto;
     }
 
-    .mh-lux-section-header {
-      margin-bottom: 2.5rem;
-    }
-
-    /* Premium Compact Cards */
+    /* Cards with hover slide & shadow animations */
     .mh-lux-card {
-      background: #faf8f5; /* Light Ivory-Cream backdrop */
-      border: 1px solid rgba(204, 164, 59, 0.18); /* Thin gold border */
-      border-radius: 10px;
-      padding: 2.2rem 1.8rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02);
+      background: #faf8f5; /* Light Ivory-Cream */
+      border: 1px solid rgba(204, 164, 59, 0.2);
+      border-radius: 8px;
+      padding: 2rem 1.8rem;
+      margin-bottom: 2.2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
       transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
 
     .mh-lux-card:hover {
       transform: translateY(-4px);
       border-color: #cca43b;
-      box-shadow: 0 10px 25px rgba(204, 164, 59, 0.1);
       background: #ffffff;
+      box-shadow: 0 12px 25px rgba(204, 164, 59, 0.1);
     }
 
-    /* Grids & Badges */
-    .mh-lux-grid-3 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.2rem;
-    }
-
-    @media screen and (min-width: 600px) {
-      .mh-lux-grid-3 {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-
-    .mh-lux-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      padding: 0.8rem 1.2rem;
+    /* Image Block */
+    .mh-lux-image-box {
+      width: 100%;
+      aspect-ratio: 1.8 / 1;
       background: #faf8f5;
-      border: 1px solid rgba(204, 164, 59, 0.18);
-      border-radius: 20px;
-      font-size: 1.2rem;
-      font-weight: 500;
-      color: #121212;
-      transition: all 0.3s ease;
-      text-align: center;
+      border: 1px solid rgba(204, 164, 59, 0.2);
+      border-radius: 8px;
+      margin: 2.2rem 0;
+      overflow: hidden;
+      position: relative;
     }
 
-    .mh-lux-badge:hover {
-      border-color: #cca43b;
-      background: rgba(204, 164, 59, 0.04);
-      transform: scale(1.03);
+    .mh-lux-image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
 
-    .mh-lux-badge-icon {
-      width: 14px;
-      height: 14px;
-      color: #cca43b;
+    .mh-lux-image-box:hover img {
+      transform: scale(1.04);
     }
 
-    /* Compact Fragrance Notes Layout */
+    /* Fragrance Cards (Compact Columns) */
     .mh-lux-frag-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }
 
-    @media screen and (min-width: 600px) {
+    @media screen and (min-width: 750px) {
       .mh-lux-frag-grid {
         grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
       }
     }
 
-    .mh-lux-frag-item {
+    .mh-lux-frag-card {
       background: #ffffff;
       border: 1px solid rgba(204, 164, 59, 0.15);
       border-radius: 8px;
@@ -169,69 +125,100 @@
       transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
 
-    .mh-lux-frag-item:hover {
+    .mh-lux-frag-card:hover {
       transform: translateY(-4px);
       border-color: #cca43b;
-      box-shadow: 0 8px 20px rgba(204, 164, 59, 0.08);
+      box-shadow: 0 10px 22px rgba(204, 164, 59, 0.08);
     }
 
     .mh-lux-frag-title {
-      font-size: 1.45rem;
-      font-weight: 600;
-      color: #cca43b;
-      margin-bottom: 0.6rem;
-    }
-
-    .mh-lux-frag-desc {
-      font-size: 1.2rem;
-      color: #4a4a4a;
-      line-height: 1.5;
-      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #121212;
+      margin-bottom: 0.8rem;
     }
 
     .mh-lux-frag-notes {
-      font-size: 1.15rem;
       font-weight: 600;
-      color: #121212;
-      border-top: 1px dashed rgba(204, 164, 59, 0.2);
-      padding-top: 0.8rem;
+      color: #cca43b;
+      margin-bottom: 1rem;
     }
 
-    /* Image Display Area */
-    .mh-lux-image-wrapper {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 1.8 / 1;
+    /* Creative Mood & Scent Intensity Meters */
+    .mh-lux-meter {
+      font-size: 0.95em;
+      color: #555555;
+      background: rgba(204, 164, 59, 0.04);
+      padding: 0.6rem 0.8rem;
+      border-radius: 6px;
+      margin-top: 1rem;
+      border: 1px solid rgba(204, 164, 59, 0.1);
+    }
+
+    /* Signature Scent Layering Guide */
+    .mh-lux-layering {
+      text-align: center;
+      background: linear-gradient(180deg, #faf8f5 0%, #ffffff 100%);
+      border: 1px solid rgba(204, 164, 59, 0.2);
+      border-radius: 8px;
+      padding: 2.5rem 2rem;
+      margin-top: 3rem;
+    }
+
+    .mh-lux-layering-recipe {
+      display: inline-block;
+      background: #ffffff;
+      border: 1px solid rgba(204, 164, 59, 0.15);
+      border-radius: 30px;
+      padding: 0.6rem 1.8rem;
+      margin: 0.6rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .mh-lux-layering-recipe:hover {
+      border-color: #cca43b;
+      transform: scale(1.04);
+      box-shadow: 0 4px 12px rgba(204, 164, 59, 0.1);
+    }
+
+    /* Badge Grid */
+    .mh-lux-badge-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .mh-lux-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.6rem 1.4rem;
       background: #faf8f5;
       border: 1px solid rgba(204, 164, 59, 0.18);
-      border-radius: 8px;
-      margin: 2rem 0;
-      overflow: hidden;
+      border-radius: 20px;
+      font-weight: 500;
+      color: #121212;
+      transition: all 0.3s ease;
     }
 
-    .mh-lux-image-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s ease;
+    .mh-lux-badge:hover {
+      border-color: #cca43b;
+      background: rgba(204, 164, 59, 0.04);
+      transform: translateY(-2px);
     }
 
-    .mh-lux-image-wrapper:hover img {
-      transform: scale(1.03);
-    }
-
-    /* Comparison Table (Compact) */
+    /* Comparison Table */
     .mh-lux-table-wrapper {
       width: 100%;
       overflow-x: auto;
       border-radius: 8px;
-      border: 1px solid rgba(204, 164, 59, 0.18);
+      border: 1px solid rgba(204, 164, 59, 0.2);
     }
 
     .mh-lux-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 1.25rem;
       background: #ffffff;
       text-align: left;
     }
@@ -245,20 +232,19 @@
     .mh-lux-table th {
       background: rgba(204, 164, 59, 0.05);
       color: #121212;
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
-      font-size: 1.1rem;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
     }
 
     .mh-lux-table-check {
       color: #2e7d32;
-      font-weight: 600;
+      font-weight: bold;
     }
 
     .mh-lux-table-cross {
       color: #d32f2f;
-      font-weight: 600;
+      font-weight: bold;
     }
 
     /* How to Apply Steps */
@@ -280,11 +266,10 @@
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: 1.15rem;
       flex-shrink: 0;
     }
 
-    /* FAQ (Accordion - No JS) */
+    /* Accordion FAQ */
     .mh-lux-faq-details {
       border-bottom: 1px solid rgba(204, 164, 59, 0.15);
     }
@@ -296,7 +281,6 @@
       padding: 1.4rem 0.5rem;
       cursor: pointer;
       font-weight: 600;
-      font-size: 1.35rem;
       color: #121212;
       list-style: none;
       user-select: none;
@@ -329,68 +313,92 @@
 
     .mh-lux-faq-content {
       padding: 0 0.5rem 1.4rem 0.5rem;
-      font-size: 1.25rem;
-      line-height: 1.6;
       color: #4a4a4a;
       text-align: left;
     }
   </style>
 
-  <!-- 1. Hero & Story -->
+  <!-- 1. Hero / Main Story -->
   <div class="mh-lux-container">
     <span class="mh-lux-subtitle">A Trio of Pure Liquid Gold</span>
-    <h1 class="mh-lux-heading-large">MAHEKH Premium Attar Set</h1>
-    <p class="mh-lux-text" style="max-width: 620px; margin: 0 auto 1.5rem auto;">
-      Experience the ancient heritage of Kannauj perfumery. Hand-distilled in traditional copper pots (Degs), this alcohol-free trio captures raw blossoms inside sandalwood oil base for an elite, skin-friendly sillage.
+    <h1 class="mh-lux-title-large">MAHEKH Premium Attar Set</h1>
+    <p class="mh-lux-text">
+      Immerse yourself in the timeless world of natural fragrances with the <strong>MAHEKH Premium Attar Combo Set</strong>. Handcrafted in India's legendary perfume capital using traditional steam distillation, this trio locks raw botanical vapors directly into pure sandalwood carrier oils for a rich, alcohol-free projection that lasts all day.
     </p>
 
-    <!-- Interactive Image Block -->
-    <div class="mh-lux-image-wrapper">
-      <img src="[IMAGE_1_PLACEHOLDER]" alt="MAHEKH Premium Attar Combo Set Packaging">
+    <!-- Product Image Box -->
+    <div class="mh-lux-image-box">
+      <img src="[IMAGE_1_PLACEHOLDER]" alt="MAHEKH Premium Attar Combo Packaging Set">
     </div>
   </div>
 
-  <!-- 2. Meet The Fragrances (3 columns) -->
+  <!-- 2. Meet The Fragrances (3 columns) with interactive Scent Metrics -->
   <div class="mh-lux-container">
     <div class="mh-lux-section-header">
-      <span class="mh-lux-subtitle">The Olfactory Journey</span>
-      <h2 class="mh-lux-heading-medium">Meet The Fragrances</h2>
+      <span class="mh-lux-subtitle">Olfactory Profiles</span>
+      <h2 class="mh-lux-title-medium">Meet The Fragrances</h2>
     </div>
     <div class="mh-lux-frag-grid">
       <!-- Fragrance 1 -->
-      <div class="mh-lux-frag-item">
-        <h3 class="mh-lux-frag-title">Katcha Bela</h3>
-        <p class="mh-lux-frag-desc">Grounding and crisp wood notes that mimic monsoon rain on dry soil.</p>
-        <div class="mh-lux-frag-notes">Vetiver & Sandalwood</div>
+      <div class="mh-lux-frag-card">
+        <div class="mh-lux-frag-title">Katcha Bela</div>
+        <div class="mh-lux-frag-notes">Earthy & Woody Vetiver</div>
+        <p class="mh-lux-text" style="font-size: 0.95em;">Like fresh monsoon rain falling on warm Kannauj soil.</p>
+        <div class="mh-lux-meter">
+          🌱 Freshness: <strong>★★★★★</strong><br>
+          🪵 Earthiness: <strong>★★★★★</strong>
+        </div>
       </div>
       <!-- Fragrance 2 -->
-      <div class="mh-lux-frag-item">
-        <h3 class="mh-lux-frag-title">Kesar Chandan</h3>
-        <p class="mh-lux-frag-desc">A rich, spiritual blend of saffron threads and creamy temple sandalwood.</p>
-        <div class="mh-lux-frag-notes">Saffron & Amber</div>
+      <div class="mh-lux-frag-card">
+        <div class="mh-lux-frag-title">Kesar Chandan</div>
+        <div class="mh-lux-frag-notes">Regal Saffron & Sandal</div>
+        <p class="mh-lux-text" style="font-size: 0.95em;">Spiritual Kashmiri saffron threads in creamy sandalwood.</p>
+        <div class="mh-lux-meter">
+          🔥 Warmth: <strong>★★★★★</strong><br>
+          👑 Royalty: <strong>★★★★★</strong>
+        </div>
       </div>
       <!-- Fragrance 3 -->
-      <div class="mh-lux-frag-item">
-        <h3 class="mh-lux-frag-title">Mogra</h3>
-        <p class="mh-lux-frag-desc">Sweet white floral fragrance inspired by fresh night-blooming jasmines.</p>
-        <div class="mh-lux-frag-notes">Jasmine & White Musk</div>
+      <div class="mh-lux-frag-card">
+        <div class="mh-lux-frag-title">Mogra</div>
+        <div class="mh-lux-frag-notes">Uplifting Floral Jasmine</div>
+        <p class="mh-lux-text" style="font-size: 0.95em;">Freshly gathered jasmine flower buds in morning dew.</p>
+        <div class="mh-lux-meter">
+          🌸 Sweetness: <strong>★★★★★</strong><br>
+          💖 Romance: <strong>★★★★★</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Interactive Layering Mixologist Guide -->
+    <div class="mh-lux-layering">
+      <span class="mh-lux-subtitle" style="margin-bottom: 0.4rem;">Creative Scent Layering</span>
+      <h3 style="margin: 0 0 1rem 0; font-size: 1.4rem; color: #121212; font-weight: 700;">Mix &amp; Match Your Signature Scent</h3>
+      <p class="mh-lux-text" style="font-size: 0.95em; margin-bottom: 1.5rem;">
+        Layer these pure attars together on pulse points to create customized fragrance profiles:
+      </p>
+      <div>
+        <span class="mh-lux-layering-recipe">Mogra + Kesar Chandan = Royal Jasmine Gold 👑</span>
+        <span class="mh-lux-layering-recipe">Katcha Bela + Mogra = Dewy Forest Blossom 🌿🌸</span>
+        <span class="mh-lux-layering-recipe">Katcha Bela + Kesar Chandan = Earthy Saffron Sandal 🏺</span>
       </div>
     </div>
   </div>
 
-  <!-- 3. Why Choose MAHEKH (Badges Grid) -->
+  <!-- 3. Why Choose MAHEKH -->
   <div class="mh-lux-container" style="text-align: center;">
     <div class="mh-lux-section-header">
-      <span class="mh-lux-subtitle">Premium Quality</span>
-      <h2 class="mh-lux-heading-medium">The Mahekh Difference</h2>
+      <span class="mh-lux-subtitle">The Mahekh Promise</span>
+      <h2 class="mh-lux-title-medium">Why Customers Love It</h2>
     </div>
     <div class="mh-lux-badge-grid">
-      <span class="mh-lux-badge">🌿 100% Pure Botanical Oils</span>
-      <span class="mh-lux-badge">💧 Completely Alcohol-Free</span>
-      <span class="mh-lux-badge">⏱ 12+ Hour Sillage Sensation</span>
-      <span class="mh-lux-badge">🛡 Non-Irritating to Sensitive Skin</span>
-      <span class="mh-lux-badge">🏺 Traditional Kannauj Steam Process</span>
+      <span class="mh-lux-badge">🌿 100% Skin Friendly</span>
+      <span class="mh-lux-badge">⏱ 12+ Hour Longevity</span>
+      <span class="mh-lux-badge">🏺 Legacy Copper Pot Steam</span>
+      <span class="mh-lux-badge">💧 Alcohol &amp; Chemical Free</span>
       <span class="mh-lux-badge">✈ Travel-Safe Gold Vials</span>
+      <span class="mh-lux-badge">🎁 Exquisite Luxury Box Packaging</span>
     </div>
   </div>
 
@@ -398,7 +406,7 @@
   <div class="mh-lux-container">
     <div class="mh-lux-section-header">
       <span class="mh-lux-subtitle">Scent Science</span>
-      <h2 class="mh-lux-heading-medium">Attar Set vs Spray Perfumes</h2>
+      <h2 class="mh-lux-title-medium">Attars vs Spray Perfumes</h2>
     </div>
     <div class="mh-lux-table-wrapper">
       <table class="mh-lux-table">
@@ -411,48 +419,48 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>Alcohol Base</strong></td>
+            <td><strong>Ethyl Alcohol</strong></td>
             <td class="mh-lux-table-check">0% (Pure Oil Concentration)</td>
-            <td class="mh-lux-table-cross">85%+ Harsh Ethyl Alcohol</td>
+            <td class="mh-lux-table-cross">85%+ Harsh Alcohol base</td>
           </tr>
           <tr>
-            <td><strong>Scent Duration</strong></td>
-            <td class="mh-lux-table-check">12+ Hours (Body heat activated)</td>
+            <td><strong>Longevity</strong></td>
+            <td class="mh-lux-table-check">12+ Hours (Reacts with body heat)</td>
             <td class="mh-lux-table-cross">2 - 3 Hours (Evaporates fast)</td>
           </tr>
           <tr>
-            <td><strong>Skin Comfort</strong></td>
-            <td class="mh-lux-table-check">Safe & non-drying carrier oils</td>
-            <td class="mh-lux-table-cross">Can cause dryness/redness</td>
+            <td><strong>Skin Safety</strong></td>
+            <td class="mh-lux-table-check">Protects and moisturizes skin</td>
+            <td class="mh-lux-table-cross">Can cause dryness/rashes</td>
           </tr>
           <tr>
             <td><strong>Crafting Origin</strong></td>
             <td class="mh-lux-table-check">Copper Pot Deg-Bhapka Steam</td>
-            <td class="mh-lux-table-cross">Factory chemical compounds</td>
+            <td class="mh-lux-table-cross">Synthetic chemical compounds</td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
 
-  <!-- 5. How to Apply -->
+  <!-- 5. How to Apply Guidelines -->
   <div class="mh-lux-container">
     <div class="mh-lux-card" style="padding: 2.2rem 1.8rem; margin-bottom: 0;">
-      <h3 class="mh-lux-heading-small" style="color: #cca43b; text-align: center; margin-bottom: 2rem;">How to Apply</h3>
+      <h3 class="mh-lux-title-medium" style="color: #cca43b; margin-bottom: 2rem;">How to Apply</h3>
       <!-- Step 1 -->
       <div class="mh-lux-apply-step">
         <div class="mh-lux-apply-num">1</div>
         <div>
-          <h4 style="margin: 0 0 0.2rem 0; font-size: 1.3rem; font-weight: 600; color: #121212;">Dab Pulse Points</h4>
-          <p style="margin: 0; font-size: 1.2rem; color: #4a4a4a;">Apply to wrists, behind ears, and neck folds where heat is highest.</p>
+          <h4 style="margin: 0 0 0.2rem 0; font-weight: 600; color: #121212;">Apply on Pulse Points</h4>
+          <p style="margin: 0; color: #4a4a4a;">Dab oil wrists, neck, and behind ears. Body heat diffuses the scent naturally.</p>
         </div>
       </div>
       <!-- Step 2 -->
       <div class="mh-lux-apply-step">
         <div class="mh-lux-apply-num">2</div>
         <div>
-          <h4 style="margin: 0 0 0.2rem 0; font-size: 1.3rem; font-weight: 600; color: #121212;">Do Not Rub</h4>
-          <p style="margin: 0; font-size: 1.2rem; color: #4a4a4a;">Simply touch wrists together lightly. Friction damages top note layers.</p>
+          <h4 style="margin: 0 0 0.2rem 0; font-weight: 600; color: #121212;">Dab Gently (Do Not Rub)</h4>
+          <p style="margin: 0; color: #4a4a4a;">Simply touch wrists together. Rubbing breaks down the delicate top note layer.</p>
         </div>
       </div>
     </div>
@@ -462,31 +470,31 @@
   <div class="mh-lux-container" style="margin-top: 3.5rem;">
     <div class="mh-lux-section-header">
       <span class="mh-lux-subtitle">Support</span>
-      <h2 class="mh-lux-heading-medium">Frequently Asked Questions</h2>
+      <h2 class="mh-lux-title-medium">Frequently Asked Questions</h2>
     </div>
     <div style="border-top: 1px solid rgba(204, 164, 59, 0.15);">
       <!-- FAQ 1 -->
       <details class="mh-lux-faq-details" open>
         <summary class="mh-lux-faq-summary">
-          Is it safe for daily skin application?
+          Is it completely safe for direct skin application?
           <span class="mh-lux-faq-icon">
             <svg viewBox="0 0 14 14"><line x1="7" y1="0" x2="7" y2="14" /><line x1="0" y1="7" x2="14" y2="7" /></svg>
           </span>
         </summary>
         <div class="mh-lux-faq-content">
-          Yes. Our attar oils are 100% alcohol-free and formulated with organic sandalwood carrier oils which protect and hydrate sensitive skin.
+          Yes. Our attar oils are 100% alcohol-free and formulated with pure botanical extracts and sandalwood base oil that protect and soothe sensitive skin.
         </div>
       </details>
       <!-- FAQ 2 -->
       <details class="mh-lux-faq-details">
         <summary class="mh-lux-faq-summary">
-          Will the attar oils stain light clothing?
+          Will the oils leave stain marks on white clothes?
           <span class="mh-lux-faq-icon">
             <svg viewBox="0 0 14 14"><line x1="7" y1="0" x2="7" y2="14" /><line x1="0" y1="7" x2="14" y2="7" /></svg>
           </span>
         </summary>
         <div class="mh-lux-faq-content">
-          Applying pure oil on delicate fabrics can leave temporary wet marks. We recommend dabbing directly onto your skin (pulse points) for safe and deep projection.
+          Because attars are oil-concentrates, direct application on delicate light fabrics can leave wet spots. We recommend dabbing directly onto your skin's pulse points.
         </div>
       </details>
     </div>
