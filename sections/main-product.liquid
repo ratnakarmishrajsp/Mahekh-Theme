@@ -554,6 +554,50 @@
                   section_id: section.id,
                   show_pickup_availability: true
                 -%}
+              {%- when 'conversion_urgency' -%}
+                <div class="product__conversion-urgency" {{ block.shopify_attributes }}>
+                  <div class="urgency-stock-ticker">
+                    <span class="pulse-red-dot"></span>
+                    <span class="ticker-text">Only <strong class="highlight-urgency" id="UrgencyStockCount">{{ block.settings.stock_threshold }}</strong> sets left in this handcrafted batch!</span>
+                  </div>
+                  <div class="urgency-shipping-countdown">
+                    📦 Order within <strong class="highlight-urgency" id="UrgencyCountdown">00h 00m 00s</strong> to dispatch tomorrow morning!
+                  </div>
+                </div>
+              {%- when 'social_proof' -%}
+                <div class="product__social-proof" {{ block.shopify_attributes }}>
+                  <div class="social-live-view">
+                    <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px; margin-right:8px; vertical-align:middle; color:#cca43b; fill:none;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <span id="LiveViewCount" style="color:#cca43b; font-weight:700; margin-right:4px;">14</span> people are looking at this fragrance right now
+                  </div>
+                  <div class="social-recent-purchase" id="RecentPurchaseTicker" style="transition: opacity 0.5s ease-in-out;">
+                    🛒 Recent order: Priya from Mumbai bought this combo 8 mins ago!
+                  </div>
+                </div>
+              {%- when 'trust_badges' -%}
+                <div class="product__trust-badges" {{ block.shopify_attributes }}>
+                  <div class="trust-badge-item">
+                    <span class="trust-badge-icon">💳</span>
+                    <div class="trust-badge-text">
+                      <strong>Prepaid Discount</strong>
+                      <span>Prepay and get ₹100 OFF Instantly!</span>
+                    </div>
+                  </div>
+                  <div class="trust-badge-item">
+                    <span class="trust-badge-icon">🚚</span>
+                    <div class="trust-badge-text">
+                      <strong>COD Available</strong>
+                      <span>Cash on Delivery active nationwide.</span>
+                    </div>
+                  </div>
+                  <div class="trust-badge-item">
+                    <span class="trust-badge-icon">🌿</span>
+                    <div class="trust-badge-text">
+                      <strong>100% Skin Safe</strong>
+                      <span>Alcohol-free &amp; paraben-free oils.</span>
+                    </div>
+                  </div>
+                </div>
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
@@ -806,6 +850,27 @@
     </script>
   </div>
 </product-info>
+
+{%- if section.settings.enable_mobile_sticky_buy -%}
+  <div class="mobile-sticky-buy-bar large-up-hide quick-add-hidden">
+    <div class="sticky-buy-bar__content">
+      <div class="sticky-buy-bar__info">
+        {%- if product.featured_media -%}
+          <img src="{{ product.featured_media | image_url: width: 100 }}" alt="{{ product.title | escape }}" class="sticky-buy-bar__img" width="48" height="48" loading="lazy">
+        {%- endif -%}
+        <div class="sticky-buy-bar__title-price">
+          <span class="sticky-buy-bar__title">{{ product.title | escape }}</span>
+          <span class="sticky-buy-bar__price">{{ product.selected_or_first_available_variant.price | money }}</span>
+        </div>
+      </div>
+      <div class="sticky-buy-bar__action">
+        <button type="submit" class="button button--primary sticky-buy-bar__btn" onclick="const buyFormBtn = document.querySelector('form[action=\'/cart/add\'] [name=\'add\']'); if(buyFormBtn) { buyFormBtn.click(); }">
+          Buy Now
+        </button>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
 
 {% schema %}
 {
@@ -2155,9 +2220,43 @@
           "info": "t:sections.main-product.blocks.icon_with_text.settings.heading.info"
         }
       ]
+    },
+    {
+      "type": "conversion_urgency",
+      "name": "Conversion Urgency",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "range",
+          "id": "stock_threshold",
+          "min": 2,
+          "max": 20,
+          "step": 1,
+          "default": 9,
+          "label": "Low Stock Threshold"
+        }
+      ]
+    },
+    {
+      "type": "social_proof",
+      "name": "Social Proof",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "trust_badges",
+      "name": "Trust Badges",
+      "limit": 1,
+      "settings": []
     }
   ],
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_mobile_sticky_buy",
+      "default": true,
+      "label": "Enable Mobile Sticky Quick Buy"
+    },
     {
       "type": "checkbox",
       "id": "enable_sticky_info",
@@ -2335,3 +2434,279 @@
   ]
 }
 {% endschema %}
+
+{%- style -%}
+  /* Premium Conversion Blocks (Ivory & Gold Theme) */
+  .product__conversion-urgency {
+    background: #ffffff;
+    border: 1px solid rgba(204, 164, 59, 0.15);
+    border-radius: 8px;
+    padding: 1.5rem 1.8rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01);
+  }
+
+  .urgency-stock-ticker {
+    display: flex;
+    align-items: center;
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: #121212;
+    margin-bottom: 0.8rem;
+  }
+
+  .pulse-red-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #d32f2f;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: pulseRed 1.5s infinite;
+    vertical-align: middle;
+  }
+
+  @keyframes pulseRed {
+    0% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.7); }
+    70% { box-shadow: 0 0 0 6px rgba(211, 47, 47, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+  }
+
+  .highlight-urgency {
+    color: #cca43b;
+    font-weight: 700;
+  }
+
+  .urgency-shipping-countdown {
+    font-size: 1.3rem;
+    color: #4a453e;
+    font-weight: 500;
+  }
+
+  /* Social Proof */
+  .product__social-proof {
+    background: #ffffff;
+    border: 1px solid rgba(204, 164, 59, 0.15);
+    border-radius: 8px;
+    padding: 1.5rem 1.8rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01);
+  }
+
+  .social-live-view {
+    display: flex;
+    align-items: center;
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: #121212;
+    margin-bottom: 0.8rem;
+  }
+
+  .social-recent-purchase {
+    font-size: 1.3rem;
+    color: #4a453e;
+    font-weight: 500;
+  }
+
+  /* Trust Badges */
+  .product__trust-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    background: #ffffff;
+    border: 1px solid rgba(204, 164, 59, 0.15);
+    border-radius: 8px;
+    padding: 1.8rem;
+    margin: 2rem 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01);
+  }
+
+  .trust-badge-item {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .trust-badge-icon {
+    font-size: 1.8rem;
+    line-height: 1;
+    flex-shrink: 0;
+    color: #cca43b;
+  }
+
+  .trust-badge-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .trust-badge-text strong {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #121212;
+    margin-bottom: 0.2rem;
+  }
+
+  .trust-badge-text span {
+    font-size: 1.2rem;
+    color: #4a453e;
+    line-height: 1.4;
+  }
+
+  /* Mobile Sticky Buy Bar */
+  .mobile-sticky-buy-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    border-top: 1px solid rgba(204, 164, 59, 0.25);
+    padding: 1.2rem 1.6rem;
+    z-index: 100;
+    box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.08);
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .mobile-sticky-buy-bar.is-visible {
+    transform: translateY(0);
+  }
+
+  .sticky-buy-bar__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+    gap: 1.5rem;
+  }
+
+  .sticky-buy-bar__info {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  .sticky-buy-bar__img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid rgba(204, 164, 59, 0.15);
+  }
+
+  .sticky-buy-bar__title-price {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .sticky-buy-bar__title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #121212;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
+  }
+
+  .sticky-buy-bar__price {
+    font-size: 1.35rem;
+    color: #cca43b;
+    font-weight: bold;
+  }
+
+  .sticky-buy-bar__action {
+    flex-shrink: 0;
+  }
+
+  .sticky-buy-bar__btn {
+    padding: 1.2rem 2.5rem !important;
+    min-height: 40px !important;
+    font-size: 1.3rem !important;
+    letter-spacing: 0.08em !important;
+    background: linear-gradient(135deg, #cca43b, #f1cb64) !important;
+    border: none !important;
+    color: #110d0c !important;
+    box-shadow: 0 4px 10px rgba(204, 164, 59, 0.2) !important;
+  }
+{%- endstyle -%}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 1. Shipping Cutoff Countdown Timer
+    const countdownEl = document.getElementById('UrgencyCountdown');
+    if (countdownEl) {
+      function updateCountdown() {
+        const now = new Date();
+        const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 11, 0, 0); // Dispatches next morning at 11 AM
+        let diff = tomorrow - now;
+        if (diff < 0) {
+          tomorrow.setDate(tomorrow.getDate() + 1);
+          diff = tomorrow - now;
+        }
+        
+        const hrs = Math.floor(diff / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        countdownEl.textContent = `${hrs.toString().padStart(2, '0')}h ${mins.toString().padStart(2, '0')}m ${secs.toString().padStart(2, '0')}s`;
+      }
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    }
+
+    // 2. Live View Counter
+    const liveViewEl = document.getElementById('LiveViewCount');
+    if (liveViewEl) {
+      setInterval(function() {
+        const current = parseInt(liveViewEl.textContent);
+        const change = Math.random() > 0.5 ? 1 : -1;
+        let next = current + change;
+        if (next < 11) next = 11;
+        if (next > 21) next = 21;
+        liveViewEl.textContent = next;
+      }, 5000);
+    }
+
+    // 3. Recent Purchases Ticker
+    const recentPurchaseEl = document.getElementById('RecentPurchaseTicker');
+    if (recentPurchaseEl) {
+      const locations = ["Mumbai", "Delhi", "Lucknow", "Bangalore", "Jaipur", "Ahmedabad", "Udaipur", "Kolkata", "Pune", "Hyderabad"];
+      const names = ["Priya", "Rohan", "Amit", "Sneha", "Kabir", "Divya", "Anjali", "Vikram", "Shalini", "Rahul"];
+      const times = [4, 8, 12, 15, 22, 28, 35, 45, 52];
+      
+      setInterval(function() {
+        recentPurchaseEl.style.opacity = 0;
+        setTimeout(function() {
+          const name = names[Math.floor(Math.random() * names.length)];
+          const loc = locations[Math.floor(Math.random() * locations.length)];
+          const min = times[Math.floor(Math.random() * times.length)];
+          recentPurchaseEl.innerHTML = `🛒 Recent order: <strong>${name}</strong> from <strong>${loc}</strong> bought this combo ${min} mins ago!`;
+          recentPurchaseEl.style.opacity = 1;
+        }, 500);
+      }, 12000);
+    }
+
+    // 4. Mobile Sticky Buy Bar Scroll Observer
+    const buyButton = document.querySelector('form[action="/cart/add"] [name="add"]');
+    const stickyBar = document.querySelector('.mobile-sticky-buy-bar');
+    if (buyButton && stickyBar) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            stickyBar.classList.remove('is-visible');
+          } else {
+            if (window.scrollY > entry.boundingClientRect.top + window.scrollY) {
+              stickyBar.classList.add('is-visible');
+            }
+          }
+        });
+      }, { threshold: 0 });
+
+      observer.observe(buyButton);
+    }
+  });
+</script>
+
