@@ -49,11 +49,12 @@
 
     /* Make payment icons (Paytm, GPay, etc.) small and clean */
     .shiprocket-headless .sr-payment-icons, .sr-headless-checkout .sr-payment-icons {
-      max-height: 12px !important;
+      max-height: 18px !important;
       width: auto !important;
       margin-left: 6px !important;
       vertical-align: middle !important;
-      opacity: 0.8 !important;
+      align-self: center !important;
+      opacity: 0.9 !important;
     }
 
     /* Hide the powered by Shiprocket badge completely */
@@ -120,11 +121,12 @@
              box-shadow: 0 5px 15px rgba(204, 164, 59, 0.35) !important;
            }
            .${className} .sr-payment-icons {
-             max-height: 12px !important;
+             max-height: 18px !important;
              width: auto !important;
              margin-left: 6px !important;
              vertical-align: middle !important;
-             opacity: 0.8 !important;
+             align-self: center !important;
+             opacity: 0.9 !important;
            }
            .${className} .sr-brand-badge-container {
              display: none !important;
@@ -152,5 +154,25 @@
       // Append the style element to the head
       document.head.appendChild(styleElement);
     }
+
+    // Dynamic Injection of COD Badge
+    function addCodIcon() {
+      const paymentIcons = document.querySelectorAll('.sr-payment-icons');
+      paymentIcons.forEach(paymentIcon => {
+        const parent = paymentIcon.parentElement;
+        if (parent && !parent.querySelector('.sr-cod-icon')) {
+          const codSvg = `
+            <svg class="sr-cod-icon" viewBox="0 0 38 18" width="38" height="18" style="vertical-align: middle; margin-left: 6px; display: inline-block; flex-shrink: 0; align-self: center;">
+              <rect x="0.5" y="0.5" width="37" height="17" rx="3" fill="none" stroke="#1a1107" stroke-width="1.2"/>
+              <text x="50%" y="55%" dominant-baseline="middle" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="8.5" font-weight="bold" fill="#1a1107">COD</text>
+            </svg>
+          `;
+          paymentIcon.insertAdjacentHTML('afterend', codSvg);
+        }
+      });
+    }
+    setInterval(addCodIcon, 500);
+    window.addEventListener('load', addCodIcon);
+    document.addEventListener('DOMContentLoaded', addCodIcon);
   </script>
   <!-- BTN - CUST - SCRIPT - END  -->
