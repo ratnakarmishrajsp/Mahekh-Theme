@@ -1,24 +1,30 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "custom_banner_homepage": {
       "type": "custom-banner",
       "settings": {
+        "desktop_height": "adapt",
+        "desktop_alignment": "center center",
+        "mobile_height": "350px",
+        "mobile_alignment": "left center",
+        "link": "",
+        "button_label": "",
+        "color_scheme": "",
         "padding_top": 0,
         "padding_bottom": 0
       }
     },
     "custom_usp_grid_homepage": {
       "type": "custom-usp-grid",
-      "settings": {
-        "title": "Pure & Authentic Fragrances",
-        "heading_size": "h1",
-        "subtitle": "The Mahekh Standard",
-        "columns_desktop": 4,
-        "show_borders": true,
-        "color_scheme": "scheme-1",
-        "padding_top": 40,
-        "padding_bottom": 40
-      },
       "blocks": {
         "usp_1": {
           "type": "usp",
@@ -58,46 +64,49 @@
         "usp_2",
         "usp_3",
         "usp_4"
-      ]
+      ],
+      "settings": {
+        "title": "Pure & Authentic Fragrances",
+        "heading_size": "h1",
+        "subtitle": "The Mahekh Standard",
+        "columns_desktop": 4,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
     },
     "custom_categories_homepage": {
       "type": "custom-category-cards",
-      "settings": {
-        "title": "Shop By Fragrance Notes",
-        "heading_size": "h1",
-        "subtitle": "Find your signature scent profile",
-        "card_shape": "arch",
-        "color_scheme": "scheme-1",
-        "padding_top": 40,
-        "padding_bottom": 40
-      },
       "blocks": {
         "cat_1": {
           "type": "category",
           "settings": {
             "title": "Royal Oudh",
-            "subtitle": "Warm & Intense"
+            "subtitle": "Warm & Intense",
+            "link": ""
           }
         },
         "cat_2": {
           "type": "category",
           "settings": {
             "title": "Classic Rose",
-            "subtitle": "Floral & Romantic"
+            "subtitle": "Floral & Romantic",
+            "link": ""
           }
         },
         "cat_3": {
           "type": "category",
           "settings": {
             "title": "Earthy Khus",
-            "subtitle": "Fresh & Calming"
+            "subtitle": "Fresh & Calming",
+            "link": ""
           }
         },
         "cat_4": {
           "type": "category",
           "settings": {
             "title": "Exotic Musk",
-            "subtitle": "Powdery & Sensual"
+            "subtitle": "Powdery & Sensual",
+            "link": ""
           }
         }
       },
@@ -106,7 +115,15 @@
         "cat_2",
         "cat_3",
         "cat_4"
-      ]
+      ],
+      "settings": {
+        "title": "Shop By Fragrance Notes",
+        "heading_size": "h1",
+        "subtitle": "Find your signature scent profile",
+        "card_shape": "arch",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
     },
     "featured_product_UXN8fm": {
       "type": "featured-product",
@@ -171,23 +188,6 @@
         "padding_bottom": 36
       }
     },
-    "custom_making_process_homepage": {
-      "type": "product-making-process",
-      "settings": {
-        "subtitle": "CRAFTSMANSHIP & ORIGINS",
-        "title": "How We Distill Our Premium Attars",
-        "heading_size": "h1",
-        "step_1_title": "Raw Floral Harvest",
-        "step_1_desc": "Fresh rose, jasmine, or khus roots are hand-picked at dawn in Kannauj when the fragrance concentration is highest, and immediately sent to distillation.",
-        "step_2_title": "Copper Clay Distillation (Deg)",
-        "step_2_desc": "Petals are mixed with water in copper pots (Degs), sealed tightly using clay and cotton ropes, and heated gently over a wood-fire furnace.",
-        "step_3_title": "Clay Condensation (Bhapka)",
-        "step_3_desc": "Fragrant vapor travels through bamboo pipes into cold clay receivers (Bhapkas) submerged in water. Scent is captured drop by drop in pure sandalwood base oil.",
-        "color_scheme": "scheme-2",
-        "padding_top": 44,
-        "padding_bottom": 44
-      }
-    },
     "featured_collection_miQLWj": {
       "type": "featured-collection",
       "name": "t:sections.featured-collection.presets.name",
@@ -217,16 +217,27 @@
         "padding_bottom": 36
       }
     },
+    "custom_scent_notes_wheel_EBHy3B": {
+      "type": "custom-scent-notes-wheel",
+      "name": "Scent Notes Wheel",
+      "settings": {
+        "title": "Scent Anatomy Visualizer",
+        "subtitle": "Interactive Fragrance Wheel",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
     "custom_heritage_homepage": {
       "type": "custom-heritage",
       "settings": {
-        "image_aspect_ratio": "1 \/ 1",
+        "image_aspect_ratio": "1 / 1",
         "layout": "image_left",
         "subtitle": "THE ART OF DEG & BHAPKA",
         "title": "Distilled In Kannauj, Perfume Capital of India",
         "heading_size": "h1",
-        "text": "<p>Since ancient times, Kannauj has kept the heritage of perfume distillation alive. Using the traditional Deg-Bhapka process, flowers and natural raw materials are distilled in copper pots over wood fires, sending fragrant steam to rest in cold clay containers base-filled with sandalwood oil.<\/p><p>Mahekh preserves this pure artisan process, providing long-lasting attars free from chemicals and alcohol.<\/p>",
+        "text": "<p>Since ancient times, Kannauj has kept the heritage of perfume distillation alive. Using the traditional Deg-Bhapka process, flowers and natural raw materials are distilled in copper pots over wood fires, sending fragrant steam to rest in cold clay containers base-filled with sandalwood oil.</p><p>Mahekh preserves this pure artisan process, providing long-lasting attars free from chemicals and alcohol.</p>",
         "button_label": "Explore Our Process",
+        "button_link": "",
         "color_scheme": "scheme-2",
         "padding_top": 44,
         "padding_bottom": 44
@@ -234,14 +245,6 @@
     },
     "custom_testimonials_homepage": {
       "type": "custom-testimonials",
-      "settings": {
-        "title": "Loved By Fragrance Lovers",
-        "heading_size": "h1",
-        "subtitle": "REVIEWS & TESTIMONIALS",
-        "color_scheme": "scheme-1",
-        "padding_top": 40,
-        "padding_bottom": 40
-      },
       "blocks": {
         "test_1": {
           "type": "testimonial",
@@ -250,7 +253,8 @@
             "quote": "I have tried many luxury Oudh fragrances, but Mahekh's Oudh attar is outstanding. It is 100% alcohol-free and lasts more than 10 hours on my skin. Worth every rupee!",
             "author": "Aarav Mehta",
             "location": "Mumbai",
-            "verified_buyer": true
+            "verified_buyer": true,
+            "product": ""
           }
         },
         "test_2": {
@@ -260,7 +264,8 @@
             "quote": "The Classic Rose attar smells exactly like fresh Kannauj roses. It's clean, non-greasy, and incredibly soothing. Very premium quality packaging too.",
             "author": "Priya Patel",
             "location": "Ahmedabad",
-            "verified_buyer": true
+            "verified_buyer": true,
+            "product": ""
           }
         },
         "test_3": {
@@ -270,7 +275,8 @@
             "quote": "Highly recommend the Ruh Khus. It has a beautiful earthy aroma that cools the mind instantly. Authentic Kannauj distillation shine through.",
             "author": "Kabir Sen",
             "location": "Kolkata",
-            "verified_buyer": true
+            "verified_buyer": true,
+            "product": ""
           }
         }
       },
@@ -278,10 +284,46 @@
         "test_1",
         "test_2",
         "test_3"
-      ]
+      ],
+      "settings": {
+        "title": "Loved By Fragrance Lovers",
+        "heading_size": "h1",
+        "subtitle": "REVIEWS & TESTIMONIALS",
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
     },
     "custom_faq_homepage": {
       "type": "custom-faq",
+      "blocks": {
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "How should I apply concentrated attar oil?",
+            "answer": "<p>Apply a few drops of attar to your pulse points, such as your wrists, behind the ears, and inner elbows. Gently dab the oil on the skin without rubbing too vigorously. Rubbing can break down the fragrance molecules.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "Is it safe to apply attar on clothes?",
+            "answer": "<p>Attar contains pure essential oils, so applying it directly to light-colored or delicate clothing can sometimes leave a faint oil stain. We recommend applying it on pulse points. If you want to use it on clothes, apply a small amount to the inner seams or use it on dark fabrics.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "How long does Mahekh attar last?",
+            "answer": "<p>Due to its high concentration of pure oils and traditional steam distillation process, our attars typically last between 8 to 12 hours on skin, and even longer on fabric. The exact duration depends on the specific note profile (e.g., Oudh and Amber profiles last longer than light Floral profiles).</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3"
+      ],
       "settings": {
         "title": "Frequently Asked Questions",
         "heading_size": "h1",
@@ -291,59 +333,17 @@
         "color_scheme": "scheme-1",
         "padding_top": 40,
         "padding_bottom": 40
-      },
-      "blocks": {
-        "faq_1": {
-          "type": "faq",
-          "settings": {
-            "question": "How should I apply concentrated attar oil?",
-            "answer": "<p>Apply a few drops of attar to your pulse points, such as your wrists, behind the ears, and inner elbows. Gently dab the oil on the skin without rubbing too vigorously. Rubbing can break down the fragrance molecules.<\/p>"
-          }
-        },
-        "faq_2": {
-          "type": "faq",
-          "settings": {
-            "question": "Is it safe to apply attar on clothes?",
-            "answer": "<p>Attar contains pure essential oils, so applying it directly to light-colored or delicate clothing can sometimes leave a faint oil stain. We recommend applying it on pulse points. If you want to use it on clothes, apply a small amount to the inner seams or use it on dark fabrics.<\/p>"
-          }
-        },
-        "faq_3": {
-          "type": "faq",
-          "settings": {
-            "question": "How long does Mahekh attar last?",
-            "answer": "<p>Due to its high concentration of pure oils and traditional steam distillation process, our attars typically last between 8 to 12 hours on skin, and even longer on fabric. The exact duration depends on the specific note profile (e.g., Oudh and Amber profiles last longer than light Floral profiles).<\/p>"
-          }
-        }
-      },
-      "block_order": [
-        "faq_1",
-        "faq_2",
-        "faq_3"
-      ]
+      }
     },
-    "custom_scent_quiz_homepage": {
+    "custom_scent_quiz_e8zy3L": {
       "type": "custom-scent-quiz",
+      "name": "Custom Scent Quiz",
       "settings": {
         "title": "Find Your Signature Scent",
         "subtitle": "Fragrance Matchmaker",
-        "padding_top": 48,
-        "padding_bottom": 48
-      }
-    },
-    "custom_scent_notes_wheel_homepage": {
-      "type": "custom-scent-notes-wheel",
-      "settings": {
-        "title": "Scent Anatomy Visualizer",
-        "subtitle": "Interactive Fragrance Wheel",
-        "padding_top": 48,
-        "padding_bottom": 48
-      }
-    },
-    "custom_scent_timeline_homepage": {
-      "type": "custom-scent-timeline",
-      "settings": {
-        "title": "Scent Evolution Timeline",
-        "subtitle": "12-Hour Fragrance Journey",
+        "product_floral": "",
+        "product_woody": "",
+        "product_combo": "",
         "padding_top": 48,
         "padding_bottom": 48
       }
@@ -354,13 +354,11 @@
     "custom_usp_grid_homepage",
     "custom_categories_homepage",
     "featured_product_UXN8fm",
-    "custom_making_process_homepage",
     "featured_collection_miQLWj",
+    "custom_scent_notes_wheel_EBHy3B",
     "custom_heritage_homepage",
     "custom_testimonials_homepage",
-    "custom_scent_timeline_homepage",
-    "custom_scent_notes_wheel_homepage",
-    "custom_scent_quiz_homepage",
+    "custom_scent_quiz_e8zy3L",
     "custom_faq_homepage"
   ]
 }
