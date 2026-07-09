@@ -6,11 +6,6 @@
  <!-- BTN - CUST - SCRIPT - START  -->
  <input type="hidden" value="true" id="shiprocketCheckoutBtnStylesCheck"/>
    <style>
-    @keyframes srShimmer {
-      0% { background-position: 100% 0; }
-      25%, 100% { background-position: -100% 0; }
-    }
-    
     @keyframes srPulseHighlight {
       0%, 100% {
         transform: scale(1);
@@ -28,8 +23,7 @@
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      background: linear-gradient(120deg, #cca43b 25%, #ffd700 40%, #ffffff 50%, #ffd700 60%, #cca43b 75%) !important;
-      background-size: 250% 100% !important;
+      background: #cca43b !important;
       color: #1a1107 !important;
       font-weight: 600 !important;
       font-size: 14px !important;
@@ -38,7 +32,7 @@
       border-radius: 6px !important;
       text-transform: uppercase !important;
       transition: all 0.3s ease !important;
-      animation: srShimmer 5s infinite linear, srPulseHighlight 2.5s infinite ease-in-out !important;
+      animation: srPulseHighlight 2.5s infinite ease-in-out !important;
     }
     
     .shiprocket-headless:hover, .sr-headless-checkout:hover {
@@ -82,10 +76,6 @@
   
          // Define the animation keyframes for highlight pulse
          let animationRule = `
-           @keyframes srShimmer {
-             0% { background-position: 100% 0; }
-             25%, 100% { background-position: -100% 0; }
-           }
            @keyframes srPulseHighlight {
              0%, 100% { transform: scale(1); box-shadow: 0 3px 10px rgba(204, 164, 59, 0.18) !important; }
              50% { transform: scale(1.015); box-shadow: 0 6px 18px rgba(204, 164, 59, 0.4) !important; }
@@ -98,14 +88,13 @@
    
            .${className} {
              ${stylesString}
-             background: linear-gradient(120deg, #cca43b 25%, #ffd700 40%, #ffffff 50%, #ffd700 60%, #cca43b 75%) !important;
-             background-size: 250% 100% !important;
+             background: #cca43b !important;
              color: #1a1107 !important;
              font-weight: 600 !important;
              font-size: 14px !important;
              letter-spacing: 0.08em !important;
              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-             animation: srShimmer 5s infinite linear, srPulseHighlight 2.5s infinite ease-in-out !important;
+             animation: srPulseHighlight 2.5s infinite ease-in-out !important;
              transition: all 0.3s ease !important;
              height: 42px !important;
              display: flex !important;
