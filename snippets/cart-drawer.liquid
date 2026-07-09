@@ -230,14 +230,14 @@
             {%- assign remaining = gift_threshold | minus: cart_total -%}
             {%- assign pct = cart_total | times: 100 | divided_by: gift_threshold -%}
             <p class="cart-drawer__shipping-msg">
-              Add <strong>{{ remaining | money }}</strong> more for a <strong>FREE MINI SAMPLE & PREMIUM BOX PACKAGING</strong>! <br><span style="font-size: 1.05rem; opacity: 0.8;">(You already get <strong>FREE SHIPPING</strong>)</span>
+              Add <strong>{{ remaining | money }}</strong> more for a <strong>FREE MINI ATTAR SAMPLE</strong>! <br><span style="font-size: 1.05rem; opacity: 0.8;">(You already get <strong>FREE SHIPPING</strong>)</span>
             </p>
             <div class="cart-drawer__bar-track">
               <div class="cart-drawer__bar-fill" style="width: {{ pct }}%;"></div>
             </div>
           {%- else -%}
             <p class="cart-drawer__shipping-msg">
-              🎉 Congratulations! You have unlocked a <strong>FREE MINI SAMPLE & PREMIUM BOX PACKAGING</strong>! <br><span style="font-size: 1.05rem; opacity: 0.8;">(Plus <strong>FREE SHIPPING</strong>)</span>
+              🎉 Congratulations! You have unlocked a <strong>FREE MINI ATTAR SAMPLE</strong>! <br><span style="font-size: 1.05rem; opacity: 0.8;">(Plus <strong>FREE SHIPPING</strong>)</span>
             </p>
             <div class="cart-drawer__bar-track">
               <div class="cart-drawer__bar-fill" style="width: 100%; background: linear-gradient(90deg, #cca43b, #ffd700); animation: fbGoldShine 2s infinite linear;"></div>
