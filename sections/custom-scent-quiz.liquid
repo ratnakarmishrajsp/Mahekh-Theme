@@ -487,12 +487,12 @@
           price: "{{ pf.price | money }}",
           image: "{{ pf.featured_image | image_url: width: 300 }}",
         {%- else -%}
-          title: "",
-          url: "",
-          price: "",
-          image: "",
+          title: "🌸 Jasmine Attar – Pure Floral Bliss | Long-Lasting & Alcohol-Free ✨",
+          url: "/products/%F0%9F%8C%B8-jasmine-attar-pure-floral-bliss-long-lasting-alcohol-free-%E2%9C%A8",
+          price: "₹699.00",
+          image: "https://mahekh.in/cdn/shop/files/ChatGPT_Image_Jun_11_2026_12_06_36_AM.png?v=1781116627&width=533",
         {%- endif -%}
-        desc: "Because you love sweet, floral, and daily fresh vibes, our Mogra/Katcha Bela selection is perfect for you. It provides a refreshing aura that captures pure luxury."
+        desc: "Because you love sweet, floral, and daily fresh vibes, our Jasmine Attar selection is perfect for you. It provides a refreshing aura that captures pure luxury."
       },
       spicy_woody: {
         {%- assign pw = section.settings.product_woody -%}
@@ -502,12 +502,12 @@
           price: "{{ pw.price | money }}",
           image: "{{ pw.featured_image | image_url: width: 300 }}",
         {%- else -%}
-          title: "",
-          url: "",
-          price: "",
-          image: "",
+          title: "Premium Kesar Chandan Attar | Handcrafted Natural Attar",
+          url: "/products/premium-kesar-chandan-attar-handcrafted-natural-attar",
+          price: "₹799.00",
+          image: "https://mahekh.in/cdn/shop/files/rn-image_picker_lib_temp_f7c60fcc-594b-4869-b230-b84a85f20487.jpg?v=1781025416&width=533",
         {%- endif -%}
-        desc: "You prefer spicy and woody aromatics with rich projection. Our Kesar Chandan / Sandalwood fragrance notes will give you a majestic, bold presence perfect for any occasion."
+        desc: "You prefer spicy and woody aromatics with rich projection. Our Kesar Chandan fragrance notes will give you a majestic, bold presence perfect for any occasion."
       },
       combo: {
         {%- assign pc = section.settings.product_combo -%}
@@ -517,10 +517,10 @@
           price: "{{ pc.price | money }}",
           image: "{{ pc.featured_image | image_url: width: 300 }}",
         {%- else -%}
-          title: "",
-          url: "",
-          price: "",
-          image: "",
+          title: "Premium Attar (Set of 3) ✨ KATCHA BELA, KESAR CHANDAN, MOGRA",
+          url: "/products/%E2%9C%A8-mahekh-premium-attar-combo-set-of-3-%E2%9C%A8-katcha-bel-kesar-chandan-mogra",
+          price: "₹1,299.00",
+          image: "https://mahekh.in/cdn/shop/files/WhatsAppImage2026-06-14at10.59.43AM.jpg?v=1781415028&width=533",
         {%- endif -%}
         desc: "For gifting or a fully complete sensory experience, our Mahekh Premium Attar Combo (Set of 3) is the absolute gold standard. It blends Mogra, Chandan, and Katcha Bela perfectly."
       }
@@ -586,12 +586,33 @@
         productName.textContent = data.title;
         productPrice.textContent = data.price;
       } else {
-        // Ultimate fallback values if product settings are empty
-        resultsDesc.textContent = "Discover the ultimate fragrances combo. The Mahekh Premium Attar Pack fits all vibes and long-lasting expectations.";
-        productLink.href = "/products/%E2%9C%A8-mahekh-premium-attar-combo-set-of-3-%E2%9C%A8-katcha-bela-kesar-chandan-mogra";
-        productImg.src = "https://cdn.shopify.com/s/files/1/0807/6045/5850/files/IMG_1020_large.png";
-        productName.textContent = "Mahekh Premium Attar Combo (Set of 3)";
-        productPrice.textContent = "₹499.00";
+        // Dynamic fallback values if product settings are empty
+        let fallbackTitle = "Premium Attar (Set of 3) ✨ KATCHA BELA, KESAR CHANDAN, MOGRA";
+        let fallbackUrl = "/products/%E2%9C%A8-mahekh-premium-attar-combo-set-of-3-%E2%9C%A8-katcha-bel-kesar-chandan-mogra";
+        let fallbackPrice = "₹1,299.00";
+        let fallbackImg = "https://mahekh.in/cdn/shop/files/WhatsAppImage2026-06-14at10.59.43AM.jpg?v=1781415028&width=533";
+        let fallbackDesc = "For gifting or a fully complete sensory experience, our Mahekh Premium Attar Combo (Set of 3) is the absolute gold standard. It blends Mogra, Chandan, and Katcha Bela perfectly.";
+
+        if (finalMatch === "sweet_floral") {
+          fallbackTitle = "🌸 Jasmine Attar – Pure Floral Bliss | Long-Lasting & Alcohol-Free ✨";
+          fallbackUrl = "/products/%F0%9F%8C%B8-jasmine-attar-pure-floral-bliss-long-lasting-alcohol-free-%E2%9C%A8";
+          fallbackPrice = "₹699.00";
+          fallbackImg = "https://mahekh.in/cdn/shop/files/ChatGPT_Image_Jun_11_2026_12_06_36_AM.png?v=1781116627&width=533";
+          fallbackDesc = "Because you love sweet, floral, and daily fresh vibes, our Jasmine Attar selection is perfect for you. It provides a refreshing aura that captures pure luxury.";
+        } else if (finalMatch === "spicy_woody") {
+          fallbackTitle = "Premium Kesar Chandan Attar | Handcrafted Natural Attar";
+          fallbackUrl = "/products/premium-kesar-chandan-attar-handcrafted-natural-attar";
+          fallbackPrice = "₹799.00";
+          fallbackImg = "https://mahekh.in/cdn/shop/files/rn-image_picker_lib_temp_f7c60fcc-594b-4869-b230-b84a85f20487.jpg?v=1781025416&width=533";
+          fallbackDesc = "You prefer spicy and woody aromatics with rich projection. Our Kesar Chandan fragrance notes will give you a majestic, bold presence perfect for any occasion.";
+        }
+
+        resultsDesc.textContent = fallbackDesc;
+        productLink.href = fallbackUrl;
+        productImg.src = fallbackImg;
+        name = fallbackTitle;
+        productName.textContent = fallbackTitle;
+        productPrice.textContent = fallbackPrice;
       }
     }
 
