@@ -331,7 +331,7 @@
       }
     },
     "custom_scent_notes_wheel_homepage": {
-      "type": "scent-notes-wheel",
+      "type": "custom-scent-notes-wheel",
       "settings": {
         "title": "Scent Anatomy Visualizer",
         "subtitle": "Interactive Fragrance Wheel",
