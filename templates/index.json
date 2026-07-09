@@ -320,6 +320,15 @@
         "faq_2",
         "faq_3"
       ]
+    },
+    "custom_scent_quiz_homepage": {
+      "type": "custom-scent-quiz",
+      "settings": {
+        "title": "Find Your Signature Scent",
+        "subtitle": "Fragrance Matchmaker",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
@@ -331,6 +340,7 @@
     "featured_collection_miQLWj",
     "custom_heritage_homepage",
     "custom_testimonials_homepage",
+    "custom_scent_quiz_homepage",
     "custom_faq_homepage"
   ]
 }

@@ -1,0 +1,688 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* Scent Quiz Container Styling */
+  .scent-quiz {
+    background: #faf8f5 !important; /* Ivory-cream premium background */
+    border-top: 1px solid rgba(204, 164, 59, 0.15);
+    border-bottom: 1px solid rgba(204, 164, 59, 0.15);
+  }
+
+  .scent-quiz__box {
+    max-width: 680px;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid rgba(204, 164, 59, 0.2);
+    border-radius: 12px;
+    padding: 3rem 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+    position: relative;
+    overflow: hidden;
+  }
+
+  @media screen and (max-width: 749px) {
+    .scent-quiz__box {
+      padding: 2.2rem 1.5rem;
+    }
+  }
+
+  /* Progress Bar */
+  .scent-quiz__progress-container {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.05);
+    height: 4px;
+    border-radius: 2px;
+    margin-bottom: 3.5rem;
+    position: relative;
+  }
+
+  .scent-quiz__progress-bar {
+    height: 100%;
+    background: #cca43b;
+    border-radius: 2px;
+    width: 25%;
+    transition: width 0.4s ease;
+  }
+
+  /* Step Screen Transitions */
+  .scent-quiz__step {
+    display: none;
+    animation: sqFadeIn 0.5s ease forwards;
+  }
+
+  .scent-quiz__step.active {
+    display: block;
+  }
+
+  @keyframes sqFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Questions typography */
+  .scent-quiz__question-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #121212 !important;
+    margin: 0 0 1rem 0;
+    text-align: center;
+  }
+
+  .scent-quiz__question-desc {
+    font-size: 1.35rem;
+    color: #4a453e !important;
+    text-align: center;
+    margin: 0 0 3rem 0;
+  }
+
+  /* Options Grid */
+  .scent-quiz__options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  @media screen and (min-width: 550px) {
+    .scent-quiz__options {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Option Card */
+  .scent-quiz__option-card {
+    border: 1px solid rgba(204, 164, 59, 0.18);
+    border-radius: 8px;
+    padding: 2.2rem 1.8rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    position: relative;
+  }
+
+  .scent-quiz__option-card:hover {
+    border-color: #cca43b;
+    background: rgba(204, 164, 59, 0.02);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(204, 164, 59, 0.08);
+  }
+
+  .scent-quiz__option-card.selected {
+    border-color: #cca43b;
+    background: rgba(204, 164, 59, 0.06);
+    box-shadow: 0 8px 20px rgba(204, 164, 59, 0.12);
+  }
+
+  /* Checkmark circle */
+  .scent-quiz__option-card::after {
+    content: '✓';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #cca43b;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.2s ease;
+  }
+
+  .scent-quiz__option-card.selected::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Option icon/graphic placeholder */
+  .scent-quiz__option-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(204, 164, 59, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #cca43b;
+    font-size: 1.8rem;
+    border: 1px solid rgba(204, 164, 59, 0.15);
+  }
+
+  .scent-quiz__option-label {
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #121212;
+    margin: 0;
+  }
+
+  .scent-quiz__option-desc {
+    font-size: 1.2rem;
+    color: #4a453e;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* Footer Navigation */
+  .scent-quiz__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    padding-top: 2rem;
+  }
+
+  .scent-quiz__btn {
+    padding: 1.2rem 2.4rem;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .scent-quiz__btn--back {
+    background: transparent;
+    color: #4a453e;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+  }
+
+  .scent-quiz__btn--back:hover {
+    background: rgba(0, 0, 0, 0.02);
+    color: #121212;
+  }
+
+  .scent-quiz__btn--next {
+    background: #121212;
+    color: #ffffff;
+    border: none;
+    margin-left: auto;
+  }
+
+  .scent-quiz__btn--next:hover {
+    background: #cca43b;
+    color: #1a1107;
+  }
+
+  .scent-quiz__btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* Result screen card layout */
+  .scent-quiz__result-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2.2rem;
+    text-align: center;
+  }
+
+  .scent-quiz__result-badge {
+    color: #cca43b;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin: 0;
+  }
+
+  .scent-quiz__result-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #121212;
+    margin: -1rem 0 1rem 0;
+  }
+
+  .scent-quiz__result-desc {
+    font-size: 1.4rem;
+    color: #4a453e;
+    line-height: 1.6;
+    margin: 0;
+    max-width: 550px;
+  }
+
+  .scent-quiz__product-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid rgba(204, 164, 59, 0.25);
+    background: #faf8f5;
+    border-radius: 8px;
+    padding: 2rem;
+    width: 100%;
+    max-width: 440px;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+
+  .scent-quiz__product-link:hover {
+    border-color: #cca43b;
+    box-shadow: 0 8px 24px rgba(204,164,59,0.1);
+  }
+
+  .scent-quiz__product-img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #ffffff;
+  }
+
+  .scent-quiz__product-name {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #121212;
+    margin: 0;
+  }
+
+  .scent-quiz__product-price {
+    font-size: 1.5rem;
+    color: #cca43b;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .scent-quiz__cta-btn {
+    background: #cca43b;
+    color: #1a1107;
+    width: 100%;
+    max-width: 320px;
+    padding: 1.4rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-align: center;
+    border: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .scent-quiz__cta-btn:hover {
+    background: #ffd700;
+    transform: translateY(-2px);
+  }
+
+  .scent-quiz__restart-btn {
+    background: transparent;
+    color: #4a453e;
+    border: none;
+    font-size: 1.25rem;
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .scent-quiz__restart-btn:hover {
+    color: #cca43b;
+  }
+{%- endstyle -%}
+
+<div class="scent-quiz section-{{ section.id }}-padding" id="scent-quiz-{{ section.id }}">
+  <div class="page-width">
+    
+    <!-- Title Section -->
+    <div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin text-center" style="margin-bottom: 4.5rem; display: flex; flex-direction: column; align-items: center; position: relative;">
+      {%- if section.settings.subtitle != blank -%}
+        <p class="image-with-text__text image-with-text__text--caption custom-usp-grid__subtitle-text" style="margin: 0 0 0.8rem 0; font-size: 1.5rem; letter-spacing: 0.15em; text-transform: uppercase;">
+          {{ section.settings.subtitle | escape }}
+        </p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="title inline-richtext h1" style="margin: 0; font-weight: 600; color: #121212; letter-spacing: 0.03em;">
+          {{ section.settings.title | escape }}
+        </h2>
+      {%- endif -%}
+    </div>
+
+    <!-- Quiz Box Container -->
+    <div class="scent-quiz__box">
+      
+      <!-- Top Progress tracker -->
+      <div class="scent-quiz__progress-container" id="sq-progress-container-{{ section.id }}">
+        <div class="scent-quiz__progress-bar" id="sq-progress-bar-{{ section.id }}"></div>
+      </div>
+
+      <!-- Step 1: Who is this for? -->
+      <div class="scent-quiz__step active" data-step="1">
+        <h3 class="scent-quiz__question-title">Who is this fragrance for?</h3>
+        <p class="scent-quiz__question-desc">Select who will be wearing this premium scent.</p>
+        
+        <div class="scent-quiz__options">
+          <div class="scent-quiz__option-card" data-val="self">
+            <div class="scent-quiz__option-badge">👤</div>
+            <h4 class="scent-quiz__option-label">For Myself</h4>
+            <p class="scent-quiz__option-desc">I want to find my signature daily scent.</p>
+          </div>
+          <div class="scent-quiz__option-card" data-val="gift">
+            <div class="scent-quiz__option-badge">🎁</div>
+            <h4 class="scent-quiz__option-label">A Luxury Gift</h4>
+            <p class="scent-quiz__option-desc">Gifting something special to a loved one.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Vibe Preference -->
+      <div class="scent-quiz__step" data-step="2">
+        <h3 class="scent-quiz__question-title">Choose your preferred fragrance vibe</h3>
+        <p class="scent-quiz__question-desc">Which aromatic profile calls to your senses?</p>
+        
+        <div class="scent-quiz__options">
+          <div class="scent-quiz__option-card" data-val="sweet_floral">
+            <div class="scent-quiz__option-badge">🌸</div>
+            <h4 class="scent-quiz__option-label">Sweet & Floral</h4>
+            <p class="scent-quiz__option-desc">Jasmine, Katcha Bela, Mogra notes.</p>
+          </div>
+          <div class="scent-quiz__option-card" data-val="spicy_woody">
+            <div class="scent-quiz__option-badge">🪵</div>
+            <h4 class="scent-quiz__option-label">Spicy & Woody</h4>
+            <p class="scent-quiz__option-desc">Saffron, Kesar Chandan, Sandalwood.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Intensity -->
+      <div class="scent-quiz__step" data-step="3">
+        <h3 class="scent-quiz__question-title">What is your ideal scent intensity?</h3>
+        <p class="scent-quiz__question-desc">How powerful should the fragrance projection be?</p>
+        
+        <div class="scent-quiz__options">
+          <div class="scent-quiz__option-card" data-val="subtle">
+            <div class="scent-quiz__option-badge">🍃</div>
+            <h4 class="scent-quiz__option-label">Mild & Subtle</h4>
+            <p class="scent-quiz__option-desc">Stays close to skin, gentle daily aura.</p>
+          </div>
+          <div class="scent-quiz__option-card" data-val="bold">
+            <div class="scent-quiz__option-badge">🔥</div>
+            <h4 class="scent-quiz__option-label">Bold & Projection</h4>
+            <p class="scent-quiz__option-desc">Strong projection, makes a statement.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Results Display -->
+      <div class="scent-quiz__step" data-step="4" id="sq-results-{{ section.id }}">
+        <div class="scent-quiz__result-card">
+          <span class="scent-quiz__result-badge">Your Match</span>
+          <h3 class="scent-quiz__result-title">Mahekh Premium Selection</h3>
+          <p class="scent-quiz__result-desc" id="sq-match-description-{{ section.id }}"></p>
+          
+          <!-- Shoppable Recommendation Card -->
+          <a href="#" id="sq-product-link-{{ section.id }}" class="scent-quiz__product-link">
+            <img src="" id="sq-product-img-{{ section.id }}" class="scent-quiz__product-img" alt="Recommended Product">
+            <h4 id="sq-product-name-{{ section.id }}" class="scent-quiz__product-name"></h4>
+            <span id="sq-product-price-{{ section.id }}" class="scent-quiz__product-price"></span>
+            <button type="button" class="scent-quiz__cta-btn">Buy Product Now</button>
+          </a>
+
+          <button class="scent-quiz__restart-btn" id="sq-restart-btn-{{ section.id }}">Retake Scent Quiz</button>
+        </div>
+      </div>
+
+      <!-- Nav buttons -->
+      <div class="scent-quiz__footer" id="sq-footer-{{ section.id }}">
+        <button class="scent-quiz__btn scent-quiz__btn--back" id="sq-back-btn-{{ section.id }}" disabled>Back</button>
+        <button class="scent-quiz__btn scent-quiz__btn--next" id="sq-next-btn-{{ section.id }}" disabled>Next</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const sectionId = "{{ section.id }}";
+    const quizBox = document.getElementById(`scent-quiz-${sectionId}`);
+    if (!quizBox) return;
+
+    const steps = quizBox.querySelectorAll(".scent-quiz__step");
+    const progressBar = quizBox.querySelector(`#sq-progress-bar-${sectionId}`);
+    const progressContainer = quizBox.querySelector(`#sq-progress-container-${sectionId}`);
+    const nextBtn = quizBox.querySelector(`#sq-next-btn-${sectionId}`);
+    const backBtn = quizBox.querySelector(`#sq-back-btn-${sectionId}`);
+    const footer = quizBox.querySelector(`#sq-footer-${sectionId}`);
+    const restartBtn = quizBox.querySelector(`#sq-restart-btn-${sectionId}`);
+
+    // Result elements
+    const resultsDesc = quizBox.querySelector(`#sq-match-description-${sectionId}`);
+    const productLink = quizBox.querySelector(`#sq-product-link-${sectionId}`);
+    const productImg = quizBox.querySelector(`#sq-product-img-${sectionId}`);
+    const productName = quizBox.querySelector(`#sq-product-name-${sectionId}`);
+    const productPrice = quizBox.querySelector(`#sq-product-price-${sectionId}`);
+
+    let currentStepIndex = 0;
+    const selections = {};
+
+    // Product recommendations database set up by schema settings
+    const recommendations = {
+      sweet_floral: {
+        title: "{{ section.settings.product_floral.title | escape }}",
+        url: "{{ section.settings.product_floral.url }}",
+        price: "{{ section.settings.product_floral.price | money }}",
+        image: "{{ section.settings.product_floral.featured_image | image_url: width: 300 }}",
+        desc: "Because you love sweet, floral, and daily fresh vibes, our Mogra/Katcha Bela selection is perfect for you. It provides a refreshing aura that captures pure luxury."
+      },
+      spicy_woody: {
+        title: "{{ section.settings.product_woody.title | escape }}",
+        url: "{{ section.settings.product_woody.url }}",
+        price: "{{ section.settings.product_woody.price | money }}",
+        image: "{{ section.settings.product_woody.featured_image | image_url: width: 300 }}",
+        desc: "You prefer spicy and woody aromatics with rich projection. Our Kesar Chandan / Sandalwood fragrance notes will give you a majestic, bold presence perfect for any occasion."
+      },
+      combo: {
+        title: "{{ section.settings.product_combo.title | escape }}",
+        url: "{{ section.settings.product_combo.url }}",
+        price: "{{ section.settings.product_combo.price | money }}",
+        image: "{{ section.settings.product_combo.featured_image | image_url: width: 300 }}",
+        desc: "For gifting or a fully complete sensory experience, our Mahekh Premium Attar Combo (Set of 3) is the absolute gold standard. It blends Mogra, Chandan, and Katcha Bela perfectly."
+      }
+    };
+
+    function updateStep() {
+      // Show/Hide steps
+      steps.forEach((step, idx) => {
+        if (idx === currentStepIndex) {
+          step.classList.add("active");
+        } else {
+          step.classList.remove("active");
+        }
+      });
+
+      // Update progress bar
+      const progressPercent = ((currentStepIndex + 1) / steps.length) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+
+      // Configure back / next buttons
+      if (currentStepIndex === 0) {
+        backBtn.disabled = true;
+        nextBtn.style.display = "block";
+        footer.style.display = "flex";
+        progressContainer.style.display = "block";
+      } else if (currentStepIndex === steps.length - 1) {
+        // Result page: hide buttons
+        footer.style.display = "none";
+        progressContainer.style.display = "none";
+        calculateResults();
+      } else {
+        backBtn.disabled = false;
+        nextBtn.style.display = "block";
+        footer.style.display = "flex";
+        progressContainer.style.display = "block";
+      }
+
+      // Check if current step has selection to enable next button
+      const activeStep = steps[currentStepIndex];
+      const selectedOption = activeStep.querySelector(".scent-quiz__option-card.selected");
+      nextBtn.disabled = !selectedOption;
+    }
+
+    function calculateResults() {
+      let finalMatch = "combo"; // Fallback default recommendation
+      
+      if (selections[1] === "gift") {
+        finalMatch = "combo";
+      } else {
+        if (selections[2] === "sweet_floral") {
+          finalMatch = "sweet_floral";
+        } else if (selections[2] === "spicy_woody") {
+          finalMatch = "spicy_woody";
+        }
+      }
+
+      // Load results data
+      const data = recommendations[finalMatch];
+      if (data && data.title) {
+        resultsDesc.textContent = data.desc;
+        productLink.href = data.url;
+        productImg.src = data.image;
+        productName.textContent = data.title;
+        productPrice.textContent = data.price;
+      } else {
+        // Ultimate fallback values if product settings are empty
+        resultsDesc.textContent = "Discover the ultimate fragrances combo. The Mahekh Premium Attar Pack fits all vibes and long-lasting expectations.";
+        productLink.href = "/products/%E2%9C%A8-mahekh-premium-attar-combo-set-of-3-%E2%9C%A8-katcha-bela-kesar-chandan-mogra";
+        productImg.src = "https://cdn.shopify.com/s/files/1/0807/6045/5850/files/IMG_1020_large.png";
+        productName.textContent = "Mahekh Premium Attar Combo (Set of 3)";
+        productPrice.textContent = "₹499.00";
+      }
+    }
+
+    // Option Click handlers
+    steps.forEach((step, stepIdx) => {
+      const options = step.querySelectorAll(".scent-quiz__option-card");
+      options.forEach(opt => {
+        opt.addEventListener("click", function() {
+          options.forEach(o => o.classList.remove("selected"));
+          opt.classList.add("selected");
+          
+          const val = opt.getAttribute("data-val");
+          selections[stepIdx + 1] = val;
+          
+          nextBtn.disabled = false;
+        });
+      });
+    });
+
+    nextBtn.addEventListener("click", function() {
+      if (currentStepIndex < steps.length - 1) {
+        currentStepIndex++;
+        updateStep();
+      }
+    });
+
+    backBtn.addEventListener("click", function() {
+      if (currentStepIndex > 0) {
+        currentStepIndex--;
+        updateStep();
+      }
+    });
+
+    restartBtn.addEventListener("click", function() {
+      currentStepIndex = 0;
+      // Reset selections
+      quizBox.querySelectorAll(".scent-quiz__option-card").forEach(o => o.classList.remove("selected"));
+      updateStep();
+    });
+
+    // Initialize first step
+    updateStep();
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Custom Scent Quiz",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Find Your Signature Scent"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "Fragrance Matchmaker"
+    },
+    {
+      "type": "header",
+      "content": "Quiz Recommendation Products"
+    },
+    {
+      "type": "product",
+      "id": "product_floral",
+      "label": "Floral / Sweet Vibe Recommendation",
+      "info": "Recommended product for floral and sweet choices"
+    },
+    {
+      "type": "product",
+      "id": "product_woody",
+      "label": "Woody / Spicy Vibe Recommendation",
+      "info": "Recommended product for woody and spicy choices"
+    },
+    {
+      "type": "product",
+      "id": "product_combo",
+      "label": "Gifts / Combo Recommendation",
+      "info": "Recommended product for gift paths or all vibes"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48,
+      "label": "Padding Bottom"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Scent Quiz",
+      "category": "Premium Custom Sections"
+    }
+  ]
+}
+{% endschema %}
