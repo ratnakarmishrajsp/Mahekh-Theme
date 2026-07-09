@@ -60,6 +60,157 @@
           {%- render 'gift-card-recipient-form', product: product, form: form, section: section -%}
         {%- endif -%}
 
+        <!-- Luxury Gifting & Card Checkbox inside Form -->
+        <div class="product-gifting__container">
+          <label class="product-gifting__label">
+            <input type="checkbox" name="properties[Gift Wrapping]" value="Yes" id="GiftWrappingCheckbox-{{ section_id }}" class="product-gifting__checkbox">
+            <span class="product-gifting__box-design"></span>
+            <div class="product-gifting__text-group">
+              <span class="product-gifting__title">✨ Add Luxury Gift Wrapping & Card (+₹49)</span>
+              <span class="product-gifting__desc">Premium gold foil box packaging with a personalized handwritten card.</span>
+            </div>
+          </label>
+          
+          <div class="product-gifting__message-field" id="GiftMessageField-{{ section_id }}" style="display: none;">
+            <label for="GiftMessageInput-{{ section_id }}" class="product-gifting__input-label">Write your personal message:</label>
+            <textarea 
+              id="GiftMessageInput-{{ section_id }}" 
+              name="properties[Gift Message]" 
+              rows="3" 
+              class="product-gifting__textarea" 
+              placeholder="E.g. Dear Amit, Happy Birthday! May your day be filled with fragrance. From, Sanya"
+              disabled
+            ></textarea>
+          </div>
+        </div>
+        
+        <style>
+          .product-gifting__container {
+            border: 1px solid rgba(204, 164, 59, 0.25);
+            background: #faf8f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: left;
+            transition: all 0.3s ease;
+          }
+          .product-gifting__label {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+            cursor: pointer;
+            user-select: none;
+            margin: 0;
+          }
+          .product-gifting__checkbox {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+          }
+          .product-gifting__box-design {
+            height: 20px;
+            width: 20px;
+            background-color: #ffffff;
+            border: 1.5px solid rgba(204, 164, 59, 0.4);
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            position: relative;
+            transition: all 0.2s ease;
+          }
+          .product-gifting__checkbox:checked ~ .product-gifting__box-design {
+            background-color: #cca43b;
+            border-color: #cca43b;
+          }
+          .product-gifting__box-design::after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 6px;
+            top: 2px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+          }
+          .product-gifting__checkbox:checked ~ .product-gifting__box-design::after {
+            display: block;
+          }
+          .product-gifting__text-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+          }
+          .product-gifting__title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #121212;
+          }
+          .product-gifting__desc {
+            font-size: 1.15rem;
+            color: #4a453e;
+            line-height: 1.4;
+          }
+          .product-gifting__message-field {
+            margin-top: 1.5rem;
+            border-top: 1px dashed rgba(204, 164, 59, 0.2);
+            padding-top: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            animation: fbSlideDown 0.3s ease forwards;
+          }
+          .product-gifting__input-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #121212;
+          }
+          .product-gifting__textarea {
+            width: 100%;
+            border: 1px solid rgba(204, 164, 59, 0.25);
+            border-radius: 4px;
+            padding: 1rem;
+            font-size: 1.25rem;
+            font-family: inherit;
+            background: #ffffff;
+            color: #121212;
+            resize: none;
+            box-sizing: border-box;
+          }
+          .product-gifting__textarea:focus {
+            outline: none;
+            border-color: #cca43b;
+            box-shadow: 0 0 5px rgba(204, 164, 59, 0.2);
+          }
+          @keyframes fbSlideDown {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+        </style>
+        
+        <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            const checkbox = document.getElementById("GiftWrappingCheckbox-{{ section_id }}");
+            const msgField = document.getElementById("GiftMessageField-{{ section_id }}");
+            const msgInput = document.getElementById("GiftMessageInput-{{ section_id }}");
+            
+            if (checkbox && msgField && msgInput) {
+              checkbox.addEventListener("change", function() {
+                if (checkbox.checked) {
+                  msgField.style.display = "flex";
+                  msgInput.removeAttribute("disabled");
+                } else {
+                  msgField.style.display = "none";
+                  msgInput.setAttribute("disabled", "true");
+                }
+              });
+            }
+          });
+        </script>
+
         <div class="product-form__buttons">
           {%- liquid
             assign check_against_inventory = true

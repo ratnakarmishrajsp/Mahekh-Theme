@@ -1,0 +1,298 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* Timeline styling */
+  .scent-journey {
+    background: #ffffff !important;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scent-journey__container {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 0;
+  }
+
+  /* Center Vertical Line */
+  .scent-journey__line {
+    position: absolute;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(204, 164, 59, 0.1) 0%, #cca43b 50%, rgba(204, 164, 59, 0.1) 100%);
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  @media screen and (max-width: 749px) {
+    .scent-journey__line {
+      left: 30px;
+    }
+  }
+
+  /* Timeline Block */
+  .scent-journey__block {
+    position: relative;
+    margin-bottom: 6rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .scent-journey__block.animated {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .scent-journey__block:nth-child(even) {
+    flex-direction: row-reverse;
+  }
+
+  /* Node Point on center line */
+  .scent-journey__node {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #cca43b;
+    border: 4px solid #ffffff;
+    box-shadow: 0 0 10px rgba(204, 164, 59, 0.4);
+    z-index: 2;
+    transition: all 0.3s ease;
+  }
+
+  .scent-journey__block.animated .scent-journey__node {
+    transform: translateX(-50%) scale(1.2);
+  }
+
+  @media screen and (max-width: 749px) {
+    .scent-journey__node {
+      left: 30px;
+      transform: translateX(-50%);
+    }
+    .scent-journey__block.animated .scent-journey__node {
+      transform: translateX(-50%) scale(1.2);
+    }
+  }
+
+  /* Content Panel */
+  .scent-journey__content {
+    width: 44%;
+    background: #faf8f5;
+    border: 1px solid rgba(204, 164, 59, 0.15);
+    border-radius: 8px;
+    padding: 2.5rem 3rem;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01);
+  }
+
+  .scent-journey__block:nth-child(odd) .scent-journey__content {
+    margin-right: auto;
+    text-align: right;
+  }
+
+  .scent-journey__block:nth-child(even) .scent-journey__content {
+    margin-left: auto;
+    text-align: left;
+  }
+
+  @media screen and (max-width: 749px) {
+    .scent-journey__block {
+      justify-content: flex-start;
+      margin-bottom: 4rem;
+    }
+    .scent-journey__block:nth-child(even) {
+      flex-direction: row;
+    }
+    .scent-journey__content {
+      width: calc(100% - 60px);
+      margin-left: 60px !important;
+      margin-right: 0 !important;
+      text-align: left !important;
+      padding: 2rem;
+    }
+  }
+
+  /* Content Elements */
+  .scent-journey__time {
+    font-size: 1.2rem;
+    color: #cca43b;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .scent-journey__title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #121212;
+    margin: 0 0 1rem 0;
+  }
+
+  .scent-journey__desc {
+    font-size: 1.3rem;
+    color: #4a453e !important;
+    line-height: 1.6;
+    margin: 0;
+  }
+{%- endstyle -%}
+
+<div class="scent-journey section-{{ section.id }}-padding" id="scent-journey-{{ section.id }}">
+  <div class="page-width">
+    
+    <!-- Title Section -->
+    <div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin text-center" style="margin-bottom: 5.5rem; display: flex; flex-direction: column; align-items: center; position: relative;">
+      {%- if section.settings.subtitle != blank -%}
+        <p class="image-with-text__text image-with-text__text--caption custom-usp-grid__subtitle-text" style="margin: 0 0 0.8rem 0; font-size: 1.5rem; letter-spacing: 0.15em; text-transform: uppercase;">
+          {{ section.settings.subtitle | escape }}
+        </p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="title inline-richtext h1" style="margin: 0; font-weight: 600; color: #121212; letter-spacing: 0.03em;">
+          {{ section.settings.title | escape }}
+        </h2>
+      {%- endif -%}
+    </div>
+
+    <!-- Timeline Wrapper -->
+    <div class="scent-journey__container">
+      <!-- Center axis line -->
+      <div class="scent-journey__line"></div>
+
+      <!-- Block 1: Top Notes -->
+      <div class="scent-journey__block">
+        <div class="scent-journey__node"></div>
+        <div class="scent-journey__content">
+          <span class="scent-journey__time">Hours 0 - 2 (Top Notes)</span>
+          <h3 class="scent-journey__title">🌸 Fresh Floral Burst</h3>
+          <p class="scent-journey__desc">Upon application, clean notes of Mogra Jasmine and Katcha Bela burst forward, creating a refreshing, sweet, and highly projection-active fragrance aura around you.</p>
+        </div>
+      </div>
+
+      <!-- Block 2: Heart Notes -->
+      <div class="scent-journey__block">
+        <div class="scent-journey__node"></div>
+        <div class="scent-journey__content">
+          <span class="scent-journey__time">Hours 2 - 6 (Heart Notes)</span>
+          <h3 class="scent-journey__title">🪵 Creamy Warm Accord</h3>
+          <p class="scent-journey__desc">As the initial floral notes settle, the warm core of Kashmiri Kesar (Saffron) and Mysore Chandan (Sandalwood) emerges, providing a smooth, spicy, and deeply sophisticated heart phase.</p>
+        </div>
+      </div>
+
+      <!-- Block 3: Base Notes -->
+      <div class="scent-journey__block">
+        <div class="scent-journey__node"></div>
+        <div class="scent-journey__content">
+          <span class="scent-journey__time">Hours 6 - 12+ (Base Notes)</span>
+          <h3 class="scent-journey__title">✨ Amber-Musk Drydown</h3>
+          <p class="scent-journey__desc">The final long-lasting drydown phase sets into the skin. Royal Amber and Earthy Musk act as a fixative, anchoring the scent for over 12 hours with a soft, majestic trail.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const sectionId = "{{ section.id }}";
+    const journeyContainer = document.getElementById(`scent-journey-${sectionId}`);
+    if (!journeyContainer) return;
+
+    const blocks = journeyContainer.querySelectorAll(".scent-journey__block");
+
+    // Scroll Animation using IntersectionObserver
+    if ('IntersectionObserver' in window) {
+      const observerOptions = {
+        root: null,
+        rootMargin: "0px 0px -100px 0px",
+        threshold: 0.15
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animated");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      blocks.forEach(block => observer.observe(block));
+    } else {
+      // Fallback if IntersectionObserver is not supported
+      blocks.forEach(block => block.classList.add("animated"));
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Fragrance Journey",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Scent Evolution Timeline"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "12-Hour Fragrance Journey"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48,
+      "label": "Padding Bottom"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fragrance Journey",
+      "category": "Premium Custom Sections"
+    }
+  ]
+}
+{% endschema %}

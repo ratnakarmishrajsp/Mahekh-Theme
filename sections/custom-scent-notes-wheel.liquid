@@ -1,0 +1,293 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* Scent Notes Wheel Grid layout */
+  .scent-wheel {
+    background: #faf8f5 !important; /* Premium Ivory-Cream background */
+    border-top: 1px solid rgba(204, 164, 59, 0.15);
+    border-bottom: 1px solid rgba(204, 164, 59, 0.15);
+  }
+
+  .scent-wheel__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 990px) {
+    .scent-wheel__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+    }
+  }
+
+  /* Left Column: Interactive Scent Wheel */
+  .scent-wheel__visual-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 2rem 0;
+  }
+
+  .scent-wheel__svg {
+    width: 100%;
+    max-width: 380px;
+    height: auto;
+    overflow: visible;
+  }
+
+  /* concentric rings sectors styling */
+  .scent-wheel__sector {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    fill-opacity: 0.85;
+    stroke: #ffffff;
+    stroke-width: 2.5px;
+  }
+
+  .scent-wheel__sector:hover {
+    fill-opacity: 1;
+    filter: drop-shadow(0 4px 12px rgba(204, 164, 59, 0.35));
+    transform: scale(1.02);
+    transform-origin: center;
+  }
+
+  /* Ring center drop decoration */
+  .scent-wheel__center-drop {
+    fill: #cca43b;
+    stroke: #ffffff;
+    stroke-width: 3px;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
+  }
+
+  /* Right Column: Scent Info Card */
+  .scent-wheel__info-card {
+    background: #ffffff;
+    border: 1px solid rgba(204, 164, 59, 0.25);
+    border-radius: 8px;
+    padding: 3.5rem 3rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    min-height: 280px;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+
+  @media screen and (max-width: 749px) {
+    .scent-wheel__info-card {
+      padding: 2.5rem 2rem;
+      min-height: auto;
+    }
+  }
+
+  .scent-wheel__info-badge {
+    align-self: flex-start;
+    background: rgba(204, 164, 59, 0.08);
+    color: #cca43b;
+    border: 1px solid rgba(204, 164, 59, 0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .scent-wheel__info-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #121212;
+    margin: 0;
+  }
+
+  .scent-wheel__info-desc {
+    font-size: 1.4rem;
+    color: #4a453e !important;
+    line-height: 1.65;
+    margin: 0;
+    animation: fbFadeInDetail 0.4s ease forwards;
+  }
+
+  @keyframes fbFadeInDetail {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .scent-wheel__info-instruction {
+    font-size: 1.3rem;
+    font-style: italic;
+    color: #cca43b;
+    text-align: center;
+    margin-top: 1rem;
+  }
+{%- endstyle -%}
+
+<div class="scent-wheel section-{{ section.id }}-padding" id="scent-wheel-{{ section.id }}">
+  <div class="page-width">
+    
+    <!-- Title Section -->
+    <div class="title-wrapper-with-link title-wrapper--self-padded-mobile title-wrapper--no-top-margin text-center" style="margin-bottom: 4.5rem; display: flex; flex-direction: column; align-items: center; position: relative;">
+      {%- if section.settings.subtitle != blank -%}
+        <p class="image-with-text__text image-with-text__text--caption custom-usp-grid__subtitle-text" style="margin: 0 0 0.8rem 0; font-size: 1.5rem; letter-spacing: 0.15em; text-transform: uppercase;">
+          {{ section.settings.subtitle | escape }}
+        </p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="title inline-richtext h1" style="margin: 0; font-weight: 600; color: #121212; letter-spacing: 0.03em;">
+          {{ section.settings.title | escape }}
+        </h2>
+      {%- endif -%}
+    </div>
+
+    <!-- Scent Wheel Visual & Details Grid -->
+    <div class="scent-wheel__grid">
+      
+      <!-- Interactive SVG Scent Notes Wheel -->
+      <div class="scent-wheel__visual-wrapper">
+        <svg class="scent-wheel__svg" viewBox="0 0 200 200">
+          
+          <!-- Outer Circle / Ring 3: Top Notes -->
+          <!-- sector 1 (Mogra/Floral) -->
+          <path class="scent-wheel__sector" d="M 100 10 A 90 90 0 0 1 178 55 L 152 70 A 60 60 0 0 0 100 40 Z" fill="#faf5e6" data-type="top" data-name="Mogra Jasmine" data-desc="Delivers a sweet, clean floral entrance. Extracted through steam distillation from Kannauj jasmine buds to greet the senses."></path>
+          <!-- sector 2 (Katcha Bela/Fresh) -->
+          <path class="scent-wheel__sector" d="M 178 55 A 90 90 0 0 1 178 145 L 152 130 A 60 60 0 0 0 152 70 Z" fill="#f8eed0" data-type="top" data-name="Katcha Bela" data-desc="Fresh, green, and sweet aroma. Captures the fragrance of blooming wet buds in Kannauj gardens right after the first rain."></path>
+
+          <!-- Middle Circle / Ring 2: Heart Notes -->
+          <!-- sector 3 (Saffron/Kesar) -->
+          <path class="scent-wheel__sector" d="M 178 145 A 90 90 0 0 1 100 190 L 100 160 A 60 60 0 0 0 152 130 Z" fill="#ffd700" data-type="heart" data-name="Kesar Saffron" data-desc="Exotic Kashmiri saffron strands provide a spicy, warm, luxurious core note that bridges the scent profile."></path>
+          <!-- sector 4 (Chandan/Sandalwood) -->
+          <path class="scent-wheel__sector" d="M 100 190 A 90 90 0 0 1 22 145 L 48 130 A 60 60 0 0 0 100 160 Z" fill="#f1cb64" data-type="heart" data-name="Chandan Mysore" data-desc="Creamy, balsamic sandalwood heart notes that add depth and velvety warmth to the middle phase of development."></path>
+
+          <!-- Inner Circle / Ring 1: Base Notes -->
+          <!-- sector 5 (Royal Amber) -->
+          <path class="scent-wheel__sector" d="M 22 145 A 90 90 0 0 1 22 55 L 48 70 A 60 60 0 0 0 48 130 Z" fill="#e5b33a" data-type="base" data-name="Royal Amber" data-desc="A rich, golden resinous note that locks the fragrance molecules, ensuring maximum longevity and projection."></path>
+          <!-- sector 6 (Earthy Musk) -->
+          <path class="scent-wheel__sector" d="M 22 55 A 90 90 0 0 1 100 10 L 100 40 A 60 60 0 0 0 48 70 Z" fill="#cca43b" data-type="base" data-name="Earthy Musk" data-desc="Powdery, warm musk undertones that linger for hours, leaving a majestic, unforgettable trail of luxury."></path>
+
+          <!-- Center decorative drop icon -->
+          <circle class="scent-wheel__center-drop" cx="100" cy="100" r="16"></circle>
+          <path d="M 100 90 Q 94 99 94 103 A 6 6 0 1 0 106 103 Q 106 99 100 90 Z" fill="#ffffff"></path>
+          
+        </svg>
+      </div>
+
+      <!-- Scent Details Card (Displays details dynamically on hover/click) -->
+      <div class="scent-wheel__info-card" id="sq-info-card-{{ section.id }}">
+        <div id="sq-card-content-{{ section.id }}">
+          <span class="scent-wheel__info-badge" id="sq-detail-badge-{{ section.id }}">Interactive Profile</span>
+          <h3 class="scent-wheel__info-title" id="sq-detail-title-{{ section.id }}">Fragrance Anatomy</h3>
+          <p class="scent-wheel__info-desc" id="sq-detail-desc-{{ section.id }}">Hover over or tap any sector of the scent notes wheel to analyze the ingredients, extraction, and note category details.</p>
+        </div>
+        <p class="scent-wheel__info-instruction" id="sq-instruction-{{ section.id }}">👈 Hover over notes sectors to explore</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const sectionId = "{{ section.id }}";
+    const scentSection = document.getElementById(`scent-wheel-${sectionId}`);
+    if (!scentSection) return;
+
+    const sectors = scentSection.querySelectorAll(".scent-wheel__sector");
+    const detailBadge = scentSection.querySelector(`#sq-detail-badge-${sectionId}`);
+    const detailTitle = scentSection.querySelector(`#sq-detail-title-${sectionId}`);
+    const detailDesc = scentSection.querySelector(`#sq-detail-desc-${sectionId}`);
+    const instruction = scentSection.querySelector(`#sq-instruction-${sectionId}`);
+
+    sectors.forEach(sector => {
+      function showDetails() {
+        const type = sector.getAttribute("data-type");
+        const name = sector.getAttribute("data-name");
+        const desc = sector.getAttribute("data-desc");
+
+        // Format type label
+        let badgeLabel = "TOP NOTE";
+        if (type === "heart") badgeLabel = "HEART NOTE";
+        if (type === "base") badgeLabel = "BASE NOTE";
+
+        detailBadge.textContent = badgeLabel;
+        detailTitle.textContent = name;
+        
+        // Dynamic re-trigger fade-in animation
+        detailDesc.style.animation = 'none';
+        detailDesc.offsetHeight; /* trigger reflow */
+        detailDesc.style.animation = '';
+        detailDesc.textContent = desc;
+        
+        instruction.style.opacity = "0.2";
+      }
+
+      sector.addEventListener("mouseenter", showDetails);
+      sector.addEventListener("click", showDetails);
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Scent Notes Wheel",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Scent Anatomy Visualizer"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "Interactive Fragrance Wheel"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48,
+      "label": "Padding Bottom"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scent Notes Wheel",
+      "category": "Premium Custom Sections"
+    }
+  ]
+}
+{% endschema %}
