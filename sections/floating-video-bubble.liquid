@@ -1,0 +1,643 @@
+{%- style -%}
+  /* Floating Video Bubble Styling */
+  .fb-bubble-container {
+    position: fixed;
+    bottom: 25px;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .fb-bubble-position-left {
+    left: 25px;
+  }
+
+  .fb-bubble-position-right {
+    right: 25px;
+  }
+
+  .fb-bubble-wrapper {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    border: 3px solid #cca43b; /* Premium gold border */
+    background: #121212;
+    overflow: visible;
+    transition: transform 0.3s ease;
+  }
+
+  /* Pulsing highlight effect */
+  .fb-bubble-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border: 2px solid rgba(204, 164, 59, 0.4);
+    border-radius: 50%;
+    animation: fbPulse 2s infinite ease-in-out;
+  }
+
+  .fb-bubble-wrapper:hover {
+    transform: scale(1.08);
+  }
+
+  .fb-bubble-preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  /* Bubble Video Indicator */
+  .fb-bubble-play-icon {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    background: #cca43b;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1a1107;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    border: 2px solid #ffffff;
+    z-index: 2;
+  }
+
+  .fb-bubble-play-icon svg {
+    width: 10px;
+    height: 10px;
+    fill: currentColor;
+    margin-left: 1px;
+  }
+
+  /* Dismiss button */
+  .fb-bubble-dismiss {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #1a1107;
+    color: #ffffff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.2);
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .fb-bubble-container:hover .fb-bubble-dismiss {
+    opacity: 1;
+  }
+
+  /* Text label below/beside the bubble */
+  .fb-bubble-label {
+    position: absolute;
+    background: rgba(26, 17, 7, 0.95);
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    border: 1px solid rgba(204, 164, 59, 0.3);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    pointer-events: none;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .fb-bubble-position-left .fb-bubble-label {
+    left: 84px;
+    top: 22px;
+    animation: fbSlideInLeft 0.5s ease-out forwards;
+  }
+
+  .fb-bubble-position-right .fb-bubble-label {
+    right: 84px;
+    top: 22px;
+    animation: fbSlideInRight 0.5s ease-out forwards;
+  }
+
+  @keyframes fbPulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 0.4; }
+    100% { transform: scale(0.95); opacity: 0.8; }
+  }
+
+  @keyframes fbSlideInLeft {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes fbSlideInRight {
+    from { opacity: 0; transform: translateX(10px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* Full Screen Video Modal */
+  .fb-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 2147483640; /* Force overlay to stack on top */
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .fb-modal-overlay.active {
+    display: flex;
+    opacity: 1;
+  }
+
+  .fb-modal-container {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    height: 100%;
+    max-height: 80vh;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    background: #000000;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(204, 164, 59, 0.25);
+    transform: scale(0.95);
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .fb-modal-overlay.active .fb-modal-container {
+    transform: scale(1);
+  }
+
+  @media screen and (max-width: 550px) {
+    .fb-modal-container {
+      max-height: 100%;
+      height: 100%;
+      border-radius: 0;
+      border: none;
+    }
+  }
+
+  /* Video Elements */
+  .fb-video-player-wrapper {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: #000;
+  }
+
+  .fb-video-element {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Modal Close and Sound Controls */
+  .fb-modal-btn {
+    position: absolute;
+    top: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.25);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    z-index: 10;
+  }
+
+  .fb-modal-btn:hover {
+    background: #cca43b;
+    color: #1a1107;
+  }
+
+  .fb-btn-close {
+    right: 20px;
+  }
+
+  .fb-btn-mute {
+    right: 70px;
+  }
+
+  /* Shoppable Product Card Overlay (Glassmorphism card at bottom) */
+  .fb-product-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px 20px 25px 20px;
+    background: linear-gradient(0deg, rgba(18, 12, 5, 0.95) 0%, rgba(18, 12, 5, 0.8) 70%, rgba(18, 12, 5, 0) 100%);
+    z-index: 5;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .fb-caption-text {
+    font-size: 1.35rem;
+    line-height: 1.5;
+    margin: 0;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .fb-product-card {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(204, 164, 59, 0.25);
+    border-radius: 8px;
+    padding: 1.2rem;
+    gap: 1.5rem;
+    backdrop-filter: blur(12px);
+    transition: border-color 0.3s ease;
+  }
+
+  .fb-product-card:hover {
+    border-color: #cca43b;
+  }
+
+  .fb-product-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #ffffff;
+    flex-shrink: 0;
+  }
+
+  .fb-product-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .fb-product-info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .fb-product-title {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+
+  .fb-product-price {
+    font-size: 1.3rem;
+    color: #cca43b;
+    font-weight: bold;
+  }
+
+  .fb-product-cta-btn {
+    background: #cca43b;
+    color: #1a1107;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    text-align: center;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    border: none;
+  }
+
+  .fb-product-cta-btn:hover {
+    background: #ffd700;
+    transform: translateY(-2px);
+  }
+
+  /* Responsive Display */
+  @media screen and (max-width: 749px) {
+    {%- unless section.settings.show_mobile -%}
+      .fb-bubble-container { display: none !important; }
+    {%- endunless -%}
+  }
+
+  @media screen and (min-width: 750px) {
+    {%- unless section.settings.show_desktop -%}
+      .fb-bubble-container { display: none !important; }
+    {%- endunless -%}
+  }
+{%- endstyle -%}
+
+<div id="fb-bubble-{{ section.id }}" class="fb-bubble-container fb-bubble-position-{{ section.settings.bubble_position }}" style="display: none;">
+  <div class="fb-bubble-dismiss" id="fb-dismiss-{{ section.id }}" title="Dismiss">×</div>
+  
+  <div class="fb-bubble-wrapper" id="fb-open-{{ section.id }}">
+    {%- if section.settings.bubble_image != blank -%}
+      <img src="{{ section.settings.bubble_image | image_url: width: 150 }}" alt="Mahekh video preview" class="fb-bubble-preview-img" loading="lazy">
+    {%- else -%}
+      {% comment %} Fallback default preview image {% endcomment %}
+      <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#cca43b; border-radius:50%; color:#1a1107; font-weight:bold; font-size:24px;">M</div>
+    {%- endif -%}
+    
+    <div class="fb-bubble-play-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+    </div>
+  </div>
+
+  {%- if section.settings.bubble_text != blank -%}
+    <span class="fb-bubble-label">{{ section.settings.bubble_text | escape }}</span>
+  {%- endif -%}
+</div>
+
+<!-- Reels Modal Overlay -->
+<div id="fb-modal-{{ section.id }}" class="fb-modal-overlay">
+  <div class="fb-modal-container">
+    <div class="fb-modal-btn fb-btn-close" id="fb-modal-close-{{ section.id }}" title="Close">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </div>
+    
+    <div class="fb-modal-btn fb-btn-mute" id="fb-modal-mute-{{ section.id }}" title="Toggle Sound">
+      <svg id="fb-sound-on-svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+      </svg>
+      <svg id="fb-sound-off-svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+      </svg>
+    </div>
+
+    <div class="fb-video-player-wrapper">
+      {%- if section.settings.video_url != blank -%}
+        <video 
+          id="fb-video-element-{{ section.id }}" 
+          class="fb-video-element" 
+          playsinline 
+          loop 
+          preload="metadata"
+          muted
+        >
+          <source src="{{ section.settings.video_url }}" type="video/mp4">
+          Your browser does not support vertical video.
+        </video>
+      {%- endif -%}
+
+      <div class="fb-product-card-overlay">
+        {%- if section.settings.caption != blank -%}
+          <p class="fb-caption-text">{{ section.settings.caption | escape }}</p>
+        {%- endif -%}
+
+        {%- assign p = section.settings.featured_product -%}
+        {%- if p != blank -%}
+          <div class="fb-product-card">
+            <div class="fb-product-thumb">
+              <img src="{{ p.featured_image | image_url: width: 120 }}" alt="{{ p.title | escape }}" loading="lazy">
+            </div>
+            
+            <div class="fb-product-info">
+              <h4 class="fb-product-title">
+                {%- if section.settings.custom_title != blank -%}
+                  {{ section.settings.custom_title | escape }}
+                {%- else -%}
+                  {{ p.title | escape }}
+                {%- endif -%}
+              </h4>
+              <span class="fb-product-price">{{ p.price | money }}</span>
+            </div>
+
+            {%- assign btn_url = p.url -%}
+            {%- if section.settings.cta_url != blank -%}{%- assign btn_url = section.settings.cta_url -%}{%- endif -%}
+            <a href="{{ btn_url }}" class="fb-product-cta-btn">
+              {%- if section.settings.cta_text != blank -%}
+                {{ section.settings.cta_text | escape }}
+              {%- else -%}
+                Buy Now
+              {%- endif -%}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const bubbleContainer = document.getElementById("fb-bubble-{{ section.id }}");
+    const dismissBtn = document.getElementById("fb-dismiss-{{ section.id }}");
+    const openBtn = document.getElementById("fb-open-{{ section.id }}");
+    
+    const modal = document.getElementById("fb-modal-{{ section.id }}");
+    const modalClose = document.getElementById("fb-modal-close-{{ section.id }}");
+    const soundToggle = document.getElementById("fb-modal-mute-{{ section.id }}");
+    
+    const video = document.getElementById("fb-video-element-{{ section.id }}");
+    const soundOnSvg = document.getElementById("fb-sound-on-svg");
+    const soundOffSvg = document.getElementById("fb-sound-off-svg");
+
+    const sessionKey = "fb_bubble_dismissed_{{ section.id }}";
+
+    // 1. Session Storage check: Don't show if dismissed in this session
+    if (!sessionStorage.getItem(sessionKey)) {
+      bubbleContainer.style.display = "flex";
+    }
+
+    // 2. Dismiss logic
+    dismissBtn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      bubbleContainer.style.opacity = "0";
+      setTimeout(() => {
+        bubbleContainer.style.display = "none";
+        sessionStorage.setItem(sessionKey, "true");
+      }, 400);
+    });
+
+    // 3. Open Modal
+    openBtn.addEventListener("click", function() {
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden"; // Disable background scrolling
+      
+      if (video) {
+        video.muted = true; // Auto-muted by default to bypass autoplay policy
+        soundOnSvg.style.display = "none";
+        soundOffSvg.style.display = "block";
+        
+        let playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(error => {
+            console.log("Autoplay blocked or video missing source: ", error);
+          });
+        }
+      }
+    });
+
+    // 4. Close Modal
+    function closeModal() {
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+      
+      if (video) {
+        video.pause();
+      }
+    }
+
+    modalClose.addEventListener("click", closeModal);
+    modal.addEventListener("click", function(e) {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // 5. Sound toggle (Mute / Unmute)
+    soundToggle.addEventListener("click", function() {
+      if (video) {
+        if (video.muted) {
+          video.muted = false;
+          soundOnSvg.style.display = "block";
+          soundOffSvg.style.display = "none";
+        } else {
+          video.muted = true;
+          soundOnSvg.style.display = "none";
+          soundOffSvg.style.display = "block";
+        }
+      }
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Floating Video Bubble",
+  "tag": "section",
+  "class": "section-floating-video",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_desktop",
+      "label": "Show on Desktop",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_mobile",
+      "label": "Show on Mobile",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "bubble_image",
+      "label": "Bubble Thumbnail Image",
+      "info": "Should be a square image (preferably cropped close to product/person face)"
+    },
+    {
+      "type": "text",
+      "id": "bubble_text",
+      "label": "Bubble Text Label",
+      "default": "Watch Video"
+    },
+    {
+      "type": "select",
+      "id": "bubble_position",
+      "label": "Bubble Position",
+      "options": [
+        { "value": "left", "label": "Bottom Left" },
+        { "value": "right", "label": "Bottom Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Video Player Settings"
+    },
+    {
+      "type": "text",
+      "id": "video_url",
+      "label": "Vertical MP4 Video URL",
+      "info": "Upload video in Shopify Admin under Content > Files, and paste the URL here."
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Video Caption",
+      "default": "Experience the luxury of Mahekh Premium Attar combo!"
+    },
+    {
+      "type": "header",
+      "content": "Shoppable Product Tag"
+    },
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Shoppable Product",
+      "info": "Adds product overlay card at bottom of video player."
+    },
+    {
+      "type": "text",
+      "id": "custom_title",
+      "label": "Custom Product Title",
+      "info": "Leave blank to use default product title"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button Label",
+      "default": "Buy Now"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Custom Link URL",
+      "info": "Leave blank to point to default product detail page"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Floating Video Bubble",
+      "category": "Premium Custom Sections"
+    }
+  ]
+}
+{% endschema %}
