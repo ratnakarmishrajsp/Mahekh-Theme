@@ -46,6 +46,20 @@
       filter: brightness(1.08) !important;
       box-shadow: 0 5px 15px rgba(204, 164, 59, 0.35) !important;
     }
+
+    /* Make payment icons (Paytm, GPay, etc.) small and clean */
+    .shiprocket-headless .sr-payment-icons, .sr-headless-checkout .sr-payment-icons {
+      max-height: 12px !important;
+      width: auto !important;
+      margin-left: 6px !important;
+      vertical-align: middle !important;
+      opacity: 0.8 !important;
+    }
+
+    /* Hide the powered by Shiprocket badge completely */
+    .shiprocket-headless .sr-brand-badge-container, .sr-headless-checkout .sr-brand-badge-container {
+      display: none !important;
+    }
    </style>
   <script>
     let btnStyles = null;
@@ -104,6 +118,16 @@
              transform: scale(1.025) !important;
              filter: brightness(1.08) !important;
              box-shadow: 0 5px 15px rgba(204, 164, 59, 0.35) !important;
+           }
+           .${className} .sr-payment-icons {
+             max-height: 12px !important;
+             width: auto !important;
+             margin-left: 6px !important;
+             vertical-align: middle !important;
+             opacity: 0.8 !important;
+           }
+           .${className} .sr-brand-badge-container {
+             display: none !important;
            }
          `;
   
