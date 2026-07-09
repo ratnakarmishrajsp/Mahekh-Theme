@@ -369,7 +369,11 @@
   <div class="fb-bubble-dismiss" id="fb-dismiss-{{ section.id }}" title="Dismiss">×</div>
   
   <div class="fb-bubble-wrapper" id="fb-open-{{ section.id }}">
-    {%- if section.settings.bubble_image != blank -%}
+    {%- if section.settings.video_url != blank -%}
+      <video class="fb-bubble-preview-img" autoplay loop muted playsinline preload="metadata" style="width:100%; height:100%; object-fit:cover; border-radius:50%; pointer-events:none;">
+        <source src="{{ section.settings.video_url }}" type="video/mp4">
+      </video>
+    {%- elsif section.settings.bubble_image != blank -%}
       <img src="{{ section.settings.bubble_image | image_url: width: 150 }}" alt="Mahekh video preview" class="fb-bubble-preview-img" loading="lazy">
     {%- else -%}
       {% comment %} Fallback default preview image {% endcomment %}
@@ -456,6 +460,24 @@
               {%- else -%}
                 Buy Now
               {%- endif -%}
+            </a>
+          </div>
+        {%- else -%}
+          {% comment %} Ultimate fallback shoppable product card (Set of 3 Combo) {% endcomment %}
+          <div class="fb-product-card">
+            <div class="fb-product-thumb">
+              <img src="https://mahekh.in/cdn/shop/files/WhatsAppImage2026-06-14at10.59.43AM.jpg?v=1781415028&width=120" alt="Premium Attar Set of 3" loading="lazy">
+            </div>
+            
+            <div class="fb-product-info">
+              <h4 class="fb-product-title" style="-webkit-line-clamp: 1;">
+                Premium Attar (Set of 3) ✨ KATCHA BELA, KESAR CHANDAN, MOGRA
+              </h4>
+              <span class="fb-product-price">₹1,299.00</span>
+            </div>
+
+            <a href="/products/%E2%9C%A8-mahekh-premium-attar-combo-set-of-3-%E2%9C%A8-katcha-bel-kesar-chandan-mogra" class="fb-product-cta-btn">
+              Buy Now
             </a>
           </div>
         {%- endif -%}
@@ -596,6 +618,7 @@
       "type": "text",
       "id": "video_url",
       "label": "Vertical MP4 Video URL",
+      "default": "https://cdn.shopify.com/videos/c/o/v/93c6ebef37734cfbbcfd8237ebce1664.mp4",
       "info": "Upload video in Shopify Admin under Content > Files, and paste the URL here."
     },
     {
