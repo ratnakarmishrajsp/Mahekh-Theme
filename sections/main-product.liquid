@@ -952,7 +952,7 @@
         </div>
       </div>
       <div class="sticky-buy-bar__action">
-        <button type="submit" class="button button--primary sticky-buy-bar__btn" onclick="const srBtn = document.querySelector('.sr-headless-checkout, .shiprocket-headless'); if(srBtn) { srBtn.click(); } else { const buyFormBtn = document.querySelector('form[action=\'/cart/add\'] [name=\'add\']'); if(buyFormBtn) { buyFormBtn.click(); } }">
+        <button type="submit" class="button button--primary sticky-buy-bar__btn" onclick="const srBtn = document.querySelector('form[action*=\'/cart/add\'] .sr-headless-checkout'); let clicked = false; if(srBtn) { if(!srBtn.disabled) { srBtn.click(); clicked = true; } } if(!clicked) { const buyFormBtn = document.querySelector('form[action=\'/cart/add\'] [name=\'add\']'); if(buyFormBtn) { buyFormBtn.click(); } }">
           Buy Now
         </button>
       </div>
