@@ -480,24 +480,48 @@
     // Product recommendations database set up by schema settings
     const recommendations = {
       sweet_floral: {
-        title: "{{ section.settings.product_floral.title | escape }}",
-        url: "{{ section.settings.product_floral.url }}",
-        price: "{{ section.settings.product_floral.price | money }}",
-        image: "{{ section.settings.product_floral.featured_image | image_url: width: 300 }}",
+        {%- assign pf = section.settings.product_floral -%}
+        {%- if pf != blank -%}
+          title: "{{ pf.title | escape }}",
+          url: "{{ pf.url }}",
+          price: "{{ pf.price | money }}",
+          image: "{{ pf.featured_image | image_url: width: 300 }}",
+        {%- else -%}
+          title: "",
+          url: "",
+          price: "",
+          image: "",
+        {%- endif -%}
         desc: "Because you love sweet, floral, and daily fresh vibes, our Mogra/Katcha Bela selection is perfect for you. It provides a refreshing aura that captures pure luxury."
       },
       spicy_woody: {
-        title: "{{ section.settings.product_woody.title | escape }}",
-        url: "{{ section.settings.product_woody.url }}",
-        price: "{{ section.settings.product_woody.price | money }}",
-        image: "{{ section.settings.product_woody.featured_image | image_url: width: 300 }}",
+        {%- assign pw = section.settings.product_woody -%}
+        {%- if pw != blank -%}
+          title: "{{ pw.title | escape }}",
+          url: "{{ pw.url }}",
+          price: "{{ pw.price | money }}",
+          image: "{{ pw.featured_image | image_url: width: 300 }}",
+        {%- else -%}
+          title: "",
+          url: "",
+          price: "",
+          image: "",
+        {%- endif -%}
         desc: "You prefer spicy and woody aromatics with rich projection. Our Kesar Chandan / Sandalwood fragrance notes will give you a majestic, bold presence perfect for any occasion."
       },
       combo: {
-        title: "{{ section.settings.product_combo.title | escape }}",
-        url: "{{ section.settings.product_combo.url }}",
-        price: "{{ section.settings.product_combo.price | money }}",
-        image: "{{ section.settings.product_combo.featured_image | image_url: width: 300 }}",
+        {%- assign pc = section.settings.product_combo -%}
+        {%- if pc != blank -%}
+          title: "{{ pc.title | escape }}",
+          url: "{{ pc.url }}",
+          price: "{{ pc.price | money }}",
+          image: "{{ pc.featured_image | image_url: width: 300 }}",
+        {%- else -%}
+          title: "",
+          url: "",
+          price: "",
+          image: "",
+        {%- endif -%}
         desc: "For gifting or a fully complete sensory experience, our Mahekh Premium Attar Combo (Set of 3) is the absolute gold standard. It blends Mogra, Chandan, and Katcha Bela perfectly."
       }
     };
