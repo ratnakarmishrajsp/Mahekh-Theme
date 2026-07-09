@@ -8,43 +8,43 @@
    <style>
     @keyframes srShimmer {
       0% { background-position: 100% 0; }
-      30%, 100% { background-position: -100% 0; }
+      25%, 100% { background-position: -100% 0; }
     }
     
     @keyframes srPulseHighlight {
       0%, 100% {
         transform: scale(1);
-        box-shadow: 0 4px 15px rgba(204, 164, 59, 0.25) !important;
+        box-shadow: 0 3px 10px rgba(204, 164, 59, 0.18) !important;
       }
       50% {
-        transform: scale(1.03);
-        box-shadow: 0 10px 28px rgba(204, 164, 59, 0.6) !important;
+        transform: scale(1.015);
+        box-shadow: 0 6px 18px rgba(204, 164, 59, 0.4) !important;
       }
     }
 
     .shiprocket-headless, .sr-headless-checkout {
       width: 100% !important;
-      height: 48px !important;
+      height: 42px !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
       background: linear-gradient(120deg, #cca43b 25%, #ffd700 40%, #ffffff 50%, #ffd700 60%, #cca43b 75%) !important;
       background-size: 250% 100% !important;
       color: #1a1107 !important;
-      font-weight: 700 !important;
-      font-size: 16px !important;
-      letter-spacing: 0.05em !important;
+      font-weight: 600 !important;
+      font-size: 14px !important;
+      letter-spacing: 0.08em !important;
       border: none !important;
       border-radius: 6px !important;
       text-transform: uppercase !important;
       transition: all 0.3s ease !important;
-      animation: srShimmer 4s infinite linear, srPulseHighlight 2.5s infinite ease-in-out !important;
+      animation: srShimmer 5s infinite linear, srPulseHighlight 2.5s infinite ease-in-out !important;
     }
     
     .shiprocket-headless:hover, .sr-headless-checkout:hover {
-      transform: scale(1.04) !important;
-      filter: brightness(1.1) !important;
-      box-shadow: 0 6px 20px rgba(204, 164, 59, 0.45) !important;
+      transform: scale(1.025) !important;
+      filter: brightness(1.08) !important;
+      box-shadow: 0 5px 15px rgba(204, 164, 59, 0.35) !important;
     }
    </style>
   <script>
@@ -69,11 +69,11 @@
          let animationRule = `
            @keyframes srShimmer {
              0% { background-position: 100% 0; }
-             30%, 100% { background-position: -100% 0; }
+             25%, 100% { background-position: -100% 0; }
            }
            @keyframes srPulseHighlight {
-             0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(204, 164, 59, 0.25) !important; }
-             50% { transform: scale(1.03); box-shadow: 0 10px 28px rgba(204, 164, 59, 0.6) !important; }
+             0%, 100% { transform: scale(1); box-shadow: 0 3px 10px rgba(204, 164, 59, 0.18) !important; }
+             50% { transform: scale(1.015); box-shadow: 0 6px 18px rgba(204, 164, 59, 0.4) !important; }
            }
          `;
    
@@ -86,13 +86,13 @@
              background: linear-gradient(120deg, #cca43b 25%, #ffd700 40%, #ffffff 50%, #ffd700 60%, #cca43b 75%) !important;
              background-size: 250% 100% !important;
              color: #1a1107 !important;
-             font-weight: 700 !important;
-             font-size: 16px !important;
-             letter-spacing: 0.05em !important;
+             font-weight: 600 !important;
+             font-size: 14px !important;
+             letter-spacing: 0.08em !important;
              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-             animation: srShimmer 4s infinite linear, srPulseHighlight 2.5s infinite ease-in-out !important;
+             animation: srShimmer 5s infinite linear, srPulseHighlight 2.5s infinite ease-in-out !important;
              transition: all 0.3s ease !important;
-             height: 48px !important;
+             height: 42px !important;
              display: flex !important;
              align-items: center !important;
              justify-content: center !important;
@@ -101,9 +101,9 @@
              text-transform: uppercase !important;
            }
            .${className}:hover {
-             transform: scale(1.04) !important;
-             filter: brightness(1.1) !important;
-             box-shadow: 0 6px 20px rgba(204, 164, 59, 0.45) !important;
+             transform: scale(1.025) !important;
+             filter: brightness(1.08) !important;
+             box-shadow: 0 5px 15px rgba(204, 164, 59, 0.35) !important;
            }
          `;
   
