@@ -3010,19 +3010,45 @@
       observer.observe(buyButton);
     }
 
-    // 5. Live Sales Notification Loop (10 Custom Buyers)
-    const buyers = [
-      { name: "Priya", location: "Delhi", time: "2 mins ago" },
-      { name: "Rohan", location: "Mumbai", time: "5 mins ago" },
-      { name: "Sneha", location: "Bangalore", time: "8 mins ago" },
-      { name: "Amit", location: "Jaipur", time: "12 mins ago" },
-      { name: "Anjali", location: "Lucknow", time: "17 mins ago" },
-      { name: "Vikram", location: "Ahmedabad", time: "22 mins ago" },
-      { name: "Shalini", location: "Pune", time: "29 mins ago" },
-      { name: "Kabir", location: "Hyderabad", time: "38 mins ago" },
-      { name: "Divya", location: "Kolkata", time: "45 mins ago" },
-      { name: "Rahul", location: "Noida", time: "53 mins ago" }
+    // 5. Live Sales Notification Loop (Deterministic Unique Buyers per Product)
+    const productId = {{ product.id | default: 0 }};
+    const namePool = [
+      "Priya", "Rohan", "Sneha", "Amit", "Anjali", "Vikram", "Shalini", "Kabir", "Divya", "Rahul",
+      "Karan", "Meera", "Aditya", "Neha", "Yash", "Tanvi", "Siddharth", "Riya", "Raj", "Pooja",
+      "Arjun", "Kriti", "Varun", "Isha", "Abhishek", "Simran", "Manish", "Preeti", "Gaurav", "Komal",
+      "Deepak", "Aishwarya", "Sandeep", "Swati", "Sanjay"
     ];
+    const locationPool = [
+      "Delhi", "Mumbai", "Bangalore", "Jaipur", "Lucknow", "Ahmedabad", "Pune", "Hyderabad", "Kolkata", "Noida",
+      "Gurugram", "Chandigarh", "Indore", "Bhopal", "Patna", "Ranchi", "Guwahati", "Bhubaneswar", "Kochi", "Chennai",
+      "Coimbatore", "Surat", "Vadodara", "Udaipur", "Amritsar"
+    ];
+    const timePool = [
+      "2 mins ago", "3 mins ago", "5 mins ago", "7 mins ago", "9 mins ago", 
+      "12 mins ago", "15 mins ago", "18 mins ago", "22 mins ago", "27 mins ago", 
+      "34 mins ago", "41 mins ago", "48 mins ago", "55 mins ago", "1 hour ago"
+    ];
+
+    // Seeded pseudo-random generator
+    function getSeededValue(seed, min, max) {
+      const x = Math.sin(seed) * 10000;
+      const r = x - Math.floor(x);
+      return Math.floor(r * (max - min + 1)) + min;
+    }
+
+    // Generate 10 unique buyers based on product ID
+    const buyers = [];
+    for (let i = 0; i < 10; i++) {
+      const nameIndex = getSeededValue(productId + i * 13, 0, namePool.length - 1);
+      const locIndex = getSeededValue(productId + i * 37 + 7, 0, locationPool.length - 1);
+      const timeIndex = getSeededValue(productId + i * 73 + 19, 0, timePool.length - 1);
+
+      buyers.push({
+        name: namePool[nameIndex],
+        location: locationPool[locIndex],
+        time: timePool[timeIndex]
+      });
+    }
 
     const closeBtn = document.getElementById('SalesNotificationClose');
     const buyerSpan = document.getElementById('SalesNotificationBuyer');
