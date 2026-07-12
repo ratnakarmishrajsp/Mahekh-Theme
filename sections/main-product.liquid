@@ -960,6 +960,28 @@
   </div>
 {%- endif -%}
 
+<div id="SalesNotificationPopup" class="sales-notification-popup quick-add-hidden">
+  <button id="SalesNotificationClose" class="sales-notification-close" aria-label="Dismiss">&times;</button>
+  <div class="sales-notification-content">
+    {%- if product.featured_media -%}
+      <img id="SalesNotificationImage" src="{{ product.featured_media | image_url: width: 120 }}" alt="{{ product.title | escape }}" class="sales-notification-img" width="48" height="48" loading="lazy">
+    {%- endif -%}
+    <div class="sales-notification-info">
+      <div class="sales-notification-buyer-badge">
+        <span id="SalesNotificationBuyer">Priya from Delhi</span>
+        <span class="sales-notification-verified">
+          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" width="10" height="10" style="vertical-align: middle; margin-left: 3px; fill: #cca43b;">
+            <path d="M12 6C12 9.31371 9.31371 12 6 12C2.68629 12 0 9.31371 0 6C0 2.68629 2.68629 0 6 0C9.31371 0 12 2.68629 12 6ZM5.4857 8.48528L9.02123 4.94975L8.31412 4.24264L5.4857 7.07107L3.71802 5.30339L3.01091 6.0105L5.4857 8.48528Z" fill="currentColor"/>
+          </svg>
+          Verified
+        </span>
+      </div>
+      <p class="sales-notification-text">purchased <strong id="SalesNotificationProduct">{{ product.title | escape }}</strong></p>
+      <p class="sales-notification-time" id="SalesNotificationTime">2 minutes ago</p>
+    </div>
+  </div>
+</div>
+
 {% schema %}
 {
   "name": "t:sections.main-product.name",
@@ -2781,6 +2803,133 @@
     color: #110d0c !important;
     box-shadow: 0 4px 10px rgba(204, 164, 59, 0.2) !important;
   }
+
+  /* Sales Notification Popup styling */
+  .sales-notification-popup {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 99;
+    background: rgba(253, 251, 247, 0.97);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(204, 164, 59, 0.4);
+    border-radius: 8px;
+    padding: 1.2rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    width: 320px;
+    max-width: calc(100% - 32px);
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), opacity 0.4s ease, bottom 0.4s ease;
+    opacity: 0;
+    transform: translateY(15px);
+    pointer-events: none;
+    display: block !important;
+  }
+
+  .sales-notification-popup.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .sales-notification-popup.sticky-visible {
+    bottom: 82px;
+  }
+
+  .sales-notification-content {
+    display: flex;
+    gap: 1.2rem;
+    align-items: center;
+    position: relative;
+    padding-right: 1.5rem;
+  }
+
+  .sales-notification-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    object-fit: cover;
+    border: 1px solid rgba(204, 164, 59, 0.2);
+    flex-shrink: 0;
+  }
+
+  .sales-notification-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    gap: 0.1rem;
+  }
+
+  .sales-notification-buyer-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #121212;
+  }
+
+  .sales-notification-verified {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #cca43b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .sales-notification-text {
+    font-size: 1.15rem;
+    color: #4a453e;
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  .sales-notification-text strong {
+    font-weight: 700;
+    color: #cca43b;
+    display: inline;
+  }
+
+  .sales-notification-time {
+    font-size: 1rem;
+    color: #8a8276;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .sales-notification-close {
+    position: absolute;
+    top: -2px;
+    right: 0;
+    background: transparent;
+    border: none;
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #8a8276;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.4rem;
+    transition: color 0.2s;
+    z-index: 2;
+  }
+
+  .sales-notification-close:hover {
+    color: #121212;
+  }
+
+  @media screen and (max-width: 749px) {
+    .sales-notification-popup {
+      left: 16px;
+      bottom: 16px;
+      width: calc(100% - 32px);
+      max-width: 360px;
+    }
+    .sales-notification-popup.sticky-visible {
+      bottom: 82px;
+    }
+  }
 {%- endstyle -%}
 
 <script>
@@ -2842,20 +2991,86 @@
     // 4. Mobile Sticky Buy Bar Scroll Observer
     const buyButton = document.querySelector('form[action="/cart/add"] [name="add"]');
     const stickyBar = document.querySelector('.mobile-sticky-buy-bar');
+    const salesPopup = document.getElementById('SalesNotificationPopup');
     if (buyButton && stickyBar) {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             stickyBar.classList.remove('is-visible');
+            if (salesPopup) salesPopup.classList.remove('sticky-visible');
           } else {
             if (window.scrollY > entry.boundingClientRect.top + window.scrollY) {
               stickyBar.classList.add('is-visible');
+              if (salesPopup) salesPopup.classList.add('sticky-visible');
             }
           }
         });
       }, { threshold: 0 });
 
       observer.observe(buyButton);
+    }
+
+    // 5. Live Sales Notification Loop (10 Custom Buyers)
+    const buyers = [
+      { name: "Priya", location: "Delhi", time: "2 mins ago" },
+      { name: "Rohan", location: "Mumbai", time: "5 mins ago" },
+      { name: "Sneha", location: "Bangalore", time: "8 mins ago" },
+      { name: "Amit", location: "Jaipur", time: "12 mins ago" },
+      { name: "Anjali", location: "Lucknow", time: "17 mins ago" },
+      { name: "Vikram", location: "Ahmedabad", time: "22 mins ago" },
+      { name: "Shalini", location: "Pune", time: "29 mins ago" },
+      { name: "Kabir", location: "Hyderabad", time: "38 mins ago" },
+      { name: "Divya", location: "Kolkata", time: "45 mins ago" },
+      { name: "Rahul", location: "Noida", time: "53 mins ago" }
+    ];
+
+    const closeBtn = document.getElementById('SalesNotificationClose');
+    const buyerSpan = document.getElementById('SalesNotificationBuyer');
+    const timeSpan = document.getElementById('SalesNotificationTime');
+
+    if (salesPopup && buyers.length > 0) {
+      let currentIndex = 0;
+      let popupTimeout = null;
+      let cycleInterval = null;
+      let isDismissed = sessionStorage.getItem('sales_notification_dismissed') === 'true';
+
+      function showNextNotification() {
+        if (isDismissed) return;
+
+        const buyer = buyers[currentIndex];
+        
+        // Update content
+        if (buyerSpan) buyerSpan.textContent = `${buyer.name} from ${buyer.location}`;
+        if (timeSpan) timeSpan.textContent = buyer.time;
+
+        // Show popup
+        salesPopup.classList.add('active');
+
+        // Hide after 6 seconds
+        popupTimeout = setTimeout(() => {
+          salesPopup.classList.remove('active');
+          currentIndex = (currentIndex + 1) % buyers.length;
+        }, 6000);
+      }
+
+      // Start loop after 8 seconds, repeat every 18 seconds (6s visible + 12s hidden)
+      if (!isDismissed) {
+        setTimeout(() => {
+          showNextNotification();
+          cycleInterval = setInterval(showNextNotification, 18000);
+        }, 8000);
+      }
+
+      // Close button handler
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          isDismissed = true;
+          sessionStorage.setItem('sales_notification_dismissed', 'true');
+          if (popupTimeout) clearTimeout(popupTimeout);
+          if (cycleInterval) clearInterval(cycleInterval);
+          salesPopup.classList.remove('active');
+        });
+      }
     }
   });
 </script>
