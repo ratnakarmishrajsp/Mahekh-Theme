@@ -988,34 +988,33 @@
       <button id="ExitIntentClose" class="exit-intent-close-btn" aria-label="Close popup">&times;</button>
       
       <div class="exit-intent-header">
-        <span class="exit-intent-tag">🎁 Limited Time Offer</span>
+        <span class="exit-intent-tag">🎁 Special Exit Offer</span>
         <h3 class="exit-intent-title">Wait! Don't Leave Your Fragrance Behind</h3>
       </div>
       
       <div class="exit-intent-product">
         {%- if product.featured_media -%}
-          <img src="{{ product.featured_media | image_url: width: 240 }}" alt="{{ product.title | escape }}" class="exit-intent-prod-img" loading="lazy" width="80" height="80">
+          <img src="{{ product.featured_media | image_url: width: 180 }}" alt="{{ product.title | escape }}" class="exit-intent-prod-img" loading="lazy" width="60" height="60">
         {%- endif -%}
         <div class="exit-intent-prod-info">
           <h4 class="exit-intent-prod-title">{{ product.title }}</h4>
-          <p class="exit-intent-prod-price">{{ product.selected_or_first_available_variant.price | money }}</p>
+          <div class="exit-intent-pricing">
+            <span class="exit-intent-price-old" id="ExitIntentPriceOld"></span>
+            <span class="exit-intent-price-new" id="ExitIntentPriceNew"></span>
+            <span class="exit-intent-save-badge">Save {{ section.settings.exit_popup_discount_amount | default: '₹100' }}</span>
+          </div>
         </div>
       </div>
       
       <div class="exit-intent-offer">
-        <p class="exit-intent-discount-text">Get <strong class="highlight-gold">FLAT {{ section.settings.exit_popup_discount_amount | default: '₹100' }} OFF</strong> on your order!</p>
-        <div class="exit-intent-code-wrapper">
-          <span class="exit-intent-code" id="ExitIntentCouponCode">{{ section.settings.exit_popup_discount_code | default: 'MAHEKH100' }}</span>
-          <button class="exit-intent-copy-btn" id="ExitIntentCopyBtn">Copy Code</button>
-        </div>
-        <p class="exit-intent-benefits">✨ Free Shipping + Cash on Delivery (COD) Available</p>
+        <p class="exit-intent-benefits">🎉 <strong>Cash on Delivery (COD)</strong> + <strong>Free Shipping</strong> Included</p>
+        <p class="exit-intent-delivery">🚚 Estimated Delivery: Get it by <strong id="ExitIntentDeliveryDate" class="highlight-gold"></strong> if you order today!</p>
       </div>
       
       <div class="exit-intent-actions">
         <button id="ExitIntentClaimBtn" class="exit-intent-btn-primary">Claim Discount & Buy Now</button>
         <button id="ExitIntentCancelBtn" class="exit-intent-btn-secondary">No thanks, I will pay full price</button>
       </div>
-      <div id="ExitIntentToast" class="exit-intent-toast">Code copied! Applying to checkout...</div>
     </div>
   </div>
 {%- endif -%}
@@ -3113,68 +3112,58 @@
     overflow: hidden;
   }
 
-  .exit-intent-prod-price {
+  .exit-intent-pricing {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 0.4rem;
+  }
+
+  .exit-intent-price-old {
     font-size: 1.3rem;
+    color: #8a8276;
+    text-decoration: line-through;
+    font-weight: 500;
+  }
+
+  .exit-intent-price-new {
+    font-size: 1.6rem;
     color: #cca43b;
-    font-weight: bold;
-    margin: 0;
+    font-weight: 700;
+  }
+
+  .exit-intent-save-badge {
+    background: #d32f2f;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
   }
 
   .exit-intent-offer {
     margin-bottom: 2.2rem;
   }
 
-  .exit-intent-discount-text {
-    font-size: 1.4rem;
+  .exit-intent-benefits {
+    font-size: 1.25rem;
     color: #4a453e;
-    margin: 0 0 1.2rem 0;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .exit-intent-delivery {
+    font-size: 1.25rem;
+    color: #4a453e;
+    margin: 0.8rem 0 0 0;
+    line-height: 1.4;
   }
 
   .highlight-gold {
     color: #cca43b;
     font-weight: 700;
-  }
-
-  .exit-intent-code-wrapper {
-    display: inline-flex;
-    align-items: center;
-    border: 2px dashed rgba(204, 164, 59, 0.5);
-    background: #ffffff;
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 1.2rem;
-  }
-
-  .exit-intent-code {
-    font-family: monospace;
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #121212;
-    padding: 0.8rem 1.6rem;
-    letter-spacing: 0.05em;
-  }
-
-  .exit-intent-copy-btn {
-    background: #cca43b;
-    color: #1a1107;
-    border: none;
-    padding: 1rem 1.6rem;
-    font-size: 1.2rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-
-  .exit-intent-copy-btn:hover {
-    background: #ffd700;
-  }
-
-  .exit-intent-benefits {
-    font-size: 1.15rem;
-    color: #555555;
-    margin: 0;
-    font-weight: 500;
   }
 
   .exit-intent-actions {
@@ -3219,27 +3208,16 @@
     color: #cca43b;
   }
 
-  .exit-intent-toast {
-    position: absolute;
-    bottom: 1.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(26, 17, 7, 0.95);
-    color: #ffffff;
-    padding: 0.6rem 1.4rem;
-    border-radius: 20px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    border: 1px solid rgba(204, 164, 59, 0.3);
-    z-index: 5;
-    white-space: nowrap;
-  }
-
-  .exit-intent-toast.show {
-    opacity: 1;
+  @media screen and (max-width: 749px) {
+    .exit-intent-popup {
+      left: 16px;
+      bottom: 16px;
+      width: calc(100% - 32px);
+      max-width: 360px;
+    }
+    .exit-intent-popup.sticky-visible {
+      bottom: 82px;
+    }
   }
 {%- endstyle -%}
 
@@ -3415,10 +3393,32 @@
     if (exitPopup) {
       const exitClose = document.getElementById('ExitIntentClose');
       const exitCancel = document.getElementById('ExitIntentCancelBtn');
-      const exitCopy = document.getElementById('ExitIntentCopyBtn');
       const exitClaim = document.getElementById('ExitIntentClaimBtn');
-      const couponText = document.getElementById('ExitIntentCouponCode')?.textContent || 'MAHEKH100';
-      const toast = document.getElementById('ExitIntentToast');
+      const discountCode = '{{ section.settings.exit_popup_discount_code | default: "MAHEKH100" }}';
+
+      // Dynamic Pricing & Delivery Dates
+      const priceOldEl = document.getElementById('ExitIntentPriceOld');
+      const priceNewEl = document.getElementById('ExitIntentPriceNew');
+      const deliveryEl = document.getElementById('ExitIntentDeliveryDate');
+      
+      const originalPriceVal = {{ product.selected_or_first_available_variant.price | default: 0 }} / 100;
+      const discountVal = parseInt('{{ section.settings.exit_popup_discount_amount | replace: "₹", "" | replace: "Rs", "" | default: "100" }}') || 100;
+      const discountedPriceVal = originalPriceVal - discountVal;
+      
+      function formatCurrency(amount) {
+        return '₹' + amount.toLocaleString('en-IN', { maximumFractionDigits: 0 });
+      }
+
+      if (priceOldEl) priceOldEl.textContent = formatCurrency(originalPriceVal);
+      if (priceNewEl) priceNewEl.textContent = formatCurrency(discountedPriceVal);
+
+      // Estimated Delivery Date (4 days from today)
+      if (deliveryEl) {
+        const deliveryDate = new Date();
+        deliveryDate.setDate(deliveryDate.getDate() + 4);
+        const options = { day: 'numeric', month: 'short' };
+        deliveryEl.textContent = deliveryDate.toLocaleDateString('en-IN', options);
+      }
 
       let popupShown = false;
 
@@ -3447,43 +3447,47 @@
       if (exitClose) exitClose.addEventListener('click', closeExitPopup);
       if (exitCancel) exitCancel.addEventListener('click', closeExitPopup);
 
-      // Copy coupon code utility
-      function copyCouponCode() {
-        navigator.clipboard.writeText(couponText).then(() => {
-          // Show toast
-          if (toast) {
-            toast.classList.add('show');
-            setTimeout(() => {
-              toast.classList.remove('show');
-            }, 3000);
-          }
-        }).catch(err => {
-          console.error('Failed to copy text: ', err);
-        });
-      }
-
-      if (exitCopy) exitCopy.addEventListener('click', copyCouponCode);
-
       // Claim discount & checkout button handler
       if (exitClaim) {
         exitClaim.addEventListener('click', () => {
-          copyCouponCode();
+          // Disable button and show loader text
+          exitClaim.disabled = true;
+          exitClaim.textContent = "Applying Discount...";
           
-          // Smooth checkout: close popup and trigger standard buy-now or cart-add checkout
-          setTimeout(() => {
-            closeExitPopup();
-            
-            // Try to trigger checkout / buy buttons
-            const buyButton = document.querySelector('form[action="/cart/add"] [name="add"]') || document.querySelector('.sr-headless-checkout') || document.querySelector('.shopify-payment-button__button');
-            if (buyButton) {
-              buyButton.click();
-            } else {
-              const purchaseForm = document.querySelector('form[action*="/cart/add"]') || document.querySelector('.product-form');
-              if (purchaseForm) {
-                purchaseForm.scrollIntoView({ behavior: 'smooth' });
-              }
-            }
-          }, 800);
+          // Apply discount in background via silent Shopify fetch call
+          fetch(`/discount/${discountCode}`)
+            .then(() => {
+              setTimeout(() => {
+                closeExitPopup();
+                
+                // Reset button text
+                exitClaim.disabled = false;
+                exitClaim.textContent = "Claim Discount & Buy Now";
+                
+                // Find Shiprocket checkout button (.sr-headless-checkout) or standard checkout
+                const srBtn = document.querySelector('form[action*="/cart/add"] .sr-headless-checkout') || document.querySelector('.sr-headless-checkout');
+                const standardBtn = document.querySelector('form[action="/cart/add"] [name="add"]') || document.querySelector('.shopify-payment-button__button');
+                
+                if (srBtn) {
+                  srBtn.click();
+                } else if (standardBtn) {
+                  standardBtn.click();
+                } else {
+                  // Fallback scroll to purchase form
+                  const purchaseForm = document.querySelector('form[action*="/cart/add"]') || document.querySelector('.product-form');
+                  if (purchaseForm) {
+                    purchaseForm.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }
+              }, 400);
+            })
+            .catch(err => {
+              console.error('Error applying discount:', err);
+              // Fallback: trigger checkout anyway
+              closeExitPopup();
+              const standardBtn = document.querySelector('form[action="/cart/add"] [name="add"]') || document.querySelector('.sr-headless-checkout');
+              if (standardBtn) standardBtn.click();
+            });
         });
       }
     }
