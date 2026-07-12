@@ -982,6 +982,44 @@
   </div>
 </div>
 
+{%- if section.settings.enable_exit_popup -%}
+  <div id="ExitIntentPopup" class="exit-intent-overlay quick-add-hidden">
+    <div class="exit-intent-card">
+      <button id="ExitIntentClose" class="exit-intent-close-btn" aria-label="Close popup">&times;</button>
+      
+      <div class="exit-intent-header">
+        <span class="exit-intent-tag">🎁 Limited Time Offer</span>
+        <h3 class="exit-intent-title">Wait! Don't Leave Your Fragrance Behind</h3>
+      </div>
+      
+      <div class="exit-intent-product">
+        {%- if product.featured_media -%}
+          <img src="{{ product.featured_media | image_url: width: 240 }}" alt="{{ product.title | escape }}" class="exit-intent-prod-img" loading="lazy" width="80" height="80">
+        {%- endif -%}
+        <div class="exit-intent-prod-info">
+          <h4 class="exit-intent-prod-title">{{ product.title }}</h4>
+          <p class="exit-intent-prod-price">{{ product.selected_or_first_available_variant.price | money }}</p>
+        </div>
+      </div>
+      
+      <div class="exit-intent-offer">
+        <p class="exit-intent-discount-text">Get <strong class="highlight-gold">FLAT {{ section.settings.exit_popup_discount_amount | default: '₹100' }} OFF</strong> on your order!</p>
+        <div class="exit-intent-code-wrapper">
+          <span class="exit-intent-code" id="ExitIntentCouponCode">{{ section.settings.exit_popup_discount_code | default: 'MAHEKH100' }}</span>
+          <button class="exit-intent-copy-btn" id="ExitIntentCopyBtn">Copy Code</button>
+        </div>
+        <p class="exit-intent-benefits">✨ Free Shipping + Cash on Delivery (COD) Available</p>
+      </div>
+      
+      <div class="exit-intent-actions">
+        <button id="ExitIntentClaimBtn" class="exit-intent-btn-primary">Claim Discount & Buy Now</button>
+        <button id="ExitIntentCancelBtn" class="exit-intent-btn-secondary">No thanks, I will pay full price</button>
+      </div>
+      <div id="ExitIntentToast" class="exit-intent-toast">Code copied! Applying to checkout...</div>
+    </div>
+  </div>
+{%- endif -%}
+
 {% schema %}
 {
   "name": "t:sections.main-product.name",
@@ -2565,6 +2603,28 @@
       "unit": "px",
       "label": "t:sections.all.padding.padding_bottom",
       "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Exit Intent Offer Popup"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_exit_popup",
+      "default": true,
+      "label": "Enable Exit Intent Popup"
+    },
+    {
+      "type": "text",
+      "id": "exit_popup_discount_code",
+      "default": "MAHEKH100",
+      "label": "Discount Code to Apply/Show"
+    },
+    {
+      "type": "text",
+      "id": "exit_popup_discount_amount",
+      "default": "₹100",
+      "label": "Discount Amount (e.g. ₹100 or 10%)"
     }
   ]
 }
@@ -2930,6 +2990,257 @@
       bottom: 82px;
     }
   }
+
+  /* Exit Intent Overlay & Card styling */
+  .exit-intent-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 2147483647;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: 1.6rem;
+  }
+
+  .exit-intent-overlay.active {
+    display: flex;
+    opacity: 1;
+  }
+
+  .exit-intent-card {
+    background: rgba(253, 251, 247, 0.98);
+    border: 2px solid #cca43b;
+    border-radius: 12px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    position: relative;
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .exit-intent-overlay.active .exit-intent-card {
+    transform: scale(1);
+  }
+
+  .exit-intent-close-btn {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.5rem;
+    background: transparent;
+    border: none;
+    font-size: 2.4rem;
+    font-weight: bold;
+    color: #8a8276;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.2rem;
+    transition: color 0.2s;
+  }
+
+  .exit-intent-close-btn:hover {
+    color: #cca43b;
+  }
+
+  .exit-intent-header {
+    margin-bottom: 2rem;
+  }
+
+  .exit-intent-tag {
+    display: inline-block;
+    background: rgba(204, 164, 59, 0.12);
+    color: #cca43b;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+  }
+
+  .exit-intent-title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #121212;
+    margin: 0;
+    line-height: 1.35;
+  }
+
+  .exit-intent-product {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    text-align: left;
+  }
+
+  .exit-intent-prod-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid rgba(204, 164, 59, 0.15);
+    background: #ffffff;
+  }
+
+  .exit-intent-prod-info {
+    flex-grow: 1;
+  }
+
+  .exit-intent-prod-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #121212;
+    margin: 0 0 0.2rem 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .exit-intent-prod-price {
+    font-size: 1.3rem;
+    color: #cca43b;
+    font-weight: bold;
+    margin: 0;
+  }
+
+  .exit-intent-offer {
+    margin-bottom: 2.2rem;
+  }
+
+  .exit-intent-discount-text {
+    font-size: 1.4rem;
+    color: #4a453e;
+    margin: 0 0 1.2rem 0;
+  }
+
+  .highlight-gold {
+    color: #cca43b;
+    font-weight: 700;
+  }
+
+  .exit-intent-code-wrapper {
+    display: inline-flex;
+    align-items: center;
+    border: 2px dashed rgba(204, 164, 59, 0.5);
+    background: #ffffff;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 1.2rem;
+  }
+
+  .exit-intent-code {
+    font-family: monospace;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #121212;
+    padding: 0.8rem 1.6rem;
+    letter-spacing: 0.05em;
+  }
+
+  .exit-intent-copy-btn {
+    background: #cca43b;
+    color: #1a1107;
+    border: none;
+    padding: 1rem 1.6rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .exit-intent-copy-btn:hover {
+    background: #ffd700;
+  }
+
+  .exit-intent-benefits {
+    font-size: 1.15rem;
+    color: #555555;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .exit-intent-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .exit-intent-btn-primary {
+    background: linear-gradient(135deg, #cca43b, #f1cb64);
+    color: #110d0c;
+    border: none;
+    border-radius: 6px;
+    padding: 1.4rem 2.4rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(204, 164, 59, 0.25);
+    transition: all 0.3s ease;
+  }
+
+  .exit-intent-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(204, 164, 59, 0.35);
+  }
+
+  .exit-intent-btn-secondary {
+    background: transparent;
+    border: none;
+    color: #8a8276;
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0.6rem;
+    transition: color 0.2s;
+  }
+
+  .exit-intent-btn-secondary:hover {
+    color: #cca43b;
+  }
+
+  .exit-intent-toast {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(26, 17, 7, 0.95);
+    color: #ffffff;
+    padding: 0.6rem 1.4rem;
+    border-radius: 20px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border: 1px solid rgba(204, 164, 59, 0.3);
+    z-index: 5;
+    white-space: nowrap;
+  }
+
+  .exit-intent-toast.show {
+    opacity: 1;
+  }
 {%- endstyle -%}
 
 <script>
@@ -3095,6 +3406,84 @@
           if (popupTimeout) clearTimeout(popupTimeout);
           if (cycleInterval) clearInterval(cycleInterval);
           salesPopup.classList.remove('active');
+        });
+      }
+    }
+
+    // 6. Exit Intent / Back Button Hijack Popup Logic
+    const exitPopup = document.getElementById('ExitIntentPopup');
+    if (exitPopup) {
+      const exitClose = document.getElementById('ExitIntentClose');
+      const exitCancel = document.getElementById('ExitIntentCancelBtn');
+      const exitCopy = document.getElementById('ExitIntentCopyBtn');
+      const exitClaim = document.getElementById('ExitIntentClaimBtn');
+      const couponText = document.getElementById('ExitIntentCouponCode')?.textContent || 'MAHEKH100';
+      const toast = document.getElementById('ExitIntentToast');
+
+      let popupShown = false;
+
+      // 1. History Hijack to Intercept Back Button
+      // Push initial dummy state so we have a state to pop when user clicks back
+      history.pushState({ exitPopup: "intercept" }, null, window.location.href);
+
+      window.addEventListener('popstate', function(event) {
+        if (!popupShown) {
+          // Prevent immediate navigation back by pushing state back onto history stack
+          history.pushState({ exitPopup: "intercept" }, null, window.location.href);
+          
+          // Open the popup!
+          exitPopup.classList.add('active');
+          popupShown = true;
+        } else {
+          // If the popup has already been shown, let navigation back happen naturally
+        }
+      });
+
+      // Close handlers
+      function closeExitPopup() {
+        exitPopup.classList.remove('active');
+      }
+
+      if (exitClose) exitClose.addEventListener('click', closeExitPopup);
+      if (exitCancel) exitCancel.addEventListener('click', closeExitPopup);
+
+      // Copy coupon code utility
+      function copyCouponCode() {
+        navigator.clipboard.writeText(couponText).then(() => {
+          // Show toast
+          if (toast) {
+            toast.classList.add('show');
+            setTimeout(() => {
+              toast.classList.remove('show');
+            }, 3000);
+          }
+        }).catch(err => {
+          console.error('Failed to copy text: ', err);
+        });
+      }
+
+      if (exitCopy) exitCopy.addEventListener('click', copyCouponCode);
+
+      // Claim discount & checkout button handler
+      if (exitClaim) {
+        exitClaim.addEventListener('click', () => {
+          copyCouponCode();
+          
+          // Smooth checkout: close popup and trigger standard buy-now or cart-add checkout
+          setTimeout(() => {
+            closeExitPopup();
+            
+            // Try to trigger checkout / buy buttons
+            const buyButton = document.querySelector('form[action="/cart/add"] [name="add"]') || document.querySelector('.sr-headless-checkout') || document.querySelector('.shopify-payment-button__button');
+            if (buyButton) {
+              buyButton.click();
+            } else {
+              const purchaseForm = document.querySelector('form[action*="/cart/add"]') || document.querySelector('.product-form');
+              if (purchaseForm) {
+                purchaseForm.scrollIntoView({ behavior: 'smooth' });
+              }
+            }
+          }, 800);
         });
       }
     }
