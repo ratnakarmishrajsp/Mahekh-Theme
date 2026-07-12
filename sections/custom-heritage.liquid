@@ -14,10 +14,10 @@
   /* Premium Ivory/Cream and Gold Heritage Section */
   .custom-heritage {
     overflow: hidden;
-    background: #faf8f5 !important; /* Ivory-Cream background */
-    color: #121212 !important;
-    border-top: 1px solid rgba(204, 164, 59, 0.15);
-    border-bottom: 1px solid rgba(204, 164, 59, 0.15);
+    background: var(--gradient-background);
+    color: rgb(var(--color-foreground));
+    border-top: 1px solid rgba(var(--color-foreground), 0.08);
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
   }
 
   .custom-heritage__grid {
@@ -78,7 +78,7 @@
     border-radius: 8px;
     border: 1px solid rgba(204, 164, 59, 0.15); /* Gold outline frame */
     position: relative;
-    background: #ffffff;
+    background: rgb(var(--color-background));
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
   }
 
@@ -151,7 +151,7 @@
   }
 {%- endstyle -%}
 
-<div class="custom-heritage section-{{ section.id }}-padding">
+<div class="custom-heritage color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
   <div class="page-width">
     <div class="custom-heritage__grid {% if section.settings.layout == 'image_right' %}custom-heritage__grid--image-right{% endif %}">
       
@@ -284,7 +284,8 @@
     {
       "type": "url",
       "id": "button_link",
-      "label": "Button link"
+      "label": "Button link",
+      "default": "/pages/our-process"
     },
     {
       "type": "color_scheme",

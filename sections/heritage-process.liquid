@@ -1,0 +1,281 @@
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  /* Heritage Process Styles */
+  .heritage-process-sec {
+    background: var(--gradient-background);
+    color: rgb(var(--color-foreground));
+  }
+
+  .heritage-process__hero {
+    max-width: 800px;
+    margin: 0 auto 6rem auto;
+    text-align: center;
+  }
+
+  .heritage-process__subtitle {
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.25em;
+    color: #cca43b !important;
+    margin-bottom: 1rem;
+    display: block;
+    font-style: italic;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .heritage-process__title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    line-height: 1.2;
+  }
+
+  .heritage-process__lead {
+    font-size: 1.6rem;
+    color: #4a453e;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  /* Step Grid Row */
+  .heritage-process__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 8rem;
+  }
+
+  .heritage-process__step-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 750px) {
+    .heritage-process__step-row {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8rem;
+    }
+  }
+
+  .heritage-process__img-wrapper {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(204, 164, 59, 0.2);
+    box-shadow: 0 15px 35px rgba(204, 164, 59, 0.05);
+    background: rgb(var(--color-background));
+    aspect-ratio: 4 / 3;
+  }
+
+  /* Elegant thin gold frame inside image */
+  .heritage-process__img-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px solid rgba(204, 164, 59, 0.15);
+    pointer-events: none;
+    border-radius: 8px;
+    z-index: 1;
+  }
+
+  .heritage-process__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .heritage-process__img-wrapper:hover .heritage-process__img {
+    transform: scale(1.04);
+  }
+
+  .heritage-process__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    padding: 2rem 0;
+  }
+
+  .heritage-process__step-num {
+    font-size: 4rem;
+    font-weight: 700;
+    color: rgba(204, 164, 59, 0.25);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    line-height: 1;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .heritage-process__step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.6rem;
+    font-weight: 600;
+    color: rgb(var(--color-foreground));
+    margin: 0 0 1.5rem 0;
+    letter-spacing: 0.02em;
+  }
+
+  .heritage-process__step-text {
+    font-size: 1.45rem;
+    line-height: 1.75;
+    color: #4a453e;
+    margin: 0;
+  }
+
+  /* Alternating desktop layouts */
+  @media screen and (min-width: 750px) {
+    .heritage-process__step-row:nth-child(even) .heritage-process__img-wrapper {
+      order: 1;
+    }
+  }
+{%- endstyle -%}
+
+<div class="heritage-process-sec color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    
+    <!-- Hero Header -->
+    <div class="heritage-process__hero">
+      <span class="heritage-process__subtitle">{{ section.settings.subtitle | escape }}</span>
+      <h1 class="heritage-process__title h0">{{ section.settings.title | escape }}</h1>
+      <p class="heritage-process__lead">{{ section.settings.lead_text | escape }}</p>
+    </div>
+
+    <!-- Steps Progression -->
+    <div class="heritage-process__steps">
+      
+      <!-- Step 1 -->
+      <div class="heritage-process__step-row">
+        <div class="heritage-process__img-wrapper">
+          <img src="{{ 'heritage_harvest.png' | asset_url }}" alt="Morning Mogra Flower Harvest" class="heritage-process__img" loading="lazy" width="600" height="450">
+        </div>
+        <div class="heritage-process__content">
+          <span class="heritage-process__step-num">01</span>
+          <h2 class="heritage-process__step-title">The Dawn Flower Harvest</h2>
+          <p class="heritage-process__step-text">
+            Every morning at dawn, local farmers in the fertile fields of Kannauj hand-pick fresh white Mogra (Jasmine) and rose buds covered with fresh dew. Gathering the blossoms at first light ensures that their delicate scent oils are locked in and have not evaporated under the heat of the sun.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="heritage-process__step-row">
+        <div class="heritage-process__img-wrapper">
+          <img src="{{ 'heritage_deg.png' | asset_url }}" alt="Traditional Copper Deg Distillation pots" class="heritage-process__img" loading="lazy" width="600" height="450">
+        </div>
+        <div class="heritage-process__content">
+          <span class="heritage-process__step-num">02</span>
+          <h2 class="heritage-process__step-title">Charging the Copper Degs</h2>
+          <p class="heritage-process__step-text">
+            The freshly harvested flowers are immediately transferred into traditional copper pots called "Degs". The pots are filled with pure water, closed with heavy lids, and tightly sealed with a mixture of clay and cotton. This creates an airtight seal that preserves the pressure and organic vapor.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="heritage-process__step-row">
+        <div class="heritage-process__img-wrapper">
+          <img src="{{ 'heritage_bhapka.png' | asset_url }}" alt="Submerged Bhapka Condenser" class="heritage-process__img" loading="lazy" width="600" height="450">
+        </div>
+        <div class="heritage-process__content">
+          <span class="heritage-process__step-num">03</span>
+          <h2 class="heritage-process__step-title">Bhapka Condensation</h2>
+          <p class="heritage-process__step-text">
+            The Degs are heated over open ovens fueled by wood or coal. As the water boils, fragrant steam travels through a curved bamboo pipe ("Chonga") into a copper receiver pot called a "Bhapka". The Bhapka, filled with a base of pure Sandalwood oil, is kept submerged in a cold water pool, condensing the fragrant vapors directly into the sandalwood base.
+          </p>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="heritage-process__step-row">
+        <div class="heritage-process__img-wrapper">
+          <img src="{{ 'heritage_aging.png' | asset_url }}" alt="Attar Kuppi Aging bottles" class="heritage-process__img" loading="lazy" width="600" height="450">
+        </div>
+        <div class="heritage-process__content">
+          <span class="heritage-process__step-num">04</span>
+          <h2 class="heritage-process__step-title">Separation & Kuppi Aging</h2>
+          <p class="heritage-process__step-text">
+            Once distillation is complete, the mixture of oil and water in the Bhapka is carefully separated. The raw attar oil is transferred into traditional camel-skin leather bottles called "Kuppis". These leather bottles allow natural moisture to evaporate while retaining the rich fragrance molecules, aging and enriching the attar over months.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Heritage Process Detail",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "KANNAUJ'S ANCIENT DISTILLATION ART"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "The Art of Deg & Bhapka"
+    },
+    {
+      "type": "textarea",
+      "id": "lead_text",
+      "label": "Hero Lead Description",
+      "default": "Explore how Mahekh keeps the traditional 400-year-old hydro-distillation craftsmanship alive in copper pots over wood fires, preserving pure essential attar oils."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48,
+      "label": "Padding Top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 48,
+      "label": "Padding Bottom"
+    }
+  ]
+}
+{% endschema %}
