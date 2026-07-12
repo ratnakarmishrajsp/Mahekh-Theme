@@ -1,3 +1,4 @@
+{%- if request.page_type == 'index' -%}
 {%- style -%}
   /* Floating Video Bubble Styling */
   .fb-bubble-container {
@@ -569,6 +570,7 @@
     });
   });
 </script>
+{%- endif -%}
 
 {% schema %}
 {
