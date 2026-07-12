@@ -41,11 +41,25 @@
     padding: 2rem 0;
   }
 
+  /* Rotating Wheel Animation */
+  @keyframes rotateWheel {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
   .scent-wheel__svg {
     width: 100%;
     max-width: 380px;
     height: auto;
     overflow: visible;
+    animation: rotateWheel 30s infinite linear;
+    transform-origin: center;
+    transition: filter 0.3s ease;
+  }
+
+  /* Pause rotation on hover so the user can interact easily */
+  .scent-wheel__svg:hover {
+    animation-play-state: paused;
   }
 
   /* concentric rings sectors styling */
@@ -72,39 +86,70 @@
     filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
   }
 
-  /* Right Column: Scent Info Card */
+  /* Scent Details Card Version 2.0 */
   .scent-wheel__info-card {
     background: #ffffff;
-    border: 1px solid rgba(204, 164, 59, 0.25);
-    border-radius: 8px;
+    border: 1.5px solid rgba(204, 164, 59, 0.45);
+    border-radius: 12px;
     padding: 3.5rem 3rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 12px 35px rgba(204, 164, 59, 0.06);
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    min-height: 280px;
+    gap: 2rem;
+    min-height: 320px;
     justify-content: center;
     transition: all 0.3s ease;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
   }
 
-  @media screen and (max-width: 749px) {
-    .scent-wheel__info-card {
-      padding: 2.5rem 2rem;
-      min-height: auto;
-    }
+  .scent-wheel__info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: #cca43b;
+  }
+
+  .scent-wheel__card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
   }
 
   .scent-wheel__info-badge {
-    align-self: flex-start;
     background: rgba(204, 164, 59, 0.08);
     color: #cca43b;
-    border: 1px solid rgba(204, 164, 59, 0.2);
+    border: 1px solid rgba(204, 164, 59, 0.25);
     padding: 4px 12px;
-    border-radius: 20px;
+    border-radius: 4px;
     font-size: 1.1rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
+  }
+
+  .scent-wheel__effect-badge {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #8a8276;
+    background: #f7f5f0;
+    padding: 3px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,0.03);
+  }
+
+  .scent-wheel__title-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    margin-bottom: 1.2rem;
   }
 
   .scent-wheel__info-title {
@@ -112,19 +157,85 @@
     font-weight: 700;
     color: #121212;
     margin: 0;
+    letter-spacing: 0.02em;
+  }
+
+  .scent-wheel__sub-name {
+    font-size: 1.25rem;
+    font-style: italic;
+    color: #8a8276;
   }
 
   .scent-wheel__info-desc {
     font-size: 1.4rem;
     color: #4a453e !important;
     line-height: 1.65;
-    margin: 0;
-    animation: fbFadeInDetail 0.4s ease forwards;
+    margin: 0 0 1.5rem 0;
+    min-height: 60px;
   }
 
   @keyframes fbFadeInDetail {
     from { opacity: 0; transform: translateY(5px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Longevity & Intensity Metrics */
+  .scent-wheel__detail-metrics {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    border-top: 1px solid rgba(204, 164, 59, 0.18);
+    padding-top: 1.5rem;
+    animation: fbFadeInDetail 0.4s ease forwards;
+  }
+
+  .scent-wheel__metric {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  .scent-wheel__metric-label {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #121212;
+    width: 75px;
+    flex-shrink: 0;
+  }
+
+  .scent-wheel__bar-wrapper {
+    background: #f0ebe4;
+    height: 6px;
+    border-radius: 10px;
+    flex-grow: 1;
+    overflow: hidden;
+  }
+
+  .scent-wheel__bar-fill {
+    background: linear-gradient(90deg, #cca43b, #ffd700);
+    height: 100%;
+    border-radius: 10px;
+    width: 0;
+    transition: width 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .scent-wheel__metric-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #cca43b;
+    width: 85px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .scent-wheel__metric-info {
+    font-size: 1.35rem;
+    color: #4a453e;
+    text-align: left;
+  }
+
+  .scent-wheel__metric-info strong {
+    color: #121212;
   }
 
   .scent-wheel__info-instruction {
@@ -185,12 +296,33 @@
         </svg>
       </div>
 
-      <!-- Scent Details Card (Displays details dynamically on hover/click) -->
+      <!-- Scent Details Card (Version 2.0 Redesigned Layout) -->
       <div class="scent-wheel__info-card" id="sq-info-card-{{ section.id }}">
         <div id="sq-card-content-{{ section.id }}">
-          <span class="scent-wheel__info-badge" id="sq-detail-badge-{{ section.id }}">Interactive Profile</span>
-          <h3 class="scent-wheel__info-title" id="sq-detail-title-{{ section.id }}">Fragrance Anatomy</h3>
+          <div class="scent-wheel__card-header">
+            <span class="scent-wheel__info-badge" id="sq-detail-badge-{{ section.id }}">Interactive Profile</span>
+            <span class="scent-wheel__effect-badge" id="sq-detail-effect-{{ section.id }}">Explore Notes</span>
+          </div>
+          
+          <div class="scent-wheel__title-row">
+            <h3 class="scent-wheel__info-title" id="sq-detail-title-{{ section.id }}">Fragrance Anatomy</h3>
+            <span class="scent-wheel__sub-name" id="sq-detail-subname-{{ section.id }}">Anatomy Visualizer</span>
+          </div>
+          
           <p class="scent-wheel__info-desc" id="sq-detail-desc-{{ section.id }}">Hover over or tap any sector of the scent notes wheel to analyze the ingredients, extraction, and note category details.</p>
+          
+          <div class="scent-wheel__detail-metrics" id="sq-detail-metrics-{{ section.id }}" style="display: none;">
+            <div class="scent-wheel__metric">
+              <span class="scent-wheel__metric-label">Longevity:</span>
+              <div class="scent-wheel__bar-wrapper">
+                <div class="scent-wheel__bar-fill" id="sq-detail-bar-{{ section.id }}"></div>
+              </div>
+              <span class="scent-wheel__metric-value" id="sq-detail-longevity-{{ section.id }}"></span>
+            </div>
+            <div class="scent-wheel__metric-info">
+              <span><strong>Intensity:</strong> <span id="sq-detail-strength-{{ section.id }}"></span></span>
+            </div>
+          </div>
         </div>
         <p class="scent-wheel__info-instruction" id="sq-instruction-{{ section.id }}">👈 Hover over notes sectors to explore</p>
       </div>
@@ -222,6 +354,60 @@
         if (type === "heart") badgeLabel = "HEART NOTE";
         if (type === "base") badgeLabel = "BASE NOTE";
 
+        // Redesigned 2.0 metrics mapping
+        const noteData = {
+          "Mogra Jasmine": {
+            subName: "Jasminum Sambac",
+            longevity: "1-2 Hours",
+            strength: "Fresh & Floral Sweet",
+            effect: "Calming & Uplifting",
+            longevityPct: "25%"
+          },
+          "Katcha Bela": {
+            subName: "Monsoon Jasmine Buds",
+            longevity: "1-2 Hours",
+            strength: "Green & Crisp",
+            effect: "Uplifting & Fresh",
+            longevityPct: "25%"
+          },
+          "Kesar Saffron": {
+            subName: "Crocus Sativus",
+            longevity: "4-6 Hours",
+            strength: "Spicy & Warm Saffron",
+            effect: "Exotic & Luxurious",
+            longevityPct: "60%"
+          },
+          "Chandan Mysore": {
+            subName: "Santalum Album",
+            longevity: "6-8 Hours",
+            strength: "Creamy & Balsamic Woody",
+            effect: "Soothing & Meditative",
+            longevityPct: "80%"
+          },
+          "Royal Amber": {
+            subName: "Golden Amber Accord",
+            longevity: "8-12+ Hours",
+            strength: "Deep Warm & Balsamic Resin",
+            effect: "Rich & Long-lasting",
+            longevityPct: "100%"
+          },
+          "Earthy Musk": {
+            subName: "Soft Powdery Musk Accord",
+            longevity: "10-12+ Hours",
+            strength: "Warm, Earthy & Clean Musk",
+            effect: "Sensual & Magnetic",
+            longevityPct: "100%"
+          }
+        };
+
+        const data = noteData[name] || {
+          subName: "Extraction Extract",
+          longevity: "N/A",
+          strength: "N/A",
+          effect: "N/A",
+          longevityPct: "0%"
+        };
+
         detailBadge.textContent = badgeLabel;
         detailTitle.textContent = name;
         
@@ -230,6 +416,30 @@
         detailDesc.offsetHeight; /* trigger reflow */
         detailDesc.style.animation = '';
         detailDesc.textContent = desc;
+
+        // Version 2.0 details display
+        const subNameEl = scentSection.querySelector(`#sq-detail-subname-${sectionId}`);
+        const effectEl = scentSection.querySelector(`#sq-detail-effect-${sectionId}`);
+        const metricsEl = scentSection.querySelector(`#sq-detail-metrics-${sectionId}`);
+        const barFillEl = scentSection.querySelector(`#sq-detail-bar-${sectionId}`);
+        const longevityEl = scentSection.querySelector(`#sq-detail-longevity-${sectionId}`);
+        const strengthEl = scentSection.querySelector(`#sq-detail-strength-${sectionId}`);
+
+        if (subNameEl) subNameEl.textContent = data.subName;
+        if (effectEl) {
+          effectEl.textContent = data.effect;
+          effectEl.style.color = "#cca43b";
+          effectEl.style.background = "rgba(204, 164, 59, 0.08)";
+        }
+        if (metricsEl) metricsEl.style.display = "flex";
+        if (barFillEl) {
+          barFillEl.style.width = "0%";
+          setTimeout(() => {
+            barFillEl.style.width = data.longevityPct;
+          }, 50);
+        }
+        if (longevityEl) longevityEl.textContent = data.longevity;
+        if (strengthEl) strengthEl.textContent = data.strength;
         
         instruction.style.opacity = "0.2";
       }
