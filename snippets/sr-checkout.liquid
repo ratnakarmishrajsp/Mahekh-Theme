@@ -5,201 +5,73 @@
 
  <!-- BTN - CUST - SCRIPT - START  -->
  <input type="hidden" value="true" id="shiprocketCheckoutBtnStylesCheck"/>
-   <style>
-    @keyframes srPulseHighlight {
-      0%, 100% {
-        transform: scale(1);
-        box-shadow: 0 3px 10px rgba(204, 164, 59, 0.18) !important;
-      }
-      50% {
-        transform: scale(1.015);
-        box-shadow: 0 6px 18px rgba(204, 164, 59, 0.4) !important;
-      }
-    }
-
-    .shiprocket-headless, .sr-headless-checkout {
-      width: 100% !important;
-      height: 42px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      background: #cca43b !important;
-      color: #1a1107 !important;
-      font-weight: 600 !important;
-      font-size: 14px !important;
-      letter-spacing: 0.08em !important;
-      border: none !important;
-      border-radius: 6px !important;
-      text-transform: uppercase !important;
-      transition: all 0.3s ease !important;
-      animation: srPulseHighlight 2.5s infinite ease-in-out !important;
-    }
-    
-    .shiprocket-headless:hover, .sr-headless-checkout:hover {
-      transform: scale(1.025) !important;
-      filter: brightness(1.08) !important;
-      box-shadow: 0 5px 15px rgba(204, 164, 59, 0.35) !important;
-    }
-
-    /* Make payment icons (Paytm, GPay, etc.) small and clean */
-    .shiprocket-headless .sr-payment-icons, .sr-headless-checkout .sr-payment-icons {
-      max-height: 18px !important;
-      width: auto !important;
-      margin-left: 6px !important;
-      vertical-align: middle !important;
-      align-self: center !important;
-      opacity: 0.9 !important;
-    }
-
-    /* Hide the powered by Shiprocket badge completely */
-    .shiprocket-headless .sr-brand-badge-container, .sr-headless-checkout .sr-brand-badge-container {
-      display: none !important;
-    }
-
-    /* Hide the discount label overlay completely */
-    .shiprocket-headless .sr-discount-label, .sr-headless-checkout .sr-discount-label, .sr-discount-label {
-      display: none !important;
-    }
-   </style>
-  <script>
-    let btnStyles = null;
-    {% if shop.metafields.shiprocketCheckoutButton.shiprocketCheckoutButtonStyles %}
-      btnStyles = {{ shop.metafields.shiprocketCheckoutButton.shiprocketCheckoutButtonStyles }}
-    {%  endif %}
-        
-    if (btnStyles && typeof btnStyles === 'object') {
-      const styleElement = document.createElement("style");
-      styleElement.type = "text/css";
-      let cssRules = "";
-  
-      Object.entries(btnStyles).forEach(([className, styles]) => {
-         const isButton = className === 'shiprocket-headless' || className === 'sr-headless-checkout';
-         
-         // Define the animation keyframes for highlight pulse
-         let animationRule = `
-           @keyframes srPulseHighlight {
-             0%, 100% { transform: scale(1); box-shadow: 0 3px 10px rgba(204, 164, 59, 0.18) !important; }
-             50% { transform: scale(1.015); box-shadow: 0 6px 18px rgba(204, 164, 59, 0.4) !important; }
+ <style>
+  .shiprocket-headless{
+  width:100%!important;
+}
+ </style>
+ <script>
+   let btnStyles = null;
+   {% if shop.metafields.shiprocketCheckoutButton.shiprocketCheckoutButtonStyles %}
+     btnStyles = {{ shop.metafields.shiprocketCheckoutButton.shiprocketCheckoutButtonStyles }}
+   {%  endif %}
+       
+   if (btnStyles && typeof btnStyles === 'object') {
+     const styleElement = document.createElement("style");
+     styleElement.type = "text/css";
+     let cssRules = "";
+ 
+     Object.entries(btnStyles).forEach(([className, styles]) => {
+       // Convert styles object to CSS rules with !important
+       const stylesString = Object.entries(styles)
+         .filter(([key]) => key !== "text" && key !== "animation") // Exclude text and animation
+         .map(([key, value]) => `${key}: ${value} !important;`)
+         .join(" ");
+ 
+       // Define the animation keyframes if needed
+       let animationRule = "";
+       if (styles.animation === "horizontal-jiggle") {
+         animationRule = `
+           @keyframes horizontal-jiggle {
+             0%, 100% { transform: translateX(0); }
+             25% { transform: translateX(-5px); }
+             50% { transform: translateX(5px); }
+             75% { transform: translateX(-5px); }
            }
          `;
-         
-         let cssRule = "";
-         
-         if (isButton) {
-           const stylesString = Object.entries(styles)
-             .filter(([key]) => key !== "text" && key !== "animation" && key !== "background-color" && key !== "background" && key !== "color" && key !== "height" && key !== "display")
-             .map(([key, value]) => `${key}: ${value} !important;`)
-             .join(" ");
-
-           cssRule = `
-             ${animationRule}
-    
-             .${className} {
-               ${stylesString}
-               background: #cca43b !important;
-               color: #1a1107 !important;
-               font-weight: 600 !important;
-               font-size: 14px !important;
-               letter-spacing: 0.08em !important;
-               font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-               animation: srPulseHighlight 2.5s infinite ease-in-out !important;
-               transition: all 0.3s ease !important;
-               height: 42px !important;
-               display: flex !important;
-               align-items: center !important;
-               justify-content: center !important;
-               border: none !important;
-               border-radius: 6px !important;
-               text-transform: uppercase !important;
-             }
-             .${className}:hover {
-               transform: scale(1.025) !important;
-               filter: brightness(1.08) !important;
-               box-shadow: 0 5px 15px rgba(204, 164, 59, 0.35) !important;
-             }
-             .${className} .sr-payment-icons {
-               max-height: 18px !important;
-               width: auto !important;
-               margin-left: 6px !important;
-               vertical-align: middle !important;
-               align-self: center !important;
-               opacity: 0.9 !important;
-             }
-             .${className} .sr-brand-badge-container {
-               display: none !important;
-             }
-             .${className} .sr-discount-label {
-               display: none !important;
-             }
-           `;
-           
-           // If 'text' key exists, append additional CSS rules
-           if (styles.text) {
-             cssRule += `
-               .${className}:after {
-                 content: "${styles.text}";
-                 color: #1a1107 !important;
-               }
-               .${className} span {
-                 display: none !important;
-               }
-             `;
-           }
-         } else if (className === 'sr-discount-label') {
-           // Completely hide the discount label element
-           cssRule = `
-             .sr-discount-label {
-               display: none !important;
-             }
-           `;
-         } else {
-           // For any other element classes, map their style settings as-is without overriding background or display/height
-           const stylesString = Object.entries(styles)
-             .map(([key, value]) => `${key}: ${value} !important;`)
-             .join(" ");
-
-           cssRule = `
-             .${className} {
-               ${stylesString}
-             }
-           `;
+       }
+ 
+       // Base CSS rule for the class
+       let cssRule = `
+         ${animationRule}
+ 
+         .${className} {
+           ${stylesString}
+           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+           ${styles.animation === "horizontal-jiggle" ? "animation: horizontal-jiggle 1s ease-in-out infinite;" : ""}
          }
-   
-         cssRules += cssRule;
-      });
-  
-      // Set the CSS rules in the style element
-      styleElement.textContent = cssRules;
-      // Append the style element to the head
-      document.head.appendChild(styleElement);
-    }
-
-    // Dynamic Injection of COD Badge
-    function addCodIcon() {
-      const paymentIcons = document.querySelectorAll('.sr-payment-icons');
-      paymentIcons.forEach(paymentIcon => {
-        const parent = paymentIcon.parentElement;
-        if (parent && !parent.querySelector('.sr-cod-icon')) {
-          const codHtml = `
-            <div class="sr-cod-icon" style="display: inline-flex; align-items: center; margin-left: 8px; vertical-align: middle; flex-shrink: 0; align-self: center;">
-              <svg viewBox="0 0 24 16" width="24" height="16" fill="none" stroke="#1a1107" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
-                <rect x="1" y="1" width="22" height="14" rx="2" />
-                <circle cx="12" cy="8" r="3.2" />
-                <path d="M10.5 6.5h3" stroke-width="1.1" />
-                <path d="M10.5 7.5h3" stroke-width="1.1" />
-                <path d="M11 6.5c1 0 1.8.4 1.8 1.4s-.8 1.4-1.8 1.4h-0.8" stroke-width="1.1" />
-                <path d="M11.5 9.3l1.3 1.8" stroke-width="1.1" />
-                <path d="M3.5 3.5h.01 M20.5 3.5h.01 M3.5 12.5h.01 M20.5 12.5h.01" stroke-width="1.5" />
-              </svg>
-              <span style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 10px; font-weight: 700; color: #1a1107; margin-left: 4px; letter-spacing: 0.02em; line-height: 1; vertical-align: middle;">COD</span>
-            </div>
-          `;
-          paymentIcon.insertAdjacentHTML('afterend', codHtml);
-        }
-      });
-    }
-    setInterval(addCodIcon, 500);
-    window.addEventListener('load', addCodIcon);
-    document.addEventListener('DOMContentLoaded', addCodIcon);
-  </script>
+       `;
+ 
+       // If 'text' key exists, append additional CSS rules
+       if (styles.text) {
+         cssRule += `
+           .${className}:after {
+             content: "${styles.text}";
+           }
+           .${className} span {
+             display: none !important;
+           }
+         `;
+       }
+ 
+       cssRules += cssRule;
+     });
+ 
+     // Set the CSS rules in the style element
+     styleElement.textContent = cssRules;
+     // Append the style element to the head
+     document.head.appendChild(styleElement);
+   }
+ </script>
   <!-- BTN - CUST - SCRIPT - END  -->
+ 
