@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -25,16 +34,6 @@
             "show_gift_card_recipient": true
           }
         },
-        "seedgrow_whatsapp_chat_app_block_AtLN6F": {
-          "type": "shopify:\/\/apps\/seedgrow-whatsapp-chat\/blocks\/app-block\/b85b5e45-9cea-417a-9b9e-0aa961ccf3ef",
-          "settings": {
-            "button_label": "Need help? Chat with us",
-            "button_style": "round",
-            "background_color": "#2db742",
-            "text_color": "#ffffff",
-            "phone_number": "919321868526"
-          }
-        },
         "description": {
           "type": "description",
           "settings": {}
@@ -44,7 +43,8 @@
           "settings": {
             "heading": "Shipping & Delivery",
             "icon": "truck",
-            "content": "<p>We offer fast delivery across India. Orders are typically shipped within 24-48 hours and delivered in 3-7 business days. Free shipping is available on all prepaid orders.<\/p>"
+            "content": "<p>We offer fast delivery across India. Orders are typically shipped within 24-48 hours and delivered in 3-7 business days. Free shipping is available on all prepaid orders.</p>",
+            "page": ""
           }
         },
         "collapsible_tab_kannauj": {
@@ -52,29 +52,8 @@
           "settings": {
             "heading": "The Kannauj Heritage",
             "icon": "leaf",
-            "content": "<p>Each drop of Mahekh attar is distilled using traditional copper pots (Degs) and clay receivers (Bhapkas) in Kannauj, the perfume capital of India. We source only the purest natural blossoms and ingredients.<\/p>"
-          }
-        },
-        "conversion_urgency_mahekh": {
-          "type": "conversion_urgency",
-          "settings": {
-            "stock_threshold": 9
-          }
-        },
-        "social_proof_mahekh": {
-          "type": "social_proof",
-          "settings": {}
-        },
-        "trust_badges_mahekh": {
-          "type": "trust_badges",
-          "settings": {}
-        },
-        "whatsapp_button_mahekh": {
-          "type": "whatsapp_button",
-          "settings": {
-            "phone_number": "919321868526",
-            "button_text": "For Inquiry",
-            "prefilled_text": "Hello Mahekh, I would like to order the Mahekh Premium Attar Combo (Katcha Bela + Kesar Chandan + Mogra). Please assist me with my order!"
+            "content": "<p>Each drop of Mahekh attar is distilled using traditional copper pots (Degs) and clay receivers (Bhapkas) in Kannauj, the perfume capital of India. We source only the purest natural blossoms and ingredients.</p>",
+            "page": ""
           }
         }
       },
@@ -82,17 +61,13 @@
         "title",
         "variant_picker_VXpTRR",
         "price",
-        "conversion_urgency_mahekh",
         "buy_buttons_YKNBFb",
-        "whatsapp_button_mahekh",
-        "social_proof_mahekh",
-        "trust_badges_mahekh",
-        "seedgrow_whatsapp_chat_app_block_AtLN6F",
         "description",
         "collapsible_tab_shipping",
         "collapsible_tab_kannauj"
       ],
       "settings": {
+        "enable_mobile_sticky_buy": true,
         "enable_sticky_info": true,
         "color_scheme": "scheme-2",
         "media_size": "small",
@@ -105,7 +80,10 @@
         "hide_variants": true,
         "enable_video_looping": false,
         "padding_top": 36,
-        "padding_bottom": 36
+        "padding_bottom": 36,
+        "enable_exit_popup": true,
+        "exit_popup_discount_code": "MAHEKH100",
+        "exit_popup_discount_amount": "₹100"
       }
     },
     "product_fragrance_profile_section": {
@@ -135,23 +113,6 @@
         "padding_bottom": 40
       }
     },
-    "product_making_process_section": {
-      "type": "product-making-process",
-      "settings": {
-        "subtitle": "CRAFTSMANSHIP & ORIGINS",
-        "title": "How We Distill Our Premium Attars",
-        "heading_size": "h1",
-        "step_1_title": "Raw Floral Harvest",
-        "step_1_desc": "Fresh rose, jasmine, or khus roots are hand-picked at dawn in Kannauj when the fragrance concentration is highest, and immediately sent to distillation.",
-        "step_2_title": "Copper Clay Distillation (Deg)",
-        "step_2_desc": "Petals are mixed with water in copper pots (Degs), sealed tightly using clay and cotton ropes, and heated gently over a wood-fire furnace.",
-        "step_3_title": "Clay Condensation (Bhapka)",
-        "step_3_desc": "Fragrant vapor travels through bamboo pipes into cold clay receivers (Bhapkas) submerged in water. Scent is captured drop by drop in pure sandalwood base oil.",
-        "color_scheme": "scheme-2",
-        "padding_top": 44,
-        "padding_bottom": 44
-      }
-    },
     "product_application_guide_section": {
       "type": "product-application-guide",
       "settings": {
@@ -171,16 +132,6 @@
     },
     "custom_usp_grid_section": {
       "type": "custom-usp-grid",
-      "settings": {
-        "title": "Pure & Authentic Fragrances",
-        "heading_size": "h1",
-        "subtitle": "The Mahekh Standard",
-        "columns_desktop": 4,
-        "show_borders": true,
-        "color_scheme": "scheme-1",
-        "padding_top": 40,
-        "padding_bottom": 40
-      },
       "blocks": {
         "usp_1": {
           "type": "usp",
@@ -220,56 +171,15 @@
         "usp_2",
         "usp_3",
         "usp_4"
-      ]
-    },
-    "product_reviews_section": {
-      "type": "product-reviews",
+      ],
       "settings": {
-        "title": "Patron Testimonials",
+        "title": "Pure & Authentic Fragrances",
         "heading_size": "h1",
-        "subtitle": "TRUST & APPRECIATION",
-        "columns_desktop": 3,
-        "color_scheme": "scheme-1",
+        "subtitle": "The Mahekh Standard",
+        "columns_desktop": 4,
         "padding_top": 40,
         "padding_bottom": 40
-      },
-      "blocks": {
-        "rev_1": {
-          "type": "review",
-          "settings": {
-            "rating": 5,
-            "quote": "This Kasturi Attar has a soul. Its sillage is warm and projection is balanced. The packaging looks premium and fits a royal collection.",
-            "author": "Rohan Gupta",
-            "location": "Lucknow",
-            "verified_buyer": true
-          }
-        },
-        "rev_2": {
-          "type": "review",
-          "settings": {
-            "rating": 5,
-            "quote": "Pure concentrated oil without any sticky feeling. It lasts all day on clothes. Incredible craft from Kannauj.",
-            "author": "Anjali Sen",
-            "location": "Bangalore",
-            "verified_buyer": true
-          }
-        },
-        "rev_3": {
-          "type": "review",
-          "settings": {
-            "rating": 5,
-            "quote": "Very close to traditional sandalwood base. Free from alcohol, so it does not irritate my skin. 5 stars on quality.",
-            "author": "Vikram Singh",
-            "location": "Jaipur",
-            "verified_buyer": true
-          }
-        }
-      },
-      "block_order": [
-        "rev_1",
-        "rev_2",
-        "rev_3"
-      ]
+      }
     },
     "related-products": {
       "type": "related-products",
@@ -293,10 +203,8 @@
   "order": [
     "main",
     "product_fragrance_profile_section",
-    "product_making_process_section",
     "product_application_guide_section",
     "custom_usp_grid_section",
-    "product_reviews_section",
     "related-products"
   ]
 }
