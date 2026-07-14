@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
@@ -7,77 +16,67 @@
           "type": "title",
           "settings": {}
         },
-        "price": {
-          "type": "price",
-          "settings": {}
-        },
-        "variant_picker": {
+        "variant_picker_VXpTRR": {
           "type": "variant_picker",
           "settings": {
             "picker_type": "button",
             "swatch_shape": "circle"
           }
         },
-        "quantity_selector": {
-          "type": "quantity_selector",
+        "price": {
+          "type": "price",
           "settings": {}
         },
-        "buy_buttons": {
+        "buy_buttons_YKNBFb": {
           "type": "buy_buttons",
           "settings": {
-            "show_dynamic_checkout": true
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
           }
         },
         "description": {
           "type": "description",
           "settings": {}
         },
-        "share": {
-          "type": "share",
-          "settings": {}
-        },
-        "collapsible_tab_usp": {
+        "collapsible_tab_shipping": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "Why Mahekh Attars?",
-            "icon": "leaf",
-            "content": "<p>✨ <strong>100% Alcohol-Free:</strong> Pure fragrance oils that react with your body heat for maximum longevity.<br>🌱 <strong>Skin Friendly:</strong> Sourced naturally from organic botanical ingredients in Kannauj.<br>🏺 <strong>Legacy Craftsmanship:</strong> Distilled using the historic copper Deg-Bhapka process.<br>⏳ <strong>12+ Hours Longevity:</strong> High-concentration perfume oil that lingers all day.</p>"
-          }
-        },
-        "collapsible_tab_delivery": {
-          "type": "collapsible_tab",
-          "settings": {
-            "heading": "Shipping & Cash on Delivery (COD)",
+            "heading": "Shipping & Delivery",
             "icon": "truck",
-            "content": "<p>🚚 <strong>Fast Delivery:</strong> Dispatch within 24 hours. Delivered to your doorstep in 3-5 business days.<br>📦 <strong>Cash on Delivery (COD):</strong> Pay at the time of delivery.<br>✨ <strong>Free Shipping:</strong> Free shipping across India on all prepaid orders.</p>"
+            "content": "<p>We offer fast delivery across India. Orders are typically shipped within 24-48 hours and delivered in 3-7 business days. Free shipping is available on all prepaid orders.</p>",
+            "page": ""
           }
         },
-        "whatsapp_button_block": {
-          "type": "whatsapp_button",
+        "collapsible_tab_kannauj": {
+          "type": "collapsible_tab",
           "settings": {
-            "whatsapp_number": "919321868526",
-            "button_text": "For Inquiry",
-            "prefilled_text": "Hello Mahekh, I would like to order the Mahekh Premium Attar Combo (Katcha Bela + Kesar Chandan + Mogra). Please assist me with my order!"
+            "heading": "The Kannauj Heritage",
+            "icon": "leaf",
+            "content": "<p>Each drop of Mahekh attar is distilled using traditional copper pots (Degs) and clay receivers (Bhapkas) in Kannauj, the perfume capital of India. We source only the purest natural blossoms and ingredients.</p>",
+            "page": ""
           }
         }
       },
       "block_order": [
         "title",
+        "variant_picker_VXpTRR",
         "price",
-        "variant_picker",
-        "quantity_selector",
-        "buy_buttons",
-        "whatsapp_button_block",
+        "buy_buttons_YKNBFb",
         "description",
-        "collapsible_tab_usp",
-        "collapsible_tab_delivery",
-        "share"
+        "collapsible_tab_shipping",
+        "collapsible_tab_kannauj"
       ],
       "settings": {
+        "enable_mobile_sticky_buy": true,
         "enable_sticky_info": true,
-        "media_layout": "stacked",
-        "image_zoom": "hover",
+        "color_scheme": "scheme-2",
+        "media_size": "small",
+        "constrain_to_viewport": false,
+        "media_fit": "cover",
+        "gallery_layout": "thumbnail_slider",
         "mobile_thumbnails": "hide",
+        "media_position": "right",
+        "image_zoom": "lightbox",
         "hide_variants": true,
         "enable_video_looping": false,
         "padding_top": 36,
@@ -87,21 +86,54 @@
         "exit_popup_discount_amount": "₹100"
       }
     },
-    "product_making_process_section": {
-      "type": "product-making-process",
+    "product_reviews_xCrieU": {
+      "type": "product-reviews",
+      "blocks": {
+        "review_JkHCbg": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "quote": "This Kasturi Attar has a soul. Its sillage is warm and projection is balanced. The packaging looks premium and fits a royal collection.",
+            "author": "Rohan Gupta",
+            "location": "Lucknow",
+            "verified_buyer": true
+          }
+        },
+        "review_tGc9Jk": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "quote": "Pure concentrated oil without any sticky feeling. It lasts all day on clothes. Incredible craft from Kannauj.",
+            "author": "Anjali Sen",
+            "location": "Bangalore",
+            "verified_buyer": true
+          }
+        },
+        "review_PtCeLR": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "quote": "Very close to traditional sandalwood base. Free from alcohol, so it does not irritate my skin. 5 stars on quality.",
+            "author": "Vikram Singh",
+            "location": "Jaipur",
+            "verified_buyer": true
+          }
+        }
+      },
+      "block_order": [
+        "review_JkHCbg",
+        "review_tGc9Jk",
+        "review_PtCeLR"
+      ],
+      "name": "Bespoke Product Reviews",
       "settings": {
-        "subtitle": "CRAFTSMANSHIP & ORIGINS",
-        "title": "How We Distill Our Premium Attars",
+        "title": "Patron Testimonials",
         "heading_size": "h1",
-        "step_1_title": "Raw Floral Harvest",
-        "step_1_desc": "Fresh rose, jasmine, or khus roots are hand-picked at dawn in Kannauj when the fragrance concentration is highest, and immediately sent to distillation.",
-        "step_2_title": "Copper Clay Distillation (Deg)",
-        "step_2_desc": "Petals are mixed with water in copper pots (Degs), sealed tightly using clay and cotton ropes, and heated gently over a wood-fire furnace.",
-        "step_3_title": "Clay Condensation (Bhapka)",
-        "step_3_desc": "Fragrant vapor travels through bamboo pipes into cold clay receivers (Bhapkas) submerged in water. Scent is captured drop by drop in pure sandalwood base oil.",
-        "color_scheme": "scheme-2",
-        "padding_top": 44,
-        "padding_bottom": 44
+        "subtitle": "TRUST & APPRECIATION",
+        "columns_desktop": 3,
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "product_application_guide_section": {
@@ -110,11 +142,11 @@
         "title": "How To Apply Concentrated Attar",
         "heading_size": "h1",
         "subtitle": "LONGEVITY GUIDE",
-        "step_1_title": "Dab on Pulse Points",
-        "step_1_desc": "Apply your attar to wrists, behind the ears, and inner elbows. These warm areas diffuse the scent beautifully over time.",
-        "step_2_title": "Tap Gently, Do Not Rub",
-        "step_2_desc": "Gently press your wrists together. Avoid rubbing, as this breaks down the delicate top scent notes and reduces sillage.",
-        "step_3_title": "Prep with Moisturizer",
+        "step_1_title": "Apply on Pulse Points",
+        "step_1_desc": "Apply the perfume oil directly to pulse points (wrists, inner elbows, neck, and behind ears). Body heat in these spots diffuses the scent naturally.",
+        "step_2_title": "Dab, Don't Rub",
+        "step_2_desc": "Gently dab the oil on your skin. Never rub wrists together, as rubbing friction breaks down the delicate top note molecules and reduces scent longevity.",
+        "step_3_title": "Moisturize First",
         "step_3_desc": "Fragrance lasts significantly longer on moisturized skin. Apply an unscented moisturizer or lotion to pulse points before dabbing your attar.",
         "color_scheme": "scheme-1",
         "padding_top": 40,
@@ -125,35 +157,35 @@
       "type": "custom-usp-grid",
       "blocks": {
         "usp_1": {
-          "type": "usp_card",
+          "type": "usp",
           "settings": {
-            "icon": "leaf",
+            "icon": "perfume",
             "title": "100% Alcohol-Free",
-            "desc": "Pure fragrance oil concentrate"
+            "text": "Pure concentrated perfume oil that is gentle on your skin."
           }
         },
         "usp_2": {
-          "type": "usp_card",
+          "type": "usp",
           "settings": {
             "icon": "stopwatch",
-            "title": "12+ Hours Stay",
-            "desc": "Lingers beautifully all day"
+            "title": "Long Lasting",
+            "text": "Carefully selected ingredients that keep you fragrant all day long."
           }
         },
         "usp_3": {
-          "type": "usp_card",
+          "type": "usp",
           "settings": {
-            "icon": "perfume",
-            "title": "Unisex Profile",
-            "desc": "Perfect scents for him and her"
+            "icon": "leaf",
+            "title": "Natural Craftsmanship",
+            "text": "Traditional steam distillation process (Deg-Bhapka) from Kannauj."
           }
         },
         "usp_4": {
-          "type": "usp_card",
+          "type": "usp",
           "settings": {
-            "icon": "leather",
-            "title": "Kannauj Legacy",
-            "desc": "Aged in camel-skin Kuppi bottles"
+            "icon": "heart",
+            "title": "Premium & Pure",
+            "text": "No animal testing, crafted with clean and authentic ingredients."
           }
         }
       },
@@ -189,25 +221,13 @@
         "padding_top": 36,
         "padding_bottom": 44
       }
-    },
-    "product_reviews_section": {
-      "type": "product-reviews",
-      "settings": {
-        "title": "Patron Testimonials",
-        "subtitle": "TRUST & APPRECIATION",
-        "columns_desktop": 3,
-        "color_scheme": "scheme-1",
-        "padding_top": 40,
-        "padding_bottom": 40
-      }
     }
   },
   "order": [
     "main",
-    "product_making_process_section",
+    "product_reviews_xCrieU",
     "product_application_guide_section",
     "custom_usp_grid_section",
-    "product_reviews_section",
     "related-products"
   ]
 }
