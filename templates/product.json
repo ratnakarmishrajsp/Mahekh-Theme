@@ -189,6 +189,17 @@
         "padding_top": 36,
         "padding_bottom": 44
       }
+    },
+    "product_reviews_section": {
+      "type": "product-reviews",
+      "settings": {
+        "title": "Patron Testimonials",
+        "subtitle": "TRUST & APPRECIATION",
+        "columns_desktop": 3,
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
     }
   },
   "order": [
@@ -196,6 +207,7 @@
     "product_making_process_section",
     "product_application_guide_section",
     "custom_usp_grid_section",
+    "product_reviews_section",
     "related-products"
   ]
 }

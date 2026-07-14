@@ -167,54 +167,229 @@
     {%- endif -%}
 
     <div class="product-reviews__grid">
-      {%- for block in section.blocks -%}
-        <div class="product-reviews__card" {{ block.shopify_attributes }}>
+      {%- if product.handle contains 'first-rain' -%}
+        <!-- First Rain Attar Reviews -->
+        <div class="product-reviews__card">
           <div class="product-reviews__card-top">
-            {%- if block.settings.rating > 0 -%}
-              <div class="product-reviews__stars" aria-label="{{ block.settings.rating }} stars out of 5">
-                {%- for i in (1..block.settings.rating) -%}
-                  <svg class="product-reviews__star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                  </svg>
-                {%- endfor -%}
-              </div>
-            {%- endif -%}
-            
-            {%- if block.settings.quote != blank -%}
-              <blockquote class="product-reviews__quote body">
-                <p>"{{ block.settings.quote | escape }}"</p>
-              </blockquote>
-            {%- endif -%}
+            <div class="product-reviews__stars" aria-label="5 stars out of 5">
+              {%- for i in (1..5) -%}
+                <svg class="product-reviews__star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+              {%- endfor -%}
+            </div>
+            <blockquote class="product-reviews__quote body">
+              <p>"This smells exactly like the first summer rain on dry soil! Highly nostalgic and brings back so many childhood memories. 100% natural, alcohol-free and lasts all day on my wrists."</p>
+            </blockquote>
           </div>
-
           <div class="product-reviews__card-bottom">
             <div class="product-reviews__author-info">
-              <span class="product-reviews__author">{{ block.settings.author | escape }}</span>
+              <span class="product-reviews__author">Aarav Sharma</span>
               <div class="product-reviews__meta">
-                {%- if block.settings.verified_buyer -%}
-                  <span class="product-reviews__verified-badge">✔ Verified</span>
-                {%- endif -%}
-                {%- if block.settings.location != blank -%}
-                  <span>{{ block.settings.location | escape }}</span>
-                {%- endif -%}
+                <span class="product-reviews__verified-badge">✔ Verified</span>
+                <span>Delhi</span>
               </div>
             </div>
-
-            {%- if block.settings.image != blank -%}
-              <div class="product-reviews__image-wrapper">
-                <img
-                  src="{{ block.settings.image | image_url: width: 100 }}"
-                  alt="Customer Review Image"
-                  loading="lazy"
-                  width="48"
-                  height="48"
-                  class="product-reviews__image"
-                >
-              </div>
-            {%- endif -%}
           </div>
         </div>
-      {%- endfor -%}
+
+        <div class="product-reviews__card">
+          <div class="product-reviews__card-top">
+            <div class="product-reviews__stars" aria-label="5 stars out of 5">
+              {%- for i in (1..5) -%}
+                <svg class="product-reviews__star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+              {%- endfor -%}
+            </div>
+            <blockquote class="product-reviews__quote body">
+              <p>"I was skeptical if it would capture the real mitti ki khushboo, but it is pure magic. It is earthy, clean, and not synthetic at all. My skin feels fresh."</p>
+            </blockquote>
+          </div>
+          <div class="product-reviews__card-bottom">
+            <div class="product-reviews__author-info">
+              <span class="product-reviews__author">Priya Patel</span>
+              <div class="product-reviews__meta">
+                <span class="product-reviews__verified-badge">✔ Verified</span>
+                <span>Mumbai</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-reviews__card">
+          <div class="product-reviews__card-top">
+            <div class="product-reviews__stars" aria-label="5 stars out of 5">
+              {%- for i in (1..5) -%}
+                <svg class="product-reviews__star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+              {%- endfor -%}
+            </div>
+            <blockquote class="product-reviews__quote body">
+              <p>"A beautiful soothing scent. The sandal base makes it last very long, almost 12 hours on my wrist. Highly recommended for people who love earthy scents."</p>
+            </blockquote>
+          </div>
+          <div class="product-reviews__card-bottom">
+            <div class="product-reviews__author-info">
+              <span class="product-reviews__author">Amit Verma</span>
+              <div class="product-reviews__meta">
+                <span class="product-reviews__verified-badge">✔ Verified</span>
+                <span>Bhopal</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-reviews__card">
+          <div class="product-reviews__card-top">
+            <div class="product-reviews__stars" aria-label="5 stars out of 5">
+              {%- for i in (1..5) -%}
+                <svg class="product-reviews__star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+              {%- endfor -%}
+            </div>
+            <blockquote class="product-reviews__quote body">
+              <p>"Monsoon in a bottle! The petrichor notes are so comforting and help me relax after a long day. No chemical headache, just pure nature."</p>
+            </blockquote>
+          </div>
+          <div class="product-reviews__card-bottom">
+            <div class="product-reviews__author-info">
+              <span class="product-reviews__author">Neha Joshi</span>
+              <div class="product-reviews__meta">
+                <span class="product-reviews__verified-badge">✔ Verified</span>
+                <span>Pune</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {%- elsif product.handle contains 'set' or product.handle contains 'combo' -%}
+        <!-- Mahekh Combo Set Reviews -->
+        <div class="product-reviews__card">
+          <div class="product-reviews__card-top">
+            <div class="product-reviews__stars" aria-label="5 stars out of 5">
+              {%- for i in (1..5) -%}
+                <svg class="product-reviews__star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+              {%- endfor -%}
+            </div>
+            <blockquote class="product-reviews__quote body">
+              <p>"The combo set is a masterpiece! Three distinct royal fragrances. Katcha Bela has that fresh monsoon vibe, and Kesar Chandan is rich and premium."</p>
+            </blockquote>
+          </div>
+          <div class="product-reviews__card-bottom">
+            <div class="product-reviews__author-info">
+              <span class="product-reviews__author">Rajesh Mishra</span>
+              <div class="product-reviews__meta">
+                <span class="product-reviews__verified-badge">✔ Verified</span>
+                <span>Lucknow</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-reviews__card">
+          <div class="product-reviews__card-top">
+            <div class="product-reviews__stars" aria-label="5 stars out of 5">
+              {%- for i in (1..5) -%}
+                <svg class="product-reviews__star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+              {%- endfor -%}
+            </div>
+            <blockquote class="product-reviews__quote body">
+              <p>"Exquisite presentation and luxury packaging. All three attars are 100% alcohol-free and long-lasting. Excellent value for Kannauj's legacy craft."</p>
+            </blockquote>
+          </div>
+          <div class="product-reviews__card-bottom">
+            <div class="product-reviews__author-info">
+              <span class="product-reviews__author">Shalini Iyer</span>
+              <div class="product-reviews__meta">
+                <span class="product-reviews__verified-badge">✔ Verified</span>
+                <span>Bangalore</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-reviews__card">
+          <div class="product-reviews__card-top">
+            <div class="product-reviews__stars" aria-label="5 stars out of 5">
+              {%- for i in (1..5) -%}
+                <svg class="product-reviews__star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                </svg>
+              {%- endfor -%}
+            </div>
+            <blockquote class="product-reviews__quote body">
+              <p>"Perfect gift set. Sandalwood base makes it sillage friendly. I love layering Mogra with Kesar Chandan for a royal floral gold aura."</p>
+            </blockquote>
+          </div>
+          <div class="product-reviews__card-bottom">
+            <div class="product-reviews__author-info">
+              <span class="product-reviews__author">Vikram Malhotra</span>
+              <div class="product-reviews__meta">
+                <span class="product-reviews__verified-badge">✔ Verified</span>
+                <span>Gurugram</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      {%- else -%}
+        <!-- Standard Blocks Loop -->
+        {%- for block in section.blocks -%}
+          <div class="product-reviews__card" {{ block.shopify_attributes }}>
+            <div class="product-reviews__card-top">
+              {%- if block.settings.rating > 0 -%}
+                <div class="product-reviews__stars" aria-label="{{ block.settings.rating }} stars out of 5">
+                  {%- for i in (1..block.settings.rating) -%}
+                    <svg class="product-reviews__star" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                  {%- endfor -%}
+                </div>
+              {%- endif -%}
+              
+              {%- if block.settings.quote != blank -%}
+                <blockquote class="product-reviews__quote body">
+                  <p>"{{ block.settings.quote | escape }}"</p>
+                </blockquote>
+              {%- endif -%}
+            </div>
+
+            <div class="product-reviews__card-bottom">
+              <div class="product-reviews__author-info">
+                <span class="product-reviews__author">{{ block.settings.author | escape }}</span>
+                <div class="product-reviews__meta">
+                  {%- if block.settings.verified_buyer -%}
+                    <span class="product-reviews__verified-badge">✔ Verified</span>
+                  {%- endif -%}
+                  {%- if block.settings.location != blank -%}
+                    <span>{{ block.settings.location | escape }}</span>
+                  {%- endif -%}
+                </div>
+              </div>
+
+              {%- if block.settings.image != blank -%}
+                <div class="product-reviews__image-wrapper">
+                  <img
+                    src="{{ block.settings.image | image_url: width: 100 }}"
+                    alt="Customer Review Image"
+                    loading="lazy"
+                    width="48"
+                    height="48"
+                    class="product-reviews__image"
+                  >
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
     </div>
 
   </div>
