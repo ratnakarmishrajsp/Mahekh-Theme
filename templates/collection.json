@@ -1,1 +1,140 @@
-{"sections":{"banner":{"type":"main-collection-banner","settings":{"show_collection_description":true,"show_collection_image":false,"color_scheme":"scheme-1"}},"product-grid":{"type":"main-collection-product-grid","settings":{"products_per_page":20,"columns_desktop":5,"columns_mobile":"2","color_scheme":"","image_ratio":"adapt","image_shape":"default","show_secondary_image":false,"show_vendor":false,"show_rating":false,"quick_add":"bulk","enable_filtering":true,"filter_type":"horizontal","enable_sorting":true,"padding_top":36,"padding_bottom":36}}},"order":["banner","product-grid"]}
+{
+  "sections": {
+    "banner": {
+      "type": "main-collection-banner",
+      "settings": {
+        "promo_badge": "🔥 DIRECT ADS SPECIAL OFFER",
+        "custom_title": "",
+        "show_collection_description": true,
+        "show_highlights": true,
+        "show_collection_image": false,
+        "color_scheme": "scheme-1"
+      }
+    },
+    "trust_strip": {
+      "type": "collection-trust-strip",
+      "blocks": {
+        "badge_1": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "alcohol_free",
+            "title": "100% Alcohol-Free",
+            "desc": "Pure concentrated perfume oil, skin safe."
+          }
+        },
+        "badge_2": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "clock",
+            "title": "24+ Hours Lasting",
+            "desc": "Rich projection that lasts all day long."
+          }
+        },
+        "badge_3": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "truck",
+            "title": "Free Delivery & COD",
+            "desc": "Pay on delivery with express shipping."
+          }
+        },
+        "badge_4": {
+          "type": "trust_badge",
+          "settings": {
+            "icon": "star",
+            "title": "10,000+ Happy Users",
+            "desc": "Rated 4.9/5 by fragrance lovers."
+          }
+        }
+      },
+      "block_order": [
+        "badge_1",
+        "badge_2",
+        "badge_3",
+        "badge_4"
+      ],
+      "settings": {
+        "heading": "Why Choose Mahekh Fragrances",
+        "bg_color": "#faf8f5",
+        "text_color": "#121212",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
+    "product-grid": {
+      "type": "main-collection-product-grid",
+      "settings": {
+        "products_per_page": 20,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": true,
+        "quick_add": "standard",
+        "enable_filtering": true,
+        "filter_type": "horizontal",
+        "enable_sorting": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "faq_accordion": {
+      "type": "custom-faq",
+      "blocks": {
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "Is Cash on Delivery (COD) available for this collection?",
+            "answer": "<p>Yes! We offer 100% Cash on Delivery (COD) across India with express shipping. You can pay when your package arrives at your doorstep.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "Are all attars in this set 100% alcohol-free?",
+            "answer": "<p>Absolutely. Every single attar from Mahekh is 100% pure concentrated perfume oil with zero alcohol content, making them completely safe for skin and daily use.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "How long will delivery take for my order?",
+            "answer": "<p>Orders are dispatched within 24 hours. Express delivery usually takes 3 to 5 business days depending on your city location.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "How long does the scent projection last?",
+            "answer": "<p>Our attars are formulated with high oil concentration, giving them an impressive 24+ hour longevity on fabric and 8–12 hours on skin.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4"
+      ],
+      "settings": {
+        "title": "Frequently Asked Questions",
+        "heading_size": "h1",
+        "subtitle": "HAVE QUESTIONS?",
+        "content_width": 800,
+        "open_first": true,
+        "color_scheme": "scheme-1",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "banner",
+    "trust_strip",
+    "product-grid",
+    "faq_accordion"
+  ]
+}
