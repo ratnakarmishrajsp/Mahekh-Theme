@@ -133,8 +133,8 @@
   },
   "order": [
     "banner",
-    "trust_strip",
     "product-grid",
+    "trust_strip",
     "faq_accordion"
   ]
 }
