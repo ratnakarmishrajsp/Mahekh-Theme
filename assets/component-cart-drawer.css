@@ -185,17 +185,20 @@ cart-drawer {
 }
 
 cart-drawer-items {
-  overflow: auto;
-  flex: 1;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+  flex: 1 1 auto !important;
+  max-height: 100% !important;
 }
 
 @media screen and (max-height: 650px) {
   cart-drawer-items {
-    overflow: visible;
+    overflow-y: auto !important;
   }
 
   .drawer__inner {
-    overflow: scroll;
+    overflow: hidden !important;
   }
 }
 
