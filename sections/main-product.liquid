@@ -106,6 +106,123 @@
       border: 1px solid rgba(var(--color-foreground), 0.05);
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
     }
+
+    /* Scoped Attar Scent Mist & Flowers (Strictly Bounded to Description Box Only) */
+    .product__description {
+      position: relative !important;
+      overflow: hidden !important;
+      padding: 2.2rem !important;
+      background: #faf8f5 !important;
+      border: 1px solid rgba(204, 164, 59, 0.25) !important;
+      border-radius: 10px !important;
+      margin-top: 2rem !important;
+      margin-bottom: 2rem !important;
+    }
+
+    .description-scent-mist {
+      position: absolute !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      pointer-events: none !important;
+      z-index: 1 !important;
+      overflow: hidden !important;
+    }
+
+    .description-scent-mist__cloud {
+      position: absolute;
+      bottom: -40px;
+      width: 80%;
+      height: 140px;
+      background: radial-gradient(ellipse at center, rgba(229, 193, 88, 0.35) 0%, rgba(204, 164, 59, 0.15) 45%, rgba(255, 255, 255, 0) 75%);
+      filter: blur(22px);
+      border-radius: 50%;
+      opacity: 0;
+      pointer-events: none !important;
+      animation: descFogPulse 9s ease-in-out infinite;
+    }
+
+    .description-scent-mist__cloud--1 {
+      left: -15%;
+      animation-delay: 0s;
+    }
+
+    .description-scent-mist__cloud--2 {
+      right: -15%;
+      animation-delay: 4.5s;
+      background: radial-gradient(ellipse at center, rgba(255, 220, 130, 0.4) 0%, rgba(204, 164, 59, 0.18) 45%, rgba(255, 255, 255, 0) 75%);
+    }
+
+    @keyframes descFogPulse {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.85);
+      }
+      35% {
+        opacity: 0.55;
+        transform: translateY(-25px) scale(1.15);
+      }
+      70% {
+        opacity: 0.3;
+        transform: translateY(-60px) scale(1.3);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-90px) scale(1.4);
+      }
+    }
+
+    .description-scent-mist__petals {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none !important;
+    }
+
+    .description-scent-mist__petal {
+      position: absolute;
+      bottom: -25px;
+      font-size: 1.5rem;
+      opacity: 0;
+      pointer-events: none !important;
+      animation: descPetalFloat 8s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+    }
+
+    .description-scent-mist__petal--1 {
+      left: 12%;
+      animation-delay: 0.5s;
+    }
+
+    .description-scent-mist__petal--2 {
+      left: 48%;
+      animation-delay: 4s;
+    }
+
+    .description-scent-mist__petal--3 {
+      left: 82%;
+      animation-delay: 2.2s;
+    }
+
+    @keyframes descPetalFloat {
+      0% {
+        opacity: 0;
+        transform: translateY(0) rotate(0deg);
+      }
+      20% {
+        opacity: 0.85;
+      }
+      65% {
+        opacity: 0.6;
+        transform: translateY(-80px) rotate(180deg) translateX(18px);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-130px) rotate(360deg) translateX(-18px);
+      }
+    }
   {%- endstyle -%}
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
@@ -315,6 +432,15 @@
                 {%- endif -%}
                 {%- if product.description != blank -%}
                   <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }}>
+                    <div class="description-scent-mist" aria-hidden="true">
+                      <div class="description-scent-mist__cloud description-scent-mist__cloud--1"></div>
+                      <div class="description-scent-mist__cloud description-scent-mist__cloud--2"></div>
+                      <div class="description-scent-mist__petals">
+                        <div class="description-scent-mist__petal description-scent-mist__petal--1">🌸</div>
+                        <div class="description-scent-mist__petal description-scent-mist__petal--2">🌼</div>
+                        <div class="description-scent-mist__petal description-scent-mist__petal--3">🌺</div>
+                      </div>
+                    </div>
                     {{ product.description }}
                   </div>
                 {%- endif -%}
