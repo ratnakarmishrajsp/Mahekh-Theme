@@ -9,7 +9,16 @@
     align-items: flex-end;
     gap: 6px;
     font-family: inherit;
-    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(25px);
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+
+  .left-compact-support.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 
   /* Top Support Avatar Pill */
@@ -150,8 +159,29 @@
         <span>WhatsApp</span>
       </a>
     </div>
-  </div>
 {%- endunless -%}
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const supportWidget = document.getElementById("LeftCompactSupport-{{ section.id }}");
+    if (!supportWidget) return;
+
+    function checkSupportVisibility() {
+      const stickyBar = document.querySelector('.mobile-sticky-buy-bar');
+      const isStickyActive = stickyBar && stickyBar.classList.contains('is-visible');
+      const isScrolledPast = window.scrollY > 280;
+
+      if (isStickyActive || isScrolledPast) {
+        supportWidget.classList.add('is-visible');
+      } else {
+        supportWidget.classList.remove('is-visible');
+      }
+    }
+
+    window.addEventListener('scroll', checkSupportVisibility, { passive: true });
+    checkSupportVisibility();
+  });
+</script>
 
 {% schema %}
 {
