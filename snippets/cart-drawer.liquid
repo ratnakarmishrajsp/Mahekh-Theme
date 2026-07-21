@@ -188,8 +188,11 @@
       </style>
       <script>
         function addUpsellVariant(variantId, btn) {
-          btn.disabled = true;
-          btn.textContent = "...";
+          if (!variantId) return;
+          if (btn) {
+            btn.disabled = true;
+            btn.textContent = "ADDING...";
+          }
           
           const body = JSON.stringify({
             id: variantId,
@@ -197,7 +200,7 @@
             sections: 'cart-drawer,cart-icon-bubble'
           });
           
-          fetch('/cart/add.js', {
+          fetch(window.Shopify.routes.root + 'cart/add.js', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -215,7 +218,7 @@
             }
           })
           .catch(err => {
-            console.error(err);
+            console.error('Error adding upsell item:', err);
             window.location.reload();
           });
         }
@@ -735,7 +738,7 @@
                 <button 
                   type="button" 
                   class="cart-upsell__add-btn" 
-                  onclick="addUpsellVariant('{{ upsell_item.selected_or_first_available_variant.id }}')" 
+                  onclick="addUpsellVariant('{{ upsell_item.selected_or_first_available_variant.id }}', this)" 
                   style="background: linear-gradient(135deg, #cca43b 0%, #e5c158 100%); color: #121212; border: none; padding: 10px 14px; border-radius: 6px; font-size: 1.15rem; font-weight: 800; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 12px rgba(204, 164, 59, 0.3);"
                 >
                   + ADD FOR ₹599

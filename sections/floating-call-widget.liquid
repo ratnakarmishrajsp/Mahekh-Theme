@@ -21,6 +21,18 @@
     transform: translateY(0);
   }
 
+  /* Automatically Hide Support Widget when Cart Drawer is Open */
+  body.overflow-hidden .left-compact-support,
+  cart-drawer.active ~ .left-compact-support,
+  cart-drawer[open] ~ .left-compact-support,
+  .drawer.active ~ .left-compact-support,
+  .cart-drawer.active ~ .left-compact-support {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(25px) !important;
+    visibility: hidden !important;
+  }
+
   /* Top Support Avatar Pill */
   .left-compact-support__avatar-pill {
     display: flex;
@@ -167,6 +179,15 @@
     if (!supportWidget) return;
 
     function checkSupportVisibility() {
+      // Hide if Cart Drawer is open or body is locked
+      const cartDrawer = document.querySelector('cart-drawer');
+      const isDrawerOpen = (cartDrawer && (cartDrawer.classList.contains('active') || cartDrawer.hasAttribute('open'))) || document.body.classList.contains('overflow-hidden');
+
+      if (isDrawerOpen) {
+        supportWidget.classList.remove('is-visible');
+        return;
+      }
+
       const stickyBar = document.querySelector('.mobile-sticky-buy-bar');
       const isStickyActive = stickyBar && stickyBar.classList.contains('is-visible');
       const isScrolledPast = window.scrollY > 280;
@@ -179,6 +200,11 @@
     }
 
     window.addEventListener('scroll', checkSupportVisibility, { passive: true });
+    
+    // Observer for body class mutation when cart drawer opens
+    const bodyObserver = new MutationObserver(checkSupportVisibility);
+    bodyObserver.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+
     checkSupportVisibility();
   });
 </script>
