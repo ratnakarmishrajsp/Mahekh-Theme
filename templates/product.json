@@ -79,53 +79,25 @@
     },
     "fragrance_profile_section": {
       "type": "product-fragrance-profile",
-      "blocks": {
-        "note_top": {
-          "type": "scent_note",
-          "settings": {
-            "type": "top",
-            "name": "Katcha Bel & Fresh Citrus",
-            "desc": "An invigorating opening of crisp green bel and citrus blossoms that creates a refreshing, sweet floral aura."
-          }
-        },
-        "note_heart": {
-          "type": "scent_note",
-          "settings": {
-            "type": "heart",
-            "name": "Kashmiri Kesar & Mysore Chandan",
-            "desc": "A rich, creamy heart of pure saffron threads and sandalwood that adds deep elegance and warmth."
-          }
-        },
-        "note_base": {
-          "type": "scent_note",
-          "settings": {
-            "type": "base",
-            "name": "Royal White Mogra & Sandalwood Base",
-            "desc": "A long-lasting, hypnotic drydown of natural mogra blossoms and sandalwood that stays for over 24 hours."
-          }
-        }
-      },
-      "block_order": [
-        "note_top",
-        "note_heart",
-        "note_base"
-      ],
       "settings": {
-        "title": "Fragrance Profile & Notes",
+        "title": "Fragrance Profile & Scent Notes",
         "heading_size": "h1",
         "subtitle": "THE OLFACTORY EXPERIENCE",
-        "note_top_title": "Top Notes",
-        "note_top_desc": "First impressions (0 - 30 mins)",
-        "note_heart_title": "Heart Notes",
-        "note_heart_desc": "The core fragrance (2 - 8 hours)",
-        "note_base_title": "Base Notes",
-        "note_base_desc": "Long-lasting drydown (8 - 24+ hours)",
-        "show_radar": true,
-        "radar_title": "Performance Gauges",
-        "longevity": 5,
-        "sillage": 5,
-        "versatility": 4,
-        "uniqueness": 5,
+        "top_note_label": "Top Note",
+        "top_note_ingredients": "Katcha Bel & Fresh Citrus",
+        "top_note_desc": "An invigorating opening of green bel blossoms and citrus notes that creates a refreshing aura.",
+        "heart_note_label": "Heart Note",
+        "heart_note_ingredients": "Kashmiri Kesar & Mysore Chandan",
+        "heart_note_desc": "A rich, creamy heart of pure saffron threads and sandalwood adding deep royal warmth.",
+        "base_note_label": "Base Note",
+        "base_note_ingredients": "Royal White Mogra & Sandalwood Base",
+        "base_note_desc": "A long-lasting drydown of natural mogra blossoms and sandalwood staying over 24 hours.",
+        "longevity_hours": 12,
+        "sillage_rating": 5,
+        "sillage_text": "Strong / Radiating",
+        "intensity_rating": 5,
+        "best_suited_label": "Best Suited For",
+        "best_suited": "Daily wear, festive celebrations, royal occasions, and evening gatherings.",
         "padding_top": 40,
         "padding_bottom": 40
       }
@@ -150,6 +122,7 @@
         "step_2_desc": "Natural flowers are sealed in copper pots (Degs) with clay and heated over traditional wood-fire furnaces.",
         "step_3_title": "Clay Condensation (Bhapka)",
         "step_3_desc": "Pure fragrant steam condenses into cold clay receivers (Bhapkas) containing sandalwood base oil. Zero alcohol, 100% pure.",
+        "color_scheme": "scheme-2",
         "padding_top": 40,
         "padding_bottom": 40
       }
