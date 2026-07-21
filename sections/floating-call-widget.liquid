@@ -1,169 +1,186 @@
 {%- style -%}
-  .left-call-widget {
+  .left-compact-support {
     position: fixed;
-    left: 18px;
-    bottom: 90px; /* Positioned above mobile sticky buy bar */
+    left: 16px;
+    bottom: 85px; /* Floats above mobile sticky buy bar */
     z-index: 9999;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 6px;
     font-family: inherit;
     transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
   }
 
-  /* Team Support Badge Mockup */
-  .left-call-widget__team-badge {
+  /* Top Support Avatar Pill */
+  .left-compact-support__avatar-pill {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     background: #ffffff;
     border: 1px solid rgba(204, 164, 59, 0.35);
-    padding: 6px 14px 6px 8px;
-    border-radius: 30px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    font-size: 1.15rem;
+    padding: 4px 10px 4px 6px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-size: 1.1rem;
     font-weight: 600;
     color: #121212;
   }
 
-  .left-call-widget__team-avatars {
+  .left-compact-support__avatar-wrapper {
     position: relative;
     display: flex;
     align-items: center;
   }
 
-  .left-call-widget__avatar {
-    width: 28px;
-    height: 28px;
+  .left-compact-support__avatar {
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    border: 2px solid #ffffff;
-    object-fit: cover;
     background: #f5eedc;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 12px;
   }
 
-  .left-call-widget__online-dot {
+  .left-compact-support__online-dot {
     position: absolute;
-    bottom: 0;
-    right: -2px;
-    width: 9px;
-    height: 9px;
+    bottom: -1px;
+    right: -1px;
+    width: 7px;
+    height: 7px;
     background: #10b981;
-    border: 2px solid #ffffff;
+    border: 1.5px solid #ffffff;
     border-radius: 50%;
-    animation: pulseDot 2s infinite;
+    animation: miniDotPulse 2s infinite;
   }
 
-  @keyframes pulseDot {
+  @keyframes miniDotPulse {
     0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(16, 185, 129, 0); }
     100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
   }
 
-  /* Call Action Button */
-  .left-call-widget__btn {
+  /* Dual Action Buttons Row */
+  .left-compact-support__actions {
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: linear-gradient(135deg, #10b981 0%, #047857 100%);
-    color: #ffffff !important;
-    text-decoration: none !important;
-    padding: 10px 18px;
-    border-radius: 30px;
-    font-size: 1.3rem;
+    gap: 6px;
+  }
+
+  .left-compact-support__btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 1.15rem;
     font-weight: 700;
-    letter-spacing: 0.03em;
-    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35);
-    transition: all 0.3s ease;
+    text-decoration: none !important;
+    color: #ffffff !important;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
 
-  .left-call-widget__btn:hover {
-    transform: translateY(-2px) scale(1.03);
-    box-shadow: 0 12px 30px rgba(16, 185, 129, 0.45);
+  .left-compact-support__btn--call {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+
+  .left-compact-support__btn--wa {
+    background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+  }
+
+  .left-compact-support__btn:hover {
+    transform: translateY(-2px);
+    opacity: 0.95;
     color: #ffffff !important;
   }
 
-  .left-call-widget__icon {
-    width: 18px;
-    height: 18px;
+  .left-compact-support__icon {
+    width: 14px;
+    height: 14px;
     fill: #ffffff;
   }
 
   @media screen and (max-width: 749px) {
-    .left-call-widget {
-      left: 12px;
-      bottom: 82px; /* Positioned right above mobile sticky buy bar */
+    .left-compact-support {
+      left: 10px;
+      bottom: 78px;
     }
-    .left-call-widget__team-badge {
-      padding: 5px 12px 5px 6px;
-      font-size: 1.05rem;
+    .left-compact-support__avatar-pill {
+      font-size: 1rem;
+      padding: 3px 8px 3px 5px;
     }
-    .left-call-widget__btn {
-      padding: 9px 15px;
-      font-size: 1.2rem;
+    .left-compact-support__btn {
+      padding: 6px 10px;
+      font-size: 1.1rem;
     }
   }
 {%- endstyle -%}
 
-{%- unless section.settings.enable_call_widget == false -%}
-  <div class="left-call-widget" id="LeftCallWidget-{{ section.id }}">
-    <!-- Support Team Mockup Badge -->
-    <div class="left-call-widget__team-badge">
-      <div class="left-call-widget__team-avatars">
-        <div class="left-call-widget__avatar" aria-label="Support Team Representative">🎧</div>
-        <span class="left-call-widget__online-dot" aria-label="Online"></span>
+{%- unless section.settings.enable_support_widget == false -%}
+  <div class="left-compact-support" id="LeftCompactSupport-{{ section.id }}">
+    <!-- Top Support Avatar -->
+    <div class="left-compact-support__avatar-pill">
+      <div class="left-compact-support__avatar-wrapper">
+        <div class="left-compact-support__avatar" aria-label="Support Avatar">🎧</div>
+        <span class="left-compact-support__online-dot"></span>
       </div>
-      <span>{{ section.settings.badge_text | default: "Mahekh Support Team" }}</span>
+      <span>{{ section.settings.avatar_label | default: "Need Help?" }}</span>
     </div>
 
-    <!-- Call Button -->
-    <a href="tel:{{ section.settings.phone_number | default: '919321868526' }}" class="left-call-widget__btn" aria-label="Call Mahekh Support Team">
-      <svg class="left-call-widget__icon" viewBox="0 0 24 24" width="18" height="18">
-        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-      </svg>
-      <span>{{ section.settings.button_text | default: "Call Now" }}</span>
-    </a>
+    <!-- Dual Compact Buttons (Call & WhatsApp) -->
+    <div class="left-compact-support__actions">
+      <!-- Call Button (No Phone Number Text) -->
+      <a href="tel:{{ section.settings.phone_number | default: '919321868526' }}" class="left-compact-support__btn left-compact-support__btn--call" aria-label="Call Support">
+        <svg class="left-compact-support__icon" viewBox="0 0 24 24">
+          <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+        </svg>
+        <span>Call Us</span>
+      </a>
+
+      <!-- WhatsApp Button -->
+      <a href="https://wa.me/{{ section.settings.phone_number | default: '919321868526' }}?text=Hello%20Mahekh,%20I%20need%20help%20with%20my%20order!" target="_blank" class="left-compact-support__btn left-compact-support__btn--wa" aria-label="WhatsApp Support">
+        <svg class="left-compact-support__icon" viewBox="0 0 24 24">
+          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.006 5.282 5.289-.002 11.795 0c3.148.002 6.11 1.229 8.342 3.463 2.23 2.236 3.451 5.201 3.447 8.35-.008 6.516-5.29 11.802-11.796 11.802-2.007-.001-3.97-.514-5.717-1.488L0 24zm6.49-4.523c1.657.982 3.277 1.498 4.907 1.499 5.378 0 9.754-4.374 9.76-9.758.002-2.609-1.01-5.06-2.852-6.904C16.46 2.47 14.004 1.455 11.8 1.451c-5.38 0-9.757 4.374-9.764 9.758-.002 1.738.459 3.43 1.332 4.937L2.33 21.68l5.776-1.517c-1.637.95-3.05 1.503-4.56 1.499zM17.5 14.2c-.3-.15-1.8-.9-2.1-1-.3-.15-.5-.2-.7.1s-.8.9-1 1.2c-.2.25-.4.3-.7.15-1.4-.7-2.5-1.3-3.5-3-.3-.45.3-.4.8-.9.2-.2.2-.4.1-.6s-1-2.4-1.3-3.2c-.3-.8-.7-.7-.9-.7h-.7c-.25 0-.6.1-.9.4s-1.1 1.1-1.1 2.7 1.2 3.1 1.4 3.3c.2.2 2.3 3.6 5.7 5.1.8.3 1.5.5 2 .7.8.25 1.6.2 2.2.1.7-.1 1.8-.7 2.1-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.35z"/>
+        </svg>
+        <span>WhatsApp</span>
+      </a>
+    </div>
   </div>
 {%- endunless -%}
 
 {% schema %}
 {
-  "name": "Left Call Widget",
+  "name": "Compact Support Widget",
   "tag": "section",
-  "class": "section-left-call-widget",
+  "class": "section-compact-support",
   "settings": [
     {
       "type": "checkbox",
-      "id": "enable_call_widget",
-      "label": "Enable Sticky Left Call Widget",
+      "id": "enable_support_widget",
+      "label": "Enable Compact Support Widget",
       "default": true
     },
     {
       "type": "text",
-      "id": "badge_text",
-      "label": "Support Team Badge Text",
-      "default": "Mahekh Support Team"
-    },
-    {
-      "type": "text",
-      "id": "button_text",
-      "label": "Call Button Text",
-      "default": "Call 93218-68526"
+      "id": "avatar_label",
+      "label": "Avatar Pill Label",
+      "default": "Need Help?"
     },
     {
       "type": "text",
       "id": "phone_number",
-      "label": "Phone Number for Call",
+      "label": "Phone & WhatsApp Number",
       "default": "919321868526"
     }
   ],
   "presets": [
     {
-      "name": "Left Call Widget"
+      "name": "Compact Support Widget"
     }
   ]
 }
