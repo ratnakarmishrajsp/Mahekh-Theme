@@ -4,60 +4,60 @@
     bottom: 0;
     left: 0;
     width: 100vw;
-    height: 35vh;
+    height: 45vh;
     pointer-events: none !important;
-    z-index: 999;
+    z-index: 9999;
     overflow: hidden;
   }
 
   /* Fragrance Mist Clouds */
   .ambient-scent-fog__cloud {
     position: absolute;
-    bottom: -50px;
-    width: 60vw;
-    height: 250px;
-    background: radial-gradient(ellipse at center, rgba(245, 230, 185, 0.28) 0%, rgba(204, 164, 59, 0.12) 45%, rgba(255, 255, 255, 0) 75%);
-    filter: blur(35px);
+    bottom: -60px;
+    width: 70vw;
+    height: 280px;
+    background: radial-gradient(ellipse at center, rgba(229, 193, 88, 0.45) 0%, rgba(204, 164, 59, 0.22) 40%, rgba(255, 255, 255, 0) 70%);
+    filter: blur(30px);
     border-radius: 50%;
     opacity: 0;
     pointer-events: none !important;
-    animation: fogRise 14s ease-in-out infinite;
+    animation: fogRise 10s ease-in-out infinite;
   }
 
   .ambient-scent-fog__cloud--1 {
-    left: -10%;
+    left: -15%;
     animation-delay: 0s;
   }
 
   .ambient-scent-fog__cloud--2 {
-    left: 25%;
-    width: 50vw;
-    animation-delay: 4.5s;
-    background: radial-gradient(ellipse at center, rgba(255, 245, 220, 0.32) 0%, rgba(229, 193, 88, 0.15) 50%, rgba(255, 255, 255, 0) 75%);
+    left: 20%;
+    width: 60vw;
+    animation-delay: 3.5s;
+    background: radial-gradient(ellipse at center, rgba(255, 215, 120, 0.5) 0%, rgba(204, 164, 59, 0.25) 45%, rgba(255, 255, 255, 0) 70%);
   }
 
   .ambient-scent-fog__cloud--3 {
-    right: -10%;
-    width: 55vw;
-    animation-delay: 9s;
+    right: -15%;
+    width: 65vw;
+    animation-delay: 7s;
   }
 
   @keyframes fogRise {
     0% {
       opacity: 0;
-      transform: translateY(60px) scale(0.9);
+      transform: translateY(80px) scale(0.85);
     }
-    35% {
-      opacity: {{ section.settings.fog_opacity | default: 0.25 }};
-      transform: translateY(-40px) scale(1.15);
+    40% {
+      opacity: 0.55;
+      transform: translateY(-50px) scale(1.2);
     }
-    70% {
-      opacity: {{ section.settings.fog_opacity | default: 0.25 | times: 0.7 }};
-      transform: translateY(-90px) scale(1.3);
+    75% {
+      opacity: 0.35;
+      transform: translateY(-110px) scale(1.4);
     }
     100% {
       opacity: 0;
-      transform: translateY(-150px) scale(1.4);
+      transform: translateY(-180px) scale(1.5);
     }
   }
 
@@ -69,54 +69,54 @@
     width: 100vw;
     height: 100vh;
     pointer-events: none !important;
-    z-index: 9998;
+    z-index: 99999;
     overflow: hidden;
   }
 
   .ambient-scent-fog__petal {
     position: absolute;
-    bottom: -40px;
-    width: 18px;
-    height: 18px;
+    bottom: -30px;
+    width: 22px;
+    height: 22px;
     opacity: 0;
     pointer-events: none !important;
-    animation: petalFloat 12s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+    animation: petalFloat 9s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
   }
 
   .ambient-scent-fog__petal svg {
     width: 100%;
     height: 100%;
     fill: #cca43b;
-    opacity: 0.65;
-    filter: drop-shadow(0 2px 4px rgba(204, 164, 59, 0.2));
+    opacity: 0.85;
+    filter: drop-shadow(0 3px 6px rgba(204, 164, 59, 0.4));
   }
 
   .ambient-scent-fog__petal--1 {
-    left: 12%;
-    animation-delay: 1s;
-    animation-duration: 11s;
+    left: 10%;
+    animation-delay: 0.5s;
+    animation-duration: 8.5s;
   }
 
   .ambient-scent-fog__petal--2 {
-    left: 38%;
-    animation-delay: 5s;
-    animation-duration: 13s;
-    width: 14px;
-    height: 14px;
+    left: 35%;
+    animation-delay: 3.5s;
+    animation-duration: 10s;
+    width: 18px;
+    height: 18px;
   }
 
   .ambient-scent-fog__petal--3 {
-    left: 65%;
-    animation-delay: 2.5s;
-    animation-duration: 14s;
+    left: 60%;
+    animation-delay: 1.8s;
+    animation-duration: 9s;
   }
 
   .ambient-scent-fog__petal--4 {
-    left: 85%;
-    animation-delay: 8s;
-    animation-duration: 10.5s;
-    width: 16px;
-    height: 16px;
+    left: 82%;
+    animation-delay: 6s;
+    animation-duration: 8s;
+    width: 20px;
+    height: 20px;
   }
 
   @keyframes petalFloat {
@@ -125,35 +125,29 @@
       transform: translateY(0) rotate(0deg) translateX(0);
     }
     15% {
-      opacity: 0.75;
+      opacity: 0.9;
     }
     50% {
-      transform: translateY(-45vh) rotate(180deg) translateX(35px);
+      transform: translateY(-50vh) rotate(180deg) translateX(40px);
     }
     85% {
-      opacity: 0.6;
+      opacity: 0.7;
     }
     100% {
       opacity: 0;
-      transform: translateY(-95vh) rotate(360deg) translateX(-25px);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .ambient-scent-fog, .ambient-scent-fog__petals {
-      display: none !important;
+      transform: translateY(-100vh) rotate(360deg) translateX(-30px);
     }
   }
 {%- endstyle -%}
 
-{%- if section.settings.enable_ambient_fog -%}
+{%- unless section.settings.enable_ambient_fog == false -%}
   <div class="ambient-scent-fog" aria-hidden="true">
     <div class="ambient-scent-fog__cloud ambient-scent-fog__cloud--1"></div>
     <div class="ambient-scent-fog__cloud ambient-scent-fog__cloud--2"></div>
     <div class="ambient-scent-fog__cloud ambient-scent-fog__cloud--3"></div>
   </div>
 
-  {%- if section.settings.enable_petals -%}
+  {%- unless section.settings.enable_petals == false -%}
     <div class="ambient-scent-fog__petals" aria-hidden="true">
       <div class="ambient-scent-fog__petal ambient-scent-fog__petal--1">
         <svg viewBox="0 0 24 24"><path d="M12 2C9 7 4 9 4 14c0 4.4 3.6 8 8 8s8-3.6 8-8c0-5-5-7-8-12z"/></svg>
@@ -168,8 +162,8 @@
         <svg viewBox="0 0 24 24"><path d="M12 2C9 7 4 9 4 14c0 4.4 3.6 8 8 8s8-3.6 8-8c0-5-5-7-8-12z"/></svg>
       </div>
     </div>
-  {%- endif -%}
-{%- endif -%}
+  {%- endunless -%}
+{%- endunless -%}
 
 {% schema %}
 {
@@ -188,15 +182,6 @@
       "id": "enable_petals",
       "label": "Enable Floating Floral Petals",
       "default": true
-    },
-    {
-      "type": "range",
-      "id": "fog_opacity",
-      "min": 0.1,
-      "max": 0.5,
-      "step": 0.05,
-      "default": 0.25,
-      "label": "Mist Opacity (Subtle & Non-Intrusive)"
     }
   ],
   "presets": [
