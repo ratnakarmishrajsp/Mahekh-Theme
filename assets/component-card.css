@@ -593,3 +593,62 @@
     clip-path: polygon(var(--shape--blob-5));
   }
 }
+
+/* --- High Conversion CRO Product Card Extensions --- */
+.product-card-wrapper {
+  transition: transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.35s ease;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 0.8rem;
+  border: 1px solid rgba(204, 164, 59, 0.18);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.product-card-wrapper:hover {
+  transform: translateY(-6px);
+  border-color: #cca43b;
+  box-shadow: 0 12px 28px rgba(204, 164, 59, 0.15);
+}
+
+.custom-card-savings-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+  background: #121212;
+  color: #cca43b;
+  border: 1px solid #cca43b;
+  font-size: 1.15rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  animation: pulseGoldGlow 2.5s infinite ease-in-out;
+}
+
+@keyframes pulseGoldGlow {
+  0% { box-shadow: 0 0 0 0 rgba(204, 164, 59, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(204, 164, 59, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(204, 164, 59, 0); }
+}
+
+.quick-add__submit {
+  background: linear-gradient(135deg, #cca43b 0%, #e5c158 100%) !important;
+  color: #121212 !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 1.1rem 1.5rem !important;
+  box-shadow: 0 4px 14px rgba(204, 164, 59, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+.quick-add__submit:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(204, 164, 59, 0.5) !important;
+  background: linear-gradient(135deg, #e5c158 0%, #cca43b 100%) !important;
+}
+

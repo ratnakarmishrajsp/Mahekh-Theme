@@ -106,6 +106,12 @@
             </div>
           </div>
         {%- endif -%}
+        {%- if card_product.compare_at_price > card_product.price and card_product.available -%}
+          {%- assign discount_percent = card_product.compare_at_price | minus: card_product.price | times: 100 | divided_by: card_product.compare_at_price -%}
+          <span class="custom-card-savings-badge">
+            🔥 SAVE {{ discount_percent }}%
+          </span>
+        {%- endif -%}
         <div class="card__content">
           <div class="card__information">
             <h3
