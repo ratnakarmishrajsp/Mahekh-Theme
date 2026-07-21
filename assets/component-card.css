@@ -755,19 +755,23 @@
 
 /* --- Ensure 2 products per row on Mobile --- */
 @media screen and (max-width: 749px) {
-  .grid--2-col-tablet-down {
-    display: flex !important;
-    flex-wrap: wrap !important;
-    margin-left: -0.5rem !important;
-    margin-right: -0.5rem !important;
+  #product-grid.product-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    column-gap: 10px !important;
+    row-gap: 16px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
   }
 
-  .grid--2-col-tablet-down .grid__item {
-    width: calc(50% - 1rem) !important;
-    max-width: calc(50% - 1rem) !important;
-    flex: 0 0 calc(50% - 1rem) !important;
-    margin: 0.5rem !important;
+  #product-grid.product-grid > .grid__item {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+    margin: 0 !important;
     padding: 0 !important;
+    box-sizing: border-box !important;
   }
 }
 

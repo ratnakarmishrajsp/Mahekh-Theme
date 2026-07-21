@@ -35,9 +35,23 @@
     }
   }
 
-  .product-grid {
-    column-gap: 2rem !important;
-    row-gap: 3rem !important;
+  @media screen and (max-width: 749px) {
+    ul.product-grid {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      column-gap: 10px !important;
+      row-gap: 16px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+    }
+    ul.product-grid > .grid__item {
+      width: 100% !important;
+      max-width: 100% !important;
+      flex: 0 0 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
   }
   @media screen and (min-width: 750px) {
     .product-grid {
