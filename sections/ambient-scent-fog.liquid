@@ -1,0 +1,208 @@
+{%- style -%}
+  .ambient-scent-fog {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    height: 35vh;
+    pointer-events: none !important;
+    z-index: 999;
+    overflow: hidden;
+  }
+
+  /* Fragrance Mist Clouds */
+  .ambient-scent-fog__cloud {
+    position: absolute;
+    bottom: -50px;
+    width: 60vw;
+    height: 250px;
+    background: radial-gradient(ellipse at center, rgba(245, 230, 185, 0.28) 0%, rgba(204, 164, 59, 0.12) 45%, rgba(255, 255, 255, 0) 75%);
+    filter: blur(35px);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none !important;
+    animation: fogRise 14s ease-in-out infinite;
+  }
+
+  .ambient-scent-fog__cloud--1 {
+    left: -10%;
+    animation-delay: 0s;
+  }
+
+  .ambient-scent-fog__cloud--2 {
+    left: 25%;
+    width: 50vw;
+    animation-delay: 4.5s;
+    background: radial-gradient(ellipse at center, rgba(255, 245, 220, 0.32) 0%, rgba(229, 193, 88, 0.15) 50%, rgba(255, 255, 255, 0) 75%);
+  }
+
+  .ambient-scent-fog__cloud--3 {
+    right: -10%;
+    width: 55vw;
+    animation-delay: 9s;
+  }
+
+  @keyframes fogRise {
+    0% {
+      opacity: 0;
+      transform: translateY(60px) scale(0.9);
+    }
+    35% {
+      opacity: {{ section.settings.fog_opacity | default: 0.25 }};
+      transform: translateY(-40px) scale(1.15);
+    }
+    70% {
+      opacity: {{ section.settings.fog_opacity | default: 0.25 | times: 0.7 }};
+      transform: translateY(-90px) scale(1.3);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-150px) scale(1.4);
+    }
+  }
+
+  /* Floating Petals Container */
+  .ambient-scent-fog__petals {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none !important;
+    z-index: 9998;
+    overflow: hidden;
+  }
+
+  .ambient-scent-fog__petal {
+    position: absolute;
+    bottom: -40px;
+    width: 18px;
+    height: 18px;
+    opacity: 0;
+    pointer-events: none !important;
+    animation: petalFloat 12s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  }
+
+  .ambient-scent-fog__petal svg {
+    width: 100%;
+    height: 100%;
+    fill: #cca43b;
+    opacity: 0.65;
+    filter: drop-shadow(0 2px 4px rgba(204, 164, 59, 0.2));
+  }
+
+  .ambient-scent-fog__petal--1 {
+    left: 12%;
+    animation-delay: 1s;
+    animation-duration: 11s;
+  }
+
+  .ambient-scent-fog__petal--2 {
+    left: 38%;
+    animation-delay: 5s;
+    animation-duration: 13s;
+    width: 14px;
+    height: 14px;
+  }
+
+  .ambient-scent-fog__petal--3 {
+    left: 65%;
+    animation-delay: 2.5s;
+    animation-duration: 14s;
+  }
+
+  .ambient-scent-fog__petal--4 {
+    left: 85%;
+    animation-delay: 8s;
+    animation-duration: 10.5s;
+    width: 16px;
+    height: 16px;
+  }
+
+  @keyframes petalFloat {
+    0% {
+      opacity: 0;
+      transform: translateY(0) rotate(0deg) translateX(0);
+    }
+    15% {
+      opacity: 0.75;
+    }
+    50% {
+      transform: translateY(-45vh) rotate(180deg) translateX(35px);
+    }
+    85% {
+      opacity: 0.6;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-95vh) rotate(360deg) translateX(-25px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ambient-scent-fog, .ambient-scent-fog__petals {
+      display: none !important;
+    }
+  }
+{%- endstyle -%}
+
+{%- if section.settings.enable_ambient_fog -%}
+  <div class="ambient-scent-fog" aria-hidden="true">
+    <div class="ambient-scent-fog__cloud ambient-scent-fog__cloud--1"></div>
+    <div class="ambient-scent-fog__cloud ambient-scent-fog__cloud--2"></div>
+    <div class="ambient-scent-fog__cloud ambient-scent-fog__cloud--3"></div>
+  </div>
+
+  {%- if section.settings.enable_petals -%}
+    <div class="ambient-scent-fog__petals" aria-hidden="true">
+      <div class="ambient-scent-fog__petal ambient-scent-fog__petal--1">
+        <svg viewBox="0 0 24 24"><path d="M12 2C9 7 4 9 4 14c0 4.4 3.6 8 8 8s8-3.6 8-8c0-5-5-7-8-12z"/></svg>
+      </div>
+      <div class="ambient-scent-fog__petal ambient-scent-fog__petal--2">
+        <svg viewBox="0 0 24 24"><path d="M12 2C9 7 4 9 4 14c0 4.4 3.6 8 8 8s8-3.6 8-8c0-5-5-7-8-12z"/></svg>
+      </div>
+      <div class="ambient-scent-fog__petal ambient-scent-fog__petal--3">
+        <svg viewBox="0 0 24 24"><path d="M12 2C9 7 4 9 4 14c0 4.4 3.6 8 8 8s8-3.6 8-8c0-5-5-7-8-12z"/></svg>
+      </div>
+      <div class="ambient-scent-fog__petal ambient-scent-fog__petal--4">
+        <svg viewBox="0 0 24 24"><path d="M12 2C9 7 4 9 4 14c0 4.4 3.6 8 8 8s8-3.6 8-8c0-5-5-7-8-12z"/></svg>
+      </div>
+    </div>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Ambient Fragrance Mist",
+  "tag": "section",
+  "class": "section-ambient-fog",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_ambient_fog",
+      "label": "Enable Ambient Fragrance Mist Fog",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_petals",
+      "label": "Enable Floating Floral Petals",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "fog_opacity",
+      "min": 0.1,
+      "max": 0.5,
+      "step": 0.05,
+      "default": 0.25,
+      "label": "Mist Opacity (Subtle & Non-Intrusive)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Ambient Fragrance Mist"
+    }
+  ]
+}
+{% endschema %}
