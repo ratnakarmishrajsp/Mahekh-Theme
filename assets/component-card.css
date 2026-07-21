@@ -597,45 +597,76 @@
 /* --- High Conversion CRO Product Card Extensions --- */
 .product-card-wrapper {
   transition: transform 0.35s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.35s ease;
-  border-radius: 10px;
+  border-radius: 8px;
   background: #ffffff;
-  padding: 1.4rem;
+  padding: 0.6rem;
   border: 1px solid rgba(204, 164, 59, 0.2);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+}
+
+@media screen and (min-width: 750px) {
+  .product-card-wrapper {
+    padding: 1.2rem;
+    border-radius: 10px;
+  }
 }
 
 .product-card-wrapper:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   border-color: #cca43b;
-  box-shadow: 0 16px 32px rgba(204, 164, 59, 0.18);
+  box-shadow: 0 12px 28px rgba(204, 164, 59, 0.15);
 }
 
 .card__content {
-  padding: 1.5rem 0.5rem 0.5rem 0.5rem !important;
+  padding: 0.8rem 0.2rem 0.2rem 0.2rem !important;
+}
+
+@media screen and (min-width: 750px) {
+  .card__content {
+    padding: 1.2rem 0.5rem 0.5rem 0.5rem !important;
+  }
 }
 
 .card__heading {
-  margin-bottom: 0.8rem !important;
-  font-size: 1.6rem !important;
+  margin-bottom: 0.4rem !important;
+  font-size: 1.3rem !important;
   font-family: 'Playfair Display', serif !important;
   font-weight: 600 !important;
+  line-height: 1.3 !important;
+}
+
+@media screen and (min-width: 750px) {
+  .card__heading {
+    margin-bottom: 0.8rem !important;
+    font-size: 1.6rem !important;
+  }
 }
 
 .custom-card-savings-badge {
   position: absolute;
-  top: 14px;
-  left: 14px;
+  top: 8px;
+  left: 8px;
   z-index: 5;
   background: #121212;
   color: #cca43b;
   border: 1px solid #cca43b;
-  font-size: 1.15rem;
+  font-size: 0.95rem;
   font-weight: 700;
-  padding: 5px 12px;
+  padding: 3px 7px;
   border-radius: 4px;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.03em;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   animation: pulseGoldGlow 2.5s infinite ease-in-out;
+}
+
+@media screen and (min-width: 750px) {
+  .custom-card-savings-badge {
+    top: 12px;
+    left: 12px;
+    font-size: 1.15rem;
+    padding: 5px 12px;
+  }
 }
 
 @keyframes pulseGoldGlow {
@@ -645,26 +676,41 @@
 }
 
 .quick-add {
-  margin-top: 1.4rem !important;
+  margin-top: 0.8rem !important;
   display: flex !important;
   flex-direction: column !important;
-  gap: 0.8rem !important;
+  gap: 0.5rem !important;
+}
+
+@media screen and (min-width: 750px) {
+  .quick-add {
+    margin-top: 1.2rem !important;
+    gap: 0.8rem !important;
+  }
 }
 
 .quick-add__submit {
   background: linear-gradient(135deg, #cca43b 0%, #e5c158 100%) !important;
   color: #121212 !important;
   font-weight: 700 !important;
-  font-size: 1.25rem !important;
-  letter-spacing: 0.06em !important;
+  font-size: 1.05rem !important;
+  letter-spacing: 0.04em !important;
   text-transform: uppercase !important;
   border: none !important;
-  border-radius: 6px !important;
-  padding: 1.2rem 1.5rem !important;
-  box-shadow: 0 4px 14px rgba(204, 164, 59, 0.3) !important;
+  border-radius: 4px !important;
+  padding: 0.8rem 0.6rem !important;
+  box-shadow: 0 4px 12px rgba(204, 164, 59, 0.25) !important;
   transition: all 0.3s ease !important;
   width: 100% !important;
   cursor: pointer !important;
+}
+
+@media screen and (min-width: 750px) {
+  .quick-add__submit {
+    font-size: 1.25rem !important;
+    border-radius: 6px !important;
+    padding: 1.1rem 1.5rem !important;
+  }
 }
 
 .quick-add__submit:hover {
@@ -677,19 +723,27 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 0.5rem !important;
+  gap: 0.4rem !important;
   width: 100% !important;
-  padding: 1.1rem 1.5rem !important;
+  padding: 0.7rem 0.5rem !important;
   background: #faf8f5 !important;
   color: #121212 !important;
-  border: 1.5px solid rgba(204, 164, 59, 0.4) !important;
-  border-radius: 6px !important;
-  font-size: 1.25rem !important;
+  border: 1px solid rgba(204, 164, 59, 0.4) !important;
+  border-radius: 4px !important;
+  font-size: 1.0rem !important;
   font-weight: 600 !important;
   text-decoration: none !important;
-  letter-spacing: 0.04em !important;
+  letter-spacing: 0.02em !important;
   transition: all 0.3s ease !important;
   box-sizing: border-box !important;
+}
+
+@media screen and (min-width: 750px) {
+  .custom-card-view-details-btn {
+    padding: 1.0rem 1.5rem !important;
+    font-size: 1.2rem !important;
+    border-radius: 6px !important;
+  }
 }
 
 .custom-card-view-details-btn:hover {
@@ -698,5 +752,24 @@
   color: #cca43b !important;
   transform: translateY(-2px) !important;
 }
+
+/* --- Ensure 2 products per row on Mobile --- */
+@media screen and (max-width: 749px) {
+  .grid--2-col-tablet-down {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    margin-left: -0.5rem !important;
+    margin-right: -0.5rem !important;
+  }
+
+  .grid--2-col-tablet-down .grid__item {
+    width: calc(50% - 1rem) !important;
+    max-width: calc(50% - 1rem) !important;
+    flex: 0 0 calc(50% - 1rem) !important;
+    margin: 0.5rem !important;
+    padding: 0 !important;
+  }
+}
+
 
 
