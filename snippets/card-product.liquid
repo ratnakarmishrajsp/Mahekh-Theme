@@ -342,6 +342,9 @@
                   <div id="QuickAddInfo-{{ card_product.id }}" class="quick-add-modal__content-info"></div>
                 </div>
               </quick-add-modal>
+              <a href="{{ card_product.url }}" class="custom-card-view-details-btn">
+                View Details <span>➔</span>
+              </a>
             {%- else -%}
               <product-form data-section-id="{{ section.id }}">
                 {%- form 'product',
@@ -392,6 +395,9 @@
                   </button>
                 {%- endform -%}
               </product-form>
+              <a href="{{ card_product.url }}" class="custom-card-view-details-btn">
+                View Details <span>➔</span>
+              </a>
             {%- endif -%}
           </div>
         {% elsif quick_add == 'bulk' %}
