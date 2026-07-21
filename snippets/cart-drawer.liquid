@@ -221,26 +221,47 @@
         }
       </script>
 
-      <!-- Free Gift Progress Bar -->
+      <!-- Tiered Discount & Free Gift Progress Bar -->
       {%- if cart != empty -%}
-        {%- assign gift_threshold = 49900 -%}
+        {%- assign threshold_shipping = 49900 -%}
+        {%- assign threshold_discount = 69900 -%}
+        {%- assign threshold_pouch = 129900 -%}
         {%- assign cart_total = cart.total_price -%}
-        <div class="cart-drawer__shipping-bar">
-          {%- if cart_total < gift_threshold -%}
-            {%- assign remaining = gift_threshold | minus: cart_total -%}
-            {%- assign pct = cart_total | times: 100 | divided_by: gift_threshold -%}
-            <p class="cart-drawer__shipping-msg">
-              Add <strong>{{ remaining | money }}</strong> more for a <strong>FREE MINI ATTAR SAMPLE</strong>! <br><span style="font-size: 1.05rem; opacity: 0.8;">(You already get <strong>FREE SHIPPING</strong>)</span>
+
+        <div class="cart-drawer__shipping-bar" style="padding: 1.4rem 2rem; background: #faf8f5; border-bottom: 1px solid rgba(204, 164, 59, 0.2); text-align: center;">
+          {%- if cart_total < threshold_shipping -%}
+            {%- assign remaining = threshold_shipping | minus: cart_total -%}
+            {%- assign pct = cart_total | times: 100 | divided_by: threshold_pouch -%}
+            <p class="cart-drawer__shipping-msg" style="font-size: 1.25rem; font-weight: 600; color: #121212; margin: 0 0 0.6rem 0;">
+              Add <strong>{{ remaining | money }}</strong> more for 🚚 <strong>FREE SHIPPING & COD</strong>!
             </p>
-            <div class="cart-drawer__bar-track">
-              <div class="cart-drawer__bar-fill" style="width: {{ pct }}%;"></div>
+            <div class="cart-drawer__bar-track" style="width: 100%; height: 7px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;">
+              <div class="cart-drawer__bar-fill" style="width: {{ pct }}%; height: 100%; background: linear-gradient(90deg, #cca43b, #f1cb64); transition: width 0.4s ease;"></div>
+            </div>
+          {%- elsif cart_total < threshold_discount -%}
+            {%- assign remaining = threshold_discount | minus: cart_total -%}
+            {%- assign pct = cart_total | times: 100 | divided_by: threshold_pouch -%}
+            <p class="cart-drawer__shipping-msg" style="font-size: 1.25rem; font-weight: 600; color: #121212; margin: 0 0 0.6rem 0;">
+              🚚 <strong>FREE SHIPPING UNLOCKED!</strong> Add <strong>{{ remaining | money }}</strong> more for 💵 <strong>₹100 INSTANT DISCOUNT</strong>!
+            </p>
+            <div class="cart-drawer__bar-track" style="width: 100%; height: 7px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;">
+              <div class="cart-drawer__bar-fill" style="width: {{ pct }}%; height: 100%; background: linear-gradient(90deg, #cca43b, #f1cb64); transition: width 0.4s ease;"></div>
+            </div>
+          {%- elsif cart_total < threshold_pouch -%}
+            {%- assign remaining = threshold_pouch | minus: cart_total -%}
+            {%- assign pct = cart_total | times: 100 | divided_by: threshold_pouch -%}
+            <p class="cart-drawer__shipping-msg" style="font-size: 1.25rem; font-weight: 600; color: #121212; margin: 0 0 0.6rem 0;">
+              🎉 <strong>₹100 INSTANT DISCOUNT UNLOCKED!</strong> Add <strong>{{ remaining | money }}</strong> more for 🎁 <strong>FREE VELVET POUCH</strong>!
+            </p>
+            <div class="cart-drawer__bar-track" style="width: 100%; height: 7px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;">
+              <div class="cart-drawer__bar-fill" style="width: {{ pct }}%; height: 100%; background: linear-gradient(90deg, #cca43b, #f1cb64); transition: width 0.4s ease;"></div>
             </div>
           {%- else -%}
-            <p class="cart-drawer__shipping-msg">
-              🎉 Congratulations! You have unlocked a <strong>FREE MINI ATTAR SAMPLE</strong>! <br><span style="font-size: 1.05rem; opacity: 0.8;">(Plus <strong>FREE SHIPPING</strong>)</span>
+            <p class="cart-drawer__shipping-msg" style="font-size: 1.25rem; font-weight: 700; color: #121212; margin: 0 0 0.6rem 0;">
+              🎉 <strong>MAXIMUM DISCOUNT & GIFTS UNLOCKED!</strong> <br><span style="font-size: 1.1rem; color: #cca43b;">(Free Shipping + ₹100 Instant Discount + Free Velvet Pouch)</span>
             </p>
-            <div class="cart-drawer__bar-track">
-              <div class="cart-drawer__bar-fill" style="width: 100%; background: linear-gradient(90deg, #cca43b, #ffd700); animation: fbGoldShine 2s infinite linear;"></div>
+            <div class="cart-drawer__bar-track" style="width: 100%; height: 7px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;">
+              <div class="cart-drawer__bar-fill" style="width: 100%; height: 100%; background: linear-gradient(90deg, #cca43b, #ffd700); animation: fbGoldShine 2s infinite linear;"></div>
             </div>
           {%- endif -%}
         </div>
@@ -680,6 +701,51 @@
           <div id="CartDrawer-CartErrors" role="alert"></div>
         </form>
       </cart-drawer-items>
+
+      <!-- Exclusive ₹699 Attar Upsell Card (Save ₹100 Instant Discount) -->
+      {%- if cart != empty -%}
+        {%- assign upsell_collection = collections['set-of-3-premium-attars'] | default: collections['all'] -%}
+        {%- assign upsell_item = upsell_collection.products.first -%}
+        {%- if upsell_item != blank -%}
+          <div class="cart-upsell" style="padding: 1.5rem 2rem; border-top: 1px solid rgba(204, 164, 59, 0.2); background: #faf8f5;">
+            <div class="cart-upsell__banner" style="background: linear-gradient(135deg, #121212 0%, #2a2212 100%); color: #ffffff; padding: 0.8rem 1.2rem; border-radius: 6px; margin-bottom: 1.2rem; display: flex; align-items: center; justify-content: space-between;">
+              <span style="font-size: 1.15rem; font-weight: 700; color: #f1cb64; letter-spacing: 0.04em;">🔥 EXCLUSIVE ADD-ON OFFER</span>
+              <span style="font-size: 1.1rem; background: #cca43b; color: #121212; font-weight: 800; padding: 2px 8px; border-radius: 4px;">SAVE ₹100</span>
+            </div>
+            
+            <div class="cart-upsell__grid">
+              <div class="cart-upsell__item" style="background: #ffffff; border: 1px solid rgba(204, 164, 59, 0.3); border-radius: 8px; padding: 1.2rem; display: flex; align-items: center; gap: 1.2rem;">
+                {%- if upsell_item.featured_media != blank -%}
+                  <img src="{{ upsell_item.featured_media | image_url: width: 120 }}" alt="{{ upsell_item.title | escape }}" class="cart-upsell__img" width="56" height="56" loading="lazy" style="border-radius: 6px; object-fit: cover;">
+                {%- else -%}
+                  <div style="width: 56px; height: 56px; background: #faf8f5; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem;">✨</div>
+                {%- endif -%}
+
+                <div class="cart-upsell__info" style="flex: 1;">
+                  <h4 class="cart-upsell__title" style="font-size: 1.25rem; font-weight: 700; color: #121212; margin: 0 0 0.3rem 0;">
+                    {{ upsell_item.title }}
+                  </h4>
+                  <div style="display: flex; align-items: center; gap: 0.8rem;">
+                    <span style="font-size: 1.3rem; font-weight: 800; color: #cca43b;">₹599</span>
+                    <span style="font-size: 1.1rem; text-decoration: line-through; opacity: 0.5;">₹699</span>
+                    <span style="font-size: 1rem; color: #10b981; font-weight: 700; background: rgba(16, 185, 129, 0.1); padding: 1px 6px; border-radius: 4px;">Instant ₹100 Off</span>
+                  </div>
+                </div>
+
+                <button 
+                  type="button" 
+                  class="cart-upsell__add-btn" 
+                  onclick="addUpsellVariant('{{ upsell_item.selected_or_first_available_variant.id }}')" 
+                  style="background: linear-gradient(135deg, #cca43b 0%, #e5c158 100%); color: #121212; border: none; padding: 10px 14px; border-radius: 6px; font-size: 1.15rem; font-weight: 800; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 12px rgba(204, 164, 59, 0.3);"
+                >
+                  + ADD FOR ₹599
+                </button>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+
       <div class="drawer__footer">
         {%- if settings.show_cart_note -%}
           <details id="Details-CartDrawer">
@@ -777,8 +843,9 @@
             {% if cart == empty %}
               disabled
             {% endif %}
+            style="background: linear-gradient(135deg, #10b981 0%, #047857 100%) !important; color: #ffffff !important; font-size: 1.35rem !important; font-weight: 800 !important; letter-spacing: 0.04em !important; padding: 1.4rem !important; border-radius: 8px !important; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35) !important;"
           >
-            {{ 'sections.cart.checkout' | t }}
+            PROCEED TO CHECKOUT (COD AVAILABLE) ➔
           </button>
         </div>
       </div>
