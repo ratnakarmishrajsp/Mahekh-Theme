@@ -1,12 +1,3 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "main": {
@@ -41,18 +32,18 @@
         "collapsible_tab_shipping": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "Shipping & Delivery",
+            "heading": "Shipping & Cash on Delivery",
             "icon": "truck",
-            "content": "<p>We offer fast delivery across India. Orders are typically shipped within 24-48 hours and delivered in 3-7 business days. Free shipping is available on all prepaid orders.</p>",
+            "content": "<p>We offer 100% Cash on Delivery (COD) and fast express shipping across India. Orders are typically shipped within 24 hours and delivered in 3 to 5 business days.</p>",
             "page": ""
           }
         },
         "collapsible_tab_kannauj": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "The Kannauj Heritage",
+            "heading": "The Kannauj Heritage (100% Alcohol-Free)",
             "icon": "leaf",
-            "content": "<p>Each drop of Mahekh attar is distilled using traditional copper pots (Degs) and clay receivers (Bhapkas) in Kannauj, the perfume capital of India. We source only the purest natural blossoms and ingredients.</p>",
+            "content": "<p>Each drop of Mahekh attar is distilled using traditional copper pots (Degs) and clay receivers (Bhapkas) in Kannauj, the perfume capital of India. We source only 100% pure natural blossoms and sandalwood oil base with zero alcohol.</p>",
             "page": ""
           }
         }
@@ -86,6 +77,100 @@
         "exit_popup_discount_amount": "₹100"
       }
     },
+    "fragrance_profile_section": {
+      "type": "product-fragrance-profile",
+      "blocks": {
+        "note_top": {
+          "type": "scent_note",
+          "settings": {
+            "type": "top",
+            "name": "Katcha Bel & Fresh Citrus",
+            "desc": "An invigorating opening of crisp green bel and citrus blossoms that creates a refreshing, sweet floral aura."
+          }
+        },
+        "note_heart": {
+          "type": "scent_note",
+          "settings": {
+            "type": "heart",
+            "name": "Kashmiri Kesar & Mysore Chandan",
+            "desc": "A rich, creamy heart of pure saffron threads and sandalwood that adds deep elegance and warmth."
+          }
+        },
+        "note_base": {
+          "type": "scent_note",
+          "settings": {
+            "type": "base",
+            "name": "Royal White Mogra & Sandalwood Base",
+            "desc": "A long-lasting, hypnotic drydown of natural mogra blossoms and sandalwood that stays for over 24 hours."
+          }
+        }
+      },
+      "block_order": [
+        "note_top",
+        "note_heart",
+        "note_base"
+      ],
+      "settings": {
+        "title": "Fragrance Profile & Notes",
+        "heading_size": "h1",
+        "subtitle": "THE OLFACTORY EXPERIENCE",
+        "note_top_title": "Top Notes",
+        "note_top_desc": "First impressions (0 - 30 mins)",
+        "note_heart_title": "Heart Notes",
+        "note_heart_desc": "The core fragrance (2 - 8 hours)",
+        "note_base_title": "Base Notes",
+        "note_base_desc": "Long-lasting drydown (8 - 24+ hours)",
+        "show_radar": true,
+        "radar_title": "Performance Gauges",
+        "longevity": 5,
+        "sillage": 5,
+        "versatility": 4,
+        "uniqueness": 5,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "scent_timeline_section": {
+      "type": "custom-scent-timeline",
+      "settings": {
+        "title": "24-Hour Fragrance Journey",
+        "subtitle": "SCENT EVOLUTION TIMELINE",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "product_making_process_section": {
+      "type": "product-making-process",
+      "settings": {
+        "title": "How We Distill Our Pure Attars",
+        "subtitle": "CRAFTSMANSHIP & HERITAGE",
+        "step_1_title": "Raw Floral Harvest",
+        "step_1_desc": "Fresh Mogra blossoms, Katcha Bel, and Kesar are hand-picked at dawn in Kannauj when scent concentration is highest.",
+        "step_2_title": "Copper Clay Distillation (Deg)",
+        "step_2_desc": "Natural flowers are sealed in copper pots (Degs) with clay and heated over traditional wood-fire furnaces.",
+        "step_3_title": "Clay Condensation (Bhapka)",
+        "step_3_desc": "Pure fragrant steam condenses into cold clay receivers (Bhapkas) containing sandalwood base oil. Zero alcohol, 100% pure.",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "product_application_guide_section": {
+      "type": "product-application-guide",
+      "settings": {
+        "title": "How To Apply Concentrated Attar",
+        "heading_size": "h1",
+        "subtitle": "LONGEVITY GUIDE",
+        "step_1_title": "Apply on Pulse Points",
+        "step_1_desc": "Apply the perfume oil directly to pulse points (wrists, inner elbows, neck, and behind ears). Body heat diffuses the scent naturally.",
+        "step_2_title": "Dab, Don't Rub",
+        "step_2_desc": "Gently dab the oil on your skin. Never rub wrists together, as rubbing friction breaks down top note molecules.",
+        "step_3_title": "Moisturize First",
+        "step_3_desc": "Fragrance lasts significantly longer on moisturized skin. Apply unscented moisturizer to pulse points before dabbing.",
+        "color_scheme": "scheme-1",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
     "product_reviews_xCrieU": {
       "type": "product-reviews",
       "blocks": {
@@ -93,7 +178,7 @@
           "type": "review",
           "settings": {
             "rating": 5,
-            "quote": "This Kasturi Attar has a soul. Its sillage is warm and projection is balanced. The packaging looks premium and fits a royal collection.",
+            "quote": "This Set of 3 Attar Combo has a soul! Katcha Bel is super refreshing, Kesar Chandan feels royal, and Mogra lasts all night long. Must buy!",
             "author": "Rohan Gupta",
             "location": "Lucknow",
             "verified_buyer": true
@@ -103,7 +188,7 @@
           "type": "review",
           "settings": {
             "rating": 5,
-            "quote": "Pure concentrated oil without any sticky feeling. It lasts all day on clothes. Incredible craft from Kannauj.",
+            "quote": "Pure concentrated oil without any sticky feeling or synthetic alcohol smell. Lasts over 24 hours on clothes. Kannauj craftsmanship at its best!",
             "author": "Anjali Sen",
             "location": "Bangalore",
             "verified_buyer": true
@@ -113,7 +198,7 @@
           "type": "review",
           "settings": {
             "rating": 5,
-            "quote": "Very close to traditional sandalwood base. Free from alcohol, so it does not irritate my skin. 5 stars on quality.",
+            "quote": "100% alcohol-free so it doesn't dry my skin. Delivered in 3 days with COD. 5 stars for packaging and scent quality!",
             "author": "Vikram Singh",
             "location": "Jaipur",
             "verified_buyer": true
@@ -127,28 +212,11 @@
       ],
       "name": "Bespoke Product Reviews",
       "settings": {
-        "title": "Patron Testimonials",
+        "title": "Patron Reviews & Testimonials",
         "heading_size": "h1",
         "subtitle": "TRUST & APPRECIATION",
         "columns_desktop": 3,
         "color_scheme": "",
-        "padding_top": 40,
-        "padding_bottom": 40
-      }
-    },
-    "product_application_guide_section": {
-      "type": "product-application-guide",
-      "settings": {
-        "title": "How To Apply Concentrated Attar",
-        "heading_size": "h1",
-        "subtitle": "LONGEVITY GUIDE",
-        "step_1_title": "Apply on Pulse Points",
-        "step_1_desc": "Apply the perfume oil directly to pulse points (wrists, inner elbows, neck, and behind ears). Body heat in these spots diffuses the scent naturally.",
-        "step_2_title": "Dab, Don't Rub",
-        "step_2_desc": "Gently dab the oil on your skin. Never rub wrists together, as rubbing friction breaks down the delicate top note molecules and reduces scent longevity.",
-        "step_3_title": "Moisturize First",
-        "step_3_desc": "Fragrance lasts significantly longer on moisturized skin. Apply an unscented moisturizer or lotion to pulse points before dabbing your attar.",
-        "color_scheme": "scheme-1",
         "padding_top": 40,
         "padding_bottom": 40
       }
@@ -168,7 +236,7 @@
           "type": "usp",
           "settings": {
             "icon": "stopwatch",
-            "title": "Long Lasting",
+            "title": "24+ Hours Lasting",
             "text": "Carefully selected ingredients that keep you fragrant all day long."
           }
         },
@@ -184,8 +252,8 @@
           "type": "usp",
           "settings": {
             "icon": "heart",
-            "title": "Premium & Pure",
-            "text": "No animal testing, crafted with clean and authentic ingredients."
+            "title": "Cash on Delivery Available",
+            "text": "100% COD available across India with express shipping."
           }
         }
       },
@@ -207,7 +275,7 @@
     "related-products": {
       "type": "related-products",
       "settings": {
-        "heading": "Other industry favorites",
+        "heading": "Other Royal Favorites",
         "heading_size": "h2",
         "products_to_show": 5,
         "columns_desktop": 5,
@@ -215,9 +283,9 @@
         "color_scheme": "scheme-1",
         "image_ratio": "adapt",
         "image_shape": "default",
-        "show_secondary_image": false,
+        "show_secondary_image": true,
         "show_vendor": false,
-        "show_rating": false,
+        "show_rating": true,
         "padding_top": 36,
         "padding_bottom": 44
       }
@@ -225,8 +293,11 @@
   },
   "order": [
     "main",
-    "product_reviews_xCrieU",
+    "fragrance_profile_section",
+    "scent_timeline_section",
+    "product_making_process_section",
     "product_application_guide_section",
+    "product_reviews_xCrieU",
     "custom_usp_grid_section",
     "related-products"
   ]
