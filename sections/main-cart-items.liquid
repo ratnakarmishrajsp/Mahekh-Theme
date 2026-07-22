@@ -110,26 +110,9 @@
 
                       <a href="{{ item.url }}" class="cart-item__name h4 break">{{ item.product.title | escape }}</a>
 
-                      {%- if item.original_price != item.final_price -%}
-                        <div class="cart-item__discounted-prices">
-                          <span class="visually-hidden">
-                            {{ 'products.product.price.regular_price' | t }}
-                          </span>
-                          <s class="cart-item__old-price product-option">
-                            {{- item.original_price | money -}}
-                          </s>
-                          <span class="visually-hidden">
-                            {{ 'products.product.price.sale_price' | t }}
-                          </span>
-                          <strong class="cart-item__final-price product-option">
-                            {{ item.final_price | money }}
-                          </strong>
-                        </div>
-                      {%- else -%}
-                        <div class="product-option">
-                          {{ item.original_price | money }}
-                        </div>
-                      {%- endif -%}
+                      <div class="product-option" style="font-weight: 700; color: #121212;">
+                        {{ item.original_price | money }}
+                      </div>
 
                       {%- if item.product.has_only_default_variant == false
                         or item.properties.size != 0
@@ -166,42 +149,16 @@
 
                         <p class="product-option">{{ item.selling_plan_allocation.selling_plan.name }}</p>
                       {%- endif -%}
-
-                      <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
-                        {%- for discount in item.line_level_discount_allocations -%}
-                          <li class="discounts__discount">
-                            {{- 'icon-discount.svg' | inline_asset_content -}}
-                            {{ discount.discount_application.title | escape }}
-                          </li>
-                        {%- endfor -%}
-                      </ul>
                     </td>
 
                     <td class="cart-item__totals right medium-hide large-up-hide">
                       {%- render 'loading-spinner' -%}
                       <div class="cart-item__price-wrapper">
-                        {%- if item.original_line_price != item.final_line_price -%}
-                          <dl class="cart-item__discounted-prices">
-                            <dt class="visually-hidden">
-                              {{ 'products.product.price.regular_price' | t }}
-                            </dt>
-                            <dd>
-                              <s class="cart-item__old-price price price--end">
-                                {{ item.original_line_price | money }}
-                              </s>
-                            </dd>
-                            <dt class="visually-hidden">
-                              {{ 'products.product.price.sale_price' | t }}
-                            </dt>
-                            <dd class="price price--end">
-                              {{ item.final_line_price | money }}
-                            </dd>
-                          </dl>
-                        {%- else -%}
-                          <span class="price price--end">
-                            {{ item.original_line_price | money }}
-                          </span>
-                        {%- endif -%}
+                        <span class="price price--end" style="font-weight: 700;">
+                          {{ item.original_line_price | money }}
+                        </span>
+                      </div>
+                    </td>
 
                         {%- if item.variant.available and item.unit_price_measurement -%}
                           {% render 'unit-price', price: item.unit_price, measurement: item.unit_price_measurement %}
@@ -406,29 +363,9 @@
 
                     <td class="cart-item__totals right small-hide">
                       {%- render 'loading-spinner' -%}
-                      <div class="cart-item__price-wrapper">
-                        {%- if item.original_line_price != item.final_line_price -%}
-                          <dl class="cart-item__discounted-prices">
-                            <dt class="visually-hidden">
-                              {{ 'products.product.price.regular_price' | t }}
-                            </dt>
-                            <dd>
-                              <s class="cart-item__old-price price price--end">
-                                {{ item.original_line_price | money }}
-                              </s>
-                            </dd>
-                            <dt class="visually-hidden">
-                              {{ 'products.product.price.sale_price' | t }}
-                            </dt>
-                            <dd class="price price--end">
-                              {{ item.final_line_price | money }}
-                            </dd>
-                          </dl>
-                        {%- else -%}
-                          <span class="price price--end">
-                            {{ item.original_line_price | money }}
-                          </span>
-                        {%- endif -%}
+                        <span class="price price--end" style="font-weight: 700;">
+                          {{ item.original_line_price | money }}
+                        </span>
 
                         {%- if item.variant.available and item.unit_price_measurement -%}
                           {% render 'unit-price', price: item.unit_price, measurement: item.unit_price_measurement %}

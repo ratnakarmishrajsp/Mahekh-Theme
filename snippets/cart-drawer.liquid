@@ -227,7 +227,7 @@
       <!-- Free Shipping & Prepaid Discount Progress Bar -->
       {%- if cart != empty -%}
         {%- assign threshold_shipping = 49900 -%}
-        {%- assign cart_total = cart.total_price -%}
+        {%- assign cart_total = cart.original_total_price -%}
 
         <div class="cart-drawer__shipping-bar" style="padding: 1.2rem 2rem; background: #faf8f5; border-bottom: 1px solid rgba(204, 164, 59, 0.2); text-align: center;">
           {%- if cart_total < threshold_shipping -%}
@@ -332,26 +332,9 @@
                             {{- item.product.title | escape -}}
                           </a>
 
-                          {%- if item.original_price != item.final_price -%}
-                            <div class="cart-item__discounted-prices">
-                              <span class="visually-hidden">
-                                {{ 'products.product.price.regular_price' | t }}
-                              </span>
-                              <s class="cart-item__old-price product-option">
-                                {{- item.original_price | money -}}
-                              </s>
-                              <span class="visually-hidden">
-                                {{ 'products.product.price.sale_price' | t }}
-                              </span>
-                              <strong class="cart-item__final-price product-option">
-                                {{ item.final_price | money }}
-                              </strong>
-                            </div>
-                          {%- else -%}
-                            <div class="product-option">
-                              {{ item.original_price | money }}
-                            </div>
-                          {%- endif -%}
+                          <div class="product-option" style="font-weight: 700; color: #121212;">
+                            {{ item.original_price | money }}
+                          </div>
 
                           {%- if item.product.has_only_default_variant == false
                             or item.properties.size != 0
@@ -396,44 +379,14 @@
 
                             <p class="product-option">{{ item.selling_plan_allocation.selling_plan.name }}</p>
                           {%- endif -%}
-
-                          <ul
-                            class="discounts list-unstyled"
-                            role="list"
-                            aria-label="{{ 'customer.order.discount' | t }}"
-                          >
-                            {%- for discount in item.line_level_discount_allocations -%}
-                              <li class="discounts__discount">
-                                {{- 'icon-discount.svg' | inline_asset_content -}}
-                                {{ discount.discount_application.title }}
-                              </li>
-                            {%- endfor -%}
-                          </ul>
                         </td>
 
                         <td class="cart-item__totals right" role="cell" headers="CartDrawer-ColumnTotal">
                           {%- render 'loading-spinner' -%}
                           <div class="cart-item__price-wrapper">
-                            {%- if item.original_line_price != item.final_line_price -%}
-                              <div class="cart-item__discounted-prices">
-                                <span class="visually-hidden">
-                                  {{ 'products.product.price.regular_price' | t }}
-                                </span>
-                                <s class="cart-item__old-price price price--end">
-                                  {{ item.original_line_price | money }}
-                                </s>
-                                <span class="visually-hidden">
-                                  {{ 'products.product.price.sale_price' | t }}
-                                </span>
-                                <span class="price price--end">
-                                  {{ item.final_line_price | money }}
-                                </span>
-                              </div>
-                            {%- else -%}
-                              <span class="price price--end">
-                                {{ item.original_line_price | money }}
-                              </span>
-                            {%- endif -%}
+                            <span class="price price--end" style="font-weight: 700;">
+                              {{ item.original_line_price | money }}
+                            </span>
 
                             {%- if item.variant.available and item.unit_price_measurement -%}
                               {% render 'unit-price', price: item.unit_price, measurement: item.unit_price_measurement %}
@@ -765,23 +718,9 @@
         <!-- Subtotals -->
 
         <div class="cart-drawer__footer" {{ block.shopify_attributes }}>
-          <div>
-            {%- if cart.cart_level_discount_applications.size > 0 -%}
-              <ul class="discounts list-unstyled" role="list" aria-label="{{ 'customer.order.discount' | t }}">
-                {%- for discount in cart.cart_level_discount_applications -%}
-                  <li class="discounts__discount discounts__discount--end">
-                    {{- 'icon-discount.svg' | inline_asset_content -}}
-                    {{ discount.title | escape }}
-                    (-{{ discount.total_allocated_amount | money }})
-                  </li>
-                {%- endfor -%}
-              </ul>
-            {%- endif -%}
-          </div>
-
           <div class="totals" role="status">
             <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-            <p class="totals__total-value" style="font-size: 1.6rem; font-weight: 800; color: #cca43b;">{{ cart.total_price | money }}</p>
+            <p class="totals__total-value" style="font-size: 1.6rem; font-weight: 800; color: #cca43b;">{{ cart.original_total_price | money }}</p>
           </div>
 
           <div style="font-size: 1.15rem; color: #10b981; font-weight: 600; text-align: center; margin: 0.4rem 0 1.2rem 0;">
