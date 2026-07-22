@@ -1,0 +1,1013 @@
+<div class="mh-trio-wrapper">
+  <!-- Google Fonts Import for Premium Royal Typography -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@400;500;600;700&display=swap');
+
+    .mh-trio-wrapper {
+      --gold: #cca43b;
+      --gold-light: rgba(204, 164, 59, 0.15);
+      --gold-glow: rgba(204, 164, 59, 0.35);
+      --dark: #1a1410;
+      --dark-card: #241b15;
+      --jasmine-green: #3a5335;
+      --mogra-gold: #d4a359;
+      --ratrani-purple: #4a3459;
+      --bg-cream: #faf7f2;
+      --white: #ffffff;
+      --text: #4a4038;
+      --text-dark: #1f1813;
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Montserrat', sans-serif;
+
+      background-color: var(--white);
+      color: var(--text-dark);
+      padding: 2.5rem 1rem;
+      max-width: 920px;
+      margin: 0 auto;
+      box-sizing: border-box;
+      line-height: 1.8;
+      font-family: var(--font-body);
+      animation: mhTrioFadeIn 0.8s ease-out forwards;
+    }
+
+    .mh-trio-wrapper *,
+    .mh-trio-wrapper *::before,
+    .mh-trio-wrapper *::after {
+      box-sizing: inherit;
+    }
+
+    @keyframes mhTrioFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Typography Utilities */
+    .mh-trio-title-large {
+      font-family: var(--font-heading);
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0 0 1.2rem 0;
+      color: var(--text-dark);
+      text-align: center;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+    }
+
+    .mh-trio-title-medium {
+      font-family: var(--font-heading);
+      font-size: 2.1rem;
+      font-weight: 700;
+      margin: 0 0 1.8rem 0;
+      color: var(--text-dark);
+      text-align: center;
+      position: relative;
+    }
+
+    .mh-trio-title-medium::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 2px;
+      background: var(--gold);
+      margin: 0.8rem auto 0 auto;
+    }
+
+    .mh-trio-subtitle {
+      font-family: var(--font-heading);
+      font-style: italic;
+      color: var(--gold);
+      font-size: 1.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 0.8rem;
+      display: block;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .mh-trio-intro-text {
+      color: var(--text);
+      font-size: 1.15rem;
+      margin-bottom: 2.5rem;
+      text-align: center;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.8;
+    }
+
+    .mh-trio-container {
+      margin-bottom: 4.5rem;
+    }
+
+    /* Shimmer Animation for Royal Dark Card */
+    @keyframes mhGoldSparkle {
+      0% { background-position: 0px 0px, 0px 0px; }
+      100% { background-position: 150px 300px, -150px 300px; }
+    }
+
+    .mh-trio-hero {
+      background: radial-gradient(circle at 50% 30%, #2e2217 0%, #140d08 100%);
+      color: var(--white);
+      padding: 4rem 2rem;
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+      border: 1.5px solid rgba(204, 164, 59, 0.4);
+      box-shadow: 0 15px 35px rgba(204, 164, 59, 0.12);
+      margin-bottom: 4rem;
+      text-align: center;
+    }
+
+    .mh-trio-hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-image: 
+        radial-gradient(1.5px 1.5px at 20px 40px, rgba(204, 164, 59, 0.6) 0%, transparent 100%),
+        radial-gradient(2px 2px at 75px 140px, rgba(255, 235, 180, 0.5) 0%, transparent 100%);
+      background-size: 150px 300px, 200px 400px;
+      animation: mhGoldSparkle 6s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.8;
+    }
+
+    .mh-trio-hero-title {
+      font-family: var(--font-heading);
+      font-size: 2.6rem;
+      color: var(--gold);
+      margin: 0 0 1rem 0;
+      font-weight: 700;
+      position: relative;
+      z-index: 3;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      line-height: 1.25;
+    }
+
+    .mh-trio-hero-tag {
+      display: inline-block;
+      border: 1px solid rgba(204, 164, 59, 0.5);
+      background: rgba(204, 164, 59, 0.15);
+      color: var(--gold);
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      padding: 0.4rem 1.2rem;
+      border-radius: 50px;
+      margin-bottom: 1.6rem;
+      position: relative;
+      z-index: 3;
+    }
+
+    .mh-trio-hero-desc {
+      color: #eae4dd;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      max-width: 720px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 3;
+    }
+
+    /* Trio Scent Grid */
+    .mh-trio-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-bottom: 4rem;
+    }
+
+    @media screen and (min-width: 768px) {
+      .mh-trio-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .mh-trio-card {
+      background: var(--white);
+      border: 1.5px solid rgba(204, 164, 59, 0.22);
+      border-radius: 12px;
+      padding: 2.2rem 1.6rem;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      position: relative;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .mh-trio-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold);
+      box-shadow: 0 15px 30px rgba(204, 164, 59, 0.15);
+    }
+
+    .mh-trio-card-tag {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 0.35rem 0.9rem;
+      border-radius: 4px;
+      margin-bottom: 1.2rem;
+    }
+
+    .mh-tag-jasmin {
+      background: rgba(58, 83, 53, 0.1);
+      color: var(--jasmine-green);
+      border: 1px solid rgba(58, 83, 53, 0.25);
+    }
+
+    .mh-tag-mogra {
+      background: rgba(212, 163, 89, 0.12);
+      color: #ab792c;
+      border: 1px solid rgba(212, 163, 89, 0.3);
+    }
+
+    .mh-tag-ratrani {
+      background: rgba(74, 52, 89, 0.1);
+      color: var(--ratrani-purple);
+      border: 1px solid rgba(74, 52, 89, 0.25);
+    }
+
+    .mh-trio-card-title {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin: 0 0 0.8rem 0;
+    }
+
+    .mh-trio-card-desc {
+      font-size: 1.05rem;
+      color: var(--text);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Note Breakdown Box inside Card */
+    .mh-trio-card-notes {
+      border-top: 1px dashed rgba(204, 164, 59, 0.3);
+      padding-top: 1.2rem;
+      text-align: left;
+      background: rgba(250, 247, 242, 0.6);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    .mh-trio-note-item {
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .mh-trio-note-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .mh-trio-note-item strong {
+      color: var(--text-dark);
+    }
+
+    /* Scent Metrics Progress Bars */
+    .mh-trio-metrics {
+      background: var(--bg-cream);
+      border: 1.5px solid rgba(204, 164, 59, 0.25);
+      padding: 2.2rem;
+      border-radius: 12px;
+      margin-bottom: 4rem;
+    }
+
+    .mh-trio-metric-row {
+      margin-bottom: 1.4rem;
+    }
+
+    .mh-trio-metric-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .mh-trio-metric-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.05rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .mh-trio-metric-label {
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .mh-trio-metric-value {
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .mh-trio-metric-bar-bg {
+      height: 8px;
+      background: rgba(204, 164, 59, 0.15);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .mh-trio-metric-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #cca43b 0%, #e8b849 100%);
+      border-radius: 4px;
+    }
+
+    /* Heritage Section */
+    .mh-trio-heritage {
+      background: var(--bg-cream);
+      border: 1.5px solid rgba(204, 164, 59, 0.28);
+      border-radius: 12px;
+      padding: 3rem 2rem;
+      margin-bottom: 4rem;
+      position: relative;
+    }
+
+    .mh-trio-heritage::before {
+      content: '';
+      position: absolute;
+      top: 12px; bottom: 12px; left: 12px; right: 12px;
+      border: 1px solid rgba(204, 164, 59, 0.2);
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    .mh-trio-heritage-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.8rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    @media screen and (min-width: 768px) {
+      .mh-trio-heritage-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .mh-trio-heritage-item {
+      background: var(--white);
+      border: 1px solid rgba(204, 164, 59, 0.2);
+      border-radius: 8px;
+      padding: 1.6rem;
+    }
+
+    .mh-trio-heritage-icon {
+      font-size: 2rem;
+      margin-bottom: 0.8rem;
+      display: block;
+    }
+
+    .mh-trio-heritage-item h4 {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      margin: 0 0 0.5rem 0;
+      color: var(--text-dark);
+    }
+
+    .mh-trio-heritage-item p {
+      font-size: 1rem;
+      color: var(--text);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* Badges Grid */
+    .mh-trio-badge-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.2rem;
+      margin-bottom: 4rem;
+    }
+
+    @media screen and (min-width: 600px) {
+      .mh-trio-badge-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .mh-trio-badge-card {
+      background: var(--white);
+      border: 1px solid rgba(204, 164, 59, 0.22);
+      border-radius: 8px;
+      padding: 1.4rem 0.8rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      color: var(--text-dark);
+      font-size: 0.95rem;
+    }
+
+    .mh-trio-badge-card:hover {
+      border-color: var(--gold);
+      background: rgba(204, 164, 59, 0.04);
+      transform: translateY(-3px);
+    }
+
+    .mh-trio-badge-icon {
+      font-size: 1.8rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Comparison Table */
+    .mh-trio-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1.5px solid rgba(204, 164, 59, 0.25);
+      margin-bottom: 4rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.02);
+    }
+
+    .mh-trio-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      text-align: left;
+      font-size: 1rem;
+      min-width: 550px;
+    }
+
+    .mh-trio-table th, 
+    .mh-trio-table td {
+      padding: 1.2rem 1.4rem;
+      border-bottom: 1px solid rgba(204, 164, 59, 0.15);
+    }
+
+    .mh-trio-table th {
+      background: rgba(204, 164, 59, 0.08);
+      color: var(--text-dark);
+      font-weight: 700;
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+    }
+
+    .mh-trio-table td strong {
+      color: var(--text-dark);
+    }
+
+    .mh-trio-check { color: #2e7d32; font-weight: 700; }
+    .mh-trio-cross { color: #c62828; font-weight: 700; }
+
+    /* How to Apply Guide */
+    .mh-trio-apply-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+
+    @media screen and (min-width: 768px) {
+      .mh-trio-apply-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .mh-trio-apply-step {
+      background: var(--bg-cream);
+      border: 1px solid rgba(204, 164, 59, 0.2);
+      border-radius: 10px;
+      padding: 1.8rem 1.2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .mh-trio-apply-step:hover {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+    }
+
+    .mh-trio-apply-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      background: rgba(204, 164, 59, 0.08);
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .mh-trio-apply-title {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      margin: 0 0 0.5rem 0;
+      color: var(--text-dark);
+    }
+
+    .mh-trio-apply-desc {
+      font-size: 0.95rem;
+      color: var(--text);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* FAQ Section (Accordion) */
+    .mh-trio-faq-item {
+      border-bottom: 1px solid rgba(204, 164, 59, 0.2);
+    }
+
+    .mh-trio-faq-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.3rem 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text-dark);
+      font-size: 1.1rem;
+      list-style: none;
+      user-select: none;
+    }
+
+    .mh-trio-faq-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .mh-trio-faq-icon {
+      width: 14px;
+      height: 14px;
+      color: var(--gold);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .mh-trio-faq-item[open] .mh-trio-faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .mh-trio-faq-content {
+      padding: 0 0.5rem 1.4rem 0.5rem;
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    /* Reviews Section */
+    .mh-trio-reviews-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    @media screen and (min-width: 768px) {
+      .mh-trio-reviews-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .mh-trio-review-card {
+      background: var(--white);
+      border: 1px solid rgba(204, 164, 59, 0.2);
+      border-radius: 10px;
+      padding: 1.6rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.015);
+    }
+
+    .mh-trio-review-stars {
+      color: var(--gold);
+      font-size: 1.1rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .mh-trio-review-text {
+      font-size: 0.95rem;
+      color: var(--text);
+      font-style: italic;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .mh-trio-review-author {
+      font-weight: 700;
+      color: var(--text-dark);
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mh-trio-verified {
+      color: #2e7d32;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* Pulsing CTA Purchase Banner Box */
+    .mh-trio-cta-box {
+      background: radial-gradient(circle at 50% 30%, #2e2217 0%, #140d08 100%);
+      border: 1.5px solid rgba(204, 164, 59, 0.45);
+      border-radius: 14px;
+      padding: 3rem 2rem;
+      text-align: center;
+      margin-top: 4rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 12px 30px rgba(204, 164, 59, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mh-trio-cta-title {
+      font-family: var(--font-heading);
+      font-size: 2.2rem;
+      color: var(--white);
+      margin: 0.5rem 0 1rem 0;
+      font-weight: 700;
+    }
+
+    .mh-trio-cta-text {
+      color: #eae4dd;
+      font-size: 1.1rem;
+      max-width: 650px;
+      margin: 0 auto 2rem auto;
+      line-height: 1.7;
+    }
+
+    @keyframes mhCtaPulse {
+      0% {
+        transform: translateY(-2px) scale(1);
+        box-shadow: 0 8px 25px rgba(204, 164, 59, 0.5), 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+      50% {
+        transform: translateY(-6px) scale(1.035);
+        box-shadow: 0 16px 38px rgba(204, 164, 59, 0.8), 0 8px 25px rgba(0, 0, 0, 0.4);
+      }
+      100% {
+        transform: translateY(-2px) scale(1);
+        box-shadow: 0 8px 25px rgba(204, 164, 59, 0.5), 0 4px 15px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    @keyframes mhCtaLightSweep {
+      0% { transform: translateX(-120%) rotate(25deg); }
+      25% { transform: translateX(220%) rotate(25deg); }
+      100% { transform: translateX(220%) rotate(25deg); }
+    }
+
+    .mh-trio-buy-now-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #cca43b 0%, #e8b849 50%, #b88e28 100%);
+      color: #140d08;
+      font-weight: 700;
+      font-size: 1.15rem;
+      padding: 1.1rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid #ffe89e;
+      animation: mhCtaPulse 3s ease-in-out infinite;
+      transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+
+    .mh-trio-buy-now-btn::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 50%;
+      height: 200%;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.6) 50%,
+        transparent 100%
+      );
+      transform: rotate(25deg);
+      animation: mhCtaLightSweep 3.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .mh-trio-buy-now-btn:hover {
+      transform: translateY(-6px) scale(1.05);
+      background: linear-gradient(135deg, #e8b849 0%, #ffd466 50%, #cca43b 100%);
+      color: #000000;
+    }
+  </style>
+
+  <!-- Hero Section Banner -->
+  <div class="mh-trio-hero">
+    <span class="mh-trio-hero-tag">Royal Floral Collection</span>
+    <h1 class="mh-trio-hero-title">Mahekh Signature Jasmin, Mogra & Ratrani Attar Trio</h1>
+    <p class="mh-trio-hero-desc">
+      Step into the timeless fragrance of royal Indian gardens with our hand-crafted floral attar trio. 100% pure, alcohol-free concentrated perfume oils traditionally distilled in heritage copper pots of Kannauj for 24+ hours of lasting projection.
+    </p>
+  </div>
+
+  <!-- Intro Overview -->
+  <div class="mh-trio-container">
+    <span class="mh-trio-subtitle">Pure Floral Essence</span>
+    <h2 class="mh-trio-title-large">A Trilogy of India's Most Regal Blossoms</h2>
+    <p class="mh-trio-intro-text">
+      From bright morning sunshine to seductive midnight breezes, this trio captures the complete sensory journey of pure Indian white florals. Each attar is extracted using ancient slow-distillation techniques to preserve the delicate, authentic bloom of natural flowers.
+    </p>
+
+    <!-- Trio Cards Grid -->
+    <div class="mh-trio-grid">
+      
+      <!-- Card 1: Jasmin Attar -->
+      <div class="mh-trio-card">
+        <div>
+          <span class="mh-trio-card-tag mh-tag-jasmin">Daytime Elegance</span>
+          <h3 class="mh-trio-card-title">Pure Jasmin Attar</h3>
+          <p class="mh-trio-card-desc">
+            Known as the king of flowers, Jasmin (Chameli) releases a crisp, uplifting, and soothing floral melody that revitalizes the spirit and inspires confidence all day long.
+          </p>
+        </div>
+        <div class="mh-trio-card-notes">
+          <div class="mh-trio-note-item"><strong>Top Note:</strong> <span>Fresh Jasmine Petals</span></div>
+          <div class="mh-trio-note-item"><strong>Heart Note:</strong> <span>Sweet Botanical Dew</span></div>
+          <div class="mh-trio-note-item"><strong>Base Note:</strong> <span>Warm Earthy Sandal</span></div>
+        </div>
+      </div>
+
+      <!-- Card 2: Mogra Attar -->
+      <div class="mh-trio-card">
+        <div>
+          <span class="mh-trio-card-tag mh-tag-mogra">Festive Divine</span>
+          <h3 class="mh-trio-card-title">Royal Mogra Attar</h3>
+          <p class="mh-trio-card-desc">
+            Intensely rich, sweet, and intoxicating Arabian Jasmine blossom. Mogra carries a grand, festive aura traditionally worn during sacred rituals and celebrations.
+          </p>
+        </div>
+        <div class="mh-trio-card-notes">
+          <div class="mh-trio-note-item"><strong>Top Note:</strong> <span>Blooming Mogra Nectar</span></div>
+          <div class="mh-trio-note-item"><strong>Heart Note:</strong> <span>Honeyed Floral Cream</span></div>
+          <div class="mh-trio-note-item"><strong>Base Note:</strong> <span>Velvety Pure Oil</span></div>
+        </div>
+      </div>
+
+      <!-- Card 3: Ratrani Attar -->
+      <div class="mh-trio-card">
+        <div>
+          <span class="mh-trio-card-tag mh-tag-ratrani">Midnight Magnetism</span>
+          <h3 class="mh-trio-card-title">Enchanting Ratrani Attar</h3>
+          <p class="mh-trio-card-desc">
+            Night-Blooming Jasmine that unfolds its captivating fragrance only under moonlight. Deep, mysterious, and seductive — making every evening unforgettable.
+          </p>
+        </div>
+        <div class="mh-trio-card-notes">
+          <div class="mh-trio-note-item"><strong>Top Note:</strong> <span>Night-Bloom Accord</span></div>
+          <div class="mh-trio-note-item"><strong>Heart Note:</strong> <span>Deep Exotic Floral</span></div>
+          <div class="mh-trio-note-item"><strong>Base Note:</strong> <span>Rich Woody Musk</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scent Profile Metrics -->
+  <div class="mh-trio-container">
+    <span class="mh-trio-subtitle">Performance & Sensory Meter</span>
+    <h2 class="mh-trio-title-medium">Fragrance Characteristics</h2>
+    <div class="mh-trio-metrics">
+      <div class="mh-trio-metric-row">
+        <div class="mh-trio-metric-header">
+          <span class="mh-trio-metric-label">Longevity (24+ Hours Wear)</span>
+          <span class="mh-trio-metric-value">98%</span>
+        </div>
+        <div class="mh-trio-metric-bar-bg">
+          <div class="mh-trio-metric-bar-fill" style="width: 98%;"></div>
+        </div>
+      </div>
+      <div class="mh-trio-metric-row">
+        <div class="mh-trio-metric-header">
+          <span class="mh-trio-metric-label">Sillage & Aura (Rich Room-Filling Projection)</span>
+          <span class="mh-trio-metric-value">95%</span>
+        </div>
+        <div class="mh-trio-metric-bar-bg">
+          <div class="mh-trio-metric-bar-fill" style="width: 95%;"></div>
+        </div>
+      </div>
+      <div class="mh-trio-metric-row">
+        <div class="mh-trio-metric-header">
+          <span class="mh-trio-metric-label">Floral Authenticity (100% Pure Botanical Concentrate)</span>
+          <span class="mh-trio-metric-value">100%</span>
+        </div>
+        <div class="mh-trio-metric-bar-bg">
+          <div class="mh-trio-metric-bar-fill" style="width: 100%;"></div>
+        </div>
+      </div>
+      <div class="mh-trio-metric-row">
+        <div class="mh-trio-metric-header">
+          <span class="mh-trio-metric-label">Skin Friendliness (Alcohol-Free & Non-Irritating)</span>
+          <span class="mh-trio-metric-value">100%</span>
+        </div>
+        <div class="mh-trio-metric-bar-bg">
+          <div class="mh-trio-metric-bar-fill" style="width: 100%;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Heritage Distillation Story -->
+  <div class="mh-trio-container">
+    <span class="mh-trio-subtitle">Ancient Craftsmanship</span>
+    <h2 class="mh-trio-title-medium">The Kannauj Copper Pot Heritage</h2>
+    <div class="mh-trio-heritage">
+      <div class="mh-trio-heritage-grid">
+        <div class="mh-trio-heritage-item">
+          <span class="mh-trio-heritage-icon">🪔</span>
+          <h4>Deg & Bhapka Distillation</h4>
+          <p>Hand-harvested at dawn, fresh floral blossoms are sealed inside copper cauldrons (Degs) and slowly hydro-distilled into bamboo receivers (Bhapkas) submerged in cool water tanks.</p>
+        </div>
+        <div class="mh-trio-heritage-item">
+          <span class="mh-trio-heritage-icon">🌿</span>
+          <h4>0% Synthetic Alcohol</h4>
+          <p>Unlike commercial sprays that evaporate quickly and dry out skin, our pure perfume oils adapt to your body heat, creating a lingering personal trail without harsh chemicals.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why Choose Mahekh Badges -->
+  <div class="mh-trio-badge-grid">
+    <div class="mh-trio-badge-card">
+      <span class="mh-trio-badge-icon">💧</span>
+      100% Pure Oil
+    </div>
+    <div class="mh-trio-badge-card">
+      <span class="mh-trio-badge-icon">🚫</span>
+      Zero Alcohol
+    </div>
+    <div class="mh-trio-badge-card">
+      <span class="mh-trio-badge-icon">✨</span>
+      24+ Hrs Lasting
+    </div>
+    <div class="mh-trio-badge-card">
+      <span class="mh-trio-badge-icon">🌸</span>
+      Skin Safe
+    </div>
+  </div>
+
+  <!-- Comparison Table -->
+  <div class="mh-trio-container">
+    <span class="mh-trio-subtitle">The Pure Difference</span>
+    <h2 class="mh-trio-title-medium">Mahekh Attar Trio vs Commercial Perfumes</h2>
+    <div class="mh-trio-table-wrapper">
+      <table class="mh-trio-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Mahekh Pure Attar Trio</th>
+            <th>Commercial Alcohol Perfumes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Formula</strong></td>
+            <td><span class="mh-trio-check">✓</span> 100% Pure Concentrated Oil</td>
+            <td><span class="mh-trio-cross">✗</span> 80% Denatured Alcohol & Water</td>
+          </tr>
+          <tr>
+            <td><strong>Longevity</strong></td>
+            <td><span class="mh-trio-check">✓</span> 24+ Hours (Stays on clothes for days)</td>
+            <td><span class="mh-trio-cross">✗</span> Evaporates in 2–4 hours</td>
+          </tr>
+          <tr>
+            <td><strong>Skin Safety</strong></td>
+            <td><span class="mh-trio-check">✓</span> Nourishing & Non-Drying</td>
+            <td><span class="mh-trio-cross">✗</span> Causes dryness & skin sting</td>
+          </tr>
+          <tr>
+            <td><strong>Distillation Method</strong></td>
+            <td><span class="mh-trio-check">✓</span> Ancient Kannauj Deg-Bhapka Craft</td>
+            <td><span class="mh-trio-cross">✗</span> Synthetic chemical synthesis</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- How to Apply Guide -->
+  <div class="mh-trio-container">
+    <span class="mh-trio-subtitle">Ritual of Application</span>
+    <h2 class="mh-trio-title-medium">How to Wear Your Attar</h2>
+    <div class="mh-trio-apply-grid">
+      <div class="mh-trio-apply-step">
+        <span class="mh-trio-apply-num">1</span>
+        <h4 class="mh-trio-apply-title">Pulse Points</h4>
+        <p class="mh-trio-apply-desc">Apply a small dab onto warm pulse points: inner wrists, neck, behind earlobes, and inner elbows.</p>
+      </div>
+      <div class="mh-trio-apply-step">
+        <span class="mh-trio-apply-num">2</span>
+        <h4 class="mh-trio-apply-title">Dab, Don't Rub</h4>
+        <p class="mh-trio-apply-desc">Gently press pulse points together. Never rub vigorously, as rubbing breaks down delicate fragrance molecules.</p>
+      </div>
+      <div class="mh-trio-apply-step">
+        <span class="mh-trio-apply-num">3</span>
+        <h4 class="mh-trio-apply-title">Custom Layering</h4>
+        <p class="mh-trio-apply-desc">Mix Jasmin and Mogra for day events, or combine Mogra and Ratrani for an exquisite evening scent.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ Section (Accordion) -->
+  <div class="mh-trio-container">
+    <span class="mh-trio-subtitle">Got Questions?</span>
+    <h2 class="mh-trio-title-medium">Frequently Asked Questions</h2>
+    
+    <details class="mh-trio-faq-item">
+      <summary class="mh-trio-faq-summary">
+        <span>Is this attar trio 100% alcohol-free and safe for skin?</span>
+        <span class="mh-trio-faq-icon">┼</span>
+      </summary>
+      <div class="mh-trio-faq-content">
+        Yes! All three attars in the trio (Jasmin, Mogra, Ratrani) are 100% pure concentrated perfume oils without any alcohol, parabens, or harsh chemicals. They are suitable for all skin types.
+      </div>
+    </details>
+
+    <details class="mh-trio-faq-item">
+      <summary class="mh-trio-faq-summary">
+        <span>How long does the fragrance last after applying?</span>
+        <span class="mh-trio-faq-icon">┼</span>
+      </summary>
+      <div class="mh-trio-faq-content">
+        Due to the high concentration of natural perfume oil, just a few dabs last 24+ hours on skin and remain subtly noticeable on fabrics for several days.
+      </div>
+    </details>
+
+    <details class="mh-trio-faq-item">
+      <summary class="mh-trio-faq-summary">
+        <span>Can I layer these attars together?</span>
+        <span class="mh-trio-faq-icon">┼</span>
+      </summary>
+      <div class="mh-trio-faq-content">
+        Absolutely! Because all three belong to the regal Jasmine flower family, they blend together harmoniously. You can layer Jasmin with Ratrani to create your unique signature aroma.
+      </div>
+    </details>
+
+    <details class="mh-trio-faq-item">
+      <summary class="mh-trio-faq-summary">
+        <span>Will these attars leave stains on white clothes?</span>
+        <span class="mh-trio-faq-icon">┼</span>
+      </summary>
+      <div class="mh-trio-faq-content">
+        Our attars are formulated to be light and pure. For best results, apply directly to skin on pulse points or dab gently on dark fabric seams.
+      </div>
+    </details>
+  </div>
+
+  <!-- Customer Reviews Highlights -->
+  <div class="mh-trio-container">
+    <span class="mh-trio-subtitle">Customer Love</span>
+    <h2 class="mh-trio-title-medium">What Our Patrons Say</h2>
+    <div class="mh-trio-reviews-grid">
+      <div class="mh-trio-review-card">
+        <div class="mh-trio-review-stars">★★★★★</div>
+        <p class="mh-trio-review-text">"The Ratrani in this trio is unbelievable! It smells like walking through a night garden full of flowers. Mogra is super rich and authentic too."</p>
+        <div class="mh-trio-review-author">
+          <span>Ananya R.</span>
+          <span class="mh-trio-verified">✓ Verified Buyer</span>
+        </div>
+      </div>
+
+      <div class="mh-trio-review-card">
+        <div class="mh-trio-review-stars">★★★★★</div>
+        <p class="mh-trio-review-text">"Pure Kannauj magic. You can immediately feel the quality difference compared to synthetic sprays. Lasts standard 24 hours easily!"</p>
+        <div class="mh-trio-review-author">
+          <span>Vikram S.</span>
+          <span class="mh-trio-verified">✓ Verified Buyer</span>
+        </div>
+      </div>
+
+      <div class="mh-trio-review-card">
+        <div class="mh-trio-review-stars">★★★★★</div>
+        <p class="mh-trio-review-text">"Got this trio as a gift and I'm obsessed. All three scents are distinct yet complement each other so well when layered."</p>
+        <div class="mh-trio-review-author">
+          <span>Pooja K.</span>
+          <span class="mh-trio-verified">✓ Verified Buyer</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pulsing CTA Bottom Purchase Banner -->
+  <div class="mh-trio-cta-box">
+    <span class="mh-trio-subtitle">Limited Stock Available</span>
+    <h3 class="mh-trio-cta-title">Experience Pure Floral Royalty Today</h3>
+    <p class="mh-trio-cta-text">Get 3x 100% Pure Perfume Oils (Jasmin + Mogra + Ratrani) for ₹1,299. Free Shipping & ₹100 Extra OFF on Prepaid Orders!</p>
+    <a href="#ProductSubmitButton-template--{{ section.id }}__main" onclick="var b=document.querySelector('.shopify-payment-button__button--unbranded')||document.querySelector('.product-form__submit'); if(b){b.scrollIntoView({behavior:'smooth'}); b.focus();} return false;" class="mh-trio-buy-now-btn">
+      <span>🛍️ BUY NOW - GET INSTANT ₹100 OFF 💸</span>
+    </a>
+  </div>
+
+</div>
+

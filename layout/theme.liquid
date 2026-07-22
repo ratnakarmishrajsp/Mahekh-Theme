@@ -297,9 +297,77 @@
       }
     </script>
     <style>
-.shopify-payment-button .shopify-payment-button__button--unbranded {
-    position: relative;
+/* Animated Pulse & Elevated Shadow for Buy Now, Fastrr & Add to Cart Buttons */
+@keyframes mhBuyNowPulse {
+  0% {
+    transform: translateY(-2px) scale(1);
+    box-shadow: 0 8px 24px rgba(204, 164, 59, 0.45), 0 4px 14px rgba(0, 0, 0, 0.18);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.028);
+    box-shadow: 0 16px 36px rgba(204, 164, 59, 0.75), 0 8px 22px rgba(0, 0, 0, 0.28);
+  }
+  100% {
+    transform: translateY(-2px) scale(1);
+    box-shadow: 0 8px 24px rgba(204, 164, 59, 0.45), 0 4px 14px rgba(0, 0, 0, 0.18);
+  }
 }
+
+@keyframes mhBuyNowShimmer {
+  0% { transform: translateX(-120%) rotate(25deg); }
+  22% { transform: translateX(220%) rotate(25deg); }
+  100% { transform: translateX(220%) rotate(25deg); }
+}
+
+/* Fastrr Buy Now, Standard Buy Now, Sticky Buy Bar, & Add to Cart Buttons */
+.sr-headless-checkout,
+button[name="sr-headless-button"],
+.sticky-buy-bar__btn,
+.shopify-payment-button,
+.shopify-payment-button__button,
+.shopify-payment-button__button--unbranded,
+.product-form__submit {
+  position: relative !important;
+  overflow: hidden !important;
+  border-radius: 8px !important;
+  border: 1.5px solid rgba(204, 164, 59, 0.5) !important;
+  animation: mhBuyNowPulse 3.2s ease-in-out infinite !important;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+  will-change: transform, box-shadow !important;
+}
+
+.sr-headless-checkout,
+button[name="sr-headless-button"],
+.shopify-payment-button__button--unbranded {
+  position: relative;
+  background: linear-gradient(135deg, #1d1107 0%, #3a2211 100%) !important;
+  color: #cca43b !important;
+  font-weight: 700 !important;
+}
+
+.sr-headless-checkout::before,
+button[name="sr-headless-button"]::before,
+.sticky-buy-bar__btn::before,
+.shopify-payment-button__button--unbranded::before,
+.product-form__submit::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -50% !important;
+  left: -50% !important;
+  width: 60% !important;
+  height: 200% !important;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  ) !important;
+  transform: rotate(25deg) !important;
+  animation: mhBuyNowShimmer 3.8s ease-in-out infinite !important;
+  pointer-events: none !important;
+  z-index: 4 !important;
+}
+
 .shopify-payment-button .shopify-payment-button__button--unbranded:after {
     content: "🎁 Pay Prepaid, Get ₹100 OFF Instantly! 💸";
     background: inherit;
@@ -313,6 +381,17 @@
     position: absolute;
     top: 0;
     left: 0;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.sr-headless-checkout:hover,
+button[name="sr-headless-button"]:hover,
+.sticky-buy-bar__btn:hover,
+.shopify-payment-button__button--unbranded:hover,
+.product-form__submit:hover {
+  transform: translateY(-6px) scale(1.04) !important;
+  box-shadow: 0 20px 42px rgba(204, 164, 59, 0.85), 0 10px 30px rgba(0, 0, 0, 0.35) !important;
 }
 
 /* Premium Ivory/Cream Section Overrides for Royal Balance */

@@ -1,0 +1,915 @@
+<div class="mh-combo-wrapper">
+  <!-- Google Fonts Import for Premium Typography -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@400;500;600;700&display=swap');
+
+    .mh-combo-wrapper {
+      --gold: #cca43b;
+      --dark: #1d1107;
+      --light-bg: #faf8f5;
+      --white: #ffffff;
+      --saffron: #e88d30;
+      --rose: #a63a50;
+      --text: #4a3e3d;
+      --text-dark: #1f1107;
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'Montserrat', sans-serif;
+
+      background-color: var(--white);
+      color: var(--text-dark);
+      padding: 3rem 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+      box-sizing: border-box;
+      line-height: 1.8;
+      font-family: var(--font-body);
+      animation: mhComboFadeIn 0.8s ease-out forwards;
+    }
+
+    .mh-combo-wrapper *,
+    .mh-combo-wrapper *::before,
+    .mh-combo-wrapper *::after {
+      box-sizing: inherit;
+    }
+
+    @keyframes mhComboFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Typography */
+    .mh-combo-title-large {
+      font-family: var(--font-heading);
+      font-size: 2.6rem;
+      font-weight: 700;
+      margin: 0 0 1.2rem 0;
+      color: var(--text-dark);
+      text-align: center;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+    }
+
+    .mh-combo-title-medium {
+      font-family: var(--font-heading);
+      font-size: 2.1rem;
+      font-weight: 700;
+      margin: 0 0 1.8rem 0;
+      color: var(--text-dark);
+      text-align: center;
+      position: relative;
+    }
+
+    .mh-combo-title-medium::after {
+      content: '';
+      display: block;
+      width: 45px;
+      height: 2px;
+      background: var(--gold);
+      margin: 0.8rem auto 0 auto;
+    }
+
+    .mh-combo-subtitle {
+      font-family: var(--font-heading);
+      font-style: italic;
+      color: var(--gold);
+      font-size: 1.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      margin-bottom: 0.8rem;
+      display: block;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .mh-combo-text {
+      color: var(--text);
+      font-size: 1.35rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      max-width: 780px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .mh-combo-container {
+      margin-bottom: 5rem;
+    }
+
+    /* Floating Gold, Saffron & Rose Shimmer Animation */
+    @keyframes mhGoldShimmer {
+      0% {
+        background-position: 
+          0px 0px, 0px 0px,
+          0px 0px, 0px 0px;
+      }
+      100% {
+        background-position: 
+          100px 200px, -150px 300px,
+          120px 400px, -80px 250px;
+      }
+    }
+
+    .mh-combo-hero {
+      background: radial-gradient(circle at 50% 30%, #3a2211 0%, #150902 100%);
+      color: var(--white);
+      padding: 4.5rem 3rem;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      border: 1.5px solid rgba(204, 164, 59, 0.4);
+      box-shadow: 0 15px 35px rgba(204, 164, 59, 0.12);
+      margin-bottom: 4.5rem;
+      text-align: center;
+    }
+
+    /* Animated sparkle layers for a royal sensory experience */
+    .mh-combo-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        /* Layer 1: Saffron Sparks */
+        radial-gradient(1.5px 1.5px at 20px 40px, rgba(232, 141, 48, 0.6) 0%, transparent 100%),
+        radial-gradient(2px 2px at 75px 140px, rgba(232, 141, 48, 0.5) 0%, transparent 100%),
+        /* Layer 2: Gold Sparks */
+        radial-gradient(1px 1px at 45px 80px, rgba(204, 164, 59, 0.7) 0%, transparent 100%),
+        radial-gradient(2px 2.5px at 110px 180px, rgba(204, 164, 59, 0.5) 0%, transparent 100%),
+        /* Layer 3: Rose Dust */
+        radial-gradient(1.5px 2px at 130px 60px, rgba(166, 58, 80, 0.6) 0%, transparent 100%);
+      background-size: 150px 300px, 200px 400px, 120px 240px, 250px 500px, 180px 360px;
+      animation: mhGoldShimmer 4.5s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.85;
+    }
+
+    .mh-combo-hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 80% 20%, rgba(204, 164, 59, 0.06) 0%, transparent 55%),
+                  radial-gradient(circle at 20% 80%, rgba(232, 141, 48, 0.04) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .mh-combo-hero-title {
+      font-family: var(--font-heading);
+      font-size: 2.8rem;
+      color: var(--gold);
+      margin: 0 0 1.2rem 0;
+      font-weight: 700;
+      position: relative;
+      z-index: 3;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .mh-combo-hero-tag {
+      display: inline-block;
+      border: 1px solid rgba(204, 164, 59, 0.5);
+      background: rgba(204, 164, 59, 0.12);
+      color: var(--gold);
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      padding: 0.4rem 1.2rem;
+      border-radius: 4px;
+      margin-bottom: 1.8rem;
+      position: relative;
+      z-index: 3;
+    }
+
+    .mh-combo-hero-desc {
+      color: #e8e3de;
+      font-size: 1.45rem;
+      line-height: 1.8;
+      max-width: 700px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 3;
+    }
+
+    /* Trio Scent Symphony Grid */
+    .mh-combo-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-bottom: 3.5rem;
+    }
+
+    @media screen and (min-width: 750px) {
+      .mh-combo-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .mh-combo-card {
+      background: var(--white);
+      border: 1.5px solid rgba(204, 164, 59, 0.2);
+      border-radius: 10px;
+      padding: 2.5rem 1.8rem;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      position: relative;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.015);
+    }
+
+    .mh-combo-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold);
+      box-shadow: 0 15px 30px rgba(204, 164, 59, 0.12);
+    }
+
+    .mh-combo-card-tag {
+      display: inline-block;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 0.8rem;
+      border-radius: 4px;
+      margin-bottom: 1.2rem;
+    }
+
+    .mh-combo-card-kesar {
+      background: rgba(232, 141, 48, 0.08);
+      color: var(--saffron);
+      border: 1px solid rgba(232, 141, 48, 0.2);
+    }
+
+    .mh-combo-card-kasturi {
+      background: rgba(115, 77, 38, 0.08);
+      color: #92643a;
+      border: 1px solid rgba(115, 77, 38, 0.2);
+    }
+
+    .mh-combo-card-rose {
+      background: rgba(166, 58, 80, 0.08);
+      color: var(--rose);
+      border: 1px solid rgba(166, 58, 80, 0.2);
+    }
+
+    .mh-combo-card-title {
+      font-family: var(--font-heading);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin: 0 0 1rem 0;
+    }
+
+    .mh-combo-card-desc {
+      font-size: 1.25rem;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Note Timeline within Card */
+    .mh-combo-notes {
+      border-top: 1px solid rgba(204, 164, 59, 0.12);
+      padding-top: 1.2rem;
+      text-align: left;
+    }
+
+    .mh-combo-note-item {
+      font-size: 1.15rem;
+      margin-bottom: 0.6rem;
+      color: var(--text);
+    }
+
+    .mh-combo-note-item strong {
+      color: var(--text-dark);
+    }
+
+    /* Scent Metrics Card */
+    .mh-combo-metrics {
+      background: #faf8f5;
+      border: 1.5px solid rgba(204, 164, 59, 0.22);
+      padding: 2.2rem;
+      border-radius: 8px;
+      margin-top: 2rem;
+    }
+
+    .mh-combo-metric-row {
+      margin-bottom: 1.4rem;
+    }
+
+    .mh-combo-metric-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .mh-combo-metric-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .mh-combo-metric-label {
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    .mh-combo-metric-value {
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .mh-combo-metric-bar-bg {
+      height: 6px;
+      background: rgba(204, 164, 59, 0.12);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .mh-combo-metric-bar-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 3px;
+    }
+
+    /* Traditional Distillation Heritage Block */
+    .mh-combo-heritage {
+      background: #faf8f5;
+      border: 1.5px solid rgba(204, 164, 59, 0.25);
+      border-radius: 10px;
+      padding: 3rem 2.5rem;
+      margin-bottom: 3.5rem;
+      box-shadow: 0 8px 25px rgba(204, 164, 59, 0.02);
+      position: relative;
+    }
+
+    .mh-combo-heritage::before {
+      content: '';
+      position: absolute;
+      top: 15px;
+      bottom: 15px;
+      left: 15px;
+      right: 15px;
+      border: 1px solid rgba(204, 164, 59, 0.15);
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    .mh-combo-text-left {
+      color: var(--text);
+      font-size: 1.35rem;
+      line-height: 1.8;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Trust & Promise Badges */
+    .mh-combo-badge-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 4.5rem;
+    }
+
+    @media screen and (min-width: 600px) {
+      .mh-combo-badge-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .mh-combo-badge-card {
+      background: var(--white);
+      border: 1px solid rgba(204, 164, 59, 0.18);
+      border-radius: 6px;
+      padding: 1.6rem 1rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      color: var(--text-dark);
+      font-size: 1.25rem;
+    }
+
+    .mh-combo-badge-card:hover {
+      border-color: var(--gold);
+      background: rgba(204, 164, 59, 0.03);
+      transform: translateY(-2px);
+    }
+
+    .mh-combo-badge-icon {
+      font-size: 2.2rem;
+      display: block;
+      margin-bottom: 0.6rem;
+    }
+
+    /* Comparison Table Styling */
+    .mh-combo-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1.5px solid rgba(204, 164, 59, 0.25);
+      margin-bottom: 4.5rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.015);
+    }
+
+    .mh-combo-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      text-align: left;
+      font-size: 1.3rem;
+      min-width: 500px;
+    }
+
+    .mh-combo-table th, 
+    .mh-combo-table td {
+      padding: 1.4rem 1.6rem;
+      border-bottom: 1px solid rgba(204, 164, 59, 0.12);
+    }
+
+    .mh-combo-table th {
+      background: rgba(204, 164, 59, 0.06);
+      color: var(--text-dark);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .mh-combo-table td strong {
+      color: var(--text-dark);
+    }
+
+    .mh-combo-table-check {
+      color: #2e7d32;
+      font-weight: 700;
+    }
+
+    .mh-combo-table-cross {
+      color: #c62828;
+      font-weight: 700;
+    }
+
+    /* How to Apply Guidelines */
+    .mh-combo-apply-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    @media screen and (min-width: 750px) {
+      .mh-combo-apply-row {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .mh-combo-apply-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      background: #faf8f5;
+      border: 1px solid rgba(204, 164, 59, 0.15);
+      border-radius: 8px;
+      padding: 2rem 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .mh-combo-apply-step:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .mh-combo-apply-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      background: rgba(204, 164, 59, 0.05);
+      font-size: 1.3rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .mh-combo-apply-title {
+      margin: 0 0 0.6rem 0;
+      font-weight: 700;
+      color: var(--text-dark);
+      font-size: 1.35rem;
+    }
+
+    .mh-combo-apply-desc {
+      margin: 0;
+      color: var(--text);
+      font-size: 1.25rem;
+      line-height: 1.6;
+    }
+
+    /* FAQ Details/Summary Accordion (Native CSS dropdowns) */
+    .mh-combo-faq-details {
+      border-bottom: 1px solid rgba(204, 164, 59, 0.18);
+    }
+
+    .mh-combo-faq-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.6rem 0.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text-dark);
+      font-size: 1.4rem;
+      list-style: none;
+      user-select: none;
+      outline: none;
+    }
+
+    .mh-combo-faq-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .mh-combo-faq-icon {
+      width: 12px;
+      height: 12px;
+      color: var(--gold);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .mh-combo-faq-icon svg {
+      width: 100%;
+      height: 100%;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 3;
+    }
+
+    .mh-combo-faq-details[open] .mh-combo-faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .mh-combo-faq-content {
+      padding: 0 0.5rem 1.6rem 0.5rem;
+      color: var(--text);
+      font-size: 1.3rem;
+      text-align: left;
+      line-height: 1.7;
+    }
+
+    /* Review Card Layout */
+    .mh-combo-reviews-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.8rem;
+      margin-top: 1.5rem;
+    }
+
+    @media screen and (min-width: 750px) {
+      .mh-combo-reviews-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .mh-combo-review-card {
+      background: var(--white);
+      border: 1px solid rgba(204, 164, 59, 0.18);
+      border-radius: 8px;
+      padding: 1.8rem 1.5rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.01);
+      transition: all 0.3s ease;
+    }
+
+    .mh-combo-review-card:hover {
+      border-color: var(--gold);
+      box-shadow: 0 8px 20px rgba(204, 164, 59, 0.08);
+    }
+
+    .mh-combo-review-stars {
+      color: var(--gold);
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .mh-combo-review-text {
+      font-size: 1.25rem;
+      color: var(--text);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .mh-combo-review-author {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .mh-combo-review-verified {
+      color: #2e7d32;
+      font-size: 0.95rem;
+    }
+  </style>
+
+  <!-- 1. Hero Block: Scent Journey -->
+  <div class="mh-combo-hero">
+    <span class="mh-combo-hero-tag">👑 Premium Pack of 3</span>
+    <h1 class="mh-combo-hero-title">Kesar Chandan, Kasturi & Rose</h1>
+    <p class="mh-combo-hero-desc">
+      Experience the peak of Indian perfumery with our signature 3-in-1 Attar collection. Bringing together the sacred serenity of <strong>Kesar Chandan</strong>, the majestic presence of royal <strong>Kasturi</strong>, and the fresh romance of dewy <strong>Rose</strong>. Distilled traditionally without alcohol, these oil-based fragrances merge with your skin chemistry to create a rich, personal aura that lasts all day long.
+    </p>
+  </div>
+
+  <!-- 2. Olfactory Journey Symphony -->
+  <div class="mh-combo-container">
+    <span class="mh-combo-subtitle">Olfactory Journey</span>
+    <h2 class="mh-combo-title-medium">The Scent Symphony</h2>
+    <p class="mh-combo-text">
+      Three distinct aromatic pathways created with pure botanical oils. Rotate them throughout the day or select your signature vibe for the occasion:
+    </p>
+
+    <div class="mh-combo-grid">
+      <!-- Kesar Chandan Card -->
+      <div class="mh-combo-card">
+        <span class="mh-combo-card-tag mh-combo-card-kesar">🌿 Calm & Sacred</span>
+        <h3 class="mh-combo-card-title">Kesar Chandan</h3>
+        <p class="mh-combo-card-desc">
+          A deeply soothing, warm aroma combining precious saffron strands with rich Mysore Sandalwood carrier oil. Grounding and peaceful.
+        </p>
+        <div class="mh-combo-notes">
+          <div class="mh-combo-note-item"><strong>Top:</strong> Sweet Saffron Spice</div>
+          <div class="mh-combo-note-item"><strong>Heart:</strong> Herbal Extracts & Clay</div>
+          <div class="mh-combo-note-item"><strong>Base:</strong> Creamy Sandalwood Oil</div>
+        </div>
+      </div>
+
+      <!-- Kasturi Card -->
+      <div class="mh-combo-card">
+        <span class="mh-combo-card-tag mh-combo-card-kasturi">🦌 Bold & Royal</span>
+        <h3 class="mh-combo-card-title">Kasturi</h3>
+        <p class="mh-combo-card-desc">
+          The ultimate essence of royalty. A sophisticated, dry-woody, deep musky fragrance that commands authority and leaves a powerful trail.
+        </p>
+        <div class="mh-combo-notes">
+          <div class="mh-combo-note-item"><strong>Top:</strong> Warm Amber & Spices</div>
+          <div class="mh-combo-note-item"><strong>Heart:</strong> Dry Earth & Exotic Woods</div>
+          <div class="mh-combo-note-item"><strong>Base:</strong> Bold Royal Musk Accord</div>
+        </div>
+      </div>
+
+      <!-- Rose Card -->
+      <div class="mh-combo-card">
+        <span class="mh-combo-card-tag mh-combo-card-rose">🌹 Soft & Romantic</span>
+        <h3 class="mh-combo-card-title">Rose (Gulab)</h3>
+        <p class="mh-combo-card-desc">
+          Like a walk through a fresh morning rose garden in full bloom. A delicate, romantic velvet floral aroma backed by soft powdery notes.
+        </p>
+        <div class="mh-combo-notes">
+          <div class="mh-combo-note-item"><strong>Top:</strong> Dewy Rose Petals</div>
+          <div class="mh-combo-note-item"><strong>Heart:</strong> Sweet Honeyed Rosebuds</div>
+          <div class="mh-combo-note-item"><strong>Base:</strong> Soft Velvet Musk Base</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scent Metrics Card -->
+    <div class="mh-combo-metrics">
+      <!-- Metric 1: Longevity -->
+      <div class="mh-combo-metric-row">
+        <div class="mh-combo-metric-header">
+          <span class="mh-combo-metric-label">Longevity:</span>
+          <span class="mh-combo-metric-value">12+ Hours (Concentrated Oil)</span>
+        </div>
+        <div class="mh-combo-metric-bar-bg">
+          <div class="mh-combo-metric-bar-fill" style="width: 95%;"></div>
+        </div>
+      </div>
+      <!-- Metric 2: Sillage -->
+      <div class="mh-combo-metric-row">
+        <div class="mh-combo-metric-header">
+          <span class="mh-combo-metric-label">Sillage (Projection):</span>
+          <span class="mh-combo-metric-value">Royal Aura (Linger & Impress)</span>
+        </div>
+        <div class="mh-combo-metric-bar-bg">
+          <div class="mh-combo-metric-bar-fill" style="width: 90%;"></div>
+        </div>
+      </div>
+      <!-- Metric 3: Purity Index -->
+      <div class="mh-combo-metric-row">
+        <div class="mh-combo-metric-header">
+          <span class="mh-combo-metric-label">Pure Sandalwood Oil Base:</span>
+          <span class="mh-combo-metric-value">100% Alcohol-Free</span>
+        </div>
+        <div class="mh-combo-metric-bar-bg">
+          <div class="mh-combo-metric-bar-fill" style="width: 100%;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. The Kannauj Distillation Craft (Deg & Bhapka) -->
+  <div class="mh-combo-container">
+    <div class="mh-combo-heritage">
+      <span class="mh-combo-subtitle">Legacy of Kannauj</span>
+      <h2 class="mh-combo-title-medium">Traditional Deg-Bhapka Steam Craft</h2>
+      <p class="mh-combo-text-left">
+        Every bottle of attar in this combo pack is distilled using the ancient <strong>Deg & Bhapka</strong> steam hydro-distillation system in Kannauj. The petals, woods, and raw materials are placed in large copper pots (Degs) sealed with clay, connected via bamboo pipes to water-filled cooling vessels (Bhapkas).
+        <br><br>
+        As firewood warms the Deg, fragrant steam travels through the bamboo pipes to diffuse directly into a receiver filled with pure Sandalwood carrier oil. It takes weeks of skilled labor and constant fire monitoring to bottle just a single batch. No synthetic chemicals, no pressure cookers—just absolute purity preserved across generations.
+      </p>
+    </div>
+  </div>
+
+  <!-- 4. Why Choose This Combo (The Mahekh Standard) -->
+  <div class="mh-combo-container" style="text-align: center;">
+    <span class="mh-combo-subtitle">The Mahekh Promise</span>
+    <h2 class="mh-combo-title-medium">Crafted Without Compromise</h2>
+    <div class="mh-combo-badge-grid">
+      <div class="mh-combo-badge-card">
+        <span class="mh-combo-badge-icon">🌿</span>
+        100% Pure Oils
+      </div>
+      <div class="mh-combo-badge-card">
+        <span class="mh-combo-badge-icon">💧</span>
+        Alcohol-Free
+      </div>
+      <div class="mh-combo-badge-card">
+        <span class="mh-combo-badge-icon">🧘‍♂️</span>
+        Aromatherapeutic
+      </div>
+      <div class="mh-combo-badge-card">
+        <span class="mh-combo-badge-icon">⏳</span>
+        All-Day Longevity
+      </div>
+      <div class="mh-combo-badge-card">
+        <span class="mh-combo-badge-icon">👫</span>
+        Perfectly Unisex
+      </div>
+      <div class="mh-combo-badge-card">
+        <span class="mh-combo-badge-icon">🎁</span>
+        Ideal Luxury Gift
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Comparison Table -->
+  <div class="mh-combo-container">
+    <span class="mh-combo-subtitle">Purity Comparison</span>
+    <h2 class="mh-combo-title-medium">Traditional Attars vs. Synthetic Sprays</h2>
+    <div class="mh-combo-table-wrapper">
+      <table class="mh-combo-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Mahekh Premium Attars</th>
+            <th>Ordinary Spray Perfumes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Carrier Base</strong></td>
+            <td class="mh-combo-table-check">Pure Sandalwood Oil Base</td>
+            <td class="mh-combo-table-cross">85%+ Synthetic Denatured Alcohol</td>
+          </tr>
+          <tr>
+            <td><strong>Longevity</strong></td>
+            <td class="mh-combo-table-check">12+ Hours (Lasts on skin pores)</td>
+            <td class="mh-combo-table-cross">1 - 2 Hours (Evaporates rapidly)</td>
+          </tr>
+          <tr>
+            <td><strong>Chemical Safety</strong></td>
+            <td class="mh-combo-table-check">100% Natural, Skin-safe oils</td>
+            <td class="mh-combo-table-cross">Phthalates, Parabens & Fixatives</td>
+          </tr>
+          <tr>
+            <td><strong>Therapeutic Vibe</strong></td>
+            <td class="mh-combo-table-check">Calming, grounds energy, zero headaches</td>
+            <td class="mh-combo-table-cross">Can cause sneezing or headaches</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 6. Application Ritual -->
+  <div class="mh-combo-container">
+    <span class="mh-combo-subtitle">Fragrance Ritual</span>
+    <h2 class="mh-combo-title-medium">How to Wear Like Royalty</h2>
+    <div class="mh-combo-apply-row">
+      <!-- Step 1 -->
+      <div class="mh-combo-apply-step">
+        <div class="mh-combo-apply-num">1</div>
+        <h4 class="mh-combo-apply-title">Dab Pulse Points</h4>
+        <p class="mh-combo-apply-desc">Apply on inner wrists, base of the throat, and behind ears where heat naturally diffuses the oil.</p>
+      </div>
+      <!-- Step 2 -->
+      <div class="mh-combo-apply-step">
+        <div class="mh-combo-apply-num">2</div>
+        <h4 class="mh-combo-apply-title">Press (Don't Rub)</h4>
+        <p class="mh-combo-apply-desc">Gently press your wrists together. Rubbing creates friction which breaks down the delicate top notes.</p>
+      </div>
+      <!-- Step 3 -->
+      <div class="mh-combo-apply-step">
+        <div class="mh-combo-apply-num">3</div>
+        <h4 class="mh-combo-apply-title">Hydrate First</h4>
+        <p class="mh-combo-apply-desc">Applying attar on hydrated, moisturized skin holds the scent molecules for up to 30% longer.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. FAQ Accordion (No JS) -->
+  <div class="mh-combo-container" style="margin-bottom: 4.5rem;">
+    <span class="mh-combo-subtitle">Frequently Asked Questions</span>
+    <h2 class="mh-combo-title-medium">Answers From Our Experts</h2>
+    <div style="border-top: 1px solid rgba(204, 164, 59, 0.18);">
+      <!-- FAQ 1 -->
+      <details class="mh-combo-faq-details" open>
+        <summary class="mh-combo-faq-summary">
+          Which fragrances are included in this pack of 3 combo set?
+          <span class="mh-combo-faq-icon">
+            <svg viewBox="0 0 14 14"><line x1="7" y1="0" x2="7" y2="14" /><line x1="0" y1="7" x2="14" y2="7" /></svg>
+          </span>
+        </summary>
+        <div class="mh-combo-faq-content">
+          The combo set contains three premium 10ml bottles: <strong>Kesar Chandan</strong> (sweet saffron blended with sandalwood), <strong>Kasturi</strong> (majestic, deep, and royal dry-wood musk), and <strong>Rose</strong> (fresh, romantic, dewy rose). You receive a total of 30ml of pure, concentrated, alcohol-free premium attar oil.
+        </div>
+      </details>
+      <!-- FAQ 2 -->
+      <details class="mh-combo-faq-details">
+        <summary class="mh-combo-faq-summary">
+          How long do these attars last on the body?
+          <span class="mh-combo-faq-icon">
+            <svg viewBox="0 0 14 14"><line x1="7" y1="0" x2="7" y2="14" /><line x1="0" y1="7" x2="14" y2="7" /></svg>
+          </span>
+        </summary>
+        <div class="mh-combo-faq-content">
+          Because these attars are highly concentrated, 100% pure oil formulations without any alcohol, they last for 12+ hours on your pulse points. They anchor to your skin and slow-release their aromatic notes through your body heat. When applied to clothes, the fragrance can linger for days.
+        </div>
+      </details>
+      <!-- FAQ 3 -->
+      <details class="mh-combo-faq-details">
+        <summary class="mh-combo-faq-summary">
+          Are these attars safe for daily use on sensitive skin?
+          <span class="mh-combo-faq-icon">
+            <svg viewBox="0 0 14 14"><line x1="7" y1="0" x2="7" y2="14" /><line x1="0" y1="7" x2="14" y2="7" /></svg>
+          </span>
+        </summary>
+        <div class="mh-combo-faq-content">
+          Absolutely. Our traditional attars are alcohol-free, paraben-free, and chemical-free. Distilled gently inside traditional copper pots and blended on a pure sandalwood oil base, they are soothing, moisturizing, and completely safe for all skin types.
+        </div>
+      </details>
+      <!-- FAQ 4 -->
+      <details class="mh-combo-faq-details">
+        <summary class="mh-combo-faq-summary">
+          Will the attar oils stain my clothes?
+          <span class="mh-combo-faq-icon">
+            <svg viewBox="0 0 14 14"><line x1="7" y1="0" x2="7" y2="14" /><line x1="0" y1="7" x2="14" y2="7" /></svg>
+          </span>
+        </summary>
+        <div class="mh-combo-faq-content">
+          Since these are oil-based, it is best to apply them directly onto your skin (wrists, neck, behind ears). If you wish to apply them to clothes, dab a small amount onto your palms, rub gently, and swipe across your garments, avoiding direct contact with light-colored or delicate silks.
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- 8. Testimonials Section -->
+  <div class="mh-combo-container" style="margin-bottom: 0;">
+    <span class="mh-combo-subtitle">Customer Love</span>
+    <h2 class="mh-combo-title-medium">What Verified Buyers Say</h2>
+    <div class="mh-combo-reviews-grid">
+      <!-- Testimonial 1 -->
+      <div class="mh-combo-review-card">
+        <div class="mh-combo-review-stars">★★★★★</div>
+        <p class="mh-combo-review-text">
+          "The Kesar Chandan is absolutely divine, smells exactly like a temple garden! Kasturi is bold and majestic, great for office. The quality is top-notch."
+        </p>
+        <span class="mh-combo-review-author">Rajesh Mishra <span class="mh-combo-review-verified">✓ Verified</span></span>
+      </div>
+      <!-- Testimonial 2 -->
+      <div class="mh-combo-review-card">
+        <div class="mh-combo-review-stars">★★★★★</div>
+        <p class="mh-combo-review-text">
+          "Bought the pack of 3 as a gift. The Rose attar is amazing, feels like fresh morning roses. It lasts through my entire 10-hour shift easily!"
+        </p>
+        <span class="mh-combo-review-author">Shalini Iyer <span class="mh-combo-review-verified">✓ Verified</span></span>
+      </div>
+      <!-- Testimonial 3 -->
+      <div class="mh-combo-review-card">
+        <div class="mh-combo-review-stars">★★★★★</div>
+        <p class="mh-combo-review-text">
+          "Excellent value. You get 3 premium oils for a fraction of what designer perfumes cost, and they last twice as long. Sandalwood base is key."
+        </p>
+        <span class="mh-combo-review-author">Vikram Malhotra <span class="mh-combo-review-verified">✓ Verified</span></span>
+      </div>
+    </div>
+  </div>
+</div>
