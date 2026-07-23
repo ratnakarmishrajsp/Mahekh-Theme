@@ -27,7 +27,7 @@
       if block.settings.show_cod_button == false
         assign show_cod_button = false
       endif
-      assign cod_button_text = block.settings.cod_button_text | default: "Order Now - Cash on Delivery (COD)"
+      assign cod_button_text = block.settings.cod_button_text | default: "Order Now - Cash on Delivery"
     -%}
 
     <product-form
@@ -228,19 +228,105 @@
                   });
                 }
 
-                // Attach event listeners for scroll, load and resize events to continuously block
-                window.addEventListener('scroll', blockStickyCodButtons, { passive: true });
-                window.addEventListener('resize', blockStickyCodButtons, { passive: true });
-                window.addEventListener('load', blockStickyCodButtons);
+                // Monitor for Releasit COD modal opening to inject the Prepaid Discount Promo
+                function checkReleasitModal() {
+                  const modals = document.querySelectorAll('div[class*="releasit"], div[id*="releasit"], .rsi-modal, #releasit-modal');
+                  modals.forEach(function(modal) {
+                    const submitButtons = modal.querySelectorAll('button[type="submit"], button[class*="submit"], button[class*="checkout"], button[class*="btn-complete"]');
+                    submitButtons.forEach(function(btn) {
+                      const text = btn.innerText || btn.textContent || '';
+                      if (text.includes('Complete') || text.includes('Order') || text.includes('Confirm') || text.includes('₹') || text.includes('Rs.')) {
+                        // Extract base price dynamically from Releasit complete button or fallback to Liquid
+                        let currentPrice = {{ product.selected_or_first_available_variant.price | divided_by: 100 }};
+                        const priceMatch = text.match(/(?:Rs\.?|₹|INR)\s*([\d,]+)/i);
+                        if (priceMatch) {
+                          currentPrice = parseInt(priceMatch[1].replace(/,/g, ''));
+                        }
+                        const prepaidPrice = currentPrice - 100;
 
-                // Use MutationObserver to instantly hide duplicate buttons when they are injected in the DOM
+                        const promo = modal.querySelector('.custom-prepaid-promo-releasit');
+                        if (promo) {
+                          const priceVal = promo.querySelector('.prepaid-price-val');
+                          if (priceVal && priceVal.innerText !== '₹' + prepaidPrice) {
+                            priceVal.innerText = '₹' + prepaidPrice;
+                            const btnVal = promo.querySelector('.prepaid-btn-val');
+                            if (btnVal) btnVal.innerText = '₹' + prepaidPrice;
+                          }
+                          return;
+                        }
+
+                        // Create the prepaid promo element
+                        const promoDiv = document.createElement('div');
+                        promoDiv.className = 'custom-prepaid-promo-releasit';
+                        promoDiv.style.cssText = 'margin-top: 1.2rem; padding: 1.2rem 1rem 0 1rem; border-top: 1px dashed #e2e8f0; text-align: center; width: 100%; box-sizing: border-box;';
+                        promoDiv.innerHTML = `
+                          <p style="margin: 0 0 0.8rem 0; font-size: 1.3rem; color: #475569; font-weight: 600; line-height: 1.4; font-family: inherit;">
+                            💡 Prepay online and get it for just <strong style="color: #cca43b; font-size: 1.45rem;"><span class="prepaid-price-val">₹${prepaidPrice}</span></strong> (Save ₹100 Instantly!)
+                          </p>
+                          <button type="button" class="prepaid-checkout-btn-releasit" style="width: 100%; padding: 1.1rem; background: linear-gradient(135deg, #cca43b, #a3802e) !important; color: #ffffff !important; border: none !important; border-radius: 4px; font-weight: 700; font-size: 1.3rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(204, 164, 59, 0.2); font-family: inherit;">
+                            💳 Pay Online - <span class="prepaid-btn-val">₹${prepaidPrice}</span>
+                          </button>
+                        `;
+
+                        btn.parentNode.insertBefore(promoDiv, btn.nextSibling);
+
+                        const prepayBtn = promoDiv.querySelector('.prepaid-checkout-btn-releasit');
+                        if (prepayBtn) {
+                          prepayBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            
+                            // Close Releasit modal
+                            const closeBtn = modal.querySelector('button[class*="close"], span[class*="close"], [class*="close-icon"], .close, #close');
+                            if (closeBtn) {
+                              closeBtn.click();
+                            } else {
+                              modal.style.setProperty('display', 'none', 'important');
+                            }
+
+                            // Trigger standard checkout
+                            const productForm = document.querySelector('form[action="/cart/add"], #product-form-{{ section_id }}');
+                            if (productForm) {
+                              const checkoutBtn = productForm.querySelector('button[type="submit"], .product-form__submit');
+                              if (checkoutBtn) {
+                                checkoutBtn.click();
+                              } else {
+                                productForm.submit();
+                              }
+                            }
+                          });
+                        }
+                      }
+                    });
+                  });
+                }
+
+                // Attach event listeners for scroll, load and resize events to continuously block
+                window.addEventListener('scroll', function() {
+                  blockStickyCodButtons();
+                  checkReleasitModal();
+                }, { passive: true });
+                window.addEventListener('resize', function() {
+                  blockStickyCodButtons();
+                  checkReleasitModal();
+                }, { passive: true });
+                window.addEventListener('load', function() {
+                  blockStickyCodButtons();
+                  checkReleasitModal();
+                });
+
+                // Use MutationObserver to instantly hide duplicate buttons and inject promo
                 if (window.MutationObserver) {
-                  const observer = new MutationObserver(blockStickyCodButtons);
+                  const observer = new MutationObserver(function() {
+                    blockStickyCodButtons();
+                    checkReleasitModal();
+                  });
                   observer.observe(document.documentElement, { childList: true, subtree: true });
                 }
 
                 // Initial run
                 blockStickyCodButtons();
+                checkReleasitModal();
               })();
             </script>
           {%- endif -%}
