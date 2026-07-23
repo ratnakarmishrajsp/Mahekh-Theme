@@ -295,16 +295,20 @@
 
                 // Central function to query all possible Releasit elements in the DOM
                 function getReleasitElements() {
-                  return document.querySelectorAll('div[class*="releasit"], div[id*="releasit"], div[class*="releas.it"], div[id*="releas.it"], [class*="rsi-"], [id*="rsi-"], .rsi-modal, #releasit-modal, iframe[src*="releasit"], iframe[src*="releas.it"], iframe[class*="releasit"], iframe[class*="releas.it"], iframe[id*="releasit"], iframe[id*="releas.it"], iframe[id*="rsi-"], iframe[class*="rsi-"]');
+                  const elements = document.querySelectorAll('div[class*="releasit"], div[id*="releasit"], div[class*="releas.it"], div[id*="releas.it"], [class*="rsi-"], [id*="rsi-"], .rsi-modal, #releasit-modal, iframe[src*="releasit"], iframe[src*="releas.it"], iframe[class*="releasit"], iframe[class*="releas.it"], iframe[id*="releasit"], iframe[id*="releas.it"], iframe[id*="rsi-"], iframe[class*="rsi-"]');
+                  return Array.from(elements).filter(function(el) {
+                    return !el.classList.contains('custom-cod-button-releasit') && 
+                           !el.classList.contains('custom-prepaid-fallback-releasit') && 
+                           !el.classList.contains('custom-prepaid-promo-releasit') &&
+                           !el.classList.contains('prepaid-checkout-btn-releasit') &&
+                           !el.classList.contains('fallback-checkout-btn-releasit');
+                  });
                 }
 
                 // Check if any Releasit iframe or modal element is currently visible
                 function isReleasitModalVisible() {
                   const releasitElements = getReleasitElements();
                   for (let el of releasitElements) {
-                    // Skip our own checkout fallback banner
-                    if (el.classList.contains('custom-prepaid-fallback-releasit')) continue;
-                    
                     const style = window.getComputedStyle(el);
                     if (style.display !== 'none' && style.visibility !== 'hidden' && el.offsetHeight > 0) {
                       return el;
@@ -457,32 +461,34 @@
                   }
                 }
 
+                // Safely run DOM actions without causing infinite MutationObserver loops
+                let observer = null;
+                function runObserverActions() {
+                  if (observer) {
+                    observer.disconnect(); // Temporary disconnect to avoid infinite self-trigger loops
+                  }
+                  
+                  blockStickyCodButtons();
+                  checkReleasitModal();
+                  
+                  if (observer && window.MutationObserver) {
+                    observer.observe(document.documentElement, { childList: true, subtree: true });
+                  }
+                }
+
                 // Attach event listeners for scroll, load and resize events to continuously block
-                window.addEventListener('scroll', function() {
-                  blockStickyCodButtons();
-                  checkReleasitModal();
-                }, { passive: true });
-                window.addEventListener('resize', function() {
-                  blockStickyCodButtons();
-                  checkReleasitModal();
-                }, { passive: true });
-                window.addEventListener('load', function() {
-                  blockStickyCodButtons();
-                  checkReleasitModal();
-                });
+                window.addEventListener('scroll', runObserverActions, { passive: true });
+                window.addEventListener('resize', runObserverActions, { passive: true });
+                window.addEventListener('load', runObserverActions);
 
                 // Use MutationObserver to instantly hide duplicate buttons and inject promo
                 if (window.MutationObserver) {
-                  const observer = new MutationObserver(function() {
-                    blockStickyCodButtons();
-                    checkReleasitModal();
-                  });
+                  observer = new MutationObserver(runObserverActions);
                   observer.observe(document.documentElement, { childList: true, subtree: true });
                 }
 
                 // Initial run
-                blockStickyCodButtons();
-                checkReleasitModal();
+                runObserverActions();
               })();
             </script>
           {%- endif -%}
