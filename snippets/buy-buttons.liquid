@@ -194,6 +194,53 @@
                     }
                   }
                 }, 2500);
+
+                // Anti-Sticky Button Blocker: Monitor the DOM and block any fixed/sticky buttons
+                // containing Cash on Delivery or COD text (excluding our custom checkout button).
+                function blockStickyCodButtons() {
+                  const elements = document.querySelectorAll('div, button, a, iframe');
+                  elements.forEach(function(el) {
+                    // Check if it's our own custom button (do not block)
+                    if (el.classList.contains('custom-cod-button-releasit')) return;
+                    
+                    // Check if the element contains COD/Order Now text
+                    const text = el.innerText || el.textContent || '';
+                    const isCodRelated = text.includes('Cash on Delivery') || 
+                                         text.includes('COD') || 
+                                         text.includes('Order Now') || 
+                                         text.includes('Order now') ||
+                                         text.includes('Cash On Delivery') ||
+                                         text.includes('delivery') ||
+                                         text.includes('Delivery') ||
+                                         text.includes('cash');
+                    
+                    // Check if the element's style is sticky or fixed
+                    const style = window.getComputedStyle(el);
+                    const isStickyOrFixed = style.position === 'fixed' || style.position === 'sticky';
+                    
+                    if (isStickyOrFixed && isCodRelated) {
+                      el.style.setProperty('display', 'none', 'important');
+                      el.style.setProperty('visibility', 'hidden', 'important');
+                      el.style.setProperty('opacity', '0', 'important');
+                      el.style.setProperty('height', '0', 'important');
+                      el.style.setProperty('pointer-events', 'none', 'important');
+                    }
+                  });
+                }
+
+                // Attach event listeners for scroll, load and resize events to continuously block
+                window.addEventListener('scroll', blockStickyCodButtons, { passive: true });
+                window.addEventListener('resize', blockStickyCodButtons, { passive: true });
+                window.addEventListener('load', blockStickyCodButtons);
+
+                // Use MutationObserver to instantly hide duplicate buttons when they are injected in the DOM
+                if (window.MutationObserver) {
+                  const observer = new MutationObserver(blockStickyCodButtons);
+                  observer.observe(document.documentElement, { childList: true, subtree: true });
+                }
+
+                // Initial run
+                blockStickyCodButtons();
               })();
             </script>
           {%- endif -%}
