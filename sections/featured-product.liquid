@@ -483,6 +483,7 @@
                     product_form_id: product_form_id,
                     section_id: section.id
                   -%}
+                  {%- assign outer_block = block -%}
                   {%- for block in section.blocks -%}
                     {%- if block.type == '@app' -%}
                       <div class="product-app-block-wrapper" style="margin-top: 1.5rem; margin-bottom: 0.5rem; width: 100%;">
@@ -490,6 +491,7 @@
                       </div>
                     {%- endif -%}
                   {%- endfor -%}
+                  {%- assign block = outer_block -%}
                 {%- when 'custom_liquid' -%}
                   {{ block.settings.custom_liquid }}
                 {%- when 'rating' -%}
