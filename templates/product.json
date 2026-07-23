@@ -35,12 +35,6 @@
             "show_cod_button": true
           }
         },
-        "releasit_cod_form_button_app_block_fawmFY": {
-          "type": "shopify://apps/releasit-cod-form/blocks/button-app-block/72faf214-4174-4fec-886b-0d0e8d3af9a2",
-          "settings": {
-            "product": "{{product}}"
-          }
-        },
         "description": {
           "type": "description",
           "settings": {}
@@ -69,7 +63,6 @@
         "variant_picker_VXpTRR",
         "price",
         "buy_buttons_YKNBFb",
-        "releasit_cod_form_button_app_block_fawmFY",
         "description",
         "collapsible_tab_shipping",
         "collapsible_tab_kannauj"
