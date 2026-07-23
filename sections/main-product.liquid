@@ -303,6 +303,8 @@
 
           {%- for block in section.blocks -%}
             {%- case block.type -%}
+              {%- when '@app' -%}
+                {% render block %}
               {%- when 'text' -%}
                 <p
                   class="product__text inline-richtext{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}"
@@ -748,15 +750,7 @@
                   section_id: section.id,
                   show_pickup_availability: true
                 -%}
-                {%- assign outer_block = block -%}
-                {%- for block in section.blocks -%}
-                  {%- if block.type == '@app' -%}
-                    <div class="product-app-block-wrapper" style="margin-top: 1.5rem; margin-bottom: 0.5rem; width: 100%;">
-                      {% render block %}
-                    </div>
-                  {%- endif -%}
-                {%- endfor -%}
-                {%- assign block = outer_block -%}
+
                 {%- if has_social_proof == false -%}
                   <div class="product__social-proof">
                     <div class="social-live-view">
