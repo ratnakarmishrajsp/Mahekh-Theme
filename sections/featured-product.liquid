@@ -175,8 +175,6 @@
 
             {%- for block in section.blocks -%}
               {%- case block.type -%}
-                {%- when '@app' -%}
-                  {% render block %}
                 {%- when 'text' -%}
                   <p
                     class="product__text inline-richtext{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}"
@@ -485,6 +483,13 @@
                     product_form_id: product_form_id,
                     section_id: section.id
                   -%}
+                  {%- for block in section.blocks -%}
+                    {%- if block.type == '@app' -%}
+                      <div class="product-app-block-wrapper" style="margin-top: 1.5rem; margin-bottom: 0.5rem; width: 100%;">
+                        {% render block %}
+                      </div>
+                    {%- endif -%}
+                  {%- endfor -%}
                 {%- when 'custom_liquid' -%}
                   {{ block.settings.custom_liquid }}
                 {%- when 'rating' -%}
@@ -758,6 +763,19 @@
           "default": true,
           "label": "t:sections.main-product.blocks.buy_buttons.settings.show_gift_card_recipient.label",
           "info": "t:sections.main-product.blocks.buy_buttons.settings.show_gift_card_recipient.info"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_cod_button",
+          "default": true,
+          "label": "Show Cash on Delivery (COD) Button",
+          "info": "Displays a high-converting Cash on Delivery button directly below buy buttons."
+        },
+        {
+          "type": "text",
+          "id": "cod_button_text",
+          "default": "Order Now - Cash on Delivery (COD)",
+          "label": "COD Button Text"
         }
       ]
     },
