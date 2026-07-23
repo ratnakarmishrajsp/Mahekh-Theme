@@ -230,74 +230,95 @@
 
                 // Monitor for Releasit COD modal opening to inject the Prepaid Discount Promo
                 function checkReleasitModal() {
-                  const modals = document.querySelectorAll('div[class*="releasit"], div[id*="releasit"], .rsi-modal, #releasit-modal');
-                  modals.forEach(function(modal) {
-                    const submitButtons = modal.querySelectorAll('button[type="submit"], button[class*="submit"], button[class*="checkout"], button[class*="btn-complete"]');
-                    submitButtons.forEach(function(btn) {
-                      const text = btn.innerText || btn.textContent || '';
-                      if (text.includes('Complete') || text.includes('Order') || text.includes('Confirm') || text.includes('₹') || text.includes('Rs.')) {
-                        // Extract base price dynamically from Releasit complete button or fallback to Liquid
-                        let currentPrice = {{ product.selected_or_first_available_variant.price | divided_by: 100 }};
-                        const priceMatch = text.match(/(?:Rs\.?|₹|INR)\s*([\d,]+)/i);
-                        if (priceMatch) {
-                          currentPrice = parseInt(priceMatch[1].replace(/,/g, ''));
-                        }
-                        const prepaidPrice = currentPrice - 100;
+                  // Find all buttons, submits and clickable divs on the page
+                  let allButtons = Array.from(document.querySelectorAll('button, input[type="button"], input[type="submit"], div[role="button"], div[class*="btn"], div[class*="button"]'));
+                  
+                  // Also query inside same-origin iframes just in case
+                  document.querySelectorAll('iframe').forEach(function(iframe) {
+                    try {
+                      if (iframe.contentDocument) {
+                        const iframeButtons = iframe.contentDocument.querySelectorAll('button, input[type="button"], input[type="submit"], div[role="button"], div[class*="btn"], div[class*="button"]');
+                        allButtons = allButtons.concat(Array.from(iframeButtons));
+                      }
+                    } catch (e) {
+                      // Cross-origin iframe, ignore
+                    }
+                  });
 
-                        const promo = modal.querySelector('.custom-prepaid-promo-releasit');
-                        if (promo) {
-                          const priceVal = promo.querySelector('.prepaid-price-val');
-                          if (priceVal && priceVal.innerText !== '₹' + prepaidPrice) {
-                            priceVal.innerText = '₹' + prepaidPrice;
-                            const btnVal = promo.querySelector('.prepaid-btn-val');
-                            if (btnVal) btnVal.innerText = '₹' + prepaidPrice;
-                          }
-                          return;
-                        }
+                  allButtons.forEach(function(btn) {
+                    // Skip our own buttons
+                    if (btn.classList.contains('custom-cod-button-releasit') || btn.classList.contains('prepaid-checkout-btn-releasit')) return;
+                    
+                    // Skip product page main submit button and add-to-cart buttons
+                    if (btn.id && (btn.id.includes('ProductSubmitButton') || btn.id.includes('SubmitButton'))) return;
+                    if (btn.name === 'add' || btn.classList.contains('product-form__submit')) return;
 
-                        // Create the prepaid promo element
-                        const promoDiv = document.createElement('div');
-                        promoDiv.className = 'custom-prepaid-promo-releasit';
-                        promoDiv.style.cssText = 'margin-top: 1.2rem; padding: 1.2rem 1rem 0 1rem; border-top: 1px dashed #e2e8f0; text-align: center; width: 100%; box-sizing: border-box;';
-                        promoDiv.innerHTML = `
-                          <p style="margin: 0 0 0.8rem 0; font-size: 1.3rem; color: #475569; font-weight: 600; line-height: 1.4; font-family: inherit;">
-                            💡 Prepay online and get it for just <strong style="color: #cca43b; font-size: 1.45rem;"><span class="prepaid-price-val">₹${prepaidPrice}</span></strong> (Save ₹100 Instantly!)
-                          </p>
-                          <button type="button" class="prepaid-checkout-btn-releasit" style="width: 100%; padding: 1.1rem; background: linear-gradient(135deg, #cca43b, #a3802e) !important; color: #ffffff !important; border: none !important; border-radius: 4px; font-weight: 700; font-size: 1.3rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(204, 164, 59, 0.2); font-family: inherit;">
-                            💳 Pay Online - <span class="prepaid-btn-val">₹${prepaidPrice}</span>
-                          </button>
-                        `;
+                    const text = btn.innerText || btn.textContent || '';
+                    
+                    // Releasit's complete order button text usually contains 'Complete', 'Order', 'Place', or price symbols
+                    const isReleasitBtn = text.includes('Complete') || 
+                                         text.includes('Place') || 
+                                         text.includes('Confirm') || 
+                                         (text.includes('Order') && (text.includes('₹') || text.includes('Rs.') || text.includes('INR') || text.includes('1299') || text.includes('price')));
+                    
+                    if (isReleasitBtn) {
+                      // Avoid double injection in same button container
+                      const parent = btn.parentNode;
+                      if (!parent || parent.querySelector('.custom-prepaid-promo-releasit')) return;
 
-                        btn.parentNode.insertBefore(promoDiv, btn.nextSibling);
+                      // Extract base price dynamically from Releasit complete button or fallback to Liquid
+                      let currentPrice = {{ product.selected_or_first_available_variant.price | divided_by: 100 }};
+                      const priceMatch = text.match(/(?:Rs\.?|₹|INR)\s*([\d,]+)/i);
+                      if (priceMatch) {
+                        currentPrice = parseInt(priceMatch[1].replace(/,/g, ''));
+                      }
+                      const prepaidPrice = currentPrice - 100;
 
-                        const prepayBtn = promoDiv.querySelector('.prepaid-checkout-btn-releasit');
-                        if (prepayBtn) {
-                          prepayBtn.addEventListener('click', function(e) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            
-                            // Close Releasit modal
+                      // Create the prepaid promo element
+                      const promoDiv = document.createElement('div');
+                      promoDiv.className = 'custom-prepaid-promo-releasit';
+                      promoDiv.style.cssText = 'margin-top: 1.2rem; padding: 1.2rem 1rem 0 1rem; border-top: 1px dashed #e2e8f0; text-align: center; width: 100%; box-sizing: border-box; display: block !important;';
+                      promoDiv.innerHTML = `
+                        <p style="margin: 0 0 0.8rem 0; font-size: 1.3rem; color: #475569; font-weight: 600; line-height: 1.4; font-family: inherit;">
+                          💡 Prepay online and get it for just <strong style="color: #cca43b; font-size: 1.45rem;"><span class="prepaid-price-val">₹${prepaidPrice}</span></strong> (Save ₹100 Instantly!)
+                        </p>
+                        <button type="button" class="prepaid-checkout-btn-releasit" style="width: 100%; padding: 1.1rem; background: linear-gradient(135deg, #cca43b, #a3802e) !important; color: #ffffff !important; border: none !important; border-radius: 4px; font-weight: 700; font-size: 1.3rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(204, 164, 59, 0.2); font-family: inherit;">
+                          💳 Pay Online - <span class="prepaid-btn-val">₹${prepaidPrice}</span>
+                        </button>
+                      `;
+
+                      btn.parentNode.insertBefore(promoDiv, btn.nextSibling);
+
+                      const prepayBtn = promoDiv.querySelector('.prepaid-checkout-btn-releasit');
+                      if (prepayBtn) {
+                        prepayBtn.addEventListener('click', function(e) {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          
+                          // Try to find the closest modal/wrapper to close it
+                          const modal = btn.closest('div[class*="modal"], div[id*="modal"], div[class*="popup"], div[id*="popup"], div[class*="releasit"], div[id*="releasit"]');
+                          if (modal) {
                             const closeBtn = modal.querySelector('button[class*="close"], span[class*="close"], [class*="close-icon"], .close, #close');
                             if (closeBtn) {
                               closeBtn.click();
                             } else {
                               modal.style.setProperty('display', 'none', 'important');
                             }
+                          }
 
-                            // Trigger standard checkout
-                            const productForm = document.querySelector('form[action="/cart/add"], #product-form-{{ section_id }}');
-                            if (productForm) {
-                              const checkoutBtn = productForm.querySelector('button[type="submit"], .product-form__submit');
-                              if (checkoutBtn) {
-                                checkoutBtn.click();
-                              } else {
-                                productForm.submit();
-                              }
+                          // Trigger standard checkout
+                          const productForm = document.querySelector('form[action="/cart/add"], #product-form-{{ section_id }}');
+                          if (productForm) {
+                            const checkoutBtn = productForm.querySelector('button[type="submit"], .product-form__submit');
+                            if (checkoutBtn) {
+                              checkoutBtn.click();
+                            } else {
+                              productForm.submit();
                             }
-                          });
-                        }
+                          }
+                        });
                       }
-                    });
+                    }
                   });
                 }
 
