@@ -211,8 +211,9 @@
                 function blockStickyCodButtons() {
                   const elements = document.querySelectorAll('div, button, a, iframe');
                   elements.forEach(function(el) {
-                    // Check if it's our own custom button (do not block)
-                    if (el.classList.contains('custom-cod-button-releasit')) return;
+                    // Check if it's our own custom button or inside standard theme sections (do not block)
+                    if (el.classList.contains('custom-cod-button-releasit') || el.classList.contains('prepaid-checkout-btn-releasit') || el.classList.contains('fallback-checkout-btn-releasit')) return;
+                    if (el.closest('.shopify-section') || el.closest('#MainContent') || el.closest('header') || el.closest('footer')) return;
                     
                     // Check if the element contains COD/Order Now text
                     const text = el.innerText || el.textContent || '';
