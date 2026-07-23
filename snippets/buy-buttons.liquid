@@ -126,11 +126,22 @@
               [class*="releasit-button"]:not(.custom-cod-button-releasit), 
               button[class*="releasit"]:not(.custom-cod-button-releasit),
               iframe[src*="releasit"],
+              iframe[src*="releas.it"],
+              iframe[class*="releasit"],
+              iframe[class*="releas.it"],
+              iframe[id*="releasit"],
+              iframe[id*="releas.it"],
+              iframe[id*="rsi-"],
+              iframe[class*="rsi-"],
               .product-app-block-wrapper,
               [class*="releasit-sticky"],
               [id*="releasit-sticky"],
               [class*="releasit_sticky"],
               [id*="releasit_sticky"],
+              [class*="releas.it-sticky"],
+              [id*="releas.it-sticky"],
+              [class*="releas.it_sticky"],
+              [id*="releas.it_sticky"],
               .releasit-sticky-button,
               .releasit-sticky-cart,
               .rl-sticky-atc,
@@ -281,9 +292,14 @@
                   return null;
                 }
 
+                // Central function to query all possible Releasit elements in the DOM
+                function getReleasitElements() {
+                  return document.querySelectorAll('div[class*="releasit"], div[id*="releasit"], div[class*="releas.it"], div[id*="releas.it"], [class*="rsi-"], [id*="rsi-"], .rsi-modal, #releasit-modal, iframe[src*="releasit"], iframe[src*="releas.it"], iframe[class*="releasit"], iframe[class*="releas.it"], iframe[id*="releasit"], iframe[id*="releas.it"], iframe[id*="rsi-"], iframe[class*="rsi-"]');
+                }
+
                 // Check if any Releasit iframe or modal element is currently visible
                 function isReleasitModalVisible() {
-                  const releasitElements = document.querySelectorAll('div[class*="releasit"], div[id*="releasit"], .rsi-modal, #releasit-modal, iframe[src*="releasit"], iframe[class*="releasit"], iframe[id*="releasit"]');
+                  const releasitElements = getReleasitElements();
                   for (let el of releasitElements) {
                     // Skip our own checkout fallback banner
                     if (el.classList.contains('custom-prepaid-fallback-releasit')) continue;
@@ -344,7 +360,7 @@
                         e.stopPropagation();
                         
                         // Close Releasit modal/iframe
-                        const releasitElements = document.querySelectorAll('div[class*="releasit"], div[id*="releasit"], .rsi-modal, #releasit-modal, iframe[src*="releasit"], iframe[class*="releasit"], iframe[id*="releasit"]');
+                        const releasitElements = getReleasitElements();
                         releasitElements.forEach(function(el) {
                           if (el.classList.contains('custom-prepaid-fallback-releasit')) return;
                           const closeBtn = el.querySelector('button[class*="close"], span[class*="close"], [class*="close-icon"], .close, #close');
@@ -414,7 +430,7 @@
                         e.stopPropagation();
                         
                         // Close Releasit modal
-                        const modal = btn.closest('div[class*="modal"], div[id*="modal"], div[class*="popup"], div[id*="popup"], div[class*="releasit"], div[id*="releasit"]');
+                        const modal = btn.closest('div[class*="modal"], div[id*="modal"], div[class*="popup"], div[id*="popup"], div[class*="releasit"], div[id*="releasit"], div[class*="releas.it"], div[id*="releas.it"], div[class*="rsi-"], div[id*="rsi-"]');
                         if (modal) {
                           const closeBtn = modal.querySelector('button[class*="close"], span[class*="close"], [class*="close-icon"], .close, #close');
                           if (closeBtn) {
