@@ -120,7 +120,7 @@
             </button>
 
             <style>
-              /* Hide all native Releasit buttons and app embeds to prevent duplicate buttons and force our custom button layout position */
+              /* Hide all native Releasit buttons and app embeds to prevent duplicate buttons */
               .releasit-button, 
               .releasit-cod-button, 
               [class*="releasit-button"]:not(.custom-cod-button-releasit), 
@@ -154,7 +154,17 @@
               .rsi-sticky-bar-wrapper,
               .rsi-sticky-atc,
               [class*="rsi_sticky"],
-              [id*="rsi_sticky"] {
+              [id*="rsi_sticky"],
+              /* Hide Releasit button that appears inside/below the form */
+              [class*="rsi-btn"],
+              [id*="rsi-btn"],
+              [class*="rsi-button"],
+              [id*="rsi-button"],
+              [class*="releasit-form"] button:not(.custom-cod-button-releasit):not(.prepaid-checkout-btn-releasit),
+              [id*="releasit-form"] button:not(.custom-cod-button-releasit):not(.prepaid-checkout-btn-releasit),
+              [data-releasit] button:not(.custom-cod-button-releasit),
+              /* Hide the prepaid fallback sticky banner permanently */
+              .custom-prepaid-fallback-releasit {
                 display: none !important;
                 visibility: hidden !important;
                 height: 0 !important;
@@ -330,67 +340,13 @@
                   }
                 }
 
-                // Fallback banner for cross-origin iframes
+
+                // Fallback banner removed - no sticky banner needed
                 function showPrepaidFallbackBanner() {
-                  let fallback = document.querySelector('.custom-prepaid-fallback-releasit');
-                  let currentPrice = {{ product.selected_or_first_available_variant.price | divided_by: 100 }};
-                  const prepaidPrice = currentPrice - 100;
-
-                  if (!fallback) {
-                    fallback = document.createElement('div');
-                    fallback.className = 'custom-prepaid-fallback-releasit';
-                    fallback.style.cssText = 'position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff !important; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); padding: 1.2rem 1.5rem; z-index: 2147483647; text-align: center; border-top: 3px solid #cca43b; box-sizing: border-box; display: block; animation: mahekhPrepaidSlideUp 0.3s ease-out;';
-                    fallback.innerHTML = `
-                      <div style="max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 0.8rem; font-family: inherit;">
-                        <p style="margin: 0; font-size: 1.3rem; color: #1e293b; font-weight: 700; line-height: 1.3;">
-                          💡 Want to pay online? Get it for just <span style="color: #cca43b; font-size: 1.45rem;">₹${prepaidPrice}</span> (Save ₹100 Instantly!)
-                        </p>
-                        <button type="button" class="fallback-checkout-btn-releasit" style="width: 100%; padding: 1.1rem; background: linear-gradient(135deg, #cca43b, #a3802e) !important; color: #ffffff !important; border: none !important; border-radius: 4px; font-weight: 700; font-size: 1.3rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; box-shadow: 0 2px 8px rgba(204, 164, 59, 0.2); font-family: inherit;">
-                          💳 Pay Online - ₹${prepaidPrice}
-                        </button>
-                      </div>
-                      <style>
-                        @keyframes mahekhPrepaidSlideUp {
-                          from { transform: translateY(100%); }
-                          to { transform: translateY(0); }
-                        }
-                      </style>
-                    `;
-                    document.body.appendChild(fallback);
-
-                    const fallbackBtn = fallback.querySelector('.fallback-checkout-btn-releasit');
-                    if (fallbackBtn) {
-                      fallbackBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-                        // Close Releasit modal/iframe
-                        const releasitElements = getReleasitElements();
-                        releasitElements.forEach(function(el) {
-                          if (el.classList.contains('custom-prepaid-fallback-releasit')) return;
-                          const closeBtn = el.querySelector('button[class*="close"], span[class*="close"], [class*="close-icon"], .close, #close');
-                          if (closeBtn) {
-                            closeBtn.click();
-                          } else {
-                            el.style.setProperty('display', 'none', 'important');
-                          }
-                        });
-
-                        fallback.style.setProperty('display', 'none', 'important');
-                        triggerPrepaidCheckout();
-                      });
-                    }
-                  } else {
-                    fallback.style.setProperty('display', 'block', 'important');
-                    // Dynamically update price in case variant changed
-                    const priceSpan = fallback.querySelector('span');
-                    if (priceSpan && priceSpan.innerText !== '₹' + prepaidPrice) {
-                      priceSpan.innerText = '₹' + prepaidPrice;
-                      const btn = fallback.querySelector('.fallback-checkout-btn-releasit');
-                      if (btn) btn.innerText = '💳 Pay Online - ₹' + prepaidPrice;
-                    }
-                  }
+                  // Intentionally disabled - do not show sticky banner
+                  return;
                 }
+
 
                 // Monitor for Releasit COD modal opening to inject the Prepaid Discount Promo
                 function checkReleasitModal() {
