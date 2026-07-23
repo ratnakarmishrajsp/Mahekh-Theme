@@ -120,6 +120,21 @@
             </button>
 
             <style>
+              /* Hide all native Releasit buttons and app embeds to prevent duplicate buttons and force our custom button layout position */
+              .releasit-button, 
+              .releasit-cod-button, 
+              [class*="releasit-button"]:not(.custom-cod-button-releasit), 
+              button[class*="releasit"]:not(.custom-cod-button-releasit),
+              iframe[src*="releasit"],
+              .product-app-block-wrapper {
+                display: none !important;
+                visibility: hidden !important;
+                height: 0 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                opacity: 0 !important;
+              }
+
               @keyframes pulse-scale-cod {
                 0%, 100% { transform: scale(1); box-shadow: 0 4px 15px rgba(25, 135, 84, 0.25); }
                 50% { transform: scale(1.02); box-shadow: 0 8px 25px rgba(25, 135, 84, 0.45); }
