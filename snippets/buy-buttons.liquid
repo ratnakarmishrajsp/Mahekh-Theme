@@ -107,11 +107,11 @@
 
           {%- if show_cod_button -%}
             <!-- Vibrant Cash on Delivery (COD) Button with pulsing conversion animation -->
-            <!-- This uses official Releasit placeholder classes so the app replaces it in-place directly below Buy Now button -->
+            <!-- Cash on Delivery (COD) Button with pulsing conversion animation -->
             <button
               type="button"
-              class="product-form__submit button button--full-width button--primary custom-cod-button-releasit _rsi-cod-form-gempages-button-overwrite _rsi-cod-form-is-gempage"
-              style="margin-top: 1rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #11998e, #38ef7d) !important; color: #ffffff !important; border: none !important; font-weight: 700; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; justify-content: center; gap: 0.8rem; box-shadow: 0 4px 15px rgba(25, 135, 84, 0.25); transition: all 0.3s ease; height: auto; min-height: 48px; border-radius: 4px; padding: 1.2rem 2.5rem; position: relative; overflow: hidden; cursor: pointer; animation: pulse-scale-cod 2s infinite ease-in-out;"
+              class="product-form__submit button button--full-width button--primary custom-cod-button-releasit"
+              style="margin-top: 1rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #11998e, #38ef7d) !important; color: #ffffff !important; border: none !important; font-weight: 700; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 0.05em; display: flex !important; visibility: visible !important; opacity: 1 !important; align-items: center; justify-content: center; gap: 0.8rem; box-shadow: 0 4px 15px rgba(25, 135, 84, 0.25); transition: all 0.3s ease; height: auto; min-height: 48px; border-radius: 4px; padding: 1.2rem 2.5rem; position: relative; overflow: hidden; cursor: pointer; animation: pulse-scale-cod 2s infinite ease-in-out;"
             >
               <svg class="cod-truck-icon" viewBox="0 0 24 24" width="22" height="22" fill="currentColor" style="vertical-align: middle;">
                 <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm12 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm2-5.5h-3V9h3v4z"/>
@@ -120,6 +120,12 @@
             </button>
 
             <style>
+              .custom-cod-button-releasit {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+              }
+
               /* Hide all native Releasit buttons and app embeds to prevent duplicate buttons */
               .releasit-button, 
               .releasit-cod-button, 

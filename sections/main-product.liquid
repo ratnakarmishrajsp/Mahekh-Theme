@@ -3579,21 +3579,33 @@
       }
 
       let popupShown = false;
+      let historyPushed = false;
 
       // 1. History Hijack to Intercept Back Button
-      // Push initial dummy state so we have a state to pop when user clicks back
-      history.pushState({ exitPopup: "intercept" }, null, window.location.href);
+      // Defer history push until user actually interacts with the page (touch/scroll/click/mousemove)
+      // to prevent Facebook In-App Browser (Webview) from triggering instant popstate or page reloads on page load.
+      function pushExitHistoryState() {
+        if (!historyPushed && !popupShown) {
+          historyPushed = true;
+          try {
+            history.pushState({ exitPopup: "intercept" }, null, window.location.href);
+          } catch(e) {}
+        }
+      }
+
+      ['touchstart', 'scroll', 'mousemove', 'click', 'keydown'].forEach(function(evtName) {
+        window.addEventListener(evtName, pushExitHistoryState, { passive: true, once: true });
+      });
 
       window.addEventListener('popstate', function(event) {
-        if (!popupShown) {
-          // Prevent immediate navigation back by pushing state back onto history stack
-          history.pushState({ exitPopup: "intercept" }, null, window.location.href);
+        if (historyPushed && !popupShown) {
+          try {
+            history.pushState({ exitPopup: "intercept" }, null, window.location.href);
+          } catch(e) {}
           
           // Open the popup!
           exitPopup.classList.add('active');
           popupShown = true;
-        } else {
-          // If the popup has already been shown, let navigation back happen naturally
         }
       });
 
