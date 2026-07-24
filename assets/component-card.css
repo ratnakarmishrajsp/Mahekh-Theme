@@ -775,5 +775,52 @@
   }
 }
 
+/* Hide Red Releasit COD Button on Collection Pages, Product Cards & Grid Views (only show Add to Cart & View Details) */
+.card-wrapper .releasit-button,
+.card-wrapper .releasit-cod-button,
+.card-wrapper [class*="releasit"],
+.card-wrapper [id*="releasit"],
+.card-wrapper [class*="rsi-"],
+.card-wrapper [id*="rsi-"],
+.card-wrapper [class*="rsi-btn"],
+.card-wrapper [id*="rsi-btn"],
+.card-wrapper [class*="rsi-button"],
+.card-wrapper [id*="rsi-button"],
+.card-wrapper iframe[src*="releasit"],
+.card-wrapper iframe[src*="releas.it"],
+.card-wrapper [data-releasit],
+.quick-add .releasit-button,
+.quick-add .releasit-cod-button,
+.quick-add [class*="releasit"],
+.quick-add [id*="releasit"],
+.quick-add [class*="rsi-"],
+.quick-add [id*="rsi-"],
+.quick-add [class*="rsi-btn"],
+.quick-add [id*="rsi-btn"],
+.quick-add [class*="rsi-button"],
+.quick-add [id*="rsi-button"],
+.quick-add iframe[src*="releasit"],
+.quick-add iframe[src*="releas.it"],
+.quick-add [data-releasit],
+.template-collection .card-wrapper .releasit-button,
+.template-collection .card-wrapper .releasit-cod-button,
+.template-collection .card-wrapper [class*="releasit"],
+.template-collection .card-wrapper [class*="rsi-"],
+#product-grid .releasit-button,
+#product-grid .releasit-cod-button,
+#product-grid [class*="releasit"],
+#product-grid [id*="releasit"],
+#product-grid [class*="rsi-"],
+#product-grid [id*="rsi-"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 
 
