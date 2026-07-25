@@ -161,7 +161,7 @@
           "settings": {
             "show_dynamic_checkout": true,
             "show_gift_card_recipient": true,
-            "show_cod_button": true
+            "show_cod_button": false
           }
         }
       },

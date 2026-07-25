@@ -23,9 +23,9 @@
         assign show_dynamic_checkout = true
       endif
 
-      assign show_cod_button = true
-      if block.settings.show_cod_button == false
-        assign show_cod_button = false
+      assign show_cod_button = false
+      if block.settings.show_cod_button == true
+        assign show_cod_button = true
       endif
       assign cod_button_text = block.settings.cod_button_text | default: "Order Now - Cash on Delivery"
     -%}
@@ -105,301 +105,33 @@
             {{ form | payment_button }}
           {%- endif -%}
 
-          {%- if show_cod_button -%}
-            <style>
-              /* Hide only duplicate sticky/fixed bars, keep native Releasit red button intact */
-              [class*="releasit-sticky"],
-              [id*="releasit-sticky"],
-              [class*="releasit_sticky"],
-              [id*="releasit_sticky"],
-              [class*="releas.it-sticky"],
-              [id*="releas.it-sticky"],
-              [class*="releas.it_sticky"],
-              [id*="releas.it_sticky"],
-              .releasit-sticky-button,
-              .releasit-sticky-cart,
-              .rl-sticky-atc,
-              [class*="rsi-sticky"],
-              [id*="rsi-sticky"],
-              [class*="rsi-cod-sticky"],
-              [id*="rsi-cod-sticky"],
-              .rsi-sticky-button,
-              .rsi-sticky-bar,
-              .rsi-sticky-bar-wrapper,
-              .rsi-sticky-atc,
-              [class*="rsi_sticky"],
-              [id*="rsi_sticky"],
-              .custom-prepaid-fallback-releasit {
-                display: none !important;
-                visibility: hidden !important;
-                height: 0 !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                opacity: 0 !important;
-              }
-            </style>
-
-            <script>
-              (function() {
-                // Safety Fallback: If Releasit script is not loaded or doesn't replace the button within 2.5 seconds,
-                // we force display the button and attach a standard form submit click handler.
-                setTimeout(function() {
-                  const codBtn = document.querySelector('.custom-cod-button-releasit');
-                  if (codBtn) {
-                    const isReplaced = codBtn.classList.contains('rsi-button-replaced') || 
-                                       codBtn.closest('.rsi-replaced') || 
-                                       document.querySelector('.releasit-button-replaced');
-                    
-                    // If not replaced and is hidden by the app's stylesheet, restore visibility and add fallback form submit
-                    if (!isReplaced && (codBtn.offsetHeight === 0 || window.getComputedStyle(codBtn).display === 'none')) {
-                      codBtn.classList.remove('_rsi-cod-form-gempages-button-overwrite', '_rsi-cod-form-is-gempage');
-                      codBtn.style.setProperty('display', 'flex', 'important');
-                      codBtn.style.setProperty('visibility', 'visible', 'important');
-                      codBtn.style.setProperty('opacity', '1', 'important');
-                      
-                      codBtn.addEventListener('click', function(e) {
-                        const form = codBtn.closest('form');
-                        if (form) {
-                          e.preventDefault();
-                          form.submit();
-                        }
-                      });
-                    }
-                  }
-                }, 2500);
-
-                // Anti-Sticky Button Blocker: Monitor the DOM and block any fixed/sticky buttons
-                // containing Cash on Delivery or COD text (excluding our custom checkout button).
-                function blockStickyCodButtons() {
-                  const elements = document.querySelectorAll('div, button, a, iframe');
-                  elements.forEach(function(el) {
-                    // Check if it's our own custom button or inside standard theme sections (do not block)
-                    if (el.classList.contains('custom-cod-button-releasit') || el.classList.contains('prepaid-checkout-btn-releasit') || el.classList.contains('fallback-checkout-btn-releasit')) return;
-                    if (el.closest('.shopify-section') || el.closest('#MainContent') || el.closest('header') || el.closest('footer')) return;
-                    
-                    // Check if the element contains COD/Order Now text
-                    const text = el.innerText || el.textContent || '';
-                    const isCodRelated = text.includes('Cash on Delivery') || 
-                                         text.includes('COD') || 
-                                         text.includes('Order Now') || 
-                                         text.includes('Order now') ||
-                                         text.includes('Cash On Delivery') ||
-                                         text.includes('delivery') ||
-                                         text.includes('Delivery') ||
-                                         text.includes('cash');
-                    
-                    // Check if the element's style is sticky or fixed
-                    const style = window.getComputedStyle(el);
-                    const isStickyOrFixed = style.position === 'fixed' || style.position === 'sticky';
-                    
-                    if (isStickyOrFixed && isCodRelated) {
-                      el.style.setProperty('display', 'none', 'important');
-                      el.style.setProperty('visibility', 'hidden', 'important');
-                      el.style.setProperty('opacity', '0', 'important');
-                      el.style.setProperty('height', '0', 'important');
-                      el.style.setProperty('pointer-events', 'none', 'important');
-                    }
-                  });
-                }
-
-                // Helper to search recursively inside a DOM root including Shadow DOMs
-                function findButtonInDOM(root) {
-                  if (!root) return null;
-                  
-                  // Check current root's buttons
-                  const buttons = root.querySelectorAll('button, input[type="button"], input[type="submit"], [role="button"], a.btn, div[class*="btn"], div[class*="button"]');
-                  for (let btn of buttons) {
-                    if (btn.classList.contains('custom-cod-button-releasit') || btn.classList.contains('prepaid-checkout-btn-releasit')) continue;
-                    if (btn.id && (btn.id.includes('ProductSubmitButton') || btn.id.includes('SubmitButton'))) continue;
-                    if (btn.name === 'add' || btn.classList.contains('product-form__submit')) continue;
-
-                    const text = btn.innerText || btn.textContent || '';
-                    const isReleasitBtn = text.includes('Complete') || 
-                                         text.includes('Place') || 
-                                         text.includes('Confirm') || 
-                                         (text.includes('Order') && (text.includes('₹') || text.includes('Rs.') || text.includes('1299') || text.includes('price')));
-                    
-                    if (isReleasitBtn) {
-                      return btn;
-                    }
-                  }
-
-                  // Recursively check all child elements for shadow roots
-                  const allElements = root.querySelectorAll('*');
-                  for (let el of allElements) {
-                    if (el.shadowRoot) {
-                      const found = findButtonInDOM(el.shadowRoot);
-                      if (found) return found;
-                    }
-                  }
-
-                  return null;
-                }
-
-                // Search same-origin iframes recursively
-                function findReleasitSubmitButton() {
-                  let btn = findButtonInDOM(document);
-                  if (btn) return btn;
-
-                  const iframes = document.querySelectorAll('iframe');
-                  for (let iframe of iframes) {
-                    try {
-                      if (iframe.contentDocument) {
-                        btn = findButtonInDOM(iframe.contentDocument);
-                        if (btn) return btn;
-                      }
-                    } catch (e) {
-                      // Cross-origin iframe, ignore
-                    }
-                  }
-                  return null;
-                }
-
-                // Central function to query all possible Releasit elements in the DOM
-                function getReleasitElements() {
-                  const elements = document.querySelectorAll('div[class*="releasit"], div[id*="releasit"], div[class*="releas.it"], div[id*="releas.it"], [class*="rsi-"], [id*="rsi-"], .rsi-modal, #releasit-modal, iframe[src*="releasit"], iframe[src*="releas.it"], iframe[class*="releasit"], iframe[class*="releas.it"], iframe[id*="releasit"], iframe[id*="releas.it"], iframe[id*="rsi-"], iframe[class*="rsi-"]');
-                  return Array.from(elements).filter(function(el) {
-                    return !el.classList.contains('custom-cod-button-releasit') && 
-                           !el.classList.contains('custom-prepaid-fallback-releasit') && 
-                           !el.classList.contains('custom-prepaid-promo-releasit') &&
-                           !el.classList.contains('prepaid-checkout-btn-releasit') &&
-                           !el.classList.contains('fallback-checkout-btn-releasit');
-                  });
-                }
-
-                // Check if any Releasit iframe or modal element is currently visible
-                function isReleasitModalVisible() {
-                  const releasitElements = getReleasitElements();
-                  for (let el of releasitElements) {
-                    const style = window.getComputedStyle(el);
-                    if (style.display !== 'none' && style.visibility !== 'hidden' && el.offsetHeight > 0) {
-                      return el;
-                    }
-                  }
-                  return null;
-                }
-
-                // Trigger standard prepaid checkout on parent page
-                function triggerPrepaidCheckout() {
-                  const productForm = document.querySelector('form[action="/cart/add"], #product-form-{{ section_id }}');
-                  if (productForm) {
-                    const checkoutBtn = productForm.querySelector('button[type="submit"], .product-form__submit');
-                    if (checkoutBtn) {
-                      checkoutBtn.click();
-                    } else {
-                      productForm.submit();
-                    }
-                  }
-                }
-
-
-                // Fallback banner removed - no sticky banner needed
-                function showPrepaidFallbackBanner() {
-                  // Intentionally disabled - do not show sticky banner
-                  return;
-                }
-
-
-                // Monitor for Releasit COD modal opening to inject the Prepaid Discount Promo
-                function checkReleasitModal() {
-                  const btn = findReleasitSubmitButton();
-                  
-                  if (btn) {
-                    // Hide the fallback sticky bar if it was showing
-                    const fallback = document.querySelector('.custom-prepaid-fallback-releasit');
-                    if (fallback) fallback.style.setProperty('display', 'none', 'important');
-
-                    // Avoid double injection next to the button
-                    const parent = btn.parentNode;
-                    if (!parent || parent.querySelector('.custom-prepaid-promo-releasit')) return;
-
-                    const text = btn.innerText || btn.textContent || '';
-                    let currentPrice = {{ product.selected_or_first_available_variant.price | divided_by: 100 }};
-                    const priceMatch = text.match(/(?:Rs\.?|₹|INR)\s*([\d,]+)/i);
-                    if (priceMatch) {
-                      currentPrice = parseInt(priceMatch[1].replace(/,/g, ''));
-                    }
-                    const prepaidPrice = currentPrice - 100;
-
-                    // Create the prepaid promo element
-                    const promoDiv = document.createElement('div');
-                    promoDiv.className = 'custom-prepaid-promo-releasit';
-                    promoDiv.style.cssText = 'margin-top: 1.2rem; padding: 1.2rem 1rem 0 1rem; border-top: 1px dashed #e2e8f0; text-align: center; width: 100%; box-sizing: border-box; display: block !important;';
-                    promoDiv.innerHTML = `
-                      <p style="margin: 0 0 0.8rem 0; font-size: 1.3rem; color: #475569; font-weight: 600; line-height: 1.4; font-family: inherit;">
-                        💡 Prepay online and get it for just <strong style="color: #cca43b; font-size: 1.45rem;"><span class="prepaid-price-val">₹${prepaidPrice}</span></strong> (Save ₹100 Instantly!)
-                      </p>
-                      <button type="button" class="prepaid-checkout-btn-releasit" style="width: 100%; padding: 1.1rem; background: linear-gradient(135deg, #cca43b, #a3802e) !important; color: #ffffff !important; border: none !important; border-radius: 4px; font-weight: 700; font-size: 1.3rem; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(204, 164, 59, 0.2); font-family: inherit;">
-                        💳 Pay Online - <span class="prepaid-btn-val">₹${prepaidPrice}</span>
-                      </button>
-                    `;
-
-                    btn.parentNode.insertBefore(promoDiv, btn.nextSibling);
-
-                    const prepayBtn = promoDiv.querySelector('.prepaid-checkout-btn-releasit');
-                    if (prepayBtn) {
-                      prepayBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        
-                        // Close Releasit modal
-                        const modal = btn.closest('div[class*="modal"], div[id*="modal"], div[class*="popup"], div[id*="popup"], div[class*="releasit"], div[id*="releasit"], div[class*="releas.it"], div[id*="releas.it"], div[class*="rsi-"], div[id*="rsi-"]');
-                        if (modal) {
-                          const closeBtn = modal.querySelector('button[class*="close"], span[class*="close"], [class*="close-icon"], .close, #close');
-                          if (closeBtn) {
-                            closeBtn.click();
-                          } else {
-                            modal.style.setProperty('display', 'none', 'important');
-                          }
-                        }
-
-                        triggerPrepaidCheckout();
-                      });
-                    }
-                  } else {
-                    // Check if the Releasit modal or iframe is visible
-                    const activeModal = isReleasitModalVisible();
-                    if (activeModal) {
-                      showPrepaidFallbackBanner();
-                    } else {
-                      // Hide fallback banner if Releasit modal is closed
-                      const fallback = document.querySelector('.custom-prepaid-fallback-releasit');
-                      if (fallback) fallback.style.setProperty('display', 'none', 'important');
-                    }
-                  }
-                }
-
-                // Safely run DOM actions without causing infinite MutationObserver loops
-                let observer = null;
-                function runObserverActions() {
-                  if (observer) {
-                    observer.disconnect(); // Temporary disconnect to avoid infinite self-trigger loops
-                  }
-                  
-                  blockStickyCodButtons();
-                  checkReleasitModal();
-                  
-                  if (observer && window.MutationObserver) {
-                    observer.observe(document.documentElement, { childList: true, subtree: true });
-                  }
-                }
-
-                // Attach event listeners for scroll, load and resize events to continuously block
-                window.addEventListener('scroll', runObserverActions, { passive: true });
-                window.addEventListener('resize', runObserverActions, { passive: true });
-                window.addEventListener('load', runObserverActions);
-
-                // Use MutationObserver to instantly hide duplicate buttons and inject promo
-                if (window.MutationObserver) {
-                  observer = new MutationObserver(runObserverActions);
-                  observer.observe(document.documentElement, { childList: true, subtree: true });
-                }
-
-                // Initial run
-                runObserverActions();
-              })();
-            </script>
-          {%- endif -%}
+          <style>
+            /* Disable and hide all Releasit COD buttons, popups, sticky bars & embeds */
+            iframe[src*="releasit"],
+            iframe[src*="releas.it"],
+            div[class*="releasit"],
+            div[id*="releasit"],
+            div[class*="releas.it"],
+            div[id*="releas.it"],
+            [class*="rsi-"],
+            [id*="rsi-"],
+            .releasit-button,
+            .releasit-cod-button,
+            .custom-cod-button-releasit,
+            .custom-prepaid-promo-releasit,
+            .custom-prepaid-fallback-releasit,
+            .releasit-sticky-button,
+            .releasit-sticky-cart,
+            .rl-sticky-atc {
+              display: none !important;
+              visibility: hidden !important;
+              opacity: 0 !important;
+              pointer-events: none !important;
+              height: 0 !important;
+              width: 0 !important;
+              overflow: hidden !important;
+            }
+          </style>
         </div>
       {%- endform -%}
     </product-form>
