@@ -7,7 +7,7 @@
       --gold: #d4af37;
       --gold-dark: #b8860b;
       --gold-light: #f3e5ab;
-      --gold-glow: rgba(212, 175, 55, 0.35);
+      --gold-glow: rgba(212, 175, 55, 0.45);
       --amber-dark: #1f140e;
       --amber-card: #2c1d14;
       --amber-accent: #8b0000;
@@ -28,6 +28,8 @@
       box-sizing: border-box;
       line-height: 1.8;
       font-family: var(--font-body);
+      position: relative;
+      overflow: hidden;
       animation: mhKasturiFadeIn 0.8s ease-out forwards;
     }
 
@@ -54,9 +56,133 @@
       100% { transform: scale(1); }
     }
 
-    @keyframes mhSparkleDrip {
-      0% { background-position: 0px 0px, 0px 0px; }
-      100% { background-position: 180px 360px, -180px 360px; }
+    /* BACKGROUND ANIMATED KASTURI MUSK DEER (HIRAN) */
+    .mh-kasturi-bg-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    /* Floating Golden Scent Fog Particles */
+    @keyframes mhMistFloat {
+      0% { transform: translate(0, 0) scale(1); opacity: 0.12; }
+      50% { transform: translate(40px, -60px) scale(1.15); opacity: 0.22; }
+      100% { transform: translate(-30px, -120px) scale(1); opacity: 0.12; }
+    }
+
+    .mh-bg-mist-1 {
+      position: absolute;
+      top: 15%;
+      left: 10%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.25) 0%, rgba(212, 175, 55, 0) 70%);
+      filter: blur(40px);
+      animation: mhMistFloat 12s infinite ease-in-out;
+    }
+
+    .mh-bg-mist-2 {
+      position: absolute;
+      top: 55%;
+      right: 5%;
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, rgba(184, 134, 11, 0.2) 0%, rgba(184, 134, 11, 0) 70%);
+      filter: blur(50px);
+      animation: mhMistFloat 16s infinite ease-in-out reverse;
+    }
+
+    /* Running Deer Motion Animation across full description */
+    @keyframes mhDeerGallopRun {
+      0% {
+        transform: translate(-180px, 0px) scaleX(1);
+        opacity: 0;
+      }
+      5% {
+        opacity: 0.35;
+      }
+      25% {
+        transform: translate(25vw, -30px) scaleX(1);
+        opacity: 0.45;
+      }
+      50% {
+        transform: translate(55vw, 20px) scaleX(1);
+        opacity: 0.35;
+      }
+      75% {
+        transform: translate(80vw, -25px) scaleX(1);
+        opacity: 0.45;
+      }
+      95% {
+        opacity: 0.35;
+      }
+      100% {
+        transform: translate(calc(100% + 180px), 0px) scaleX(1);
+        opacity: 0;
+      }
+    }
+
+    @keyframes mhDeerLeapBody {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      25% { transform: translateY(-14px) rotate(-3deg); }
+      50% { transform: translateY(4px) rotate(2deg); }
+      75% { transform: translateY(-10px) rotate(-2deg); }
+    }
+
+    @keyframes mhScentTrailPulse {
+      0% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 0.7; transform: scale(1.3); }
+      100% { opacity: 0.2; transform: scale(0.8); }
+    }
+
+    .mh-running-deer-container {
+      position: absolute;
+      top: 180px;
+      left: 0;
+      width: 220px;
+      height: 140px;
+      animation: mhDeerGallopRun 22s linear infinite;
+      z-index: 1;
+      filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.6));
+    }
+
+    .mh-running-deer-container-2 {
+      position: absolute;
+      top: 1100px;
+      left: 0;
+      width: 200px;
+      height: 130px;
+      animation: mhDeerGallopRun 26s linear infinite 10s;
+      z-index: 1;
+      filter: drop-shadow(0 0 14px rgba(212, 175, 55, 0.5));
+    }
+
+    .mh-running-deer-container-3 {
+      position: absolute;
+      top: 2100px;
+      left: 0;
+      width: 230px;
+      height: 150px;
+      animation: mhDeerGallopRun 24s linear infinite 4s;
+      z-index: 1;
+      filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.6));
+    }
+
+    .mh-deer-svg {
+      width: 100%;
+      height: 100%;
+      animation: mhDeerLeapBody 1.6s ease-in-out infinite;
+    }
+
+    /* All content stays above background animation */
+    .mh-kasturi-content {
+      position: relative;
+      z-index: 2;
     }
 
     /* Top BOGO Highlight Bar */
@@ -93,7 +219,7 @@
 
     /* Hero Royal Card */
     .mh-kasturi-hero {
-      background: radial-gradient(circle at 50% 25%, #3a261a 0%, #170d07 100%);
+      background: radial-gradient(circle at 50% 25%, rgba(58, 38, 26, 0.95) 0%, rgba(23, 13, 7, 0.98) 100%);
       color: var(--white);
       padding: 3.5rem 2rem;
       border-radius: 16px;
@@ -103,20 +229,6 @@
       box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
       margin-bottom: 2.5rem;
       text-align: center;
-    }
-
-    .mh-kasturi-hero::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background-image: 
-        radial-gradient(1.5px 1.5px at 25px 45px, rgba(212, 175, 55, 0.7) 0%, transparent 100%),
-        radial-gradient(2px 2px at 80px 160px, rgba(255, 235, 180, 0.6) 0%, transparent 100%);
-      background-size: 180px 360px, 240px 480px;
-      animation: mhSparkleDrip 8s linear infinite;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0.85;
     }
 
     .mh-hero-content {
@@ -298,7 +410,8 @@
 
     /* Heritage & Story Section */
     .mh-story-card {
-      background: var(--bg-light);
+      background: rgba(250, 247, 242, 0.92);
+      backdrop-filter: blur(8px);
       border: 1px solid rgba(212, 175, 55, 0.25);
       border-radius: 14px;
       padding: 2.5rem 2rem;
@@ -373,7 +486,8 @@
     }
 
     .mh-note-card {
-      background: var(--white);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
       border: 1.5px solid rgba(212, 175, 55, 0.3);
       border-radius: 14px;
       padding: 2rem 1.5rem;
@@ -435,7 +549,7 @@
 
     /* Special BOGO Offer Spotlight */
     .mh-bogo-spotlight {
-      background: linear-gradient(135deg, #2c1d14 0%, #190e08 100%);
+      background: linear-gradient(135deg, rgba(44, 29, 20, 0.96) 0%, rgba(25, 14, 8, 0.98) 100%);
       color: var(--white);
       border: 2px solid var(--gold);
       border-radius: 16px;
@@ -533,7 +647,8 @@
     }
 
     .mh-benefit-box {
-      background: var(--bg-light);
+      background: rgba(250, 247, 242, 0.92);
+      backdrop-filter: blur(8px);
       border: 1px solid rgba(0,0,0,0.06);
       border-radius: 12px;
       padding: 1.8rem;
@@ -572,7 +687,8 @@
 
     /* Application Guide Section */
     .mh-apply-section {
-      background: var(--white);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
       border: 1.5px solid var(--border-gold);
       border-radius: 16px;
       padding: 2.5rem 2rem;
@@ -671,18 +787,18 @@
     }
 
     .mh-compare-table tr:nth-child(even) td {
-      background-color: #faf7f2;
+      background-color: rgba(250, 247, 242, 0.9);
     }
 
     .mh-compare-table tr:nth-child(odd) td {
-      background-color: #ffffff;
+      background-color: rgba(255, 255, 255, 0.9);
     }
 
     .mh-compare-table td:nth-child(2) {
       font-weight: 600;
       color: #1a202c;
       text-align: center;
-      background: rgba(212, 175, 55, 0.06) !important;
+      background: rgba(212, 175, 55, 0.08) !important;
     }
 
     .mh-compare-table td:nth-child(3) {
@@ -702,7 +818,7 @@
 
     /* Customer Reviews / Social Proof Strip */
     .mh-review-box {
-      background: linear-gradient(135deg, #fdfbf7 0%, #f6ede0 100%);
+      background: linear-gradient(135deg, rgba(253, 251, 247, 0.95) 0%, rgba(246, 237, 224, 0.95) 100%);
       border: 1.5px solid var(--gold);
       border-radius: 16px;
       padding: 2.2rem;
@@ -752,7 +868,8 @@
     }
 
     .mh-faq-card {
-      background: var(--bg-light);
+      background: rgba(250, 247, 242, 0.92);
+      backdrop-filter: blur(8px);
       border: 1px solid rgba(0,0,0,0.06);
       border-radius: 12px;
       padding: 1.5rem 1.8rem;
@@ -808,310 +925,376 @@
     }
   </style>
 
-  <!-- BOGO TOP PROMO BAR -->
-  <div class="mh-bogo-top-bar">
-    <span class="mh-bogo-badge">Limited Time Offer</span>
-    <span>🔥 BUY 1 GET 1 FREE — Add 1 Bottle to Cart & Get 2nd Bottle Free Automatically!</span>
+  <!-- BACKGROUND ANIMATED KASTURI MUSK DEER LAYER -->
+  <div class="mh-kasturi-bg-layer">
+    <div class="mh-bg-mist-1"></div>
+    <div class="mh-bg-mist-2"></div>
+
+    <!-- Running Deer Silhouette 1 -->
+    <div class="mh-running-deer-container">
+      <svg class="mh-deer-svg" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="goldDeerGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#ffe082" stop-opacity="0.9"/>
+            <stop offset="50%" stop-color="#d4af37" stop-opacity="0.75"/>
+            <stop offset="100%" stop-color="#b8860b" stop-opacity="0.4"/>
+          </linearGradient>
+          <filter id="deerGlow1" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="4" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+        <g filter="url(#deerGlow1)" fill="url(#goldDeerGrad1)">
+          <!-- Majestic Antlers -->
+          <path d="M148,22 C152,12 157,7 162,3 C163,7 161,11 157,14 C163,10 167,5 172,1 C170,7 165,13 159,17 C165,15 170,12 175,10 C170,17 164,20 156,23 Z" />
+          <!-- Head & Ears -->
+          <path d="M146,24 C151,23 155,25 157,29 C153,31 149,33 145,30 Z" />
+          <!-- Body & Leaping Stride -->
+          <path d="M150,27 C143,31 133,37 123,39 C108,40 93,37 78,44 C68,49 58,57 46,61 C38,64 30,63 23,57 C20,54 16,51 12,53 C14,57 20,63 26,67 C36,73 50,71 63,65 C73,60 86,51 98,49 C113,47 128,45 140,37 C144,34 148,30 150,27 Z" />
+          <!-- Reaching Front Legs -->
+          <path d="M133,41 L148,67 C151,72 156,77 160,81 L162,77 C157,73 151,67 145,61 L136,39 Z" />
+          <path d="M126,42 L140,65 C143,70 147,75 151,79 L153,76 C149,72 144,66 139,60 L129,40 Z" opacity="0.75" />
+          <!-- Extended Hind Legs -->
+          <path d="M53,62 L36,81 C30,87 22,93 13,97 L16,99 C26,94 34,87 41,80 L58,60 Z" />
+          <path d="M60,59 L46,77 C40,83 33,89 24,93 L27,96 C35,91 42,84 49,77 L64,57 Z" opacity="0.75" />
+        </g>
+      </svg>
+    </div>
+
+    <!-- Running Deer Silhouette 2 -->
+    <div class="mh-running-deer-container-2">
+      <svg class="mh-deer-svg" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#deerGlow1)" fill="url(#goldDeerGrad1)">
+          <path d="M148,22 C152,12 157,7 162,3 C163,7 161,11 157,14 C163,10 167,5 172,1 C170,7 165,13 159,17 C165,15 170,12 175,10 C170,17 164,20 156,23 Z" />
+          <path d="M146,24 C151,23 155,25 157,29 C153,31 149,33 145,30 Z" />
+          <path d="M150,27 C143,31 133,37 123,39 C108,40 93,37 78,44 C68,49 58,57 46,61 C38,64 30,63 23,57 C20,54 16,51 12,53 C14,57 20,63 26,67 C36,73 50,71 63,65 C73,60 86,51 98,49 C113,47 128,45 140,37 C144,34 148,30 150,27 Z" />
+          <path d="M133,41 L148,67 C151,72 156,77 160,81 L162,77 C157,73 151,67 145,61 L136,39 Z" />
+          <path d="M53,62 L36,81 C30,87 22,93 13,97 L16,99 C26,94 34,87 41,80 L58,60 Z" />
+        </g>
+      </svg>
+    </div>
+
+    <!-- Running Deer Silhouette 3 -->
+    <div class="mh-running-deer-container-3">
+      <svg class="mh-deer-svg" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+        <g filter="url(#deerGlow1)" fill="url(#goldDeerGrad1)">
+          <path d="M148,22 C152,12 157,7 162,3 C163,7 161,11 157,14 C163,10 167,5 172,1 C170,7 165,13 159,17 C165,15 170,12 175,10 C170,17 164,20 156,23 Z" />
+          <path d="M146,24 C151,23 155,25 157,29 C153,31 149,33 145,30 Z" />
+          <path d="M150,27 C143,31 133,37 123,39 C108,40 93,37 78,44 C68,49 58,57 46,61 C38,64 30,63 23,57 C20,54 16,51 12,53 C14,57 20,63 26,67 C36,73 50,71 63,65 C73,60 86,51 98,49 C113,47 128,45 140,37 C144,34 148,30 150,27 Z" />
+          <path d="M133,41 L148,67 C151,72 156,77 160,81 L162,77 C157,73 151,67 145,61 L136,39 Z" />
+          <path d="M53,62 L36,81 C30,87 22,93 13,97 L16,99 C26,94 34,87 41,80 L58,60 Z" />
+        </g>
+      </svg>
+    </div>
   </div>
 
-  <!-- ROYAL HERO CARD -->
-  <div class="mh-kasturi-hero">
-    <div class="mh-hero-content">
-      <span class="mh-hero-crown">👑</span>
-      <span class="mh-hero-subtitle">The Crown Jewel of Royal Indian Attars</span>
-      <h1 class="mh-hero-title">Mahekh <span>Kasturi Attar</span></h1>
-      <p class="mh-hero-desc">
-        Experience the timeless magnetic charm of pure exotic musk. Crafted with centuries-old royal attar heritage, Mahekh Kasturi Attar delivers an enchanting, deep, warm aura that lingers for 24+ hours without a single drop of alcohol.
+  <!-- MAIN CONTENT CONTAINER -->
+  <div class="mh-kasturi-content">
+    <!-- BOGO TOP PROMO BAR -->
+    <div class="mh-bogo-top-bar">
+      <span class="mh-bogo-badge">Limited Time Offer</span>
+      <span>🔥 BUY 1 GET 1 FREE — Add 1 Bottle to Cart & Get 2nd Bottle Free Automatically!</span>
+    </div>
+
+    <!-- ROYAL HERO CARD -->
+    <div class="mh-kasturi-hero">
+      <div class="mh-hero-content">
+        <span class="mh-hero-crown">👑</span>
+        <span class="mh-hero-subtitle">The Crown Jewel of Royal Indian Attars</span>
+        <h1 class="mh-hero-title">Mahekh <span>Kasturi Attar</span></h1>
+        <p class="mh-hero-desc">
+          Experience the timeless magnetic charm of pure exotic musk. Crafted with centuries-old royal attar heritage, Mahekh Kasturi Attar delivers an enchanting, deep, warm aura that lingers for 24+ hours without a single drop of alcohol.
+        </p>
+
+        <div class="mh-feature-strip">
+          <div class="mh-strip-item">
+            <span class="mh-strip-icon">🎁</span>
+            <p class="mh-strip-text">BUY 1 GET 1 FREE</p>
+          </div>
+          <div class="mh-strip-item">
+            <span class="mh-strip-icon">⏳</span>
+            <p class="mh-strip-text">24+ HR LONG LASTING</p>
+          </div>
+          <div class="mh-strip-item">
+            <span class="mh-strip-icon">🌿</span>
+            <p class="mh-strip-text">100% ALCOHOL FREE</p>
+          </div>
+          <div class="mh-strip-item">
+            <span class="mh-strip-icon">✨</span>
+            <p class="mh-strip-text">100% CRUELTY-FREE</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRAUD & DUPLICATE WARNING BOX -->
+    <div class="mh-fraud-alert">
+      <div class="mh-fraud-header">
+        <div class="mh-fraud-icon">⚠️</div>
+        <h3 class="mh-fraud-title">BE AWARE OF FRAUD & DUPLICATE SELLERS!</h3>
+      </div>
+      <div class="mh-fraud-body">
+        Due to the overwhelming popularity and high demand for <strong>Original Mahekh Kasturi Attar</strong>, several fake sellers, unauthorized Instagram pages, and fraudulent sites are impersonating our brand <strong>MAHEKH</strong> to sell cheap, chemical-laden synthetic oils under our name.
+        <div class="mh-fraud-highlight">
+          🔒 Official Guarantee: Authentic Mahekh Kasturi Attar is sold EXCLUSIVELY on our official store <strong>www.mahekh.in</strong>. Every genuine bottle comes with our tamper-evident royal seal and 100% Purity Certification. Do not compromise your skin with unauthorized fake sellers.
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENT HERITAGE SECTION -->
+    <div class="mh-story-card">
+      <div class="mh-story-grid">
+        <div class="mh-story-text">
+          <h3>The Mystical Legacy of Kasturi Musk</h3>
+          <p>
+            For millennia, Kasturi (Deer Musk) has been revered across royal Indian palaces and ancient Vedic traditions as the most hypnotic, grounding, and sensual fragrance in existence. It was prized by Maharajas and Royals for its captivating warmth and aura-enhancing properties.
+          </p>
+          <p>
+            At <strong>Mahekh</strong>, we preserve this legendary fragrance heritage through <strong>100% Cruelty-Free Botanical & Botanical Accord Alchemy</strong>. We ethically replicate the rich, sensual depth of wild Kasturi using rare herbal resins, warm amber, sweet botanical musk, and aged sandalwood notes—ensuring zero harm to any animal while delivering royal perfection.
+          </p>
+        </div>
+        <div class="mh-story-badge-box">
+          <h4>Ethical & Cruelty-Free</h4>
+          <p>Zero animal harm. 100% Vegan & cruelty-free botanical musk formulation blended with traditional steam distillation methods.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- OLFACTORY SCENT PYRAMID -->
+    <h2 class="mh-section-title">Olfactory Scent Profile</h2>
+    <p class="mh-section-sub">A rich, multi-layered fragrance journey that evolves beautifully on your pulse points.</p>
+
+    <div class="mh-notes-grid">
+      <!-- Top Notes -->
+      <div class="mh-note-card">
+        <span class="mh-note-badge">Initial 0 – 30 Mins</span>
+        <div class="mh-note-header">
+          <span>🌱</span> Top Notes
+        </div>
+        <ul class="mh-note-list">
+          <li>Warm Exotic Spices</li>
+          <li>Fresh Herbal Accord</li>
+          <li>Subtle Spicy Cardamom</li>
+          <li>Warm Cinnamon Whisper</li>
+        </ul>
+      </div>
+
+      <!-- Heart Notes -->
+      <div class="mh-note-card">
+        <span class="mh-note-badge">Heart 1 – 6 Hours</span>
+        <div class="mh-note-header">
+          <span>👑</span> Heart Notes
+        </div>
+        <ul class="mh-note-list">
+          <li>Rich Botanical Musk Accord</li>
+          <li>Sweet Golden Labdanum</li>
+          <li>Velvet Petal Rose Notes</li>
+          <li>Warm Sensual Amber</li>
+        </ul>
+      </div>
+
+      <!-- Base Notes -->
+      <div class="mh-note-card">
+        <span class="mh-note-badge">Base 6 – 24+ Hours</span>
+        <div class="mh-note-header">
+          <span>🪵</span> Base Notes
+        </div>
+        <ul class="mh-note-list">
+          <li>Deep Oriental Earthy Woods</li>
+          <li>Aged Mysuru Sandalwood</li>
+          <li>Warm Patchouli Resin</li>
+          <li>Sensual Long-Lasting Musk</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SPECIAL BOGO OFFER SPOTLIGHT -->
+    <div class="mh-bogo-spotlight">
+      <span class="mh-bogo-spotlight-badge">Special Celebration Offer</span>
+      <h3>Buy 1 Get 1 Free (Double Benefit)</h3>
+      <p>
+        Order today and receive a <strong>Second Bottle of Mahekh Kasturi Attar Absolutely FREE</strong>! Perfect to keep one at home and carry one in your pocket or bag, or to gift a royal luxury fragrance to someone special.
       </p>
-
-      <div class="mh-feature-strip">
-        <div class="mh-strip-item">
-          <span class="mh-strip-icon">🎁</span>
-          <p class="mh-strip-text">BUY 1 GET 1 FREE</p>
+      <div class="mh-bogo-steps">
+        <div class="mh-bogo-step-card">
+          <div class="mh-bogo-step-num">1</div>
+          <p class="mh-bogo-step-txt">Click "Add to Cart" or "Buy Now"</p>
         </div>
-        <div class="mh-strip-item">
-          <span class="mh-strip-icon">⏳</span>
-          <p class="mh-strip-text">24+ HR LONG LASTING</p>
+        <div class="mh-bogo-step-card">
+          <div class="mh-bogo-step-num">2</div>
+          <p class="mh-bogo-step-txt">2nd Free Bottle is Automatically Added</p>
         </div>
-        <div class="mh-strip-item">
-          <span class="mh-strip-icon">🌿</span>
-          <p class="mh-strip-text">100% ALCOHOL FREE</p>
-        </div>
-        <div class="mh-strip-item">
-          <span class="mh-strip-icon">✨</span>
-          <p class="mh-strip-text">100% CRUELTY-FREE</p>
+        <div class="mh-bogo-step-card">
+          <div class="mh-bogo-step-num">3</div>
+          <p class="mh-bogo-step-txt">Enjoy Royal Fragrance at 50% Savings!</p>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- FRAUD & DUPLICATE WARNING BOX -->
-  <div class="mh-fraud-alert">
-    <div class="mh-fraud-header">
-      <div class="mh-fraud-icon">⚠️</div>
-      <h3 class="mh-fraud-title">BE AWARE OF FRAUD & DUPLICATE SELLERS!</h3>
-    </div>
-    <div class="mh-fraud-body">
-      Due to the overwhelming popularity and high demand for <strong>Original Mahekh Kasturi Attar</strong>, several fake sellers, unauthorized Instagram pages, and fraudulent sites are impersonating our brand <strong>MAHEKH</strong> to sell cheap, chemical-laden synthetic oils under our name.
-      <div class="mh-fraud-highlight">
-        🔒 Official Guarantee: Authentic Mahekh Kasturi Attar is sold EXCLUSIVELY on our official store <strong>www.mahekh.in</strong>. Every genuine bottle comes with our tamper-evident royal seal and 100% Purity Certification. Do not compromise your skin with unauthorized fake sellers.
-      </div>
-    </div>
-  </div>
+    <!-- KEY BENEFITS GRID -->
+    <h2 class="mh-section-title">Why Choose Mahekh Kasturi Attar?</h2>
+    <p class="mh-section-sub">Formulated for fragrance connoisseurs who demand longevity, purity, and sophistication.</p>
 
-  <!-- SCENT HERITAGE SECTION -->
-  <div class="mh-story-card">
-    <div class="mh-story-grid">
-      <div class="mh-story-text">
-        <h3>The Mystical Legacy of Kasturi Musk</h3>
-        <p>
-          For millennia, Kasturi (Deer Musk) has been revered across royal Indian palaces and ancient Vedic traditions as the most hypnotic, grounding, and sensual fragrance in existence. It was prized by Maharajas and Royals for its captivating warmth and aura-enhancing properties.
-        </p>
-        <p>
-          At <strong>Mahekh</strong>, we preserve this legendary fragrance heritage through <strong>100% Cruelty-Free Botanical & Botanical Accord Alchemy</strong>. We ethically replicate the rich, sensual depth of wild Kasturi using rare herbal resins, warm amber, sweet botanical musk, and aged sandalwood notes—ensuring zero harm to any animal while delivering royal perfection.
-        </p>
+    <div class="mh-benefits-grid">
+      <div class="mh-benefit-box">
+        <div class="mh-benefit-icon">⏱️</div>
+        <div class="mh-benefit-content">
+          <h4>24+ Hours Longevity</h4>
+          <p>Unlike alcohol sprays that evaporate in minutes, our concentrated pure oil formula absorbs gently into skin and fabrics, radiating warmth all day and night.</p>
+        </div>
       </div>
-      <div class="mh-story-badge-box">
-        <h4>Ethical & Cruelty-Free</h4>
-        <p>Zero animal harm. 100% Vegan & cruelty-free botanical musk formulation blended with traditional steam distillation methods.</p>
-      </div>
-    </div>
-  </div>
 
-  <!-- OLFACTORY SCENT PYRAMID -->
-  <h2 class="mh-section-title">Olfactory Scent Profile</h2>
-  <p class="mh-section-sub">A rich, multi-layered fragrance journey that evolves beautifully on your pulse points.</p>
-
-  <div class="mh-notes-grid">
-    <!-- Top Notes -->
-    <div class="mh-note-card">
-      <span class="mh-note-badge">Initial 0 – 30 Mins</span>
-      <div class="mh-note-header">
-        <span>🌱</span> Top Notes
+      <div class="mh-benefit-box">
+        <div class="mh-benefit-icon">💧</div>
+        <div class="mh-benefit-content">
+          <h4>100% Alcohol-Free Pure Oil</h4>
+          <p>Pure concentrated perfume oil (Attar). Free from harsh synthetic alcohol, harsh preservatives, and skin irritants. Safe for all skin types.</p>
+        </div>
       </div>
-      <ul class="mh-note-list">
-        <li>Warm Exotic Spices</li>
-        <li>Fresh Herbal Accord</li>
-        <li>Subtle Spicy Cardamom</li>
-        <li>Warm Cinnamon Whisper</li>
-      </ul>
-    </div>
 
-    <!-- Heart Notes -->
-    <div class="mh-note-card">
-      <span class="mh-note-badge">Heart 1 – 6 Hours</span>
-      <div class="mh-note-header">
-        <span>👑</span> Heart Notes
+      <div class="mh-benefit-box">
+        <div class="mh-benefit-icon">🧘‍♂️</div>
+        <div class="mh-benefit-content">
+          <h4>Aura & Spiritual Elevation</h4>
+          <p>Kasturi aroma is widely known in Ayurveda and aromatherapy for instilling inner calmness, grounding mental focus, and enhancing spiritual aura during meditation and prayer.</p>
+        </div>
       </div>
-      <ul class="mh-note-list">
-        <li>Rich Botanical Musk Accord</li>
-        <li>Sweet Golden Labdanum</li>
-        <li>Velvet Petal Rose Notes</li>
-        <li>Warm Sensual Amber</li>
-      </ul>
-    </div>
 
-    <!-- Base Notes -->
-    <div class="mh-note-card">
-      <span class="mh-note-badge">Base 6 – 24+ Hours</span>
-      <div class="mh-note-header">
-        <span>🪵</span> Base Notes
-      </div>
-      <ul class="mh-note-list">
-        <li>Deep Oriental Earthy Woods</li>
-        <li>Aged Mysuru Sandalwood</li>
-        <li>Warm Patchouli Resin</li>
-        <li>Sensual Long-Lasting Musk</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- SPECIAL BOGO OFFER SPOTLIGHT -->
-  <div class="mh-bogo-spotlight">
-    <span class="mh-bogo-spotlight-badge">Special Celebration Offer</span>
-    <h3>Buy 1 Get 1 Free (Double Benefit)</h3>
-    <p>
-      Order today and receive a <strong>Second Bottle of Mahekh Kasturi Attar Absolutely FREE</strong>! Perfect to keep one at home and carry one in your pocket or bag, or to gift a royal luxury fragrance to someone special.
-    </p>
-    <div class="mh-bogo-steps">
-      <div class="mh-bogo-step-card">
-        <div class="mh-bogo-step-num">1</div>
-        <p class="mh-bogo-step-txt">Click "Add to Cart" or "Buy Now"</p>
-      </div>
-      <div class="mh-bogo-step-card">
-        <div class="mh-bogo-step-num">2</div>
-        <p class="mh-bogo-step-txt">2nd Free Bottle is Automatically Added</p>
-      </div>
-      <div class="mh-bogo-step-card">
-        <div class="mh-bogo-step-num">3</div>
-        <p class="mh-bogo-step-txt">Enjoy Royal Fragrance at 50% Savings!</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- KEY BENEFITS GRID -->
-  <h2 class="mh-section-title">Why Choose Mahekh Kasturi Attar?</h2>
-  <p class="mh-section-sub">Formulated for fragrance connoisseurs who demand longevity, purity, and sophistication.</p>
-
-  <div class="mh-benefits-grid">
-    <div class="mh-benefit-box">
-      <div class="mh-benefit-icon">⏱️</div>
-      <div class="mh-benefit-content">
-        <h4>24+ Hours Longevity</h4>
-        <p>Unlike alcohol sprays that evaporate in minutes, our concentrated pure oil formula absorbs gently into skin and fabrics, radiating warmth all day and night.</p>
+      <div class="mh-benefit-box">
+        <div class="mh-benefit-icon">👔</div>
+        <div class="mh-benefit-content">
+          <h4>Stain-Free & Non-Greasy</h4>
+          <p>Specially refined formulation that glides smoothly on wrists and neck without leaving oily stains on your white shirts, kurtas, or premium wear.</p>
+        </div>
       </div>
     </div>
 
-    <div class="mh-benefit-box">
-      <div class="mh-benefit-icon">💧</div>
-      <div class="mh-benefit-content">
-        <h4>100% Alcohol-Free Pure Oil</h4>
-        <p>Pure concentrated perfume oil (Attar). Free from harsh synthetic alcohol, harsh preservatives, and skin irritants. Safe for all skin types.</p>
+    <!-- HOW TO APPLY -->
+    <div class="mh-apply-section">
+      <h2 class="mh-section-title" style="margin-top:0;">How to Apply for Maximum Projection</h2>
+      <p class="mh-section-sub">Follow these simple steps to ensure your scent projects strongly for 24+ hours.</p>
+
+      <div class="mh-apply-grid">
+        <div class="mh-apply-card">
+          <span class="mh-apply-icon">🖐️</span>
+          <div class="mh-apply-title">Inner Wrists</div>
+          <p class="mh-apply-desc">Roll gently onto inner wrists and rub gently together to release warm notes.</p>
+        </div>
+        <div class="mh-apply-card">
+          <span class="mh-apply-icon">👂</span>
+          <div class="mh-apply-title">Behind Ears</div>
+          <p class="mh-apply-desc">Dab behind earlobes for a subtle fragrance trail whenever you move.</p>
+        </div>
+        <div class="mh-apply-card">
+          <span class="mh-apply-icon">👔</span>
+          <div class="mh-apply-title">Collar & Chest</div>
+          <p class="mh-apply-desc">Apply on collarbones or clothing seams for extended fabric retention.</p>
+        </div>
+        <div class="mh-apply-card">
+          <span class="mh-apply-icon">💪</span>
+          <div class="mh-apply-title">Inner Elbows</div>
+          <p class="mh-apply-desc">Pulse points retain warmth, boosting overall fragrance projection.</p>
+        </div>
       </div>
     </div>
 
-    <div class="mh-benefit-box">
-      <div class="mh-benefit-icon">🧘‍♂️</div>
-      <div class="mh-benefit-content">
-        <h4>Aura & Spiritual Elevation</h4>
-        <p>Kasturi aroma is widely known in Ayurveda and aromatherapy for instilling inner calmness, grounding mental focus, and enhancing spiritual aura during meditation and prayer.</p>
+    <!-- COMPARISON TABLE: ORIGINAL VS CHEAP MARKET SCENTS -->
+    <h2 class="mh-section-title">Original Mahekh vs Market Cheap Scents</h2>
+    <p class="mh-section-sub">See why thousands of perfume lovers trust Mahekh over cheap synthetic knockoffs.</p>
+
+    <div class="mh-compare-container">
+      <table class="mh-compare-table">
+        <thead>
+          <tr>
+            <th>Feature / Quality</th>
+            <th>Original Mahekh Kasturi</th>
+            <th>Cheap Fraud Counterfeits</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Fragrance Longevity</td>
+            <td><span class="mh-check-yes">✓ 24+ Hours Projection</span></td>
+            <td><span class="mh-check-no">✗ Fades in 1-2 Hours</span></td>
+          </tr>
+          <tr>
+            <td>Purity & Ingredients</td>
+            <td><span class="mh-check-yes">✓ 100% Alcohol-Free Pure Oil</span></td>
+            <td><span class="mh-check-no">✗ High Alcohol & Water Dilution</span></td>
+          </tr>
+          <tr>
+            <td>Cruelty-Free Ethics</td>
+            <td><span class="mh-check-yes">✓ 100% Vegan Botanical Accord</span></td>
+            <td><span class="mh-check-no">✗ Harmful Chemical Solvents</span></td>
+          </tr>
+          <tr>
+            <td>Skin Safety</td>
+            <td><span class="mh-check-yes">✓ Dermatologically Gentle</span></td>
+            <td><span class="mh-check-no">✗ Can Cause Rashes & Burning</span></td>
+          </tr>
+          <tr>
+            <td>Offer Benefit</td>
+            <td><span class="mh-check-yes">✓ Buy 1 Get 1 Free Verified</span></td>
+            <td><span class="mh-check-no">✗ Fake Claims / No Support</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SOCIAL PROOF / REVIEWS -->
+    <div class="mh-review-box">
+      <div class="mh-stars">★★★★★</div>
+      <div class="mh-review-rating-txt">Rated 4.9/5 by 12,400+ Verified Fragrance Enthusiasts</div>
+      <p class="mh-review-quote">
+        "Mahekh Kasturi Attar has a mesmerizing royal aroma! The rich musk and amber notes stay on my clothes even after washing. Plus getting 2 bottles in the Buy 1 Get 1 offer is unbelievable value. Pure perfection!"
+      </p>
+      <div class="mh-review-author">— Vikramaditya S., Verified Buyer</div>
+    </div>
+
+    <!-- FAQ SECTION -->
+    <h2 class="mh-section-title">Frequently Asked Questions</h2>
+    <p class="mh-section-sub">Everything you need to know before ordering.</p>
+
+    <div class="mh-faq-grid">
+      <div class="mh-faq-card">
+        <h4 class="mh-faq-question">❓ How does the Buy 1 Get 1 Free offer work?</h4>
+        <p class="mh-faq-answer">It’s simple! Simply place an order for 1 bottle on our website, and our fulfillment team will automatically pack and ship a SECOND FREE bottle in your parcel.</p>
+      </div>
+
+      <div class="mh-faq-card">
+        <h4 class="mh-faq-question">❓ Is this attar 100% alcohol-free and skin safe?</h4>
+        <p class="mh-faq-answer">Yes, absolutely. Mahekh Kasturi Attar contains zero ethyl alcohol. It is a pure, concentrated perfume oil blended with botanical carrier oils, making it safe for daily skin application.</p>
+      </div>
+
+      <div class="mh-faq-card">
+        <h4 class="mh-faq-question">❓ How do I verify I am buying original Mahekh product?</h4>
+        <p class="mh-faq-answer">Always place your order directly through <strong>www.mahekh.in</strong>. Authentic bottles feature our holographic seal and official brand branding. Beware of unauthorized social media sellers claiming to sell our products.</p>
+      </div>
+
+      <div class="mh-faq-card">
+        <h4 class="mh-faq-question">❓ Can both Men and Women wear Kasturi Attar?</h4>
+        <p class="mh-faq-answer">Yes! Kasturi attar is a classic unisex royal scent. It blends warm, woody, and sweet musk notes that complement both male and female body chemistry exceptionally well.</p>
       </div>
     </div>
 
-    <div class="mh-benefit-box">
-      <div class="mh-benefit-icon">👔</div>
-      <div class="mh-benefit-content">
-        <h4>Stain-Free & Non-Greasy</h4>
-        <p>Specially refined formulation that glides smoothly on wrists and neck without leaving oily stains on your white shirts, kurtas, or premium wear.</p>
+    <!-- TRUST FOOTER -->
+    <div class="mh-trust-footer">
+      <div class="mh-trust-item">
+        <span class="mh-trust-icon">🚚</span>
+        <span class="mh-trust-label">Free Express Shipping</span>
       </div>
-    </div>
-  </div>
-
-  <!-- HOW TO APPLY -->
-  <div class="mh-apply-section">
-    <h2 class="mh-section-title" style="margin-top:0;">How to Apply for Maximum Projection</h2>
-    <p class="mh-section-sub">Follow these simple steps to ensure your scent projects strongly for 24+ hours.</p>
-
-    <div class="mh-apply-grid">
-      <div class="mh-apply-card">
-        <span class="mh-apply-icon">🖐️</span>
-        <div class="mh-apply-title">Inner Wrists</div>
-        <p class="mh-apply-desc">Roll gently onto inner wrists and rub gently together to release warm notes.</p>
+      <div class="mh-trust-item">
+        <span class="mh-trust-icon">💵</span>
+        <span class="mh-trust-label">Cash On Delivery Available</span>
       </div>
-      <div class="mh-apply-card">
-        <span class="mh-apply-icon">👂</span>
-        <div class="mh-apply-title">Behind Ears</div>
-        <p class="mh-apply-desc">Dab behind earlobes for a subtle fragrance trail whenever you move.</p>
+      <div class="mh-trust-item">
+        <span class="mh-trust-icon">🛡️</span>
+        <span class="mh-trust-label">100% Original Guarantee</span>
       </div>
-      <div class="mh-apply-card">
-        <span class="mh-apply-icon">👔</span>
-        <div class="mh-apply-title">Collar & Chest</div>
-        <p class="mh-apply-desc">Apply on collarbones or clothing seams for extended fabric retention.</p>
+      <div class="mh-trust-item">
+        <span class="mh-trust-icon">🔒</span>
+        <span class="mh-trust-label">Secure SSL Checkout</span>
       </div>
-      <div class="mh-apply-card">
-        <span class="mh-apply-icon">💪</span>
-        <div class="mh-apply-title">Inner Elbows</div>
-        <p class="mh-apply-desc">Pulse points retain warmth, boosting overall fragrance projection.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- COMPARISON TABLE: ORIGINAL VS CHEAP MARKET SCENTS -->
-  <h2 class="mh-section-title">Original Mahekh vs Market Cheap Scents</h2>
-  <p class="mh-section-sub">See why thousands of perfume lovers trust Mahekh over cheap synthetic knockoffs.</p>
-
-  <div class="mh-compare-container">
-    <table class="mh-compare-table">
-      <thead>
-        <tr>
-          <th>Feature / Quality</th>
-          <th>Original Mahekh Kasturi</th>
-          <th>Cheap Fraud Counterfeits</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Fragrance Longevity</td>
-          <td><span class="mh-check-yes">✓ 24+ Hours Projection</span></td>
-          <td><span class="mh-check-no">✗ Fades in 1-2 Hours</span></td>
-        </tr>
-        <tr>
-          <td>Purity & Ingredients</td>
-          <td><span class="mh-check-yes">✓ 100% Alcohol-Free Pure Oil</span></td>
-          <td><span class="mh-check-no">✗ High Alcohol & Water Dilution</span></td>
-        </tr>
-        <tr>
-          <td>Cruelty-Free Ethics</td>
-          <td><span class="mh-check-yes">✓ 100% Vegan Botanical Accord</span></td>
-          <td><span class="mh-check-no">✗ Harmful Chemical Solvents</span></td>
-        </tr>
-        <tr>
-          <td>Skin Safety</td>
-          <td><span class="mh-check-yes">✓ Dermatologically Gentle</span></td>
-          <td><span class="mh-check-no">✗ Can Cause Rashes & Burning</span></td>
-        </tr>
-        <tr>
-          <td>Offer Benefit</td>
-          <td><span class="mh-check-yes">✓ Buy 1 Get 1 Free Verified</span></td>
-          <td><span class="mh-check-no">✗ Fake Claims / No Support</span></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- SOCIAL PROOF / REVIEWS -->
-  <div class="mh-review-box">
-    <div class="mh-stars">★★★★★</div>
-    <div class="mh-review-rating-txt">Rated 4.9/5 by 12,400+ Verified Fragrance Enthusiasts</div>
-    <p class="mh-review-quote">
-      "Mahekh Kasturi Attar has a mesmerizing royal aroma! The rich musk and amber notes stay on my clothes even after washing. Plus getting 2 bottles in the Buy 1 Get 1 offer is unbelievable value. Pure perfection!"
-    </p>
-    <div class="mh-review-author">— Vikramaditya S., Verified Buyer</div>
-  </div>
-
-  <!-- FAQ SECTION -->
-  <h2 class="mh-section-title">Frequently Asked Questions</h2>
-  <p class="mh-section-sub">Everything you need to know before ordering.</p>
-
-  <div class="mh-faq-grid">
-    <div class="mh-faq-card">
-      <h4 class="mh-faq-question">❓ How does the Buy 1 Get 1 Free offer work?</h4>
-      <p class="mh-faq-answer">It’s simple! Simply place an order for 1 bottle on our website, and our fulfillment team will automatically pack and ship a SECOND FREE bottle in your parcel.</p>
-    </div>
-
-    <div class="mh-faq-card">
-      <h4 class="mh-faq-question">❓ Is this attar 100% alcohol-free and skin safe?</h4>
-      <p class="mh-faq-answer">Yes, absolutely. Mahekh Kasturi Attar contains zero ethyl alcohol. It is a pure, concentrated perfume oil blended with botanical carrier oils, making it safe for daily skin application.</p>
-    </div>
-
-    <div class="mh-faq-card">
-      <h4 class="mh-faq-question">❓ How do I verify I am buying original Mahekh product?</h4>
-      <p class="mh-faq-answer">Always place your order directly through <strong>www.mahekh.in</strong>. Authentic bottles feature our holographic seal and official brand branding. Beware of unauthorized social media sellers claiming to sell our products.</p>
-    </div>
-
-    <div class="mh-faq-card">
-      <h4 class="mh-faq-question">❓ Can both Men and Women wear Kasturi Attar?</h4>
-      <p class="mh-faq-answer">Yes! Kasturi attar is a classic unisex royal scent. It blends warm, woody, and sweet musk notes that complement both male and female body chemistry exceptionally well.</p>
-    </div>
-  </div>
-
-  <!-- TRUST FOOTER -->
-  <div class="mh-trust-footer">
-    <div class="mh-trust-item">
-      <span class="mh-trust-icon">🚚</span>
-      <span class="mh-trust-label">Free Express Shipping</span>
-    </div>
-    <div class="mh-trust-item">
-      <span class="mh-trust-icon">💵</span>
-      <span class="mh-trust-label">Cash On Delivery Available</span>
-    </div>
-    <div class="mh-trust-item">
-      <span class="mh-trust-icon">🛡️</span>
-      <span class="mh-trust-label">100% Original Guarantee</span>
-    </div>
-    <div class="mh-trust-item">
-      <span class="mh-trust-icon">🔒</span>
-      <span class="mh-trust-label">Secure SSL Checkout</span>
     </div>
   </div>
 </div>
