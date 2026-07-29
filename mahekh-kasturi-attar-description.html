@@ -44,16 +44,107 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes mhPulseGlow {
-      0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.5); }
-      70% { box-shadow: 0 0 0 14px rgba(212, 175, 55, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
-    }
-
     @keyframes mhAlertPulse {
       0% { transform: scale(1); }
-      50% { transform: scale(1.02); }
+      50% { transform: scale(1.03); }
       100% { transform: scale(1); }
+    }
+
+    /* HIGH-IMPACT ANIMATED BUY 1 GET 1 FREE SHIMMER & GLOW KEYFRAMES */
+    @keyframes mhBogoGlowPulse {
+      0% {
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.6), 0 0 25px rgba(229, 62, 62, 0.4);
+        border-color: #ffd700;
+      }
+      50% {
+        box-shadow: 0 0 22px rgba(255, 215, 0, 0.95), 0 0 40px rgba(169, 27, 13, 0.8);
+        border-color: #fff;
+      }
+      100% {
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.6), 0 0 25px rgba(229, 62, 62, 0.4);
+        border-color: #ffd700;
+      }
+    }
+
+    @keyframes mhBogoShimmerSweep {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    @keyframes mhTextPulseScale {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* ANIMATED BOGO HIGH-IMPACT BADGES & CARDS */
+    .mh-bogo-animated-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #ffd700 0%, #ff8c00 50%, #ffd700 100%);
+      background-size: 200% auto;
+      color: #000000;
+      padding: 0.5rem 1.4rem;
+      border-radius: 50px;
+      font-weight: 900;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+      border: 2px solid #ffffff;
+      animation: mhBogoShimmerSweep 3s infinite linear, mhAlertPulse 2s infinite ease-in-out;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+    }
+
+    .mh-bogo-hero-tag {
+      background: linear-gradient(90deg, #8b0000 0%, #d4af37 50%, #8b0000 100%);
+      background-size: 200% auto;
+      color: #ffffff;
+      padding: 0.6rem 1.8rem;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: inline-block;
+      border: 2px solid #ffd700;
+      animation: mhBogoGlowPulse 2.5s infinite ease-in-out, mhBogoShimmerSweep 4s infinite linear;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Top BOGO Highlight Bar */
+    .mh-bogo-top-bar {
+      background: linear-gradient(135deg, #7a0000 0%, #a91b0d 50%, #500000 100%);
+      color: var(--white);
+      text-align: center;
+      padding: 1.1rem 1.4rem;
+      border-radius: 14px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      margin-bottom: 2rem;
+      border: 2px solid #ffd700;
+      animation: mhBogoGlowPulse 3s infinite ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .mh-bogo-top-text {
+      color: #ffffff;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mh-bogo-top-text span {
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+      font-size: 1.35rem;
     }
 
     /* BACKGROUND ANIMATED KASTURI MUSK DEER (HIRAN) */
@@ -68,7 +159,6 @@
       overflow: hidden;
     }
 
-    /* Floating Golden Scent Fog Particles */
     @keyframes mhMistFloat {
       0% { transform: translate(0, 0) scale(1); opacity: 0.12; }
       50% { transform: translate(40px, -60px) scale(1.15); opacity: 0.22; }
@@ -97,7 +187,6 @@
       animation: mhMistFloat 16s infinite ease-in-out reverse;
     }
 
-    /* Running Deer Motion Animation across full description */
     @keyframes mhDeerGallopRun {
       0% {
         transform: translate(-180px, 0px) scaleX(1);
@@ -132,12 +221,6 @@
       25% { transform: translateY(-14px) rotate(-3deg); }
       50% { transform: translateY(4px) rotate(2deg); }
       75% { transform: translateY(-10px) rotate(-2deg); }
-    }
-
-    @keyframes mhScentTrailPulse {
-      0% { opacity: 0.2; transform: scale(0.8); }
-      50% { opacity: 0.7; transform: scale(1.3); }
-      100% { opacity: 0.2; transform: scale(0.8); }
     }
 
     .mh-running-deer-container {
@@ -179,42 +262,9 @@
       animation: mhDeerLeapBody 1.6s ease-in-out infinite;
     }
 
-    /* All content stays above background animation */
     .mh-kasturi-content {
       position: relative;
       z-index: 2;
-    }
-
-    /* Top BOGO Highlight Bar */
-    .mh-bogo-top-bar {
-      background: linear-gradient(135deg, #8b0000 0%, #a91b0d 50%, #600000 100%);
-      color: var(--white);
-      text-align: center;
-      padding: 0.9rem 1.2rem;
-      border-radius: 12px;
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      margin-bottom: 2rem;
-      box-shadow: 0 8px 25px rgba(169, 27, 13, 0.25);
-      border: 1px solid rgba(255, 215, 0, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .mh-bogo-badge {
-      background: #ffd700;
-      color: #000000;
-      padding: 0.3rem 0.8rem;
-      border-radius: 50px;
-      font-weight: 800;
-      font-size: 0.9rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      animation: mhAlertPulse 2s infinite ease-in-out;
     }
 
     /* Hero Royal Card */
@@ -303,6 +353,12 @@
       text-align: center;
     }
 
+    .mh-strip-item-bogo {
+      background: linear-gradient(135deg, rgba(139, 0, 0, 0.3) 0%, rgba(212, 175, 55, 0.2) 100%);
+      border: 1.5px solid #ffd700;
+      animation: mhAlertPulse 2s infinite ease-in-out;
+    }
+
     .mh-strip-icon {
       font-size: 1.5rem;
       margin-bottom: 0.4rem;
@@ -315,6 +371,12 @@
       color: #fff;
       margin: 0;
       letter-spacing: 0.02em;
+    }
+
+    .mh-strip-text-bogo {
+      color: #ffd700;
+      font-weight: 800;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
     }
 
     /* FRAUD / DUPLICATE WARNING BOX */
@@ -553,37 +615,26 @@
       color: var(--white);
       border: 2px solid var(--gold);
       border-radius: 16px;
-      padding: 2.5rem 2rem;
+      padding: 2.8rem 2rem;
       margin-bottom: 3.5rem;
       text-align: center;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 15px 35px rgba(212, 175, 55, 0.15);
-    }
-
-    .mh-bogo-spotlight-badge {
-      background: linear-gradient(90deg, #ffd700, #ffaa00);
-      color: #000;
-      font-weight: 800;
-      font-size: 0.95rem;
-      text-transform: uppercase;
-      padding: 0.4rem 1.4rem;
-      border-radius: 50px;
-      display: inline-block;
-      margin-bottom: 1.2rem;
-      letter-spacing: 0.1em;
+      animation: mhBogoGlowPulse 3s infinite ease-in-out;
     }
 
     .mh-bogo-spotlight h3 {
       font-family: var(--font-heading);
-      font-size: 2.2rem;
-      color: var(--gold);
+      font-size: 2.5rem;
+      color: #ffd700;
       margin: 0 0 1rem 0;
-      font-weight: 700;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
     }
 
     .mh-bogo-spotlight p {
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       color: #e5dacd;
       max-width: 700px;
       margin: 0 auto 1.8rem auto;
@@ -606,29 +657,30 @@
 
     .mh-bogo-step-card {
       background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      padding: 1.2rem 1rem;
+      border: 1.5px solid rgba(255, 215, 0, 0.4);
+      padding: 1.4rem 1rem;
       border-radius: 12px;
     }
 
     .mh-bogo-step-num {
-      width: 32px;
-      height: 32px;
-      background: var(--gold);
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #ffd700, #ff8c00);
       color: #000;
-      font-weight: 800;
+      font-weight: 900;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 0.6rem auto;
-      font-size: 1rem;
+      margin: 0 auto 0.8rem auto;
+      font-size: 1.1rem;
+      box-shadow: 0 0 10px rgba(255,215,0,0.6);
     }
 
     .mh-bogo-step-txt {
-      font-size: 0.95rem;
+      font-size: 1rem;
       color: #fff;
-      font-weight: 500;
+      font-weight: 700;
       margin: 0;
     }
 
@@ -945,16 +997,11 @@
           </filter>
         </defs>
         <g filter="url(#deerGlow1)" fill="url(#goldDeerGrad1)">
-          <!-- Majestic Antlers -->
           <path d="M148,22 C152,12 157,7 162,3 C163,7 161,11 157,14 C163,10 167,5 172,1 C170,7 165,13 159,17 C165,15 170,12 175,10 C170,17 164,20 156,23 Z" />
-          <!-- Head & Ears -->
           <path d="M146,24 C151,23 155,25 157,29 C153,31 149,33 145,30 Z" />
-          <!-- Body & Leaping Stride -->
           <path d="M150,27 C143,31 133,37 123,39 C108,40 93,37 78,44 C68,49 58,57 46,61 C38,64 30,63 23,57 C20,54 16,51 12,53 C14,57 20,63 26,67 C36,73 50,71 63,65 C73,60 86,51 98,49 C113,47 128,45 140,37 C144,34 148,30 150,27 Z" />
-          <!-- Reaching Front Legs -->
           <path d="M133,41 L148,67 C151,72 156,77 160,81 L162,77 C157,73 151,67 145,61 L136,39 Z" />
           <path d="M126,42 L140,65 C143,70 147,75 151,79 L153,76 C149,72 144,66 139,60 L129,40 Z" opacity="0.75" />
-          <!-- Extended Hind Legs -->
           <path d="M53,62 L36,81 C30,87 22,93 13,97 L16,99 C26,94 34,87 41,80 L58,60 Z" />
           <path d="M60,59 L46,77 C40,83 33,89 24,93 L27,96 C35,91 42,84 49,77 L64,57 Z" opacity="0.75" />
         </g>
@@ -990,10 +1037,10 @@
 
   <!-- MAIN CONTENT CONTAINER -->
   <div class="mh-kasturi-content">
-    <!-- BOGO TOP PROMO BAR -->
+    <!-- TOP BOGO PROMO BAR -->
     <div class="mh-bogo-top-bar">
-      <span class="mh-bogo-badge">Limited Time Offer</span>
-      <span>🔥 BUY 1 GET 1 FREE — Add 1 Bottle to Cart & Get 2nd Bottle Free Automatically!</span>
+      <span class="mh-bogo-animated-badge">🔥 SPECIAL OFFER</span>
+      <div class="mh-bogo-top-text">🎁 <span>BUY 1 GET 1 FREE</span></div>
     </div>
 
     <!-- ROYAL HERO CARD -->
@@ -1002,14 +1049,18 @@
         <span class="mh-hero-crown">👑</span>
         <span class="mh-hero-subtitle">The Crown Jewel of Royal Indian Attars</span>
         <h1 class="mh-hero-title">Mahekh <span>Kasturi Attar</span></h1>
+        
+        <!-- HIGH IMPACT ANIMATED BOGO TAG IN HERO -->
+        <div class="mh-bogo-hero-tag">🔥 BUY 1 GET 1 FREE</div>
+
         <p class="mh-hero-desc">
           Experience the timeless magnetic charm of pure exotic musk. Crafted with centuries-old royal attar heritage, Mahekh Kasturi Attar delivers an enchanting, deep, warm aura that lingers for 24+ hours without a single drop of alcohol.
         </p>
 
         <div class="mh-feature-strip">
-          <div class="mh-strip-item">
+          <div class="mh-strip-item mh-strip-item-bogo">
             <span class="mh-strip-icon">🎁</span>
-            <p class="mh-strip-text">BUY 1 GET 1 FREE</p>
+            <p class="mh-strip-text mh-strip-text-bogo">BUY 1 GET 1 FREE</p>
           </div>
           <div class="mh-strip-item">
             <span class="mh-strip-icon">⏳</span>
@@ -1108,25 +1159,25 @@
       </div>
     </div>
 
-    <!-- SPECIAL BOGO OFFER SPOTLIGHT -->
+    <!-- SPECIAL ANIMATED BOGO OFFER SPOTLIGHT -->
     <div class="mh-bogo-spotlight">
-      <span class="mh-bogo-spotlight-badge">Special Celebration Offer</span>
-      <h3>Buy 1 Get 1 Free (Double Benefit)</h3>
+      <span class="mh-bogo-animated-badge" style="margin-bottom: 1.2rem;">SPECIAL CELEBRATION OFFER</span>
+      <h3>BUY 1 GET 1 FREE</h3>
       <p>
-        Order today and receive a <strong>Second Bottle of Mahekh Kasturi Attar Absolutely FREE</strong>! Perfect to keep one at home and carry one in your pocket or bag, or to gift a royal luxury fragrance to someone special.
+        Order today and take advantage of our exclusive <strong>BUY 1 GET 1 FREE</strong> promotion! Receive double the luxury fragrance at no extra cost.
       </p>
       <div class="mh-bogo-steps">
         <div class="mh-bogo-step-card">
           <div class="mh-bogo-step-num">1</div>
-          <p class="mh-bogo-step-txt">Click "Add to Cart" or "Buy Now"</p>
+          <p class="mh-bogo-step-txt">Place Your Order Today</p>
         </div>
         <div class="mh-bogo-step-card">
           <div class="mh-bogo-step-num">2</div>
-          <p class="mh-bogo-step-txt">2nd Free Bottle is Automatically Added</p>
+          <p class="mh-bogo-step-txt">BUY 1 GET 1 FREE Applied</p>
         </div>
         <div class="mh-bogo-step-card">
           <div class="mh-bogo-step-num">3</div>
-          <p class="mh-bogo-step-txt">Enjoy Royal Fragrance at 50% Savings!</p>
+          <p class="mh-bogo-step-txt">Get 2 Royal Bottles Shipped</p>
         </div>
       </div>
     </div>
@@ -1233,8 +1284,8 @@
             <td><span class="mh-check-no">✗ Can Cause Rashes & Burning</span></td>
           </tr>
           <tr>
-            <td>Offer Benefit</td>
-            <td><span class="mh-check-yes">✓ Buy 1 Get 1 Free Verified</span></td>
+            <td>Special Offer</td>
+            <td><span class="mh-check-yes">✓ BUY 1 GET 1 FREE</span></td>
             <td><span class="mh-check-no">✗ Fake Claims / No Support</span></td>
           </tr>
         </tbody>
@@ -1246,7 +1297,7 @@
       <div class="mh-stars">★★★★★</div>
       <div class="mh-review-rating-txt">Rated 4.9/5 by 12,400+ Verified Fragrance Enthusiasts</div>
       <p class="mh-review-quote">
-        "Mahekh Kasturi Attar has a mesmerizing royal aroma! The rich musk and amber notes stay on my clothes even after washing. Plus getting 2 bottles in the Buy 1 Get 1 offer is unbelievable value. Pure perfection!"
+        "Mahekh Kasturi Attar has a mesmerizing royal aroma! The rich musk and amber notes stay on my clothes even after washing. Plus the BUY 1 GET 1 FREE offer is unbelievable value. Pure perfection!"
       </p>
       <div class="mh-review-author">— Vikramaditya S., Verified Buyer</div>
     </div>
@@ -1257,8 +1308,8 @@
 
     <div class="mh-faq-grid">
       <div class="mh-faq-card">
-        <h4 class="mh-faq-question">❓ How does the Buy 1 Get 1 Free offer work?</h4>
-        <p class="mh-faq-answer">It’s simple! Simply place an order for 1 bottle on our website, and our fulfillment team will automatically pack and ship a SECOND FREE bottle in your parcel.</p>
+        <h4 class="mh-faq-question">❓ How does the BUY 1 GET 1 FREE offer work?</h4>
+        <p class="mh-faq-answer">It’s simple! Simply place an order for 1 bottle on our website, and our team will automatically include your FREE 2nd bottle when packing your parcel.</p>
       </div>
 
       <div class="mh-faq-card">
