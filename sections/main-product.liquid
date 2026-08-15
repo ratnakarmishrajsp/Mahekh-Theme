@@ -314,15 +314,11 @@
                 </p>
               {%- when 'title' -%}
                 <div class="product__title" {{ block.shopify_attributes }}>
-                  <h1>{{ product.title | escape }}</h1>
-                  <a href="{{ product.url }}" class="product__title">
-                    <h2 class="h1">
-                      {{ product.title | escape }}
-                    </h2>
-                  </a>
+                  <div class="pdp-subtitle">Premium Attar (Set of 3)</div>
+                  <h1 class="pdp-main-title">✨ {{ product.title | escape }}</h1>
                 </div>
               {%- when 'price' -%}
-                <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+                <div id="price-{{ section.id }}" role="status" class="pdp-price-wrapper" {{ block.shopify_attributes }}>
                   {%- render 'price',
                     product: product,
                     use_variant: true,
@@ -359,11 +355,13 @@
                 {%- if has_conversion_urgency == false -%}
                   <div class="product__conversion-urgency">
                     <div class="urgency-stock-ticker">
-                      <span class="pulse-red-dot"></span>
-                      <span class="ticker-text">Only <strong class="highlight-urgency" id="UrgencyStockCount">9</strong> sets left in this handcrafted batch!</span>
+                      <span class="urgency-icon">🔥</span>
+                      <span class="ticker-text">Only <strong class="highlight-urgency" id="UrgencyStockCount">9</strong> sets left<br><span class="urgency-subtext">in this handcrafted batch!</span></span>
                     </div>
+                    <div class="urgency-divider"></div>
                     <div class="urgency-shipping-countdown">
-                      📦 Order within <strong class="highlight-urgency" id="UrgencyCountdown">00h 00m 00s</strong> to dispatch tomorrow morning!
+                      <span class="urgency-icon">🕒</span>
+                      <span class="ticker-text">Order within <strong class="highlight-urgency" id="UrgencyCountdown">14h 22m 48s</strong><br><span class="urgency-subtext">to dispatch tomorrow morning!</span></span>
                     </div>
                   </div>
                 {%- endif -%}
@@ -751,40 +749,138 @@
                   show_pickup_availability: true
                 -%}
 
-                {%- if has_social_proof == false -%}
-                  <div class="product__social-proof">
-                    <div class="social-live-view">
-                      <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px; margin-right:8px; vertical-align:middle; color:#cca43b; fill:none;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                      <span id="LiveViewCount" style="color:#cca43b; font-weight:700; margin-right:4px;">14</span> people are looking at this fragrance right now
+                {%- if has_trust_badges == false -%}
+                  <!-- Top 3-Item Trust Strip -->
+                  <div class="pdp-trust-strip-three">
+                    <div class="trust-strip-item">
+                      <span class="trust-icon">💵</span>
+                      <span>100% Cash on Delivery (COD)</span>
                     </div>
-                    <div class="social-recent-purchase" id="RecentPurchaseTicker" style="transition: opacity 0.5s ease-in-out;">
-                      🛒 Recent order: Priya from Mumbai bought this combo 8 mins ago!
+                    <div class="trust-strip-item">
+                      <span class="trust-icon">🌿</span>
+                      <span>100% Pure &amp; Alcohol-Free</span>
+                    </div>
+                    <div class="trust-strip-item">
+                      <span class="trust-icon">🚚</span>
+                      <span>Free Express Delivery (3-5 Days)</span>
                     </div>
                   </div>
-                {%- endif -%}
-                {%- if has_trust_badges == false -%}
-                  <div class="product__trust-badges">
-                    <div class="trust-badge-item">
-                      <span class="trust-badge-icon">💳</span>
-                      <div class="trust-badge-text">
+
+                  <!-- Social Proof & Live View Bar with Customer Avatars -->
+                  <div class="product__social-proof">
+                    <div class="social-proof-content">
+                      <div class="social-live-view">
+                        <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="#cca43b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px; margin-right:6px; vertical-align:middle;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        <span><strong id="LiveViewCount">14</strong> people are looking at this fragrance right now</span>
+                      </div>
+                      <div class="social-recent-purchase" id="RecentPurchaseTicker">
+                        👥 Recent order: <strong>Priya from Mumbai</strong> bought this combo 8 mins ago!
+                      </div>
+                    </div>
+                    <div class="customer-avatar-stack">
+                      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Customer" width="32" height="32">
+                      <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80" alt="Customer" width="32" height="32">
+                      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" alt="Customer" width="32" height="32">
+                      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80" alt="Customer" width="32" height="32">
+                    </div>
+                  </div>
+
+                  <!-- 2x2 Feature Grid Card -->
+                  <div class="pdp-feature-highlights-grid">
+                    <div class="feature-highlight-card">
+                      <span class="feature-card-icon">🎁</span>
+                      <div class="feature-card-text">
                         <strong>Prepaid Discount</strong>
-                        <span>Prepay and get ₹100 OFF Instantly!</span>
+                        <span>Get ₹100 OFF Instantly!</span>
                       </div>
                     </div>
-                    <div class="trust-badge-item">
-                      <span class="trust-badge-icon">🚚</span>
-                      <div class="trust-badge-text">
+                    <div class="feature-highlight-card">
+                      <span class="feature-card-icon">🚚</span>
+                      <div class="feature-card-text">
                         <strong>COD Available</strong>
-                        <span>Cash on Delivery active nationwide.</span>
+                        <span>Cash on Delivery across India</span>
                       </div>
                     </div>
-                    <div class="trust-badge-item">
-                      <span class="trust-badge-icon">🌿</span>
-                      <div class="trust-badge-text">
-                        <strong>100% Skin Safe</strong>
+                    <div class="feature-highlight-card">
+                      <span class="feature-card-icon">🧴</span>
+                      <div class="feature-card-text">
+                        <strong>100% Safe</strong>
                         <span>Alcohol-free &amp; paraben-free oils.</span>
                       </div>
                     </div>
+                    <div class="feature-highlight-card">
+                      <span class="feature-card-icon">🛡️</span>
+                      <div class="feature-card-text">
+                        <strong>Secure Payment</strong>
+                        <span>100% Safe &amp; Encrypted</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Why You'll Love It Section -->
+                  <div class="pdp-why-youll-love-it">
+                    <div class="pdp-section-divider-title">
+                      <span>Why You'll Love It</span>
+                    </div>
+                    <div class="why-love-grid">
+                      <div class="why-love-item">
+                        <span class="why-love-icon">🍷</span>
+                        <span>3 Unique &amp; Divine Fragrances</span>
+                      </div>
+                      <div class="why-love-item">
+                        <span class="why-love-icon">🏵️</span>
+                        <span>Perfect for Every Occasion</span>
+                      </div>
+                      <div class="why-love-item">
+                        <span class="why-love-icon">🎁</span>
+                        <span>Luxury Packaging</span>
+                      </div>
+                      <div class="why-love-item">
+                        <span class="why-love-icon">🏺</span>
+                        <span>Made in Kannauj</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Trusted by 10,000+ Happy Customers Section -->
+                  <div class="pdp-trusted-customers-section">
+                    <div class="trusted-customers-title">
+                      <span class="laurel-leaf">🌿</span>
+                      <span>Trusted by <strong>10,000+</strong> Happy Customers</span>
+                      <span class="laurel-leaf">🌿</span>
+                    </div>
+                    <div class="customer-avatar-row">
+                      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Customer" width="38" height="38">
+                      <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80" alt="Customer" width="38" height="38">
+                      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" alt="Customer" width="38" height="38">
+                      <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80" alt="Customer" width="38" height="38">
+                      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80" alt="Customer" width="38" height="38">
+                    </div>
+                    <div class="trusted-badges-grid">
+                      <div class="trusted-dashed-badge">
+                        <span>🚚</span> COD Available
+                      </div>
+                      <div class="trusted-dashed-badge">
+                        <span>🚚</span> Free Delivery
+                      </div>
+                      <div class="trusted-dashed-badge">
+                        <span>🔄</span> Easy Returns
+                      </div>
+                      <div class="trusted-dashed-badge">
+                        <span>🛡️</span> Original Products
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- FOR INQUIRY Green Button -->
+                  <div class="pdp-inquiry-button-wrapper">
+                    {%- assign wa_text = 'Hello Mahekh, I would like to order the Mahekh Premium Attar Combo. Please assist me with my order!' | url_param_escape -%}
+                    <a href="https://wa.me/919321868526?text={{ wa_text }}" target="_blank" class="pdp-inquiry-btn">
+                      <svg class="whatsapp-icon" viewBox="0 0 24 24" width="20" height="20" fill="#fff">
+                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.006 5.282 5.289-.002 11.795 0c3.148.002 6.11 1.229 8.342 3.463 2.23 2.236 3.451 5.201 3.447 8.35-.008 6.516-5.29 11.802-11.796 11.802-2.007-.001-3.97-.514-5.717-1.488L0 24zm6.49-4.523c1.657.982 3.277 1.498 4.907 1.499 5.378 0 9.754-4.374 9.76-9.758.002-2.609-1.01-5.06-2.852-6.904C16.46 2.47 14.004 1.455 11.8 1.451c-5.38 0-9.757 4.374-9.764 9.758-.002 1.738.459 3.43 1.332 4.937L2.33 21.68l5.776-1.517c-1.637.95-3.05 1.503-4.56 1.499zM17.5 14.2c-.3-.15-1.8-.9-2.1-1-.3-.15-.5-.2-.7.1s-.8.9-1 1.2c-.2.25-.4.3-.7.15-1.4-.7-2.5-1.3-3.5-3-.3-.45.3-.4.8-.9.2-.2.2-.4.1-.6s-1-2.4-1.3-3.2c-.3-.8-.7-.7-.9-.7h-.7c-.25 0-.6.1-.9.4s-1.1 1.1-1.1 2.7 1.2 3.1 1.4 3.3c.2.2 2.3 3.6 5.7 5.1.8.3 1.5.5 2 .7.8.25 1.6.2 2.2.1.7-.1 1.8-.7 2.1-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.6-.35z"/>
+                      </svg>
+                      <span>FOR INQUIRY</span>
+                    </a>
                   </div>
                 {%- endif -%}
               {%- when 'conversion_urgency' -%}
