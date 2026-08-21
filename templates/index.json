@@ -12,6 +12,7 @@
     "custom_banner_homepage": {
       "type": "custom-banner",
       "settings": {
+        "image_desktop": "shopify://shop_images/IMG_20260821_234128.png",
         "desktop_height": "adapt",
         "desktop_alignment": "center center",
         "mobile_height": "350px",
@@ -161,7 +162,8 @@
           "settings": {
             "show_dynamic_checkout": true,
             "show_gift_card_recipient": true,
-            "show_cod_button": false
+            "show_cod_button": false,
+            "cod_button_text": "Order Now - Cash on Delivery"
           }
         }
       },
@@ -295,6 +297,19 @@
         "padding_bottom": 40
       }
     },
+    "custom_scent_quiz_e8zy3L": {
+      "type": "custom-scent-quiz",
+      "name": "Custom Scent Quiz",
+      "settings": {
+        "title": "Find Your Signature Scent",
+        "subtitle": "Fragrance Matchmaker",
+        "product_floral": "",
+        "product_woody": "",
+        "product_combo": "",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
     "custom_faq_homepage": {
       "type": "custom-faq",
       "blocks": {
@@ -334,19 +349,6 @@
         "color_scheme": "scheme-1",
         "padding_top": 40,
         "padding_bottom": 40
-      }
-    },
-    "custom_scent_quiz_e8zy3L": {
-      "type": "custom-scent-quiz",
-      "name": "Custom Scent Quiz",
-      "settings": {
-        "title": "Find Your Signature Scent",
-        "subtitle": "Fragrance Matchmaker",
-        "product_floral": "",
-        "product_woody": "",
-        "product_combo": "",
-        "padding_top": 48,
-        "padding_bottom": 48
       }
     }
   },
