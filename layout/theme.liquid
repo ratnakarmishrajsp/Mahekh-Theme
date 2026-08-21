@@ -474,7 +474,8 @@ main,
 
   
     {% render 'sr-checkout' %}
-  </head>
+    <script src="https://unpkg.com/spf-analytics@1.0.0/index.js" defer></script>
+</head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
