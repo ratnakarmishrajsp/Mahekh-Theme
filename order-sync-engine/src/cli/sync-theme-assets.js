@@ -14,6 +14,9 @@ const filesToSync = [
   'sections/main-track-order.liquid',
   'templates/page.track-order.json',
   'assets/mahekh-tracking-index.json',
+  'sections/main-customer-intelligence.liquid',
+  'templates/page.customer-intelligence.json',
+  'assets/mahekh-customer-index.json',
 ];
 
 async function syncThemeAssets() {
