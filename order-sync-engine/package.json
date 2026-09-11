@@ -1,0 +1,23 @@
+{
+  "name": "shopify-shiprocket-sync-engine",
+  "version": "1.0.0",
+  "description": "Standalone data sync, order intelligence, and logistics tracking for Shopify and Shiprocket",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "sync": "node src/index.js --sync",
+    "inspect": "node src/cli/inspect.js",
+    "export": "node src/cli/export.js"
+  },
+  "keywords": [
+    "shopify",
+    "shiprocket",
+    "order-tracking",
+    "logistics",
+    "ndr",
+    "rto-intelligence"
+  ],
+  "author": "",
+  "license": "MIT"
+}
