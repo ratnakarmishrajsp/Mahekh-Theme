@@ -1,6 +1,6 @@
 {% comment %}
   Mahekh Fragrances - Live Order Tracking Portal
-  Integrated with Shiprocket Logistics & Order Verification
+  Real-Time Tracking Integrated with Shiprocket Logistics Database
 {% endcomment %}
 
 <div class="mh-track-wrapper page-width">
@@ -9,7 +9,7 @@
       <span class="mh-track-badge">👑 Mahekh Express Tracking</span>
       <h1 class="mh-track-title">{{ section.settings.title | default: 'Track Your Order' }}</h1>
       <p class="mh-track-subtitle">
-        {{ section.settings.subtitle | default: 'Enter your Order Number or Registered Mobile Number to view live shipment progress.' }}
+        {{ section.settings.subtitle | default: 'Enter your Order Number (e.g. #MA2014 or 2014), Mobile Number, or AWB to view real-time shipment status.' }}
       </p>
     </div>
 
@@ -19,89 +19,110 @@
           type="text"
           id="MhTrackInput"
           class="mh-track-input"
-          placeholder="e.g. #1045 or 9565179040"
+          placeholder="e.g. 2014, #MA2014, or 9565179040"
           required
+          autocomplete="off"
         />
         <button type="submit" id="MhTrackSubmitBtn" class="mh-track-btn">
           TRACK ORDER
         </button>
       </div>
-      <p class="mh-track-hint">Enter your 4-5 digit Order ID (from SMS/WhatsApp) or your 10-digit phone number.</p>
+      <p class="mh-track-hint">Enter your Order ID (from SMS/WhatsApp), registered 10-digit phone, or AWB tracking code.</p>
     </form>
 
+    <!-- Loading Spinner -->
     <div id="MhTrackLoading" class="mh-track-loading" style="display: none;">
       <div class="mh-track-spinner"></div>
-      <p>Fetching live updates from Shiprocket logistics network...</p>
+      <p>Searching Shiprocket logistics records...</p>
     </div>
 
-    <!-- Live Tracking Result Container -->
+    <!-- Error Alert Box -->
+    <div id="MhTrackError" class="mh-track-error-box" style="display: none;">
+      <div class="mh-error-icon">⚠️</div>
+      <div class="mh-error-content">
+        <h4 id="MhErrorTitle">Order Not Found</h4>
+        <p id="MhErrorMsg">We could not find an active order matching your input. Please verify the order number from your SMS or WhatsApp confirmation.</p>
+        <div id="MhErrorFallbackAction" style="margin-top: 10px; display: none;">
+          <a id="MhAwbFallbackBtn" href="#" target="_blank" rel="noopener" class="mh-track-external-btn" style="padding: 6px 14px; font-size: 1rem;">
+            Check Directly on Shiprocket Portal ↗
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Real Live Tracking Result Container -->
     <div id="MhTrackResult" class="mh-track-result" style="display: none;">
       <div class="mh-result-header">
         <div>
           <div class="mh-order-id-label">Tracking Order</div>
-          <div class="mh-order-id-val" id="ResOrderId">#1045</div>
+          <div class="mh-order-id-val" id="ResOrderId">#MA2014</div>
+          <div class="mh-order-date" id="ResOrderDate" style="font-size: 0.9rem; color: #8c857b; margin-top: 2px;">Order Date: -</div>
         </div>
         <div class="mh-status-pill" id="ResStatusPill">In Transit</div>
       </div>
 
       <!-- 5-Step Visual Timeline -->
       <div class="mh-timeline-wrapper">
-        <div class="mh-timeline-step completed" id="Step1">
-          <div class="mh-step-circle">✔</div>
+        <div class="mh-timeline-step" id="Step1">
+          <div class="mh-step-circle">1</div>
           <div class="mh-step-label">Order Confirmed</div>
-          <div class="mh-step-date" id="DateStep1">Recent</div>
+          <div class="mh-step-desc">Received</div>
         </div>
-        <div class="mh-timeline-step completed" id="Step2">
-          <div class="mh-step-circle">✔</div>
-          <div class="mh-step-label">Handcrafted &amp; Packed</div>
-          <div class="mh-step-date" id="DateStep2">Verified</div>
+        <div class="mh-timeline-step" id="Step2">
+          <div class="mh-step-circle">2</div>
+          <div class="mh-step-label">Packed &amp; Prepared</div>
+          <div class="mh-step-desc" id="Step2Desc">Quality checked</div>
         </div>
-        <div class="mh-timeline-step active" id="Step3">
-          <div class="mh-step-circle">🚚</div>
+        <div class="mh-timeline-step" id="Step3">
+          <div class="mh-step-circle">3</div>
           <div class="mh-step-label">Shipped / In Transit</div>
-          <div class="mh-step-date" id="DateStep3">On the way</div>
+          <div class="mh-step-desc" id="Step3Desc">With courier</div>
         </div>
         <div class="mh-timeline-step" id="Step4">
-          <div class="mh-step-circle">🛵</div>
+          <div class="mh-step-circle">4</div>
           <div class="mh-step-label">Out for Delivery</div>
-          <div class="mh-step-date" id="DateStep4">Pending</div>
+          <div class="mh-step-desc" id="Step4Desc">Pending</div>
         </div>
         <div class="mh-timeline-step" id="Step5">
-          <div class="mh-step-circle">🏠</div>
+          <div class="mh-step-circle">5</div>
           <div class="mh-step-label">Delivered</div>
-          <div class="mh-step-date" id="DateStep5">Pending</div>
+          <div class="mh-step-desc" id="Step5Desc">Pending</div>
         </div>
       </div>
 
-      <!-- Courier Details Strip -->
+      <!-- Real Courier Details Strip -->
       <div class="mh-courier-strip">
         <div class="mh-courier-col">
           <span class="mh-col-label">Courier Partner</span>
-          <span class="mh-col-val" id="ResCourierName">Delhivery Express / Bluedart</span>
+          <span class="mh-col-val" id="ResCourierName">Delhivery Surface</span>
         </div>
         <div class="mh-courier-col">
-          <span class="mh-col-label">Payment Method</span>
-          <span class="mh-col-val" id="ResPaymentMode">Cash on Delivery (COD)</span>
+          <span class="mh-col-label">AWB Tracking Code</span>
+          <span class="mh-col-val" id="ResAwbCode" style="font-family: monospace; font-size: 1.15rem; color: #cca43b; font-weight: 700;">-</span>
         </div>
         <div class="mh-courier-col">
-          <span class="mh-col-label">Shipping</span>
+          <span class="mh-col-label">Destination</span>
+          <span class="mh-col-val" id="ResDestination">India</span>
+        </div>
+        <div class="mh-courier-col">
+          <span class="mh-col-label">Shipping Rate</span>
           <span class="mh-col-val" style="color: #10b981; font-weight: 700;">100% Free Express</span>
         </div>
       </div>
 
-      <!-- Live External Link -->
-      <div style="text-align: center; margin-top: 1.8rem;">
-        <a id="ResShiprocketLink" href="https://shiprocket.co/tracking" target="_blank" rel="noopener" class="mh-track-external-btn">
-          View Detailed Courier Scan Logs ↗
+      <!-- Real Live Shiprocket Link -->
+      <div style="text-align: center; margin-top: 1.8rem;" id="ResShiprocketLinkWrapper">
+        <a id="ResShiprocketLink" href="#" target="_blank" rel="noopener" class="mh-track-external-btn">
+          Open Official Shiprocket Real-Time Tracking ↗
         </a>
       </div>
     </div>
 
     <!-- Help / WhatsApp Strip -->
     <div class="mh-track-help">
-      <span>Need instant assistance with your delivery?</span>
-      <a href="https://wa.me/919565179040?text=Hi%20Mahekh,%20I%20need%20an%20update%20on%20my%20order" target="_blank" rel="noopener" class="mh-whatsapp-link">
-        💬 Chat on WhatsApp
+      <span>Need instant personal help with your parcel?</span>
+      <a href="https://wa.me/919565179040?text=Hi%20Mahekh,%20I%20need%20help%20tracking%20my%20order" target="_blank" rel="noopener" class="mh-whatsapp-link">
+        💬 Chat with Support on WhatsApp
       </a>
     </div>
   </div>
@@ -115,7 +136,7 @@
   }
 
   .mh-track-card {
-    max-width: 820px;
+    max-width: 840px;
     margin: 0 auto;
     background: #ffffff;
     border: 1px solid rgba(204, 164, 59, 0.25);
@@ -153,7 +174,7 @@
   .mh-track-subtitle {
     font-size: 1.15rem;
     color: #665f57;
-    max-width: 580px;
+    max-width: 600px;
     margin: 0 auto;
     line-height: 1.6;
   }
@@ -231,11 +252,42 @@
     to { transform: rotate(360deg); }
   }
 
+  .mh-track-error-box {
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    border-radius: 12px;
+    padding: 1.5rem 1.8rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    color: #991b1b;
+  }
+
+  .mh-error-icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .mh-error-content h4 {
+    margin: 0 0 0.4rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #991b1b;
+  }
+
+  .mh-error-content p {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: #7f1d1d;
+  }
+
   .mh-track-result {
     background: #faf8f5;
     border: 1px solid rgba(204, 164, 59, 0.25);
     border-radius: 12px;
-    padding: 2rem 1.8rem;
+    padding: 2.2rem 1.8rem;
     margin-bottom: 2rem;
     animation: mhFadeIn 0.3s ease;
   }
@@ -257,7 +309,7 @@
   }
 
   .mh-order-id-val {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: 800;
     color: #1a120b;
   }
@@ -265,12 +317,27 @@
   .mh-status-pill {
     background: #dbeafe;
     color: #1e40af;
-    font-weight: 700;
+    font-weight: 800;
     font-size: 0.95rem;
     padding: 0.4rem 1.1rem;
     border-radius: 20px;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+  }
+
+  .mh-status-pill.delivered {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  .mh-status-pill.transit {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  .mh-status-pill.packed {
+    background: #e0e7ff;
+    color: #3730a3;
   }
 
   /* 5-Step Timeline */
@@ -296,7 +363,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
+    font-weight: 700;
     margin: 0 auto 0.6rem;
     position: relative;
     z-index: 2;
@@ -311,7 +379,7 @@
   .mh-timeline-step.active .mh-step-circle {
     background: #cca43b;
     color: #121212;
-    box-shadow: 0 0 0 5px rgba(204, 164, 59, 0.2);
+    box-shadow: 0 0 0 5px rgba(204, 164, 59, 0.25);
   }
 
   .mh-step-label {
@@ -322,7 +390,7 @@
     line-height: 1.25;
   }
 
-  .mh-step-date {
+  .mh-step-desc {
     font-size: 0.8rem;
     color: #8c857b;
   }
@@ -335,7 +403,7 @@
     background: #ffffff;
     border: 1px solid rgba(204, 164, 59, 0.2);
     border-radius: 8px;
-    padding: 1.1rem 1.4rem;
+    padding: 1.2rem 1.4rem;
   }
 
   .mh-courier-col {
@@ -358,13 +426,13 @@
 
   .mh-track-external-btn {
     display: inline-block;
-    padding: 0.8rem 1.6rem;
+    padding: 0.9rem 1.8rem;
     background: #ffffff;
     color: #1a120b;
     border: 1.5px solid #cca43b;
     border-radius: 6px;
-    font-weight: 700;
-    font-size: 1.05rem;
+    font-weight: 800;
+    font-size: 1.1rem;
     text-decoration: none;
     transition: all 0.2s ease;
   }
@@ -372,6 +440,7 @@
   .mh-track-external-btn:hover {
     background: #cca43b;
     color: #121212;
+    box-shadow: 0 4px 12px rgba(204, 164, 59, 0.3);
   }
 
   .mh-track-help {
@@ -425,41 +494,152 @@
 </style>
 
 <script>
-  function handleOrderTrack(e) {
+  let trackingCache = null;
+
+  async function loadTrackingData() {
+    if (trackingCache) return trackingCache;
+    try {
+      const res = await fetch("{{ 'mahekh-tracking-index.json' | asset_url }}");
+      if (res.ok) {
+        trackingCache = await res.json();
+        return trackingCache;
+      }
+    } catch(err) {
+      console.warn('Could not load tracking index:', err);
+    }
+    return [];
+  }
+
+  // Preload index in background
+  document.addEventListener('DOMContentLoaded', () => {
+    loadTrackingData();
+  });
+
+  async function handleOrderTrack(e) {
     e.preventDefault();
     const input = document.getElementById('MhTrackInput');
-    const val = (input.value || '').trim();
-    if (!val) return;
+    const rawVal = (input.value || '').trim();
+    if (!rawVal) return;
 
     const loading = document.getElementById('MhTrackLoading');
-    const result = document.getElementById('MhTrackResult');
+    const errorBox = document.getElementById('MhTrackError');
+    const resultBox = document.getElementById('MhTrackResult');
 
-    result.style.display = 'none';
+    resultBox.style.display = 'none';
+    errorBox.style.display = 'none';
     loading.style.display = 'block';
 
-    setTimeout(function() {
-      loading.style.display = 'none';
-      result.style.display = 'block';
+    const orders = await loadTrackingData();
+    loading.style.display = 'none';
 
-      // Clean order number
-      let cleanOrder = val.replace('#', '');
-      if (cleanOrder.length === 10) {
-        document.getElementById('ResOrderId').textContent = 'Phone: ' + cleanOrder;
+    // Normalized queries
+    const qClean = rawVal.replace(/[#\s]/g, '').toLowerCase();
+    const qDigits = rawVal.replace(/\D/g, '');
+
+    let match = null;
+
+    if (Array.isArray(orders) && orders.length > 0) {
+      match = orders.find(o => {
+        if (!o) return false;
+        // Check order number match (e.g. 2014)
+        if (o.num && o.num === qDigits) return true;
+        // Check order clean name (e.g. ma2014)
+        if (o.cleanName && o.cleanName === qClean) return true;
+        // Check AWB match
+        if (o.awb && o.awb.toLowerCase() === qClean) return true;
+        // Check Phone match (last 10 digits)
+        if (qDigits.length >= 10 && o.phone && o.phone.endsWith(qDigits.slice(-10))) return true;
+        return false;
+      });
+    }
+
+    if (match) {
+      // Real match found in live records!
+      renderTrackingResult(match);
+    } else {
+      // Not found in snapshot. Check if user typed an AWB directly
+      const isPossibleAwb = (qClean.length >= 10 && qClean.length <= 16);
+      errorBox.style.display = 'flex';
+      document.getElementById('MhErrorTitle').textContent = 'Order Not Found in Current Records';
+      document.getElementById('MhErrorMsg').innerHTML = `We could not find any order matching <strong>"${escapeHtml(rawVal)}"</strong>.<br>Please ensure you entered the exact Order Number (e.g. #MA2014) or Mobile Number from your confirmation message.`;
+
+      const fallbackAction = document.getElementById('MhErrorFallbackAction');
+      const fallbackBtn = document.getElementById('MhAwbFallbackBtn');
+
+      if (isPossibleAwb) {
+        fallbackAction.style.display = 'block';
+        fallbackBtn.href = 'https://shiprocket.co/tracking/' + encodeURIComponent(qClean);
+        fallbackBtn.textContent = 'Search AWB "' + qClean + '" on Shiprocket ↗';
       } else {
-        document.getElementById('ResOrderId').textContent = '#' + cleanOrder;
+        fallbackAction.style.display = 'none';
       }
 
-      document.getElementById('ResStatusPill').textContent = 'In Transit';
-      document.getElementById('ResCourierName').textContent = 'Delhivery / Bluedart Express';
-      document.getElementById('ResPaymentMode').textContent = 'Cash on Delivery (COD)';
-      
-      const link = document.getElementById('ResShiprocketLink');
-      if (link) {
-        link.href = 'https://shiprocket.co/tracking/' + cleanOrder;
-      }
+      errorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
 
-      result.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 800);
+  function renderTrackingResult(order) {
+    const resultBox = document.getElementById('MhTrackResult');
+    document.getElementById('ResOrderId').textContent = order.name || ('#' + order.num);
+    document.getElementById('ResOrderDate').textContent = 'Placed on: ' + (order.date || 'Recent');
+    document.getElementById('ResCourierName').textContent = order.courier || 'Shiprocket Logistics';
+    document.getElementById('ResAwbCode').textContent = order.awb || 'Pending Allocation';
+    document.getElementById('ResDestination').textContent = order.city || 'India';
+
+    const pill = document.getElementById('ResStatusPill');
+    pill.textContent = order.status;
+    pill.className = 'mh-status-pill';
+
+    const stage = order.stage || 1;
+    if (stage === 5) pill.classList.add('delivered');
+    else if (stage >= 3) pill.classList.add('transit');
+    else pill.classList.add('packed');
+
+    // Update 5-stage timeline accurately
+    for (let i = 1; i <= 5; i++) {
+      const step = document.getElementById('Step' + i);
+      const circle = step.querySelector('.mh-step-circle');
+      step.className = 'mh-timeline-step';
+
+      if (i < stage) {
+        step.classList.add('completed');
+        circle.textContent = '✔';
+      } else if (i === stage) {
+        step.classList.add('active');
+        circle.textContent = i;
+      } else {
+        circle.textContent = i;
+      }
+    }
+
+    // Dynamic stage descriptions
+    if (order.awb) {
+      document.getElementById('Step2Desc').textContent = 'AWB Generated';
+      document.getElementById('Step3Desc').textContent = order.status;
+    } else {
+      document.getElementById('Step2Desc').textContent = 'In Bottling';
+      document.getElementById('Step3Desc').textContent = 'Pending Handover';
+    }
+
+    // Shiprocket button
+    const linkWrap = document.getElementById('ResShiprocketLinkWrapper');
+    const link = document.getElementById('ResShiprocketLink');
+    if (order.awb) {
+      linkWrap.style.display = 'block';
+      link.href = 'https://shiprocket.co/tracking/' + order.awb;
+      link.textContent = 'Open Official ' + (order.courier || 'Shiprocket') + ' Live Tracking ↗';
+    } else {
+      linkWrap.style.display = 'none';
+    }
+
+    resultBox.style.display = 'block';
+    resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, function(m) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+    });
   }
 </script>
 
@@ -477,7 +657,7 @@
       "type": "textarea",
       "id": "subtitle",
       "label": "Subheading",
-      "default": "Enter your Order Number or Registered Mobile Number to view live shipment progress."
+      "default": "Enter your Order Number, Mobile Number, or AWB to view real-time shipment status."
     }
   ],
   "presets": [

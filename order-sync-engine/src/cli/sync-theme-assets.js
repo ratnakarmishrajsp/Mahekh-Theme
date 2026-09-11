@@ -13,6 +13,7 @@ const filesToSync = [
   'snippets/cart-drawer.liquid',
   'sections/main-track-order.liquid',
   'templates/page.track-order.json',
+  'assets/mahekh-tracking-index.json',
 ];
 
 async function syncThemeAssets() {
