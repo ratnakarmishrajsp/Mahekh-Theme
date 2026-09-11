@@ -224,29 +224,36 @@
         }
       </script>
 
-      <!-- Free Shipping & Prepaid Discount Progress Bar -->
+      <!-- Free Gift & Prepaid Discount Progress Bar (Aligned with Store Policy) -->
       {%- if cart != empty -%}
-        {%- assign threshold_shipping = 49900 -%}
+        {%- assign threshold_gift = 99900 -%}
         {%- assign cart_total = cart.original_total_price -%}
 
-        <div class="cart-drawer__shipping-bar" style="padding: 1.2rem 2rem; background: #faf8f5; border-bottom: 1px solid rgba(204, 164, 59, 0.2); text-align: center;">
-          {%- if cart_total < threshold_shipping -%}
-            {%- assign remaining = threshold_shipping | minus: cart_total -%}
-            {%- assign pct = cart_total | times: 100 | divided_by: threshold_shipping -%}
-            <p class="cart-drawer__shipping-msg" style="font-size: 1.25rem; font-weight: 600; color: #121212; margin: 0 0 0.6rem 0;">
-              Add <strong>{{ remaining | money }}</strong> more for 🚚 <strong>FREE SHIPPING & COD</strong>!
+        <div class="cart-drawer__shipping-bar" style="padding: 1.2rem 2rem; background: #faf8f5; border-bottom: 1px solid rgba(204, 164, 59, 0.25); text-align: center;">
+          <!-- All Orders Trust Policy Pill -->
+          <div style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: rgba(204, 164, 59, 0.12); padding: 0.35rem 1rem; border-radius: 20px; font-size: 1.1rem; color: #8c6a15; font-weight: 700; margin-bottom: 0.7rem;">
+            <span>🚚 Free Shipping &amp; COD Active</span>
+            <span>•</span>
+            <span>💳 Instant ₹100 OFF on Prepaid</span>
+          </div>
+
+          {%- if cart_total < threshold_gift -%}
+            {%- assign remaining = threshold_gift | minus: cart_total -%}
+            {%- assign pct = cart_total | times: 100 | divided_by: threshold_gift -%}
+            <p class="cart-drawer__shipping-msg" style="font-size: 1.25rem; font-weight: 600; color: #1a120b; margin: 0 0 0.6rem 0; line-height: 1.4;">
+              🎁 Add <strong>{{ remaining | money }}</strong> more to unlock a <strong>FREE 6ML Luxury Attar Tester</strong>!
             </p>
-            <div class="cart-drawer__bar-track" style="width: 100%; height: 7px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;">
+            <div class="cart-drawer__bar-track" style="width: 100%; height: 8px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;">
               <div class="cart-drawer__bar-fill" style="width: {{ pct }}%; height: 100%; background: linear-gradient(90deg, #cca43b, #f1cb64); transition: width 0.4s ease;"></div>
             </div>
           {%- else -%}
-            <p class="cart-drawer__shipping-msg" style="font-size: 1.25rem; font-weight: 700; color: #121212; margin: 0 0 0.3rem 0;">
-              🎉 <strong>FREE EXPRESS SHIPPING & COD UNLOCKED!</strong>
+            <p class="cart-drawer__shipping-msg" style="font-size: 1.25rem; font-weight: 800; color: #1a120b; margin: 0 0 0.3rem 0;">
+              🎉 <strong>FREE 6ML LUXURY ATTAR TESTER UNLOCKED!</strong>
             </p>
-            <p style="font-size: 1.15rem; color: #10b981; font-weight: 600; margin: 0 0 0.6rem 0;">
-              💳 Extra Instant Discount Available on Prepaid Payment at Checkout!
+            <p style="font-size: 1.15rem; color: #059669; font-weight: 700; margin: 0 0 0.6rem 0;">
+              🎁 A complimentary surprise 6ML tester will be hand-packed in your parcel.
             </p>
-            <div class="cart-drawer__bar-track" style="width: 100%; height: 7px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;">
+            <div class="cart-drawer__bar-track" style="width: 100%; height: 8px; background: rgba(0,0,0,0.08); border-radius: 4px; overflow: hidden;">
               <div class="cart-drawer__bar-fill" style="width: 100%; height: 100%; background: linear-gradient(90deg, #cca43b, #ffd700); animation: fbGoldShine 2s infinite linear;"></div>
             </div>
           {%- endif -%}

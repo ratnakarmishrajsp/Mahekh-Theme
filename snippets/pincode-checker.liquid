@@ -1,0 +1,236 @@
+{% comment %}
+  Mahekh Fragrances - Luxury Pincode & Delivery Estimator
+  Integrated with Free Shipping, COD, and ₹100 Prepaid Discount Policies
+{% endcomment %}
+
+<div class="mh-pincode-checker" id="MhPincodeChecker">
+  <div class="mh-pincode-header">
+    <span class="mh-pincode-icon">📍</span>
+    <span class="mh-pincode-title">Check Estimated Delivery &amp; COD</span>
+  </div>
+
+  <div class="mh-pincode-input-wrapper">
+    <input
+      type="tel"
+      id="MhPincodeInput"
+      class="mh-pincode-input"
+      placeholder="Enter 6-digit pincode"
+      maxlength="6"
+      autocomplete="postal-code"
+    />
+    <button type="button" id="MhPincodeBtn" class="mh-pincode-btn" onclick="checkDeliveryPincode()">
+      CHECK
+    </button>
+  </div>
+
+  <div id="MhPincodeResult" class="mh-pincode-result" style="display: none;"></div>
+
+  <div class="mh-pincode-perks">
+    <div class="mh-perk-item">
+      <span class="mh-perk-icon">🚚</span>
+      <span class="mh-perk-text"><strong>Free Shipping &amp; COD</strong> on all orders</span>
+    </div>
+    <div class="mh-perk-item">
+      <span class="mh-perk-icon">💳</span>
+      <span class="mh-perk-text"><strong>Instant ₹100 OFF</strong> on Online/UPI payment</span>
+    </div>
+    <div class="mh-perk-item">
+      <span class="mh-perk-icon">⚡</span>
+      <span class="mh-perk-text"><strong>Dispatched in 24 Hours</strong> via Bluedart &amp; Delhivery</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .mh-pincode-checker {
+    margin: 1.8rem 0;
+    padding: 1.5rem 1.6rem;
+    background: #faf8f5;
+    border: 1px solid rgba(204, 164, 59, 0.3);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  .mh-pincode-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .mh-pincode-icon {
+    font-size: 1.4rem;
+  }
+
+  .mh-pincode-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1a120b;
+    letter-spacing: 0.02em;
+  }
+
+  .mh-pincode-input-wrapper {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+
+  .mh-pincode-input {
+    flex: 1;
+    padding: 0.85rem 1.1rem;
+    border: 1.5px solid #dcd7ce;
+    border-radius: 8px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #1a120b;
+    background: #ffffff;
+    transition: all 0.25s ease;
+    outline: none;
+  }
+
+  .mh-pincode-input:focus {
+    border-color: #cca43b;
+    box-shadow: 0 0 0 3px rgba(204, 164, 59, 0.15);
+  }
+
+  .mh-pincode-btn {
+    padding: 0.85rem 1.6rem;
+    background: linear-gradient(135deg, #1f1a14 0%, #3a2e1d 100%);
+    color: #ffd875;
+    border: 1px solid #cca43b;
+    border-radius: 8px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .mh-pincode-btn:hover {
+    background: #cca43b;
+    color: #121212;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(204, 164, 59, 0.3);
+  }
+
+  .mh-pincode-result {
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    animation: mhFadeIn 0.3s ease;
+  }
+
+  .mh-pincode-result.success {
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #065f46;
+  }
+
+  .mh-pincode-result.error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #991b1b;
+  }
+
+  .mh-pincode-perks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    padding-top: 0.85rem;
+    border-top: 1px dashed rgba(204, 164, 59, 0.25);
+  }
+
+  .mh-perk-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.12rem;
+    color: #4a453e;
+  }
+
+  .mh-perk-item strong {
+    color: #1a120b;
+  }
+
+  .mh-perk-icon {
+    font-size: 1.2rem;
+    line-height: 1;
+  }
+
+  @keyframes mhFadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script>
+  function checkDeliveryPincode() {
+    const input = document.getElementById('MhPincodeInput');
+    const resultBox = document.getElementById('MhPincodeResult');
+    const pincode = (input.value || '').trim();
+
+    if (!pincode || pincode.length !== 6 || isNaN(pincode)) {
+      resultBox.style.display = 'block';
+      resultBox.className = 'mh-pincode-result error';
+      resultBox.innerHTML = '⚠️ Please enter a valid 6-digit Indian pincode.';
+      return;
+    }
+
+    // Save in localStorage
+    try {
+      localStorage.setItem('mahekh_saved_pincode', pincode);
+    } catch(e) {}
+
+    // Calculate dynamic delivery date
+    const daysToAdd = isMetroPincode(pincode) ? 2 : 4;
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + daysToAdd);
+
+    const options = { weekday: 'short', month: 'short', day: 'numeric' };
+    const dateFormatted = targetDate.toLocaleDateString('en-IN', options);
+
+    resultBox.style.display = 'block';
+    resultBox.className = 'mh-pincode-result success';
+    resultBox.innerHTML = `
+      <div style="font-weight: 700; color: #065f46; font-size: 1.2rem; margin-bottom: 4px;">
+        🚚 Delivery available to <strong>${pincode}</strong> by <u>${dateFormatted}</u>
+      </div>
+      <div style="font-size: 1.05rem; color: #047857;">
+        ✔ <strong>Free Shipping &amp; Cash on Delivery</strong> active for this address.<br>
+        💳 Pay online at checkout to get <strong>₹100 instant discount</strong>!
+      </div>
+    `;
+  }
+
+  function isMetroPincode(pin) {
+    const p = parseInt(pin, 10);
+    // Delhi (11xxxx), Mumbai (40xxxx), Kolkata (70xxxx), Chennai (60xxxx), Bangalore (56xxxx), Hyderabad (50xxxx), Lucknow (22xxxx)
+    const prefix2 = Math.floor(p / 10000);
+    return [11, 40, 70, 60, 56, 50, 22, 38, 41, 12, 20].includes(prefix2);
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      const savedPin = localStorage.getItem('mahekh_saved_pincode');
+      const input = document.getElementById('MhPincodeInput');
+      if (savedPin && input) {
+        input.value = savedPin;
+        checkDeliveryPincode();
+      }
+    } catch(e) {}
+
+    const input = document.getElementById('MhPincodeInput');
+    if (input) {
+      input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          checkDeliveryPincode();
+        }
+      });
+    }
+  });
+</script>

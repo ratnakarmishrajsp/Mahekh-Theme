@@ -222,10 +222,19 @@
         "padding_top": 36,
         "padding_bottom": 44
       }
+    },
+    "frequently_bought_together": {
+      "type": "frequently-bought-together",
+      "settings": {
+        "heading": "Frequently Bought Together",
+        "subheading": "Pair with a complementary scent for layered luxury and instant savings.",
+        "discount_percent": 15
+      }
     }
   },
   "order": [
     "main",
+    "frequently_bought_together",
     "product_reviews_xCrieU",
     "product_application_guide_section",
     "custom_usp_grid_section",

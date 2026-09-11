@@ -1,0 +1,14 @@
+{
+  "sections": {
+    "main_track": {
+      "type": "main-track-order",
+      "settings": {
+        "title": "Track Your Order",
+        "subtitle": "Enter your Order Number or Registered Mobile Number to view live shipment progress."
+      }
+    }
+  },
+  "order": [
+    "main_track"
+  ]
+}

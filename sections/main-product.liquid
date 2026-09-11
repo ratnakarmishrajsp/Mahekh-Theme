@@ -787,6 +787,8 @@
                     </div>
                   </div>
                 {%- endif -%}
+
+                {%- render 'pincode-checker' -%}
               {%- when 'conversion_urgency' -%}
                 <div class="product__conversion-urgency" {{ block.shopify_attributes }}>
                   <div class="urgency-stock-ticker">

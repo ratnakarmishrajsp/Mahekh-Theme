@@ -1,0 +1,456 @@
+{% comment %}
+  Mahekh Fragrances - Frequently Bought Together (Bundle & Save) Section
+  Drives Average Order Value (AOV) with Instant 1-Click Dual Add-To-Cart
+{% endcomment %}
+
+{%- assign main_product = product -%}
+{%- assign complement_product = section.settings.bundle_product_1 -%}
+{%- if complement_product == blank or complement_product.id == main_product.id -%}
+  {%- for p in collections.all.products -%}
+    {%- if p.id != main_product.id and p.available -%}
+      {%- assign complement_product = p -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- if complement_product != blank -%}
+  {%- assign main_variant = main_product.selected_or_first_available_variant -%}
+  {%- assign comp_variant = complement_product.selected_or_first_available_variant -%}
+  {%- assign total_raw = main_variant.price | plus: comp_variant.price -%}
+  {%- assign discount_percent = section.settings.discount_percent | default: 15 -%}
+  {%- assign discount_multiplier = 100 | minus: discount_percent -%}
+  {%- assign bundle_price = total_raw | times: discount_multiplier | divided_by: 100 -%}
+  {%- assign savings = total_raw | minus: bundle_price -%}
+
+  <div class="fbt-section-wrapper page-width" id="FbtSection-{{ section.id }}">
+    <div class="fbt-card">
+      <div class="fbt-header">
+        <span class="fbt-badge">👑 Frequently Bought Together</span>
+        <h3 class="fbt-title">{{ section.settings.heading | default: 'Pair With The Perfect Complement' }}</h3>
+        <p class="fbt-sub">{{ section.settings.subheading | default: 'Experience harmonious scent layering with this handpicked luxury pairing.' }}</p>
+      </div>
+
+      <div class="fbt-body">
+        <!-- Products Visuals & Checkboxes -->
+        <div class="fbt-products-row">
+          <!-- Item 1 (Current Product) -->
+          <div class="fbt-item" data-price="{{ main_variant.price }}" data-variant-id="{{ main_variant.id }}">
+            <div class="fbt-img-wrap">
+              <img
+                src="{{ main_product.featured_image | image_url: width: 220 }}"
+                alt="{{ main_product.title | escape }}"
+                class="fbt-img"
+                loading="lazy"
+                width="110"
+                height="110"
+              />
+            </div>
+            <div class="fbt-details">
+              <label class="fbt-checkbox-label">
+                <input type="checkbox" checked disabled class="fbt-check" id="fbt-check-1" />
+                <span class="fbt-item-name"><strong>This item:</strong> {{ main_product.title | truncate: 45 }}</span>
+              </label>
+              <div class="fbt-item-price">{{ main_variant.price | money }}</div>
+            </div>
+          </div>
+
+          <div class="fbt-plus-icon">+</div>
+
+          <!-- Item 2 (Complementary Product) -->
+          <div class="fbt-item" data-price="{{ comp_variant.price }}" data-variant-id="{{ comp_variant.id }}">
+            <div class="fbt-img-wrap">
+              <img
+                src="{{ complement_product.featured_image | image_url: width: 220 }}"
+                alt="{{ complement_product.title | escape }}"
+                class="fbt-img"
+                loading="lazy"
+                width="110"
+                height="110"
+              />
+            </div>
+            <div class="fbt-details">
+              <label class="fbt-checkbox-label">
+                <input type="checkbox" checked class="fbt-check" id="fbt-check-2" onchange="updateFbtPricing()" />
+                <span class="fbt-item-name"><strong>Pair with:</strong> {{ complement_product.title | truncate: 45 }}</span>
+              </label>
+              <div class="fbt-item-price">{{ comp_variant.price | money }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pricing & 1-Click Buy Box -->
+        <div class="fbt-action-box">
+          <div class="fbt-price-col">
+            <div class="fbt-pricing-row">
+              <span class="fbt-total-label">Bundle Price:</span>
+              <span class="fbt-bundle-price" id="FbtBundlePrice">{{ bundle_price | money }}</span>
+              <span class="fbt-compare-price" id="FbtComparePrice">{{ total_raw | money }}</span>
+            </div>
+            <div class="fbt-save-pill" id="FbtSavePill">
+              Save {{ savings | money }} ({{ discount_percent }}% OFF)
+            </div>
+            <div class="fbt-prepaid-note">
+              💳 Extra <strong>₹100 OFF</strong> on UPI / Online Payment at Checkout!
+            </div>
+          </div>
+
+          <button type="button" class="fbt-submit-btn" id="FbtAddBtn" onclick="addFbtBundleToCart()">
+            <span class="fbt-btn-text">ADD BOTH TO CART</span>
+            <span class="fbt-btn-sub">🚚 Free Shipping &amp; COD Included</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .fbt-section-wrapper {
+      margin: 3rem auto;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .fbt-card {
+      background: #faf8f5;
+      border: 1.5px solid rgba(204, 164, 59, 0.35);
+      border-radius: 16px;
+      padding: 2.2rem 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    }
+
+    .fbt-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .fbt-badge {
+      display: inline-block;
+      background: rgba(204, 164, 59, 0.15);
+      color: #8c6a15;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.3rem 0.9rem;
+      border-radius: 20px;
+      margin-bottom: 0.5rem;
+    }
+
+    .fbt-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      color: #1a120b;
+      margin: 0 0 0.4rem;
+    }
+
+    .fbt-sub {
+      font-size: 1.05rem;
+      color: #6b6359;
+      margin: 0;
+    }
+
+    .fbt-body {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .fbt-products-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: #ffffff;
+      padding: 1.4rem;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .fbt-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+      gap: 8px;
+    }
+
+    .fbt-img-wrap {
+      width: 90px;
+      height: 90px;
+      border-radius: 8px;
+      background: #fdfbf7;
+      border: 1px solid rgba(204, 164, 59, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .fbt-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .fbt-checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      font-size: 0.92rem;
+      color: #2b251f;
+      cursor: pointer;
+      text-align: left;
+      line-height: 1.35;
+    }
+
+    .fbt-check {
+      accent-color: #cca43b;
+      margin-top: 2px;
+      transform: scale(1.1);
+    }
+
+    .fbt-item-price {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #cca43b;
+    }
+
+    .fbt-plus-icon {
+      font-size: 1.8rem;
+      color: #cca43b;
+      font-weight: 800;
+    }
+
+    /* Action Box */
+    .fbt-action-box {
+      background: #ffffff;
+      border: 1px solid rgba(204, 164, 59, 0.25);
+      border-radius: 12px;
+      padding: 1.5rem 1.6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .fbt-pricing-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .fbt-total-label {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #4a4239;
+    }
+
+    .fbt-bundle-price {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #1a120b;
+    }
+
+    .fbt-compare-price {
+      font-size: 1.15rem;
+      color: #999187;
+      text-decoration: line-through;
+    }
+
+    .fbt-save-pill {
+      display: inline-block;
+      background: #ecfdf5;
+      color: #065f46;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid #a7f3d0;
+      width: fit-content;
+    }
+
+    .fbt-prepaid-note {
+      font-size: 0.9rem;
+      color: #8c6a15;
+      background: rgba(204, 164, 59, 0.08);
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    .fbt-submit-btn {
+      background: linear-gradient(135deg, #1f1a14 0%, #3a2e1d 100%);
+      color: #ffd875;
+      border: 1.5px solid #cca43b;
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      transition: all 0.25s ease;
+      width: 100%;
+    }
+
+    .fbt-submit-btn:hover {
+      background: #cca43b;
+      color: #121212;
+      box-shadow: 0 5px 15px rgba(204, 164, 59, 0.35);
+    }
+
+    .fbt-btn-text {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .fbt-btn-sub {
+      font-size: 0.8rem;
+      opacity: 0.85;
+      font-weight: 500;
+    }
+
+    @media (max-width: 800px) {
+      .fbt-body {
+        grid-template-columns: 1fr;
+      }
+      .fbt-products-row {
+        flex-direction: row;
+        gap: 10px;
+        padding: 1rem;
+      }
+      .fbt-img-wrap {
+        width: 70px;
+        height: 70px;
+      }
+    }
+  </style>
+
+  <script>
+    function updateFbtPricing() {
+      const check2 = document.getElementById('fbt-check-2');
+      const item1Price = parseInt('{{ main_variant.price }}', 10);
+      const item2Price = parseInt('{{ comp_variant.price }}', 10);
+      const discountPct = parseInt('{{ discount_percent }}', 10);
+
+      const priceElem = document.getElementById('FbtBundlePrice');
+      const compareElem = document.getElementById('FbtComparePrice');
+      const savePill = document.getElementById('FbtSavePill');
+      const btnText = document.querySelector('#FbtAddBtn .fbt-btn-text');
+
+      if (check2 && check2.checked) {
+        const total = item1Price + item2Price;
+        const discounted = Math.round(total * (100 - discountPct) / 100);
+        const savings = total - discounted;
+
+        priceElem.textContent = formatFbtMoney(discounted);
+        compareElem.textContent = formatFbtMoney(total);
+        compareElem.style.display = 'inline';
+        savePill.style.display = 'inline-block';
+        savePill.textContent = 'Save ' + formatFbtMoney(savings) + ' (' + discountPct + '% OFF)';
+        btnText.textContent = 'ADD BOTH TO CART';
+      } else {
+        priceElem.textContent = formatFbtMoney(item1Price);
+        compareElem.style.display = 'none';
+        savePill.style.display = 'none';
+        btnText.textContent = 'ADD 1 ITEM TO CART';
+      }
+    }
+
+    function formatFbtMoney(cents) {
+      return '₹' + (cents / 100).toFixed(2).replace('.00', '');
+    }
+
+    function addFbtBundleToCart() {
+      const btn = document.getElementById('FbtAddBtn');
+      const check2 = document.getElementById('fbt-check-2');
+      const btnText = btn.querySelector('.fbt-btn-text');
+
+      btn.disabled = true;
+      btnText.textContent = 'ADDING TO CART...';
+
+      const itemsToAdd = [
+        { id: parseInt('{{ main_variant.id }}', 10), quantity: 1 }
+      ];
+
+      if (check2 && check2.checked) {
+        itemsToAdd.push({
+          id: parseInt('{{ comp_variant.id }}', 10),
+          quantity: 1
+        });
+      }
+
+      fetch(window.Shopify.routes.root + 'cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({
+          items: itemsToAdd,
+          sections: 'cart-drawer,cart-icon-bubble'
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        btn.disabled = false;
+        btnText.textContent = '✔ ADDED TO CART!';
+        setTimeout(() => updateFbtPricing(), 1500);
+
+        // Open cart drawer
+        const drawer = document.querySelector('cart-drawer');
+        if (drawer && data.sections) {
+          drawer.renderContents(data);
+        } else {
+          window.location.reload();
+        }
+      })
+      .catch(err => {
+        console.error('Error adding FBT bundle:', err);
+        window.location.reload();
+      });
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Frequently Bought Together",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Bought Together"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Pair with a complementary scent for layered luxury and instant savings."
+    },
+    {
+      "type": "product",
+      "id": "bundle_product_1",
+      "label": "Optional Pairing Product (Auto-selects if empty)"
+    },
+    {
+      "type": "range",
+      "id": "discount_percent",
+      "min": 5,
+      "max": 30,
+      "step": 5,
+      "unit": "%",
+      "label": "Bundle Discount Percentage",
+      "default": 15
+    }
+  ],
+  "presets": [
+    {
+      "name": "Frequently Bought Together"
+    }
+  ]
+}
+{% endschema %}
