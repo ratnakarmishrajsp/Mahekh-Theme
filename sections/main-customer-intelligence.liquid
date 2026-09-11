@@ -1,7 +1,7 @@
 {% comment %}
   Mahekh Fragrances - Customer Intelligence & Lifecycle Portal
   Internal Calling & Verification Team Dashboard
-  High-Aesthetic Executive Edition (Large Legible Typography & Clean Flat Metrics)
+  High-Aesthetic Executive Edition (Large Legible Typography & Mobile Optimized)
   Zero-PIN Frictionless Private Link
 {% endcomment %}
 
@@ -12,6 +12,32 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Completely suppress theme header and footer globally on this section -->
+<style>
+  #shopify-section-sections--header-group,
+  #shopify-section-sections--footer-group,
+  #shopify-section-header,
+  #shopify-section-footer,
+  .header-wrapper,
+  .section-header,
+  sticky-header,
+  header-drawer,
+  .footer,
+  footer,
+  #shopify-section-announcement-bar,
+  .announcement-bar-section,
+  .announcement-bar,
+  .localization-form {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+</style>
 
 <div class="ci-portal-wrapper">
   <div class="ci-container">
@@ -33,7 +59,7 @@
       <p class="ci-hero-desc">Real-time fraud scoring, Shiprocket delivery records, RTO risk assessment &amp; calling verification dossier</p>
     </header>
 
-    <!-- Search Card -->
+    <!-- Search Card (Mobile Optimized & Centered) -->
     <div class="ci-search-panel">
       <form id="CiSearchForm" onsubmit="handleCiSearch(event)">
         <div class="ci-search-bar">
@@ -45,6 +71,7 @@
               class="ci-search-input"
               placeholder="Search by 10-digit mobile (e.g. 9565179040), Order # (e.g. 1977), or name..."
               autocomplete="off"
+              inputmode="text"
               autofocus
             />
             <button type="button" id="CiClearInputBtn" class="ci-clear-btn" onclick="clearSearchInput()" style="display: none;">✕</button>
@@ -881,7 +908,7 @@
     border-color: #cbd5e1;
   }
 
-  /* UNIFIED METRICS PANEL (NO THICK LAYERS / CLEAN FLAT SURFACE) */
+  /* UNIFIED METRICS PANEL (CLEAN, NO THICK LAYERS / FLAT SURFACE) */
   .ci-metrics-panel {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -1428,7 +1455,7 @@
     text-decoration: underline;
   }
 
-  /* Responsive Design */
+  /* Tablet Responsive (max-width: 1024px) */
   @media (max-width: 1024px) {
     .ci-metrics-panel {
       grid-template-columns: repeat(3, 1fr);
@@ -1444,47 +1471,239 @@
     }
   }
 
+  /* ULTRA-POLISHED MOBILE VIEW (max-width: 768px) */
   @media (max-width: 768px) {
     .ci-portal-wrapper {
-      padding: 2rem 1.2rem 4.5rem;
+      padding: 2.2rem 1rem 5rem;
     }
+
     .ci-hero-title {
-      font-size: 2.1rem;
+      font-size: 2.2rem;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
     }
+
+    .ci-hero-desc {
+      font-size: 1.05rem;
+      padding: 0 4px;
+    }
+
+    /* Centered Search Card on Mobile */
+    .ci-search-panel {
+      padding: 1.6rem 1.2rem;
+      border-radius: 18px;
+    }
+
     .ci-search-bar {
       flex-direction: column;
+      gap: 12px;
     }
+
+    .ci-search-input-wrap {
+      width: 100%;
+      padding: 6px 14px;
+      border-radius: 14px;
+      box-sizing: border-box;
+    }
+
+    .ci-search-input {
+      font-size: 1.25rem;
+      padding: 14px 0;
+      text-align: left;
+    }
+
+    .ci-search-input::placeholder {
+      font-size: 1.05rem;
+    }
+
     .ci-search-btn {
       width: 100%;
       justify-content: center;
+      padding: 16px;
+      font-size: 1.05rem;
+      border-radius: 14px;
     }
+
+    .ci-search-chips {
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1.2rem;
+    }
+
+    .ci-chip {
+      font-size: 0.92rem;
+      padding: 7px 12px;
+      border-radius: 8px;
+    }
+
+    /* Customer Profile Card on Mobile */
+    .ci-hero-card {
+      padding: 1.6rem 1.2rem;
+      border-radius: 18px;
+    }
+
     .ci-hero-top {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: stretch;
+      gap: 18px;
     }
+
+    .ci-profile-cluster {
+      flex-direction: row;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .ci-avatar {
+      width: 60px;
+      height: 60px;
+      font-size: 1.7rem;
+    }
+
+    .ci-cust-title {
+      font-size: 2rem;
+    }
+
+    .ci-badge-pill {
+      font-size: 0.88rem;
+      padding: 6px 14px;
+    }
+
+    .ci-profile-meta {
+      font-size: 1.05rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+    }
+
+    .ci-meta-divider {
+      display: none;
+    }
+
     .ci-hero-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
       width: 100%;
     }
+
     .ci-action-btn {
-      flex: 1;
+      padding: 14px 10px;
+      font-size: 0.98rem;
       justify-content: center;
+      border-radius: 12px;
     }
+
+    .ci-action-btn.secondary {
+      grid-column: span 2;
+    }
+
+    /* Metrics on Mobile (Clean 2-Column Grid with Large Numbers) */
     .ci-metrics-panel {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
-      padding: 1.4rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      padding: 1.4rem 1.1rem;
+      border-radius: 18px;
     }
+
+    .ci-stat-col {
+      padding: 8px 6px;
+      border-right: none;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .ci-stat-col:nth-last-child(-n+2) {
+      border-bottom: none;
+    }
+
+    .ci-stat-title {
+      font-size: 0.82rem;
+      margin-bottom: 6px;
+    }
+
     .ci-stat-value {
       font-size: 2.2rem;
+      margin-bottom: 4px;
     }
+
+    .ci-stat-sub {
+      font-size: 0.85rem;
+    }
+
+    /* Active Order on Mobile */
+    .ci-surface-card {
+      padding: 1.4rem 1.1rem;
+      border-radius: 18px;
+    }
+
+    .ci-card-heading {
+      font-size: 1.45rem;
+    }
+
     .ci-active-specs {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      padding: 1.1rem;
     }
+
+    .ci-spec-label {
+      font-size: 0.78rem;
+    }
+
+    .ci-spec-val {
+      font-size: 1.12rem;
+    }
+
+    .ci-item-name {
+      font-size: 1.05rem;
+    }
+
+    .ci-track-footer {
+      text-align: center;
+    }
+
+    .ci-btn-track-external {
+      font-size: 0.96rem;
+      justify-content: center;
+      width: 100%;
+    }
+
+    /* Address & Guidance on Mobile */
+    .ci-addr-full {
+      font-size: 1.08rem;
+    }
+
+    .ci-check-item {
+      font-size: 0.95rem;
+    }
+
+    .ci-verdict-text {
+      font-size: 1.05rem;
+    }
+
+    .ci-script-text {
+      font-size: 1.05rem;
+    }
+
+    /* History Rows on Mobile */
     .ci-hist-row {
       grid-template-columns: 1fr;
-      gap: 10px;
+      gap: 8px;
+      padding: 1rem 1.2rem;
     }
+
+    .ci-h-id {
+      font-size: 1.15rem;
+    }
+
+    .ci-h-prod {
+      font-size: 1.05rem;
+    }
+
+    .ci-h-amt {
+      font-size: 1.15rem;
+    }
+
     .ci-h-status-col {
       text-align: left;
     }
