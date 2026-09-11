@@ -13,7 +13,7 @@ const filesToSync = [
   'snippets/cart-drawer.liquid',
   'sections/main-track-order.liquid',
   'templates/page.track-order.json',
-  'assets/mahekh-tracking-index.json',
+  'layout/theme.liquid',
   'sections/main-customer-intelligence.liquid',
   'templates/page.customer-intelligence.json',
   'assets/mahekh-customer-index.json',
