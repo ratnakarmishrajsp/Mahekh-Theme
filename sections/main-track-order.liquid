@@ -510,6 +510,65 @@
     return [];
   }
 
+  // Live Shiprocket Scraper & Real-Time Status Resolver
+  async function fetchLiveShiprocketStatus(awb) {
+    if (!awb) return null;
+    try {
+      const res = await fetch('https://shiprocket.co/tracking/' + encodeURIComponent(awb));
+      if (!res.ok) return null;
+      const html = await res.text();
+
+      // Extract status pill from Shiprocket HTML
+      const statusMatch = html.match(/class="status_(?:green|orange|blue|red|gray)[^"]*">([\s\S]*?)<\/span>/i);
+      const rawStatus = statusMatch ? statusMatch[1].trim() : '';
+
+      // Check delivery & transit milestones
+      const isDelivered = /Delivered/i.test(rawStatus) || html.includes('status_green">Delivered') || html.includes('SHIPMENT DELIVERED');
+      const isOutForDelivery = /Out for Delivery/i.test(rawStatus) || /outscan/i.test(html);
+      const isPickedUp = /Picked Up|In Transit/i.test(rawStatus) || /inscan|picked up|manifest/i.test(html);
+
+      let stage = 3;
+      let finalStatus = rawStatus.toUpperCase() || 'IN TRANSIT';
+
+      if (isDelivered) {
+        stage = 5;
+        finalStatus = 'DELIVERED';
+      } else if (isOutForDelivery) {
+        stage = 4;
+        finalStatus = 'OUT FOR DELIVERY';
+      } else if (isPickedUp) {
+        stage = 3;
+        finalStatus = rawStatus ? rawStatus.toUpperCase() : 'IN TRANSIT';
+      }
+
+      // Extract courier name
+      const courierMatch = html.match(/<span[^>]*SFProSemibold[^>]*><b>([\s\S]*?)<\/b><\/span>/i);
+      const courier = courierMatch ? courierMatch[1].trim() : null;
+
+      // Extract latest activity and location
+      const actMatch = html.match(/<activity>([\s\S]*?)<\/activity>/i);
+      const locMatch = html.match(/<b>Location\s*:\s*<\/b>\s*<activity>([\s\S]*?)<\/activity>/i);
+      const activity = actMatch ? actMatch[1].trim() : null;
+      const location = locMatch ? locMatch[1].trim() : null;
+
+      // Extract Delivered on or EDD
+      const deliveredOnMatch = html.match(/<span[^>]*class="status-css"[^>]*>([\s\S]*?)<\/span>[\s\S]*?<span[^>]*class="[^"]*date_wrap[^"]*"[^>]*>([\s\S]*?)<\/span>/i);
+      const deliveredText = deliveredOnMatch ? (deliveredOnMatch[1].trim() + ' ' + deliveredOnMatch[2].trim().replace(/\s+/g, ' ')) : null;
+
+      return {
+        status: finalStatus,
+        stage: stage,
+        courier: courier,
+        activity: activity,
+        location: location,
+        deliveredText: deliveredText
+      };
+    } catch (err) {
+      console.warn('[Live Tracking] Live Shiprocket fetch failed, using stored snapshot:', err);
+      return null;
+    }
+  }
+
   // Preload index in background
   document.addEventListener('DOMContentLoaded', () => {
     loadTrackingData();
@@ -530,7 +589,6 @@
     loading.style.display = 'block';
 
     const orders = await loadTrackingData();
-    loading.style.display = 'none';
 
     // Normalized queries
     const qClean = rawVal.replace(/[#\s]/g, '').toLowerCase();
@@ -541,27 +599,62 @@
     if (Array.isArray(orders) && orders.length > 0) {
       match = orders.find(o => {
         if (!o) return false;
-        // Check order number match (e.g. 2014)
+        // Check order number match (e.g. 1977, 2014)
         if (o.num && o.num === qDigits) return true;
-        // Check order clean name (e.g. ma2014)
+        // Check order clean name (e.g. ma1977, ma2014)
         if (o.cleanName && o.cleanName === qClean) return true;
         // Check AWB match
         if (o.awb && o.awb.toLowerCase() === qClean) return true;
-        // Check Phone match (last 10 digits)
+        // Check Phone match (last 10 digits e.g. 9035391141)
         if (qDigits.length >= 10 && o.phone && o.phone.endsWith(qDigits.slice(-10))) return true;
         return false;
       });
     }
 
     if (match) {
-      // Real match found in live records!
+      // If order has an AWB, fetch real-time live updates directly from Shiprocket
+      if (match.awb) {
+        const live = await fetchLiveShiprocketStatus(match.awb);
+        if (live) {
+          if (live.status) match.status = live.status;
+          if (live.stage) match.stage = live.stage;
+          if (live.courier) match.courier = live.courier;
+          if (live.activity) match.activity = live.activity;
+          if (live.location) match.location = live.location;
+          if (live.deliveredText) match.deliveredText = live.deliveredText;
+        }
+      }
+      loading.style.display = 'none';
       renderTrackingResult(match);
     } else {
-      // Not found in snapshot. Check if user typed an AWB directly
-      const isPossibleAwb = (qClean.length >= 10 && qClean.length <= 16);
+      // Check if user entered an AWB directly that may be unindexed
+      const isPossibleAwb = (qClean.length >= 10 && qClean.length <= 18);
+      if (isPossibleAwb) {
+        const liveDirect = await fetchLiveShiprocketStatus(qClean);
+        if (liveDirect && liveDirect.status) {
+          loading.style.display = 'none';
+          renderTrackingResult({
+            name: 'Shipment ' + qClean,
+            num: qClean,
+            awb: qClean,
+            courier: liveDirect.courier || 'Shiprocket Logistics',
+            status: liveDirect.status,
+            stage: liveDirect.stage,
+            city: liveDirect.location || 'India',
+            activity: liveDirect.activity,
+            location: liveDirect.location,
+            deliveredText: liveDirect.deliveredText,
+            date: 'Recent',
+            track_url: 'https://shiprocket.co/tracking/' + encodeURIComponent(qClean)
+          });
+          return;
+        }
+      }
+
+      loading.style.display = 'none';
       errorBox.style.display = 'flex';
       document.getElementById('MhErrorTitle').textContent = 'Order Not Found in Current Records';
-      document.getElementById('MhErrorMsg').innerHTML = `We could not find any order matching <strong>"${escapeHtml(rawVal)}"</strong>.<br>Please ensure you entered the exact Order Number (e.g. #MA2014) or Mobile Number from your confirmation message.`;
+      document.getElementById('MhErrorMsg').innerHTML = `We could not find any active order matching <strong>"${escapeHtml(rawVal)}"</strong>.<br>Please ensure you entered the exact Order Number (e.g. #MA1977) or Mobile Number from your confirmation message.`;
 
       const fallbackAction = document.getElementById('MhErrorFallbackAction');
       const fallbackBtn = document.getElementById('MhAwbFallbackBtn');
@@ -584,7 +677,10 @@
     document.getElementById('ResOrderDate').textContent = 'Placed on: ' + (order.date || 'Recent');
     document.getElementById('ResCourierName').textContent = order.courier || 'Shiprocket Logistics';
     document.getElementById('ResAwbCode').textContent = order.awb || 'Pending Allocation';
-    document.getElementById('ResDestination').textContent = order.city || 'India';
+    
+    let destText = order.city || 'India';
+    if (order.location) destText += ' · ' + order.location;
+    document.getElementById('ResDestination').textContent = destText;
 
     const pill = document.getElementById('ResStatusPill');
     pill.textContent = order.status;
@@ -605,8 +701,13 @@
         step.classList.add('completed');
         circle.textContent = '✔';
       } else if (i === stage) {
-        step.classList.add('active');
-        circle.textContent = i;
+        if (stage === 5) {
+          step.classList.add('completed');
+          circle.textContent = '✔';
+        } else {
+          step.classList.add('active');
+          circle.textContent = i;
+        }
       } else {
         circle.textContent = i;
       }
@@ -614,8 +715,15 @@
 
     // Dynamic stage descriptions
     if (order.awb) {
-      document.getElementById('Step2Desc').textContent = 'AWB Generated';
-      document.getElementById('Step3Desc').textContent = order.status;
+      document.getElementById('Step2Desc').textContent = 'AWB Allocated';
+      document.getElementById('Step3Desc').textContent = stage >= 3 ? (order.activity || 'Dispatched with Courier') : 'In Bottling';
+      if (stage === 4) {
+        document.getElementById('Step4Desc').textContent = order.activity || 'Out for Delivery';
+      }
+      if (stage === 5) {
+        document.getElementById('Step4Desc').textContent = 'Delivered';
+        document.getElementById('Step5Desc').textContent = order.deliveredText || order.activity || 'Delivered Successfully';
+      }
     } else {
       document.getElementById('Step2Desc').textContent = 'In Bottling';
       document.getElementById('Step3Desc').textContent = 'Pending Handover';
