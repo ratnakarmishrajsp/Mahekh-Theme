@@ -1,0 +1,388 @@
+<div class="mh-edp-8017551097934-wrapper">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+    .mh-edp-8017551097934-wrapper {
+      --gold: #d4c06b;
+      --gold-light: #faf1d3;
+      --bg-base: #091211;
+      --bg-card: #11211e;
+      --border-color: #203934;
+      --text-main: #f5f5f7;
+      --text-muted: #9c9ca8;
+      --font-heading: 'Playfair Display', Georgia, serif;
+      --font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      padding: 3rem 1.5rem;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 1.5rem 0;
+      box-sizing: border-box;
+      line-height: 1.8;
+      font-family: var(--font-body);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 0 0 1px var(--border-color);
+    }
+
+    .mh-edp-8017551097934-wrapper *,
+    .mh-edp-8017551097934-wrapper *::before,
+    .mh-edp-8017551097934-wrapper *::after {
+      box-sizing: inherit;
+    }
+
+    @media (max-width: 768px) {
+      .mh-edp-8017551097934-wrapper {
+        margin-left: -1.5rem !important;
+        margin-right: -1.5rem !important;
+        width: calc(100% + 3rem) !important;
+        max-width: calc(100% + 3rem) !important;
+        border-radius: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+        padding: 2.2rem 1.15rem !important;
+        box-shadow: none !important;
+      }
+    }
+
+    .mh-e-top-bar-8017551097934 {
+      background: linear-gradient(135deg, rgba(212,175,55,0.12) 0%, rgba(255,255,255,0.02) 100%);
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      text-align: center;
+      margin-bottom: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .mh-e-top-tag-8017551097934 {
+      background: linear-gradient(90deg, #ffd700, #ffae19, #ffd700);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      padding: 0.3rem 0.85rem;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .mh-e-top-title-8017551097934 {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+
+    .mh-e-hero-8017551097934 {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 0 0.5rem;
+    }
+
+    .mh-e-badge-8017551097934 {
+      display: inline-block;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      letter-spacing: 0.25em;
+      font-weight: 800;
+      margin-bottom: 0.85rem;
+    }
+
+    .mh-e-title-8017551097934 {
+      font-family: var(--font-heading);
+      font-size: clamp(2.1rem, 6vw, 3.4rem);
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 1.2rem;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .mh-e-title-8017551097934 span {
+      background: linear-gradient(135deg, #fff 0%, var(--gold-light) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .mh-e-subtitle-8017551097934 {
+      font-size: clamp(1.05rem, 3vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 780px;
+      margin: 0 auto 1.8rem;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .mh-e-badges-grid-8017551097934 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+      margin-bottom: 2.8rem;
+      width: 100%;
+    }
+
+    .mh-e-badge-card-8017551097934 {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.25rem 0.85rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .mh-e-badge-card-8017551097934:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+    }
+
+    .mh-e-badge-icon-8017551097934 {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .mh-e-badge-text-8017551097934 {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .mh-e-notes-grid-8017551097934 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      width: 100%;
+      margin-bottom: 3.2rem;
+    }
+
+    .mh-e-note-card-8017551097934 {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.85rem 1.35rem;
+      border-top: 3px solid var(--gold);
+    }
+
+    .mh-e-note-tier-8017551097934 {
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    .mh-e-note-name-8017551097934 {
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
+      color: #fff;
+      margin: 0 0 0.75rem;
+    }
+
+    .mh-e-note-desc-8017551097934 {
+      color: #b0b0bc;
+      font-size: 0.95rem;
+      margin: 0;
+      line-height: 1.65;
+    }
+
+    /* Comparison Box */
+    .mh-e-comparison-8017551097934 {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      margin-bottom: 3.2rem;
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .mh-e-table-8017551097934 {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .mh-e-table-8017551097934 th {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--gold-light);
+      padding: 1.1rem 1rem;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .mh-e-table-8017551097934 td {
+      padding: 1.05rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: #e2e2e8;
+    }
+
+    .mh-e-table-8017551097934 td.highlight {
+      color: var(--gold-light);
+      font-weight: 700;
+    }
+
+    .mh-e-table-8017551097934 td.dim {
+      color: #7b7b8a;
+    }
+
+    /* Guarantee */
+    .mh-e-guarantee-8017551097934 {
+      background: linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(212,175,55,0.05) 100%);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      text-align: center;
+      width: 100%;
+    }
+
+    .mh-e-guarantee-8017551097934 h3 {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      color: var(--gold-light);
+      margin: 0 0 0.6rem;
+    }
+
+    .mh-e-guarantee-8017551097934 p {
+      color: #e2e2e8;
+      font-size: 1.05rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 600px) {
+      .mh-e-top-bar-8017551097934 {
+        flex-direction: column;
+        gap: 8px;
+        padding: 0.9rem 1rem;
+      }
+      .mh-e-badges-grid-8017551097934 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .mh-e-notes-grid-8017551097934 {
+        grid-template-columns: 1fr;
+      }
+      .mh-e-comparison-8017551097934,
+      .mh-e-guarantee-8017551097934 {
+        padding: 1.75rem 1.2rem;
+      }
+    }
+  </style>
+
+  <div class="mh-e-top-bar-8017551097934">
+    <span class="mh-e-top-tag-8017551097934">✨ Luxury Eau De Parfum</span>
+    <span class="mh-e-top-title-8017551097934">50ML French Concentration Flacon | High Sillage</span>
+  </div>
+
+  <div class="mh-e-hero-8017551097934">
+    <div class="mh-e-badge-8017551097934">✦ Artisanal Fine Fragrance ✦</div>
+    <h1 class="mh-e-title-8017551097934">Mahekh <span>White Mogra</span> Eau de Parfum</h1>
+    <p class="mh-e-subtitle-8017551097934">The authentic, pure aroma of fresh night-blooming Indian Mogra (Arabian Jasmine). Pristine, serene, spiritual, and naturally intoxicating.</p>
+  </div>
+
+  <div class="mh-e-badges-grid-8017551097934">
+    <div class="mh-e-badge-card-8017551097934">
+      <span class="mh-e-badge-icon-8017551097934">⏳</span>
+      <span class="mh-e-badge-text-8017551097934">12–18H Stay</span>
+    </div>
+    <div class="mh-e-badge-card-8017551097934">
+      <span class="mh-e-badge-icon-8017551097934">🇫🇷</span>
+      <span class="mh-e-badge-text-8017551097934">French Essence</span>
+    </div>
+    <div class="mh-e-badge-card-8017551097934">
+      <span class="mh-e-badge-icon-8017551097934">💨</span>
+      <span class="mh-e-badge-text-8017551097934">Zero Gas Spray</span>
+    </div>
+    <div class="mh-e-badge-card-8017551097934">
+      <span class="mh-e-badge-icon-8017551097934">✨</span>
+      <span class="mh-e-badge-text-8017551097934">Ultra High Sillage</span>
+    </div>
+  </div>
+
+  <!-- Pyramid -->
+  <div style="margin-bottom: 1.5rem; text-align: center;">
+    <h3 style="font-family: var(--font-heading); font-size: clamp(1.8rem, 4.5vw, 2.4rem); color: #fff; margin-bottom: 0.5rem;">The Olfactory Pyramid</h3>
+    <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 2rem;">A masterfully structured formulation that unfolds across three distinct chapters</p>
+  </div>
+
+  <div class="mh-e-notes-grid-8017551097934">
+    <div class="mh-e-note-card-8017551097934">
+      <span class="mh-e-note-tier-8017551097934">Top Notes • Immediate Burst</span>
+      <h4 class="mh-e-note-name-8017551097934">Dewy Green Leaves & Neroli Blossom</h4>
+      <p class="mh-e-note-desc-8017551097934">Crisp morning dew drops touching tender jasmine greenery.</p>
+    </div>
+    <div class="mh-e-note-card-8017551097934">
+      <span class="mh-e-note-tier-8017551097934">Heart Notes • Core Personality</span>
+      <h4 class="mh-e-note-name-8017551097934">Full-Bloom Sambac Mogra & Tuberose</h4>
+      <p class="mh-e-note-desc-8017551097934">The rich, narcotic sweetness of real freshly plucked Indian Mogra flowers.</p>
+    </div>
+    <div class="mh-e-note-card-8017551097934">
+      <span class="mh-e-note-tier-8017551097934">Base Notes • Lingering Trail</span>
+      <h4 class="mh-e-note-name-8017551097934">White Sandalwood & Feather-Light Musk</h4>
+      <p class="mh-e-note-desc-8017551097934">A peaceful, serene finish that leaves a sacred, pure trail wherever you walk.</p>
+    </div>
+  </div>
+
+  <!-- Comparison -->
+  <div class="mh-e-comparison-8017551097934">
+    <h3 style="font-family: var(--font-heading); font-size: 1.8rem; color: #fff; margin-bottom: 0.5rem; text-align: center;">Why Mahekh EDP &gt; Commercial Gas Deodorants?</h3>
+    <p style="text-align: center; color: var(--text-muted); margin-bottom: 1.2rem;">Real perfume concentration vs pressurized propellants</p>
+
+    <table class="mh-e-table-8017551097934">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>✨ Mahekh Eau De Parfum</th>
+          <th>💨 Commercial Gas Spray</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Perfume Oil Concentration</strong></td>
+          <td class="highlight">💎 High 20–25% Pure Essence</td>
+          <td class="dim">🌫️ Under 3–5% (Mostly Gas)</td>
+        </tr>
+        <tr>
+          <td><strong>Staying Power</strong></td>
+          <td class="highlight">🕰️ 12–18 Hours Lasting Aura</td>
+          <td class="dim">⏳ Evaporates in 1–2 Hours</td>
+        </tr>
+        <tr>
+          <td><strong>Scent Experience</strong></td>
+          <td class="highlight">👑 Smooth, Layered &amp; Sophisticated</td>
+          <td class="dim">⚠️ Harsh, Pungent &amp; Headaches</td>
+        </tr>
+        <tr>
+          <td><strong>Bottle Craftsmanship</strong></td>
+          <td class="highlight">💎 Heavyweight Glass Flacon with Micro-Mist Atomizer</td>
+          <td class="dim">🥫 Tin Canister</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Guarantee -->
+  <div class="mh-e-guarantee-8017551097934">
+    <h3>👑 100% Quality &amp; Longevity Promise</h3>
+    <p>
+      Formulated with high-grade perfume essences. Backed by Cash on Delivery (COD) across India and break-resistant secure shipping.
+    </p>
+  </div>
+</div>

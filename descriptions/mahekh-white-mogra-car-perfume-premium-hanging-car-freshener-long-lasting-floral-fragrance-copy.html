@@ -1,0 +1,478 @@
+<div class="mh-car-8017569022030-wrapper">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+    .mh-car-8017569022030-wrapper {
+      --gold: #d4af37;
+      --gold-light: #fae8a4;
+      --bg-base: #0b1210;
+      --bg-card: #13211c;
+      --border-color: #233932;
+      --text-main: #f5f5f7;
+      --text-muted: #9c9ca8;
+      --font-heading: 'Playfair Display', Georgia, serif;
+      --font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      padding: 3rem 1.5rem;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 1.5rem 0;
+      box-sizing: border-box;
+      line-height: 1.8;
+      font-family: var(--font-body);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 0 0 1px var(--border-color);
+    }
+
+    .mh-car-8017569022030-wrapper *,
+    .mh-car-8017569022030-wrapper *::before,
+    .mh-car-8017569022030-wrapper *::after {
+      box-sizing: inherit;
+    }
+
+    @media (max-width: 768px) {
+      .mh-car-8017569022030-wrapper {
+        margin-left: -1.5rem !important;
+        margin-right: -1.5rem !important;
+        width: calc(100% + 3rem) !important;
+        max-width: calc(100% + 3rem) !important;
+        border-radius: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+        padding: 2.2rem 1.15rem !important;
+        box-shadow: none !important;
+      }
+    }
+
+    .mh-cp-top-bar-8017569022030 {
+      background: linear-gradient(135deg, rgba(212,175,55,0.12) 0%, rgba(255,255,255,0.02) 100%);
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      text-align: center;
+      margin-bottom: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .mh-cp-top-tag-8017569022030 {
+      background: linear-gradient(90deg, #ffd700, #ffae19, #ffd700);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      padding: 0.3rem 0.85rem;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .mh-cp-top-title-8017569022030 {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+
+    .mh-cp-hero-8017569022030 {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 0 0.5rem;
+    }
+
+    .mh-cp-badge-8017569022030 {
+      display: inline-block;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      letter-spacing: 0.25em;
+      font-weight: 800;
+      margin-bottom: 0.85rem;
+    }
+
+    .mh-cp-title-8017569022030 {
+      font-family: var(--font-heading);
+      font-size: clamp(2.1rem, 6vw, 3.4rem);
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 1.2rem;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .mh-cp-title-8017569022030 span {
+      background: linear-gradient(135deg, #fff 0%, var(--gold-light) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .mh-cp-subtitle-8017569022030 {
+      font-size: clamp(1.05rem, 3vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 780px;
+      margin: 0 auto 1.8rem;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .mh-cp-badges-grid-8017569022030 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+      margin-bottom: 2.8rem;
+      width: 100%;
+    }
+
+    .mh-cp-badge-card-8017569022030 {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.25rem 0.85rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .mh-cp-badge-card-8017569022030:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+    }
+
+    .mh-cp-badge-icon-8017569022030 {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .mh-cp-badge-text-8017569022030 {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Diffuser Mechanism Section */
+    .mh-cp-features-8017569022030 {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-cp-features-grid-8017569022030 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 22px;
+      margin-top: 1.8rem;
+    }
+
+    .mh-cp-feature-item-8017569022030 {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .mh-cp-feature-check-8017569022030 {
+      color: var(--gold);
+      font-size: 1.5rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .mh-cp-feature-text-8017569022030 h4 {
+      margin: 0 0 0.35rem;
+      font-size: 1.05rem;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .mh-cp-feature-text-8017569022030 p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Comparison Box */
+    .mh-cp-comparison-8017569022030 {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      margin-bottom: 3.2rem;
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .mh-cp-table-8017569022030 {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .mh-cp-table-8017569022030 th {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--gold-light);
+      padding: 1.1rem 1rem;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .mh-cp-table-8017569022030 td {
+      padding: 1.05rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: #e2e2e8;
+    }
+
+    .mh-cp-table-8017569022030 td.highlight {
+      color: var(--gold-light);
+      font-weight: 700;
+    }
+
+    .mh-cp-table-8017569022030 td.dim {
+      color: #7b7b8a;
+    }
+
+    /* Installation Guide */
+    .mh-cp-how-to-8017569022030 {
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(0, 0, 0, 0.3) 100%);
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-cp-steps-8017569022030 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
+      margin-top: 1.8rem;
+    }
+
+    .mh-cp-step-8017569022030 {
+      text-align: center;
+      padding: 1.5rem 1.15rem;
+      background: rgba(255, 255, 255, 0.025);
+      border-radius: 14px;
+      border: 1px dashed rgba(212, 175, 55, 0.35);
+    }
+
+    .mh-cp-step-num-8017569022030 {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 1.1rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .mh-cp-step-8017569022030 h5 {
+      margin: 0 0 0.5rem;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+
+    .mh-cp-step-8017569022030 p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Guarantee */
+    .mh-cp-guarantee-8017569022030 {
+      background: linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(212,175,55,0.05) 100%);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      text-align: center;
+      width: 100%;
+    }
+
+    .mh-cp-guarantee-8017569022030 h3 {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      color: var(--gold-light);
+      margin: 0 0 0.6rem;
+    }
+
+    .mh-cp-guarantee-8017569022030 p {
+      color: #e2e2e8;
+      font-size: 1.05rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 600px) {
+      .mh-cp-top-bar-8017569022030 {
+        flex-direction: column;
+        gap: 8px;
+        padding: 0.9rem 1rem;
+      }
+      .mh-cp-badges-grid-8017569022030 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .mh-cp-steps-8017569022030 {
+        grid-template-columns: 1fr;
+      }
+      .mh-cp-features-8017569022030,
+      .mh-cp-comparison-8017569022030,
+      .mh-cp-how-to-8017569022030,
+      .mh-cp-guarantee-8017569022030 {
+        padding: 1.75rem 1.2rem;
+      }
+    }
+  </style>
+
+  <div class="mh-cp-top-bar-8017569022030">
+    <span class="mh-cp-top-tag-8017569022030">🚗 Executive Cabin Aromatherapy</span>
+    <span class="mh-cp-top-title-8017569022030">45–60 Days Continuous Freshness | Natural Beechwood Cap</span>
+  </div>
+
+  <div class="mh-cp-hero-8017569022030">
+    <div class="mh-cp-badge-8017569022030">✦ Luxury Hanging Car Diffuser ✦</div>
+    <h1 class="mh-cp-title-8017569022030">Mahekh <span>Flora Bloom</span> Hanging Car Diffuser</h1>
+    <p class="mh-cp-subtitle-8017569022030">Elevate every drive with fresh garden blooms. Natural beechwood diffusion keeps your vehicle interior smelling luxurious, peaceful, and odor-free for 45 to 60 days.</p>
+  </div>
+
+  <div class="mh-cp-badges-grid-8017569022030">
+    <div class="mh-cp-badge-card-8017569022030">
+      <span class="mh-cp-badge-icon-8017569022030">⏳</span>
+      <span class="mh-cp-badge-text-8017569022030">45–60 Days Stay</span>
+    </div>
+    <div class="mh-cp-badge-card-8017569022030">
+      <span class="mh-cp-badge-icon-8017569022030">🪵</span>
+      <span class="mh-cp-badge-text-8017569022030">Beechwood Diffuser</span>
+    </div>
+    <div class="mh-cp-badge-card-8017569022030">
+      <span class="mh-cp-badge-icon-8017569022030">🚫</span>
+      <span class="mh-cp-badge-text-8017569022030">Spill-Proof Seal</span>
+    </div>
+    <div class="mh-cp-badge-card-8017569022030">
+      <span class="mh-cp-badge-icon-8017569022030">🌿</span>
+      <span class="mh-cp-badge-text-8017569022030">Pure Fragrance Oil</span>
+    </div>
+  </div>
+
+  <!-- Features Grid -->
+  <div class="mh-cp-features-8017569022030">
+    <h3 style="font-family: var(--font-heading); font-size: clamp(1.8rem, 4.5vw, 2.4rem); color: #fff; margin-bottom: 0.5rem; text-align: center;">Why It Beats Common Car Sprays</h3>
+    <p style="text-align: center; color: var(--text-muted); margin-bottom: 1.5rem;">Sustained natural micro-diffusion without synthetic chemical propellants</p>
+
+    <div class="mh-cp-features-grid-8017569022030">
+      <div class="mh-cp-feature-item-8017569022030">
+        <span class="mh-cp-feature-check-8017569022030">✔</span>
+        <div class="mh-cp-feature-text-8017569022030">
+          <h4>Eliminates AC &amp; Cabin Odors</h4>
+          <p>Actively binds to and neutralizes food, smoke, and moisture odors instead of masking them.</p>
+        </div>
+      </div>
+      <div class="mh-cp-feature-item-8017569022030">
+        <span class="mh-cp-feature-check-8017569022030">✔</span>
+        <div class="mh-cp-feature-text-8017569022030">
+          <h4>Continuous Natural Evaporation</h4>
+          <p>Natural wood cap absorbs oil and releases scent smoothly through cabin airflow.</p>
+        </div>
+      </div>
+      <div class="mh-cp-feature-item-8017569022030">
+        <span class="mh-cp-feature-check-8017569022030">✔</span>
+        <div class="mh-cp-feature-text-8017569022030">
+          <h4>No Headaches or Nausea</h4>
+          <p>Zero cheap aerosol gases — gentle, calming natural aromatics for pleasant journeys.</p>
+        </div>
+      </div>
+      <div class="mh-cp-feature-item-8017569022030">
+        <span class="mh-cp-feature-check-8017569022030">✔</span>
+        <div class="mh-cp-feature-text-8017569022030">
+          <h4>Executive Aesthetics</h4>
+          <p>Clear diamond-cut flacon with hand-finished wood cap elevates your car interior.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison Box -->
+  <div class="mh-cp-comparison-8017569022030">
+    <h3 style="font-family: var(--font-heading); font-size: 1.8rem; color: #fff; margin-bottom: 0.5rem; text-align: center;">Diffuser vs Cheap Paper Trees</h3>
+    <p style="text-align: center; color: var(--text-muted); margin-bottom: 1.2rem;">The difference between real luxury oil and dipped cardboard</p>
+
+    <table class="mh-cp-table-8017569022030">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>🚗 Mahekh Hanging Diffuser</th>
+          <th>🌲 Cardboard Air Freshener</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Lifespan</strong></td>
+          <td class="highlight">🕰️ 45–60 Days Lasting Fragrance</td>
+          <td class="dim">⏳ Dries out in 5–7 Days</td>
+        </tr>
+        <tr>
+          <td><strong>Diffusion System</strong></td>
+          <td class="highlight">🪵 Natural Beechwood Capillary Action</td>
+          <td class="dim">🌫️ Harsh Chemical Spike then dead</td>
+        </tr>
+        <tr>
+          <td><strong>Cabin Aesthetics</strong></td>
+          <td class="highlight">💎 High-end Glass &amp; Wooden Accent</td>
+          <td class="dim">🗑️ Cheap disposable paper look</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3-Step Setup -->
+  <div class="mh-cp-how-to-8017569022030">
+    <h3 style="font-family: var(--font-heading); font-size: clamp(1.8rem, 4.5vw, 2.4rem); color: #fff; margin-bottom: 0.5rem; text-align: center;">How to Activate in 10 Seconds</h3>
+    <p style="text-align: center; color: var(--text-muted); margin-bottom: 1.5rem;">Quick activation guide</p>
+
+    <div class="mh-cp-steps-8017569022030">
+      <div class="mh-cp-step-8017569022030">
+        <span class="mh-cp-step-num-8017569022030">1</span>
+        <h5>Unscrew &amp; Unseal</h5>
+        <p>Unscrew the beechwood cap and remove the inner transparent leak-proof plastic plug.</p>
+      </div>
+      <div class="mh-cp-step-8017569022030">
+        <span class="mh-cp-step-num-8017569022030">2</span>
+        <h5>Invert 3–5 Seconds</h5>
+        <p>Screw the wood cap back tightly and invert the bottle upside down to saturate the wood.</p>
+      </div>
+      <div class="mh-cp-step-8017569022030">
+        <span class="mh-cp-step-num-8017569022030">3</span>
+        <h5>Hang on Mirror</h5>
+        <p>Hang securely from your rearview mirror using the adjustable lanyard. Enjoy!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guarantee -->
+  <div class="mh-cp-guarantee-8017569022030">
+    <h3>👑 Spill-Proof &amp; Freshness Guarantee</h3>
+    <p>
+      Engineered for rugged roads with leak-proof seals and pure concentrated oil. Backed by Cash on Delivery (COD) across India.
+    </p>
+  </div>
+</div>

@@ -1,0 +1,411 @@
+<div class="mh-combo-7942270943310-wrapper">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+    .mh-combo-7942270943310-wrapper {
+      --gold: #d4af37;
+      --gold-light: #fae8a4;
+      --bg-base: #120b10;
+      --bg-card: #20121c;
+      --border-color: #361e2f;
+      --text-main: #f5f5f7;
+      --text-muted: #9c9ca8;
+      --font-heading: 'Playfair Display', Georgia, serif;
+      --font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      padding: 3rem 1.5rem;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 1.5rem 0;
+      box-sizing: border-box;
+      line-height: 1.8;
+      font-family: var(--font-body);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 0 0 1px var(--border-color);
+    }
+
+    .mh-combo-7942270943310-wrapper *,
+    .mh-combo-7942270943310-wrapper *::before,
+    .mh-combo-7942270943310-wrapper *::after {
+      box-sizing: inherit;
+    }
+
+    @media (max-width: 768px) {
+      .mh-combo-7942270943310-wrapper {
+        margin-left: -1.5rem !important;
+        margin-right: -1.5rem !important;
+        width: calc(100% + 3rem) !important;
+        max-width: calc(100% + 3rem) !important;
+        border-radius: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+        padding: 2.2rem 1.15rem !important;
+        box-shadow: none !important;
+      }
+    }
+
+    .mh-c-top-bar-7942270943310 {
+      background: linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(212,175,55,0.03) 100%);
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      text-align: center;
+      margin-bottom: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .mh-c-top-tag-7942270943310 {
+      background: linear-gradient(90deg, #ffd700, #ffae19, #ffd700);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      padding: 0.3rem 0.85rem;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .mh-c-top-title-7942270943310 {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+
+    .mh-c-hero-7942270943310 {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 0 0.5rem;
+    }
+
+    .mh-c-badge-7942270943310 {
+      display: inline-block;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      letter-spacing: 0.25em;
+      font-weight: 800;
+      margin-bottom: 0.85rem;
+    }
+
+    .mh-c-title-7942270943310 {
+      font-family: var(--font-heading);
+      font-size: clamp(2.1rem, 6vw, 3.4rem);
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 1.2rem;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .mh-c-title-7942270943310 span {
+      background: linear-gradient(135deg, #fff 0%, var(--gold-light) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .mh-c-subtitle-7942270943310 {
+      font-size: clamp(1.05rem, 3vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 780px;
+      margin: 0 auto 1.8rem;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .mh-c-badges-grid-7942270943310 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+      margin-bottom: 2.8rem;
+      width: 100%;
+    }
+
+    .mh-c-badge-card-7942270943310 {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.25rem 0.85rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .mh-c-badge-card-7942270943310:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+    }
+
+    .mh-c-badge-icon-7942270943310 {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .mh-c-badge-text-7942270943310 {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .mh-c-bottles-section-7942270943310 {
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-c-section-title-7942270943310 {
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 4.5vw, 2.4rem);
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .mh-c-section-desc-7942270943310 {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .mh-c-bottles-grid-7942270943310 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      width: 100%;
+    }
+
+    .mh-c-bottle-card-7942270943310 {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.85rem 1.4rem;
+      position: relative;
+      border-top: 3px solid var(--gold);
+    }
+
+    .mh-c-bottle-num-7942270943310 {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .mh-c-bottle-title-7942270943310 {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      color: #fff;
+      margin: 0 0 0.8rem;
+    }
+
+    .mh-c-bottle-desc-7942270943310 {
+      color: #b0b0bc;
+      font-size: 0.95rem;
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    /* Comparison / Value Box */
+    .mh-c-value-box-7942270943310 {
+      background: linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(0,0,0,0.3) 100%);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-c-value-table-7942270943310 {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-top: 1.5rem;
+      font-size: 0.95rem;
+    }
+
+    .mh-c-value-table-7942270943310 th {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--gold-light);
+      padding: 1.1rem 1rem;
+      text-align: left;
+      font-weight: 700;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    .mh-c-value-table-7942270943310 td {
+      padding: 1.05rem 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: #e2e2e8;
+    }
+
+    .mh-c-value-table-7942270943310 td.highlight {
+      color: var(--gold-light);
+      font-weight: 700;
+    }
+
+    .mh-c-value-table-7942270943310 td.dim {
+      color: #7b7b8a;
+    }
+
+    /* Guarantee */
+    .mh-c-guarantee-7942270943310 {
+      background: linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(212,175,55,0.05) 100%);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      text-align: center;
+      width: 100%;
+    }
+
+    .mh-c-guarantee-7942270943310 h3 {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      color: var(--gold-light);
+      margin: 0 0 0.6rem;
+    }
+
+    .mh-c-guarantee-7942270943310 p {
+      color: #e2e2e8;
+      font-size: 1.05rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 600px) {
+      .mh-c-top-bar-7942270943310 {
+        flex-direction: column;
+        gap: 8px;
+        padding: 0.9rem 1rem;
+      }
+      .mh-c-badges-grid-7942270943310 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .mh-c-bottles-grid-7942270943310 {
+        grid-template-columns: 1fr;
+      }
+      .mh-c-value-box-7942270943310,
+      .mh-c-guarantee-7942270943310 {
+        padding: 1.75rem 1.2rem;
+      }
+    }
+  </style>
+
+  <div class="mh-c-top-bar-7942270943310">
+    <span class="mh-c-top-tag-7942270943310">👑 Royal Heritage Combo</span>
+    <span class="mh-c-top-title-7942270943310">Multi-Fragrance Wardrobe | 100% Pure Alcohol-Free Oils</span>
+  </div>
+
+  <div class="mh-c-hero-7942270943310">
+    <div class="mh-c-badge-7942270943310">✦ Curated Collectors Edition ✦</div>
+    <h1 class="mh-c-title-7942270943310">Jasmine • Kasturi • Rose <span>Heritage Trio</span> (Pack of 3)</h1>
+    <p class="mh-c-subtitle-7942270943310">Three world-renowned fragrances hand-selected for seamless scent layering. Switch from daytime floral freshness to nocturnal musk royalty.</p>
+  </div>
+
+  <div class="mh-c-badges-grid-7942270943310">
+    <div class="mh-c-badge-card-7942270943310">
+      <span class="mh-c-badge-icon-7942270943310">👑</span>
+      <span class="mh-c-badge-text-7942270943310">Multi-Scent Wardrobe</span>
+    </div>
+    <div class="mh-c-badge-card-7942270943310">
+      <span class="mh-c-badge-icon-7942270943310">🌿</span>
+      <span class="mh-c-badge-text-7942270943310">100% Alcohol-Free</span>
+    </div>
+    <div class="mh-c-badge-card-7942270943310">
+      <span class="mh-c-badge-icon-7942270943310">💰</span>
+      <span class="mh-c-badge-text-7942270943310">Mega Value Savings</span>
+    </div>
+    <div class="mh-c-badge-card-7942270943310">
+      <span class="mh-c-badge-icon-7942270943310">🎁</span>
+      <span class="mh-c-badge-text-7942270943310">Luxury Gift Ready</span>
+    </div>
+  </div>
+
+  <!-- What's Inside Section -->
+  <div class="mh-c-bottles-section-7942270943310">
+    <h3 class="mh-c-section-title-7942270943310">What's Inside This Royal Set</h3>
+    <p class="mh-c-section-desc-7942270943310">Hand-poured pure attar perfume oils for every mood and occasion</p>
+
+    <div class="mh-c-bottles-grid-7942270943310">
+      
+        <div class="mh-c-bottle-card-7942270943310">
+          <span class="mh-c-bottle-num-7942270943310">Fragrance 01</span>
+          <h4 class="mh-c-bottle-title-7942270943310">1. Pure Jasmine Attar</h4>
+          <p class="mh-c-bottle-desc-7942270943310">Sweet, radiant white petals distilled for an intoxicating daytime aura.</p>
+        </div>
+      
+        <div class="mh-c-bottle-card-7942270943310">
+          <span class="mh-c-bottle-num-7942270943310">Fragrance 02</span>
+          <h4 class="mh-c-bottle-title-7942270943310">2. Imperial Kasturi Attar</h4>
+          <p class="mh-c-bottle-desc-7942270943310">Warm, intense, animalic dark musk for high-stakes meetings and cold evenings.</p>
+        </div>
+      
+        <div class="mh-c-bottle-card-7942270943310">
+          <span class="mh-c-bottle-num-7942270943310">Fragrance 03</span>
+          <h4 class="mh-c-bottle-title-7942270943310">3. Royal Rose Attar</h4>
+          <p class="mh-c-bottle-desc-7942270943310">Velvet Damask roses providing romantic elegance and majestic poise.</p>
+        </div>
+      
+    </div>
+  </div>
+
+  <!-- Value & Comparison -->
+  <div class="mh-c-value-box-7942270943310">
+    <h3 class="mh-c-section-title-7942270943310" style="margin-bottom: 0.5rem;">Why Choose This Combo?</h3>
+    <p class="mh-c-section-desc-7942270943310" style="margin-bottom: 1.2rem;">Better variety, maximum savings, and royal versatility</p>
+
+    <table class="mh-c-value-table-7942270943310">
+      <thead>
+        <tr>
+          <th>Benefit</th>
+          <th>👑 Mahekh Combo Set</th>
+          <th>💨 Buying Separately</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Cost Efficiency</strong></td>
+          <td class="highlight">🔥 Up to 50% Off Bundle Price</td>
+          <td class="dim">💸 Higher Individual MRP</td>
+        </tr>
+        <tr>
+          <td><strong>Fragrance Wardrobe</strong></td>
+          <td class="highlight">✨ Switch Scent as per Occasion</td>
+          <td class="dim">❌ Single Scent Only</td>
+        </tr>
+        <tr>
+          <td><strong>Gifting Value</strong></td>
+          <td class="highlight">🎁 Imperial Gift Presentation</td>
+          <td class="dim">📦 Standard Packing</td>
+        </tr>
+        <tr>
+          <td><strong>Alcohol-Free Purity</strong></td>
+          <td class="highlight">🌿 100% Pure Undiluted Oils</td>
+          <td class="dim">⚠️ Varies</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Guarantee -->
+  <div class="mh-c-guarantee-7942270943310">
+    <h3>👑 Authentic Distillation & Safe Transit Guarantee</h3>
+    <p>
+      Every bottle in this combo set is individual sealed and cushion-packed for 100% damage-free delivery. Backed by Cash on Delivery (COD) across India.
+    </p>
+  </div>
+</div>
