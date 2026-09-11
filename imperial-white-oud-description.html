@@ -1,0 +1,563 @@
+<div class="mh-imperial-oud-wrapper">
+  <!-- Google Fonts Import -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+    .mh-imperial-oud-wrapper {
+      --gold: #d4af37;
+      --gold-light: #f7e7a9;
+      --silver-frost: #e8ecf2;
+      --navy-deep: #0a0d14;
+      --card-bg: #111622;
+      --card-border: #232b3d;
+      --text-main: #f5f6f9;
+      --text-sub: #9ca3af;
+      --font-heading: 'Playfair Display', Georgia, serif;
+      --font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      background-color: var(--navy-deep);
+      color: var(--text-main);
+      padding: 3rem 1.5rem;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 1.5rem 0;
+      box-sizing: border-box;
+      line-height: 1.8;
+      font-family: var(--font-body);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(212, 175, 55, 0.3);
+    }
+
+    .mh-imperial-oud-wrapper *,
+    .mh-imperial-oud-wrapper *::before,
+    .mh-imperial-oud-wrapper *::after {
+      box-sizing: inherit;
+    }
+
+    @media (max-width: 768px) {
+      .mh-imperial-oud-wrapper {
+        margin-left: -1.5rem !important;
+        margin-right: -1.5rem !important;
+        width: calc(100% + 3rem) !important;
+        max-width: calc(100% + 3rem) !important;
+        border-radius: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+        padding: 2.2rem 1.15rem !important;
+        box-shadow: none !important;
+      }
+    }
+
+    @keyframes mhImperialGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); border-color: var(--gold); }
+      50% { box-shadow: 0 0 28px rgba(232, 236, 242, 0.6); border-color: #fff; }
+    }
+
+    .mh-io-top-bar {
+      background: linear-gradient(135deg, #101524 0%, #1a223a 50%, #0d1220 100%);
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      text-align: center;
+      margin-bottom: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      animation: mhImperialGlow 3.5s infinite ease-in-out;
+      width: 100%;
+    }
+
+    .mh-io-top-tag {
+      background: linear-gradient(90deg, #ffd700, #ffae19, #ffd700);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      padding: 0.3rem 0.85rem;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .mh-io-top-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+
+    .mh-io-hero {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 0 0.5rem;
+    }
+
+    .mh-io-badge {
+      display: inline-block;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      letter-spacing: 0.25em;
+      font-weight: 800;
+      margin-bottom: 0.85rem;
+    }
+
+    .mh-io-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2.1rem, 6vw, 3.4rem);
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 1.2rem;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .mh-io-title span {
+      background: linear-gradient(135deg, #fff 0%, var(--gold-light) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .mh-io-subtitle {
+      font-size: clamp(1.05rem, 3vw, 1.25rem);
+      color: var(--text-sub);
+      max-width: 780px;
+      margin: 0 auto 1.8rem;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .mh-io-badges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+      margin-bottom: 2.8rem;
+      width: 100%;
+    }
+
+    .mh-io-badge-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem 0.85rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .mh-io-badge-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25);
+    }
+
+    .mh-io-badge-icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .mh-io-badge-text {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .mh-io-story {
+      background: linear-gradient(180deg, rgba(17, 22, 34, 0.9) 0%, rgba(10, 13, 20, 0.98) 100%);
+      border: 1px solid var(--card-border);
+      border-left: 4px solid var(--gold);
+      border-radius: 14px;
+      padding: 2.2rem 1.85rem;
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-io-story-heading {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      color: var(--gold-light);
+      margin: 0 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mh-io-story-p {
+      color: #dedee6;
+      font-size: 1.08rem;
+      margin: 0 0 1.2rem;
+      line-height: 1.8;
+    }
+
+    .mh-io-story-p:last-child {
+      margin-bottom: 0;
+    }
+
+    .mh-io-pyramid-section {
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-io-section-title {
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 4.5vw, 2.4rem);
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .mh-io-section-desc {
+      text-align: center;
+      color: var(--text-sub);
+      font-size: 1rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .mh-io-notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      width: 100%;
+    }
+
+    .mh-io-note-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.85rem 1.35rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .mh-io-note-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .mh-io-note-tier {
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    .mh-io-note-name {
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
+      color: #fff;
+      margin: 0 0 0.75rem;
+    }
+
+    .mh-io-note-desc {
+      color: #b0b0bc;
+      font-size: 0.95rem;
+      margin: 0;
+      line-height: 1.65;
+    }
+
+    .mh-io-features {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-io-features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 22px;
+      margin-top: 1.8rem;
+    }
+
+    .mh-io-feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .mh-io-feature-check {
+      color: var(--gold);
+      font-size: 1.5rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .mh-io-feature-text h4 {
+      margin: 0 0 0.35rem;
+      font-size: 1.05rem;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .mh-io-feature-text p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    .mh-io-how-to {
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      background: linear-gradient(135deg, rgba(17, 22, 34, 0.95) 0%, rgba(12, 16, 26, 0.95) 100%);
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-io-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
+      margin-top: 1.8rem;
+    }
+
+    .mh-io-step {
+      text-align: center;
+      padding: 1.5rem 1.15rem;
+      background: rgba(255, 255, 255, 0.025);
+      border-radius: 14px;
+      border: 1px dashed rgba(212, 175, 55, 0.35);
+    }
+
+    .mh-io-step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 1.1rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .mh-io-step h5 {
+      margin: 0 0 0.5rem;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+
+    .mh-io-step p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    .mh-io-guarantee {
+      background: linear-gradient(135deg, #111726 0%, #1a2238 50%, #0d1220 100%);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      width: 100%;
+    }
+
+    .mh-io-guarantee h3 {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      color: var(--gold-light);
+      margin: 0 0 0.6rem;
+    }
+
+    .mh-io-guarantee p {
+      color: #e2e2e8;
+      font-size: 1.05rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 600px) {
+      .mh-io-top-bar {
+        flex-direction: column;
+        gap: 8px;
+        padding: 0.9rem 1rem;
+      }
+      .mh-io-top-title {
+        font-size: 0.95rem;
+      }
+      .mh-io-badges-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .mh-io-badge-card {
+        padding: 1rem 0.6rem;
+      }
+      .mh-io-notes-grid,
+      .mh-io-steps {
+        grid-template-columns: 1fr;
+      }
+      .mh-io-story,
+      .mh-io-features,
+      .mh-io-how-to,
+      .mh-io-guarantee {
+        padding: 1.75rem 1.2rem;
+      }
+    }
+  </style>
+
+  <!-- Top Announcement Offer Bar -->
+  <div class="mh-io-top-bar">
+    <span class="mh-io-top-tag">❄️ Imperial Aristocracy</span>
+    <span class="mh-io-top-title">Crisp White Oud Oil | 100% Pure Alcohol-Free</span>
+  </div>
+
+  <!-- Hero Headline -->
+  <div class="mh-io-hero">
+    <div class="mh-io-badge">✦ Timeless Imperial Luxury ✦</div>
+    <h1 class="mh-io-title">Imperial <span>White Oud</span></h1>
+    <p class="mh-io-subtitle">
+      A pristine union of clean crisp air, luminous white floral undertones, and velvety smooth agarwood. Sophistication crafted for everyday royal prestige.
+    </p>
+  </div>
+
+  <!-- Performance Badges Grid -->
+  <div class="mh-io-badges-grid">
+    <div class="mh-io-badge-card">
+      <span class="mh-io-badge-icon">⏳</span>
+      <span class="mh-io-badge-text">24H+ Stay</span>
+    </div>
+    <div class="mh-io-badge-card">
+      <span class="mh-io-badge-icon">🌿</span>
+      <span class="mh-io-badge-text">100% Alcohol-Free</span>
+    </div>
+    <div class="mh-io-badge-card">
+      <span class="mh-io-badge-icon">❄️</span>
+      <span class="mh-io-badge-text">Crisp &amp; Breezy</span>
+    </div>
+    <div class="mh-io-badge-card">
+      <span class="mh-io-badge-icon">👑</span>
+      <span class="mh-io-badge-text">Executive Luxury</span>
+    </div>
+  </div>
+
+  <!-- Olfactory Storytelling -->
+  <div class="mh-io-story">
+    <h3 class="mh-io-story-heading">❄️ The Crisp Aura of Imperial White Oud</h3>
+    <p class="mh-io-story-p">
+      <strong>Imperial White Oud</strong> redefines what an agarwood fragrance can be. Moving away from heavy, animalic smoky profiles, it presents an ultra-clean, refined, and airy aroma that feels immediately uplifting and charismatic.
+    </p>
+    <p class="mh-io-story-p">
+      It carries the crisp freshness of high mountain breezes blended with creamy cedar and delicate white floral petals, resting on a tranquil white oud foundation. It never suffocates — it whispers status and sophistication.
+    </p>
+  </div>
+
+  <!-- Fragrance Notes Architecture (Pyramid) -->
+  <div class="mh-io-pyramid-section">
+    <h3 class="mh-io-section-title">The Olfactory Pyramid</h3>
+    <p class="mh-io-section-desc">Artisanal formulation balancing fresh botanical top notes with precious wood resins</p>
+
+    <div class="mh-io-notes-grid">
+      <!-- Top Note -->
+      <div class="mh-io-note-card">
+        <span class="mh-io-note-tier">Top Notes • Crisp Breeze</span>
+        <h4 class="mh-io-note-name">Crisp Linen &amp; Citrus Zest</h4>
+        <p class="mh-io-note-desc">An instant burst of energetic, clean clarity that feels modern and refreshing.</p>
+      </div>
+
+      <!-- Heart Note -->
+      <div class="mh-io-note-card">
+        <span class="mh-io-note-tier">Heart Notes • Regal Core</span>
+        <h4 class="mh-io-note-name">White Oud Accord &amp; Jasmine Sambac</h4>
+        <p class="mh-io-note-desc">Subtle white agarwood enriched by velvety jasmine petals and soft herbal nuances.</p>
+      </div>
+
+      <!-- Base Note -->
+      <div class="mh-io-note-card">
+        <span class="mh-io-note-tier">Base Notes • Warm Sillage</span>
+        <h4 class="mh-io-note-name">Ambergris &amp; Virginian Cedarwood</h4>
+        <p class="mh-io-note-desc">A calm, woody drydown that lingers close to the skin with magnetic warmth.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features & Specifications -->
+  <div class="mh-io-features">
+    <h3 class="mh-io-section-title" style="margin-bottom: 0.5rem;">Why Imperial White Oud is a Must-Have</h3>
+    <p class="mh-io-section-desc" style="margin-bottom: 1.5rem;">The perfect balance of fresh cleanliness and royal woodiness</p>
+
+    <div class="mh-io-features-grid">
+      <div class="mh-io-feature-item">
+        <span class="mh-io-feature-check">✔</span>
+        <div class="mh-io-feature-text">
+          <h4>Office &amp; Meeting Friendly</h4>
+          <p>Non-overpowering sillage that creates a welcoming impression in closed spaces.</p>
+        </div>
+      </div>
+      <div class="mh-io-feature-item">
+        <span class="mh-io-feature-check">✔</span>
+        <div class="mh-io-feature-text">
+          <h4>100% Skin Safe</h4>
+          <p>No burning, no alcohol, no synthetic solvents — pure skin-friendly perfume oil.</p>
+        </div>
+      </div>
+      <div class="mh-io-feature-item">
+        <span class="mh-io-feature-check">✔</span>
+        <div class="mh-io-feature-text">
+          <h4>Smooth Roll-On / Wand</h4>
+          <p>Easy, travel-friendly bottle ready for anytime touch-ups.</p>
+        </div>
+      </div>
+      <div class="mh-io-feature-item">
+        <span class="mh-io-feature-check">✔</span>
+        <div class="mh-io-feature-text">
+          <h4>All-Season Masterpiece</h4>
+          <p>Performs equally stunning in warm summers and crisp winters.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Ritual Guide -->
+  <div class="mh-io-how-to">
+    <h3 class="mh-io-section-title" style="margin-bottom: 0.5rem;">Application Guide</h3>
+    <p class="mh-io-section-desc">How to maintain an all-day fresh aura</p>
+
+    <div class="mh-io-steps">
+      <div class="mh-io-step">
+        <span class="mh-io-step-num">1</span>
+        <h5>Pulse Application</h5>
+        <p>Apply to wrists, throat, and behind ears right after a shower for best absorption.</p>
+      </div>
+      <div class="mh-io-step">
+        <span class="mh-io-step-num">2</span>
+        <h5>Gentle Press</h5>
+        <p>Do not rub forcefully; gently tap wrists together to allow note layers to develop naturally.</p>
+      </div>
+      <div class="mh-io-step">
+        <span class="mh-io-step-num">3</span>
+        <h5>Fabric Trace</h5>
+        <p>A touch to your kurta or blazer collar ensures continuous aroma throughout the day.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guarantee & Trust Strip -->
+  <div class="mh-io-guarantee">
+    <h3>👑 Mahekh Quality Assurance</h3>
+    <p>
+      Every batch is distilled to exacting luxury standards. Enjoy doorstep Cash on Delivery (COD) across India with 100% genuine product guarantee.
+    </p>
+  </div>
+</div>

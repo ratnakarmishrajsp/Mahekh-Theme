@@ -1,0 +1,566 @@
+<div class="mh-black-oud-wrapper">
+  <!-- Google Fonts Import -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+    .mh-black-oud-wrapper {
+      --gold: #d4af37;
+      --gold-dark: #aa8210;
+      --gold-light: #f7e7a9;
+      --gold-glow: rgba(212, 175, 55, 0.4);
+      --noir-deep: #08080a;
+      --noir-card: #121215;
+      --noir-border: #242429;
+      --text-light: #f4f4f6;
+      --text-muted: #a3a3af;
+      --amber-glow: rgba(184, 134, 11, 0.25);
+      --font-heading: 'Playfair Display', Georgia, serif;
+      --font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      background-color: var(--noir-deep);
+      color: var(--text-light);
+      padding: 3rem 1.5rem;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 1.5rem 0;
+      box-sizing: border-box;
+      line-height: 1.8;
+      font-family: var(--font-body);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(212, 175, 55, 0.3);
+    }
+
+    .mh-black-oud-wrapper *,
+    .mh-black-oud-wrapper *::before,
+    .mh-black-oud-wrapper *::after {
+      box-sizing: inherit;
+    }
+
+    /* FULL WIDTH MOBILE BREAKOUT: Zero margin gaps on phone screens */
+    @media (max-width: 768px) {
+      .mh-black-oud-wrapper {
+        margin-left: -1.5rem !important;
+        margin-right: -1.5rem !important;
+        width: calc(100% + 3rem) !important;
+        max-width: calc(100% + 3rem) !important;
+        border-radius: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+        padding: 2.2rem 1.15rem !important;
+        box-shadow: none !important;
+      }
+    }
+
+    @keyframes mhGoldGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); border-color: var(--gold); }
+      50% { box-shadow: 0 0 28px rgba(212, 175, 55, 0.7); border-color: #fff; }
+    }
+
+    .mh-bo-top-bar {
+      background: linear-gradient(135deg, #19120b 0%, #261b10 50%, #110b06 100%);
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      text-align: center;
+      margin-bottom: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      animation: mhGoldGlow 3.5s infinite ease-in-out;
+      width: 100%;
+    }
+
+    .mh-bo-top-tag {
+      background: linear-gradient(90deg, #ffd700, #ffae19, #ffd700);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      padding: 0.3rem 0.85rem;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .mh-bo-top-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+
+    .mh-bo-hero {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 0 0.5rem;
+    }
+
+    .mh-bo-badge {
+      display: inline-block;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      letter-spacing: 0.25em;
+      font-weight: 800;
+      margin-bottom: 0.85rem;
+    }
+
+    .mh-bo-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2.1rem, 6vw, 3.4rem);
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 1.2rem;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .mh-bo-title span {
+      background: linear-gradient(135deg, #fff 0%, var(--gold-light) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .mh-bo-subtitle {
+      font-size: clamp(1.05rem, 3vw, 1.25rem);
+      color: var(--text-muted);
+      max-width: 780px;
+      margin: 0 auto 1.8rem;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .mh-bo-badges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+      margin-bottom: 2.8rem;
+      width: 100%;
+    }
+
+    .mh-bo-badge-card {
+      background: var(--noir-card);
+      border: 1px solid var(--noir-border);
+      border-radius: 14px;
+      padding: 1.25rem 0.85rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .mh-bo-badge-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(212, 175, 55, 0.25);
+    }
+
+    .mh-bo-badge-icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .mh-bo-badge-text {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .mh-bo-story {
+      background: linear-gradient(180deg, rgba(18, 18, 21, 0.9) 0%, rgba(8, 8, 10, 0.98) 100%);
+      border: 1px solid var(--noir-border);
+      border-left: 4px solid var(--gold);
+      border-radius: 14px;
+      padding: 2.2rem 1.85rem;
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-bo-story-heading {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      color: var(--gold-light);
+      margin: 0 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mh-bo-story-p {
+      color: #dedee6;
+      font-size: 1.08rem;
+      margin: 0 0 1.2rem;
+      line-height: 1.8;
+    }
+
+    .mh-bo-story-p:last-child {
+      margin-bottom: 0;
+    }
+
+    .mh-bo-pyramid-section {
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-bo-section-title {
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 4.5vw, 2.4rem);
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .mh-bo-section-desc {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .mh-bo-notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      width: 100%;
+    }
+
+    .mh-bo-note-card {
+      background: var(--noir-card);
+      border: 1px solid var(--noir-border);
+      border-radius: 16px;
+      padding: 1.85rem 1.35rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .mh-bo-note-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .mh-bo-note-tier {
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    .mh-bo-note-name {
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
+      color: #fff;
+      margin: 0 0 0.75rem;
+    }
+
+    .mh-bo-note-desc {
+      color: #b0b0bc;
+      font-size: 0.95rem;
+      margin: 0;
+      line-height: 1.65;
+    }
+
+    .mh-bo-features {
+      background: var(--noir-card);
+      border: 1px solid var(--noir-border);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-bo-features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 22px;
+      margin-top: 1.8rem;
+    }
+
+    .mh-bo-feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .mh-bo-feature-check {
+      color: var(--gold);
+      font-size: 1.5rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .mh-bo-feature-text h4 {
+      margin: 0 0 0.35rem;
+      font-size: 1.05rem;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .mh-bo-feature-text p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .mh-bo-how-to {
+      border: 1px solid var(--noir-border);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      background: linear-gradient(135deg, rgba(18, 18, 21, 0.95) 0%, rgba(12, 10, 8, 0.95) 100%);
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-bo-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
+      margin-top: 1.8rem;
+    }
+
+    .mh-bo-step {
+      text-align: center;
+      padding: 1.5rem 1.15rem;
+      background: rgba(255, 255, 255, 0.025);
+      border-radius: 14px;
+      border: 1px dashed rgba(212, 175, 55, 0.35);
+    }
+
+    .mh-bo-step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 1.1rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .mh-bo-step h5 {
+      margin: 0 0 0.5rem;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+
+    .mh-bo-step p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .mh-bo-guarantee {
+      background: linear-gradient(135deg, #1c1409 0%, #2f220f 50%, #150f07 100%);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      width: 100%;
+    }
+
+    .mh-bo-guarantee h3 {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      color: var(--gold-light);
+      margin: 0 0 0.6rem;
+    }
+
+    .mh-bo-guarantee p {
+      color: #e2e2e8;
+      font-size: 1.05rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 600px) {
+      .mh-bo-top-bar {
+        flex-direction: column;
+        gap: 8px;
+        padding: 0.9rem 1rem;
+      }
+      .mh-bo-top-title {
+        font-size: 0.95rem;
+      }
+      .mh-bo-badges-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .mh-bo-badge-card {
+        padding: 1rem 0.6rem;
+      }
+      .mh-bo-notes-grid,
+      .mh-bo-steps {
+        grid-template-columns: 1fr;
+      }
+      .mh-bo-story,
+      .mh-bo-features,
+      .mh-bo-how-to,
+      .mh-bo-guarantee {
+        padding: 1.75rem 1.2rem;
+      }
+    }
+  </style>
+
+  <!-- Top Announcement Offer Bar -->
+  <div class="mh-bo-top-bar">
+    <span class="mh-bo-top-tag">👑 Sultanate Heritage</span>
+    <span class="mh-bo-top-title">Rare Aged Agarwood Oil | 100% Pure Alcohol-Free</span>
+  </div>
+
+  <!-- Hero Headline -->
+  <div class="mh-bo-hero">
+    <div class="mh-bo-badge">✦ The King of Dark Woods ✦</div>
+    <h1 class="mh-bo-title">Mahekh <span>Black Oud</span> Attar</h1>
+    <p class="mh-bo-subtitle">
+      Deep, smoky, and uncompromisingly royal. Distilled from mature Assam agarwood resin, intertwined with fiery saffron, dark Damascus rose, and rich leather accords.
+    </p>
+  </div>
+
+  <!-- Performance Badges Grid -->
+  <div class="mh-bo-badges-grid">
+    <div class="mh-bo-badge-card">
+      <span class="mh-bo-badge-icon">⏳</span>
+      <span class="mh-bo-badge-text">72H+ Stay</span>
+    </div>
+    <div class="mh-bo-badge-card">
+      <span class="mh-bo-badge-icon">🌿</span>
+      <span class="mh-bo-badge-text">100% Alcohol-Free</span>
+    </div>
+    <div class="mh-bo-badge-card">
+      <span class="mh-bo-badge-icon">🔥</span>
+      <span class="mh-bo-badge-text">Intense Sillage</span>
+    </div>
+    <div class="mh-bo-badge-card">
+      <span class="mh-bo-badge-icon">🪵</span>
+      <span class="mh-bo-badge-text">Pure Aged Oud</span>
+    </div>
+  </div>
+
+  <!-- Olfactory Storytelling -->
+  <div class="mh-bo-story">
+    <h3 class="mh-bo-story-heading">🪵 The Legend of Aged Black Oud</h3>
+    <p class="mh-bo-story-p">
+      Agarwood has been prized for thousands of years by royals, emperors, and high connoisseurs as liquid gold. <strong>Mahekh Black Oud Attar</strong> captures that timeless legacy in a concentrated, viscous oil that exudes sheer dominance, authority, and dark sophistication.
+    </p>
+    <p class="mh-bo-story-p">
+      From the very first touch on your pulse points, it releases a plume of smoky resin and golden saffron. As the hours pass, the scent settles into a majestic, hypnotic blend of aged oud and warm amber that clings to clothes and shawls for days.
+    </p>
+  </div>
+
+  <!-- Fragrance Notes Architecture (Pyramid) -->
+  <div class="mh-bo-pyramid-section">
+    <h3 class="mh-bo-section-title">The Olfactory Pyramid</h3>
+    <p class="mh-bo-section-desc">Traditional Deg-Bhapka hydro-distillation using wild harvested agarwood resin</p>
+
+    <div class="mh-bo-notes-grid">
+      <!-- Top Note -->
+      <div class="mh-bo-note-card">
+        <span class="mh-bo-note-tier">Top Notes • Opening Rush</span>
+        <h4 class="mh-bo-note-name">Kashmiri Saffron &amp; Nutmeg</h4>
+        <p class="mh-bo-note-desc">A fiery, exotic spice burst that sets a grand, unmistakable royal entrance.</p>
+      </div>
+
+      <!-- Heart Note -->
+      <div class="mh-bo-note-card">
+        <span class="mh-bo-note-tier">Heart Notes • Mid Aura</span>
+        <h4 class="mh-bo-note-name">Smoked Assam Oud &amp; Dark Rose</h4>
+        <p class="mh-bo-note-desc">Rich resinous agarwood blended with velvety dark rose petals and worn leather.</p>
+      </div>
+
+      <!-- Base Note -->
+      <div class="mh-bo-note-card">
+        <span class="mh-bo-note-tier">Base Notes • Eternal Drydown</span>
+        <h4 class="mh-bo-note-name">Cenote Amber, Patchouli &amp; Musk</h4>
+        <p class="mh-bo-note-desc">A deep, earthy, balsamic foundation that radiates warmth for 48 to 72 hours.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features & Specifications -->
+  <div class="mh-bo-features">
+    <h3 class="mh-bo-section-title" style="margin-bottom: 0.5rem;">Why Mahekh Black Oud is Irreplaceable</h3>
+    <p class="mh-bo-section-desc" style="margin-bottom: 1.5rem;">Crafted without dilution, chemicals, or synthetic stabilizers</p>
+
+    <div class="mh-bo-features-grid">
+      <div class="mh-bo-feature-item">
+        <span class="mh-bo-feature-check">✔</span>
+        <div class="mh-bo-feature-text">
+          <h4>Zero Alcohol &amp; 100% Halal</h4>
+          <p>Pure perfume oil safe for sacred prayers, skin, and ceremonial wear.</p>
+        </div>
+      </div>
+      <div class="mh-bo-feature-item">
+        <span class="mh-bo-feature-check">✔</span>
+        <div class="mh-bo-feature-text">
+          <h4>Beast Mode Longevity</h4>
+          <p>Stays on cotton, wool, and linen garments for up to 3 days.</p>
+        </div>
+      </div>
+      <div class="mh-bo-feature-item">
+        <span class="mh-bo-feature-check">✔</span>
+        <div class="mh-bo-feature-text">
+          <h4>Handcrafted 12ML Crystal Bottle</h4>
+          <p>Includes a precision glass wand applicator for mess-free luxury ritual.</p>
+        </div>
+      </div>
+      <div class="mh-bo-feature-item">
+        <span class="mh-bo-feature-check">✔</span>
+        <div class="mh-bo-feature-text">
+          <h4>For Statement Occasions</h4>
+          <p>The ultimate choice for weddings, cold evenings, and board meetings.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Ritual Guide -->
+  <div class="mh-bo-how-to">
+    <h3 class="mh-bo-section-title" style="margin-bottom: 0.5rem;">The Royal Application Ritual</h3>
+    <p class="mh-bo-section-desc">How to unlock maximum depth and projection</p>
+
+    <div class="mh-bo-steps">
+      <div class="mh-bo-step">
+        <span class="mh-bo-step-num">1</span>
+        <h5>One Pure Drop</h5>
+        <p>Take one drop using the glass rod and apply directly to your wrists.</p>
+      </div>
+      <div class="mh-bo-step">
+        <span class="mh-bo-step-num">2</span>
+        <h5>Tap, Don't Rub</h5>
+        <p>Gently press your wrists together, then touch behind your ears and neckline.</p>
+      </div>
+      <div class="mh-bo-step">
+        <span class="mh-bo-step-num">3</span>
+        <h5>Fabric Touch</h5>
+        <p>Swipe lightly across your collar or cuffs to create a lasting scent bubble.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guarantee & Trust Strip -->
+  <div class="mh-bo-guarantee">
+    <h3>👑 Authentic Distillation Guarantee</h3>
+    <p>
+      Sourced directly from heritage distillers. 100% pure undiluted attar oil backed by Cash on Delivery (COD) across India and damage-free luxury packaging.
+    </p>
+  </div>
+</div>

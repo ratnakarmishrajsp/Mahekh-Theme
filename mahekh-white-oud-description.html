@@ -1,0 +1,564 @@
+<div class="mh-white-oud-wrapper">
+  <!-- Google Fonts Import -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+    .mh-white-oud-wrapper {
+      --gold: #c6a052;
+      --gold-dark: #9e7b32;
+      --gold-light: #faefd4;
+      --champagne-glow: rgba(198, 160, 82, 0.35);
+      --pearl-bg: #0d0e12;
+      --card-bg: #15171e;
+      --card-border: #282b36;
+      --text-main: #f5f6f9;
+      --text-sub: #a8abb8;
+      --font-heading: 'Playfair Display', Georgia, serif;
+      --font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      background-color: var(--pearl-bg);
+      color: var(--text-main);
+      padding: 3rem 1.5rem;
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 1.5rem 0;
+      box-sizing: border-box;
+      line-height: 1.8;
+      font-family: var(--font-body);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(198, 160, 82, 0.3);
+    }
+
+    .mh-white-oud-wrapper *,
+    .mh-white-oud-wrapper *::before,
+    .mh-white-oud-wrapper *::after {
+      box-sizing: inherit;
+    }
+
+    @media (max-width: 768px) {
+      .mh-white-oud-wrapper {
+        margin-left: -1.5rem !important;
+        margin-right: -1.5rem !important;
+        width: calc(100% + 3rem) !important;
+        max-width: calc(100% + 3rem) !important;
+        border-radius: 0 !important;
+        border-left: none !important;
+        border-right: none !important;
+        padding: 2.2rem 1.15rem !important;
+        box-shadow: none !important;
+      }
+    }
+
+    @keyframes mhChampagneGlow {
+      0%, 100% { box-shadow: 0 0 15px rgba(198, 160, 82, 0.25); border-color: var(--gold); }
+      50% { box-shadow: 0 0 28px rgba(198, 160, 82, 0.65); border-color: #fff; }
+    }
+
+    .mh-wo-top-bar {
+      background: linear-gradient(135deg, #161822 0%, #202433 50%, #11131b 100%);
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      text-align: center;
+      margin-bottom: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      animation: mhChampagneGlow 3.5s infinite ease-in-out;
+      width: 100%;
+    }
+
+    .mh-wo-top-tag {
+      background: linear-gradient(90deg, #f7e7a9, #d4af37, #f7e7a9);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      padding: 0.3rem 0.85rem;
+      border-radius: 20px;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .mh-wo-top-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #fff;
+      letter-spacing: 0.04em;
+    }
+
+    .mh-wo-hero {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 0 0.5rem;
+    }
+
+    .mh-wo-badge {
+      display: inline-block;
+      color: var(--gold);
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      letter-spacing: 0.25em;
+      font-weight: 800;
+      margin-bottom: 0.85rem;
+    }
+
+    .mh-wo-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2.1rem, 6vw, 3.4rem);
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 1.2rem;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .mh-wo-title span {
+      background: linear-gradient(135deg, #fff 0%, var(--gold-light) 50%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .mh-wo-subtitle {
+      font-size: clamp(1.05rem, 3vw, 1.25rem);
+      color: var(--text-sub);
+      max-width: 780px;
+      margin: 0 auto 1.8rem;
+      font-weight: 400;
+      line-height: 1.7;
+    }
+
+    .mh-wo-badges-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 14px;
+      margin-bottom: 2.8rem;
+      width: 100%;
+    }
+
+    .mh-wo-badge-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.25rem 0.85rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .mh-wo-badge-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(198, 160, 82, 0.25);
+    }
+
+    .mh-wo-badge-icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .mh-wo-badge-text {
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--text-main);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .mh-wo-story {
+      background: linear-gradient(180deg, rgba(21, 23, 30, 0.9) 0%, rgba(13, 14, 18, 0.98) 100%);
+      border: 1px solid var(--card-border);
+      border-left: 4px solid var(--gold);
+      border-radius: 14px;
+      padding: 2.2rem 1.85rem;
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-wo-story-heading {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      color: var(--gold-light);
+      margin: 0 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mh-wo-story-p {
+      color: #dedee6;
+      font-size: 1.08rem;
+      margin: 0 0 1.2rem;
+      line-height: 1.8;
+    }
+
+    .mh-wo-story-p:last-child {
+      margin-bottom: 0;
+    }
+
+    .mh-wo-pyramid-section {
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-wo-section-title {
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 4.5vw, 2.4rem);
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .mh-wo-section-desc {
+      text-align: center;
+      color: var(--text-sub);
+      font-size: 1rem;
+      margin-bottom: 2.2rem;
+    }
+
+    .mh-wo-notes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 18px;
+      width: 100%;
+    }
+
+    .mh-wo-note-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.85rem 1.35rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .mh-wo-note-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .mh-wo-note-tier {
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      margin-bottom: 0.6rem;
+      display: block;
+    }
+
+    .mh-wo-note-name {
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
+      color: #fff;
+      margin: 0 0 0.75rem;
+    }
+
+    .mh-wo-note-desc {
+      color: #b0b0bc;
+      font-size: 0.95rem;
+      margin: 0;
+      line-height: 1.65;
+    }
+
+    .mh-wo-features {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-wo-features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 22px;
+      margin-top: 1.8rem;
+    }
+
+    .mh-wo-feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .mh-wo-feature-check {
+      color: var(--gold);
+      font-size: 1.5rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .mh-wo-feature-text h4 {
+      margin: 0 0 0.35rem;
+      font-size: 1.05rem;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .mh-wo-feature-text p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    .mh-wo-how-to {
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      background: linear-gradient(135deg, rgba(21, 23, 30, 0.95) 0%, rgba(15, 17, 23, 0.95) 100%);
+      margin-bottom: 3.2rem;
+      width: 100%;
+    }
+
+    .mh-wo-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 18px;
+      margin-top: 1.8rem;
+    }
+
+    .mh-wo-step {
+      text-align: center;
+      padding: 1.5rem 1.15rem;
+      background: rgba(255, 255, 255, 0.025);
+      border-radius: 14px;
+      border: 1px dashed rgba(198, 160, 82, 0.35);
+    }
+
+    .mh-wo-step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: #000;
+      font-weight: 800;
+      font-size: 1.1rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .mh-wo-step h5 {
+      margin: 0 0 0.5rem;
+      font-size: 1.1rem;
+      color: #fff;
+    }
+
+    .mh-wo-step p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    .mh-wo-guarantee {
+      background: linear-gradient(135deg, #151821 0%, #202638 50%, #11131b 100%);
+      border: 2px solid var(--gold);
+      border-radius: 16px;
+      padding: 2.2rem 1.85rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      width: 100%;
+    }
+
+    .mh-wo-guarantee h3 {
+      font-family: var(--font-heading);
+      font-size: 1.75rem;
+      color: var(--gold-light);
+      margin: 0 0 0.6rem;
+    }
+
+    .mh-wo-guarantee p {
+      color: #e2e2e8;
+      font-size: 1.05rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 600px) {
+      .mh-wo-top-bar {
+        flex-direction: column;
+        gap: 8px;
+        padding: 0.9rem 1rem;
+      }
+      .mh-wo-top-title {
+        font-size: 0.95rem;
+      }
+      .mh-wo-badges-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      .mh-wo-badge-card {
+        padding: 1rem 0.6rem;
+      }
+      .mh-wo-notes-grid,
+      .mh-wo-steps {
+        grid-template-columns: 1fr;
+      }
+      .mh-wo-story,
+      .mh-wo-features,
+      .mh-wo-how-to,
+      .mh-wo-guarantee {
+        padding: 1.75rem 1.2rem;
+      }
+    }
+  </style>
+
+  <!-- Top Announcement Offer Bar -->
+  <div class="mh-wo-top-bar">
+    <span class="mh-wo-top-tag">🕊️ The Gentle Sovereign</span>
+    <span class="mh-wo-top-title">Smooth Velvet Oud Oil | 100% Alcohol-Free Pure Perfume</span>
+  </div>
+
+  <!-- Hero Headline -->
+  <div class="mh-wo-hero">
+    <div class="mh-wo-badge">✦ Sophisticated Velvet Luxury ✦</div>
+    <h1 class="mh-wo-title">Mahekh <span>White Oud</span> Attar</h1>
+    <p class="mh-wo-subtitle">
+      Creamy, soft, and effortlessly regal. An exquisite blend of rare Cambodian white agarwood, silky white amber, vanilla warmth, and crisp floral undertones.
+    </p>
+  </div>
+
+  <!-- Performance Badges Grid -->
+  <div class="mh-wo-badges-grid">
+    <div class="mh-wo-badge-card">
+      <span class="mh-wo-badge-icon">⏳</span>
+      <span class="mh-wo-badge-text">48H+ Longevity</span>
+    </div>
+    <div class="mh-wo-badge-card">
+      <span class="mh-wo-badge-icon">🌿</span>
+      <span class="mh-wo-badge-text">100% Alcohol-Free</span>
+    </div>
+    <div class="mh-wo-badge-card">
+      <span class="mh-wo-badge-icon">✨</span>
+      <span class="mh-wo-badge-text">Clean &amp; Creamy</span>
+    </div>
+    <div class="mh-wo-badge-card">
+      <span class="mh-wo-badge-icon">🕊️</span>
+      <span class="mh-wo-badge-text">All-Day Versatility</span>
+    </div>
+  </div>
+
+  <!-- Olfactory Storytelling -->
+  <div class="mh-wo-story">
+    <h3 class="mh-wo-story-heading">🤍 Pure Elegance in Every Drop</h3>
+    <p class="mh-wo-story-p">
+      If Black Oud is the midnight storm, <strong>Mahekh White Oud</strong> is the tranquil dawn. It takes the majestic woodiness of agarwood and softens it with creamy amber, powdery white musk, and soft vanilla blossoms.
+    </p>
+    <p class="mh-wo-story-p">
+      It is neither sharp nor overwhelming — it creates a refined, welcoming personal scent bubble that makes people lean in closer. Designed specifically for those who love high luxury that feels understated, graceful, and impeccably clean.
+    </p>
+  </div>
+
+  <!-- Fragrance Notes Architecture (Pyramid) -->
+  <div class="mh-wo-pyramid-section">
+    <h3 class="mh-wo-section-title">The Olfactory Pyramid</h3>
+    <p class="mh-wo-section-desc">Artisanal steam-distilled white agarwood harmonized with natural botanical absolutes</p>
+
+    <div class="mh-wo-notes-grid">
+      <!-- Top Note -->
+      <div class="mh-wo-note-card">
+        <span class="mh-wo-note-tier">Top Notes • Fresh Whisper</span>
+        <h4 class="mh-wo-note-name">Italian Bergamot &amp; White Flowers</h4>
+        <p class="mh-wo-note-desc">A luminous, crisp opening that feels airy, uplifting, and delightfully sophisticated.</p>
+      </div>
+
+      <!-- Heart Note -->
+      <div class="mh-wo-note-card">
+        <span class="mh-wo-note-tier">Heart Notes • Velvet Core</span>
+        <h4 class="mh-wo-note-name">Cambodian White Oud &amp; Amber</h4>
+        <p class="mh-wo-note-desc">Silky smooth agarwood without harsh smokiness, resting on a bed of golden liquid amber.</p>
+      </div>
+
+      <!-- Base Note -->
+      <div class="mh-wo-note-card">
+        <span class="mh-wo-note-tier">Base Notes • Sensual Trail</span>
+        <h4 class="mh-wo-note-name">White Musk, Vanilla &amp; Cedarwood</h4>
+        <p class="mh-wo-note-desc">A powdery, intimate finish that lingers on your pulse points for 24 to 48 hours.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features & Specifications -->
+  <div class="mh-wo-features">
+    <h3 class="mh-wo-section-title" style="margin-bottom: 0.5rem;">Why Mahekh White Oud is a Daily Signature</h3>
+    <p class="mh-wo-section-desc" style="margin-bottom: 1.5rem;">Pure artisanal formulation without compromises</p>
+
+    <div class="mh-wo-features-grid">
+      <div class="mh-wo-feature-item">
+        <span class="mh-wo-feature-check">✔</span>
+        <div class="mh-wo-feature-text">
+          <h4>Gentle on Sensitive Skin</h4>
+          <p>Zero synthetic alcohol, non-drying, and soothing natural formulation.</p>
+        </div>
+      </div>
+      <div class="mh-wo-feature-item">
+        <span class="mh-wo-feature-check">✔</span>
+        <div class="mh-wo-feature-text">
+          <h4>Day &amp; Evening Perfection</h4>
+          <p>Subtle enough for boardrooms and executive meetings, yet rich enough for dinner dates.</p>
+        </div>
+      </div>
+      <div class="mh-wo-feature-item">
+        <span class="mh-wo-feature-check">✔</span>
+        <div class="mh-wo-feature-text">
+          <h4>Heavy Bottle with Glass Rod</h4>
+          <p>Delivered in an opulent 12ML flacon with a smooth glass wand applicator.</p>
+        </div>
+      </div>
+      <div class="mh-wo-feature-item">
+        <span class="mh-wo-feature-check">✔</span>
+        <div class="mh-wo-feature-text">
+          <h4>Universal Compliment Getter</h4>
+          <p>Universally loved by both men and women across all age groups.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Ritual Guide -->
+  <div class="mh-wo-how-to">
+    <h3 class="mh-wo-section-title" style="margin-bottom: 0.5rem;">The Daily Luxury Ritual</h3>
+    <p class="mh-wo-section-desc">How to achieve all-day intimate sillage</p>
+
+    <div class="mh-wo-steps">
+      <div class="mh-wo-step">
+        <span class="mh-wo-step-num">1</span>
+        <h5>Warm Pulse Points</h5>
+        <p>Touch the glass wand to warm pulse points — wrists, inner elbows, and base of throat.</p>
+      </div>
+      <div class="mh-wo-step">
+        <span class="mh-wo-step-num">2</span>
+        <h5>Let It Settle</h5>
+        <p>Allow the pure oil 2-3 minutes to blend with your skin chemistry before dressing.</p>
+      </div>
+      <div class="mh-wo-step">
+        <span class="mh-wo-step-num">3</span>
+        <h5>Collar Accent</h5>
+        <p>A light brush along your shirt collar guarantees an aura that greets everyone you meet.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guarantee & Trust Strip -->
+  <div class="mh-wo-guarantee">
+    <h3>👑 The Mahekh Purity Promise</h3>
+    <p>
+      Pure, natural, alcohol-free distillation from heritage perfumers. Fast tracked delivery across India with Cash on Delivery (COD) and 100% satisfaction assurance.
+    </p>
+  </div>
+</div>
