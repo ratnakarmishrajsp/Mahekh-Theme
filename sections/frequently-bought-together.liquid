@@ -6,12 +6,21 @@
 {%- assign main_product = product -%}
 {%- assign complement_product = section.settings.bundle_product_1 -%}
 {%- if complement_product == blank or complement_product.id == main_product.id -%}
-  {%- for p in collections.all.products -%}
-    {%- if p.id != main_product.id and p.available -%}
-      {%- assign complement_product = p -%}
-      {%- break -%}
-    {%- endif -%}
-  {%- endfor -%}
+  {%- assign pool_col = collections['best-selling-attars'] -%}
+  {%- if pool_col == blank or pool_col.products.size == 0 -%}
+    {%- assign pool_col = collections['royel-attars'] -%}
+  {%- endif -%}
+  {%- if pool_col == blank or pool_col.products.size == 0 -%}
+    {%- assign pool_col = product.collections.first -%}
+  {%- endif -%}
+  {%- if pool_col != blank -%}
+    {%- for p in pool_col.products -%}
+      {%- if p.id != main_product.id and p.available -%}
+        {%- assign complement_product = p -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
 {%- endif -%}
 
 {%- if complement_product != blank -%}
