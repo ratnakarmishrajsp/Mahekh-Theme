@@ -69,9 +69,13 @@ export function buildCustomerIntelligenceIndex() {
     }
 
     const statusUpper = String(o.shiprocket_status || o.unified_status || '').toUpperCase();
+    const hasAwb = o.awb && o.awb !== 'NOT_ASSIGNED' && o.awb !== 'Not Assigned';
     const isDelivered = statusUpper.includes('DELIVERED') && !statusUpper.includes('RTO');
-    const isRto = statusUpper.includes('RTO') || statusUpper.includes('CANCEL');
-    const isInTransit = statusUpper.includes('TRANSIT') || statusUpper.includes('PICKED UP') || statusUpper.includes('SHIPPED');
+    // True RTO: Shipment was dispatched and marked RTO / Return
+    const isRto = statusUpper.includes('RTO') || (hasAwb && (statusUpper.includes('UNDELIVERED') || statusUpper.includes('RETURN')));
+    // Pre-dispatch Cancel: Cancelled before dispatch / without shipping
+    const isCancelled = (statusUpper.includes('CANCEL') || statusUpper.includes('CANCELED')) && !isRto;
+    const isInTransit = (statusUpper.includes('TRANSIT') || statusUpper.includes('PICKED UP') || statusUpper.includes('SHIPPED') || statusUpper.includes('OUT FOR DELIVERY')) && !isDelivered && !isRto;
 
     c.orders.push({
       order_id: o.shopify_order_id,
@@ -86,6 +90,7 @@ export function buildCustomerIntelligenceIndex() {
       status: o.shiprocket_status || 'CONFIRMED',
       isDelivered: isDelivered,
       isRto: isRto,
+      isCancelled: isCancelled,
       isInTransit: isInTransit,
       ndr: o.ndr || null,
       track_url: o.awb && o.awb !== 'NOT_ASSIGNED' ? `https://shiprocket.co/tracking/${o.awb}` : null,
@@ -104,29 +109,37 @@ export function buildCustomerIntelligenceIndex() {
     const totalOrders = data.orders.length;
     const deliveredCount = data.orders.filter(o => o.isDelivered).length;
     const rtoCount = data.orders.filter(o => o.isRto).length;
+    const cancelledCount = data.orders.filter(o => o.isCancelled).length;
     const inTransitCount = data.orders.filter(o => o.isInTransit).length;
     const totalSpent = data.orders.reduce((sum, o) => sum + (o.amount || 0), 0);
     const aov = totalOrders > 0 ? Math.round(totalSpent / totalOrders) : 0;
     const codCount = data.orders.filter(o => o.payment_mode.toUpperCase() === 'COD').length;
-    const prepaidCount = totalOrders - codCount;
 
-    // Trust & Risk Heuristics
+    // Trust & Risk Heuristics (Accurate RTO vs Pre-dispatch Cancel)
     let trustBadge = 'NEW BUYER (1st Order)';
     let trustColor = 'gold';
     let riskLevel = 'LOW_MEDIUM';
 
     if (rtoCount > 0) {
-      trustBadge = `🚨 HIGH RTO RISK (${rtoCount} Returned)`;
+      trustBadge = `🚨 HIGH RTO RISK (${rtoCount} Parcel Returned)`;
       trustColor = 'red';
       riskLevel = 'HIGH';
-    } else if (deliveredCount >= 1) {
-      trustBadge = totalOrders > 1 ? `👑 VIP REPEAT BUYER (${deliveredCount} Delivered)` : `🟢 VERIFIED BUYER (${deliveredCount} Delivered)`;
+    } else if (deliveredCount >= 2) {
+      trustBadge = `👑 VIP REPEAT BUYER (${deliveredCount} Delivered · 0 RTO)`;
       trustColor = 'green';
       riskLevel = 'VERY_LOW';
-    } else if (totalOrders > 1 && deliveredCount === 0 && rtoCount === 0) {
+    } else if (deliveredCount === 1) {
+      trustBadge = `🟢 VERIFIED BUYER (1 Delivered · 0 RTO)`;
+      trustColor = 'green';
+      riskLevel = 'VERY_LOW';
+    } else if (totalOrders > 1 && deliveredCount === 0 && rtoCount === 0 && inTransitCount > 0) {
       trustBadge = `⚡ MULTI-ORDER IN TRANSIT (${inTransitCount} In Transit)`;
       trustColor = 'blue';
       riskLevel = 'MEDIUM';
+    } else if (cancelledCount > 0 && deliveredCount === 0) {
+      trustBadge = `⚪ PRE-DISPATCH CANCELLED (${cancelledCount} Unshipped)`;
+      trustColor = 'gray';
+      riskLevel = 'LOW';
     }
 
     // Multi-location check
@@ -145,6 +158,7 @@ export function buildCustomerIntelligenceIndex() {
       totalOrders: totalOrders,
       deliveredOrders: deliveredCount,
       rtoOrders: rtoCount,
+      cancelledOrders: cancelledCount,
       inTransitOrders: inTransitCount,
       totalSpent: totalSpent,
       aov: aov,
@@ -164,6 +178,10 @@ export function buildCustomerIntelligenceIndex() {
         courier: o.courier,
         awb: o.awb,
         status: o.status,
+        isDelivered: o.isDelivered,
+        isRto: o.isRto,
+        isCancelled: o.isCancelled,
+        isInTransit: o.isInTransit,
         ndr: o.ndr,
         city: o.city,
         pincode: o.pincode
