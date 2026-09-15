@@ -2,8 +2,10 @@ import http from 'node:http';
 import url from 'node:url';
 import { getLiveMetrics } from '../cli/live-roas.js';
 import { MetaAdsClient } from '../meta/client.js';
+import { HistoricalAnalyticsManager } from '../meta/history.js';
 
 const PORT = process.env.PORT || 4040;
+const historyMgr = new HistoricalAnalyticsManager();
 
 const htmlContent = `<!DOCTYPE html>
 <html lang="en">
@@ -19,7 +21,7 @@ const htmlContent = `<!DOCTYPE html>
       --bg-dark: #0b0d11;
       --card-bg: #14171f;
       --card-border: rgba(212, 175, 55, 0.15);
-      --card-hover: rgba(212, 175, 55, 0.25);
+      --card-hover: rgba(212, 175, 55, 0.3);
       --gold: #dfba73;
       --gold-gradient: linear-gradient(135deg, #f3e7c4 0%, #dfba73 50%, #b88a44 100%);
       --text-main: #f3f4f6;
@@ -47,7 +49,7 @@ const htmlContent = `<!DOCTYPE html>
     }
 
     .container {
-      max-width: 1400px;
+      max-width: 1440px;
       margin: 0 auto;
     }
 
@@ -117,6 +119,7 @@ const htmlContent = `<!DOCTYPE html>
     .controls {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 12px;
     }
 
@@ -131,7 +134,7 @@ const htmlContent = `<!DOCTYPE html>
     .preset-btn {
       background: none;
       border: none;
-      padding: 8px 16px;
+      padding: 8px 14px;
       color: var(--text-muted);
       font-size: 13px;
       font-weight: 600;
@@ -146,11 +149,38 @@ const htmlContent = `<!DOCTYPE html>
       box-shadow: 0 2px 10px rgba(223, 186, 115, 0.25);
     }
 
+    .custom-date-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #191d26;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4px 10px;
+      border-radius: 10px;
+    }
+
+    .custom-date-box label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .custom-date-box input[type="date"] {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      outline: none;
+      color-scheme: dark;
+    }
+
     .btn-refresh {
       background: #191d26;
       border: 1px solid rgba(255, 255, 255, 0.1);
       color: var(--text-main);
-      padding: 10px 18px;
+      padding: 9px 16px;
       border-radius: 10px;
       font-size: 13px;
       font-weight: 600;
@@ -339,6 +369,74 @@ const htmlContent = `<!DOCTYPE html>
       color: var(--red);
     }
 
+    /* 30-Day History Section */
+    .history-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 32px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .history-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--gold);
+    }
+
+    .history-badge {
+      background: rgba(223, 186, 115, 0.15);
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+
+    .summary-banner {
+      display: flex;
+      gap: 20px;
+      background: #0d0f15;
+      padding: 12px 18px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .summary-item {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .summary-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .summary-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
     /* Layout Columns */
     .dashboard-split {
       display: grid;
@@ -392,6 +490,15 @@ const htmlContent = `<!DOCTYPE html>
       color: var(--text-main);
     }
 
+    .custom-table tr.clickable-row {
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .custom-table tr.clickable-row:hover {
+      background: rgba(223, 186, 115, 0.08);
+    }
+
     .badge {
       display: inline-block;
       padding: 3px 8px;
@@ -435,7 +542,7 @@ const htmlContent = `<!DOCTYPE html>
         <div class="brand-logo">M</div>
         <div class="brand-title">
           <h1>MAHEKH LUXURY PERFUMES</h1>
-          <p><span class="live-dot"></span> Live Sync: Meta Ads Manager + Shopify Store</p>
+          <p><span class="live-dot"></span> Live Sync: Meta Ads Manager + Shopify Store (Asia/Kolkata)</p>
         </div>
       </div>
 
@@ -444,6 +551,11 @@ const htmlContent = `<!DOCTYPE html>
           <button class="preset-btn active" onclick="loadData('today', this)">Today</button>
           <button class="preset-btn" onclick="loadData('yesterday', this)">Yesterday</button>
           <button class="preset-btn" onclick="loadData('last_7d', this)">Last 7 Days</button>
+        </div>
+
+        <div class="custom-date-box">
+          <label>Pick Date:</label>
+          <input type="date" id="customDateInput" onchange="onCustomDateChange(this.value)">
         </div>
 
         <button class="btn-refresh" id="refreshBtn" onclick="refreshCurrent()">
@@ -511,7 +623,7 @@ const htmlContent = `<!DOCTYPE html>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h0M12 15h0M17 15h0M7 11h0M12 11h0M17 11h0M7 7h10"/></svg>
           In-Hand Net Profit Estimator (Live Calculator)
         </div>
-        <span style="font-size: 12px; color: var(--text-muted);">Adjust values below to compute instant net profit</span>
+        <span style="font-size: 12px; color: var(--text-muted);">Adjust values below to compute instant net profit for selected period</span>
       </div>
 
       <div class="calc-grid">
@@ -538,12 +650,62 @@ const htmlContent = `<!DOCTYPE html>
       </div>
     </section>
 
-    <!-- Lower Split: Campaigns Breakdown vs Today's Live Orders -->
+    <!-- 30-Day Historical Day-by-Day Table -->
+    <section class="history-section">
+      <div class="history-header">
+        <div class="history-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Last 30 Days Day-by-Day Performance History
+        </div>
+        <span class="history-badge">Click any row to view that day</span>
+      </div>
+
+      <div class="summary-banner" id="historySummaryBanner">
+        <div class="summary-item">
+          <span class="summary-label">30-Day Total Ad Spend (w/ GST)</span>
+          <span class="summary-val" id="sum30Spend" style="color:var(--gold);">₹0</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">30-Day Total Shopify Sales</span>
+          <span class="summary-val" id="sum30Sales" style="color:var(--green);">₹0</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">30-Day Total Orders</span>
+          <span class="summary-val" id="sum30Orders">0</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">30-Day Blended ROAS</span>
+          <span class="summary-val" id="sum30Roas" style="color:var(--green);">0.00x</span>
+        </div>
+      </div>
+
+      <div style="overflow-x: auto; max-height: 380px; overflow-y: auto;">
+        <table class="custom-table" id="historyTable">
+          <thead>
+            <tr>
+              <th>Date (IST)</th>
+              <th>Meta Spend (w/ GST)</th>
+              <th>Shopify Orders</th>
+              <th>Shopify Sales</th>
+              <th>Real ROAS</th>
+              <th>Cost / Order (CPO)</th>
+              <th>AOV</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody">
+            <tr><td colspan="8" style="text-align:center; color: var(--text-muted); padding: 20px;">Loading 30-day historical data...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Lower Split: Campaigns Breakdown vs Verified Orders Feed -->
     <div class="dashboard-split">
       <!-- Active Campaigns Table -->
       <div class="panel">
         <div class="panel-title">
-          <span>Meta Campaigns Breakdown</span>
+          <span>Campaigns Breakdown</span>
           <span style="font-size: 12px; font-weight: 500; color: var(--text-muted);" id="campCount">0 Campaigns</span>
         </div>
         <div style="overflow-x: auto;">
@@ -568,8 +730,8 @@ const htmlContent = `<!DOCTYPE html>
       <!-- Live Shopify Orders Feed -->
       <div class="panel">
         <div class="panel-title">
-          <span>Today's Verified Orders</span>
-          <span style="font-size: 12px; font-weight: 500; color: var(--gold);" id="orderStatusCount">Live Stream</span>
+          <span id="ordersPanelTitle">Verified Orders</span>
+          <span style="font-size: 12px; font-weight: 500; color: var(--gold);" id="orderStatusCount">Live Feed</span>
         </div>
         <div style="overflow-x: auto;">
           <table class="custom-table">
@@ -594,12 +756,14 @@ const htmlContent = `<!DOCTYPE html>
   <script>
     let currentPreset = 'today';
     let globalData = null;
+    let globalHistory = [];
 
     async function loadData(preset, btnElem) {
       currentPreset = preset;
       if (btnElem) {
         document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
         btnElem.classList.add('active');
+        document.getElementById('customDateInput').value = '';
       }
 
       const refreshBtn = document.getElementById('refreshBtn');
@@ -622,8 +786,104 @@ const htmlContent = `<!DOCTYPE html>
       }
     }
 
+    async function loadHistory30Days() {
+      try {
+        const res = await fetch('/api/history-30d');
+        const data = await res.json();
+        globalHistory = data;
+        renderHistoryTable(data);
+      } catch (e) {
+        console.error('History fetch error:', e);
+      }
+    }
+
+    function renderHistoryTable(items) {
+      const tbody = document.getElementById('historyBody');
+      if (!items || items.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; color:var(--text-muted);">No historical records found.</td></tr>';
+        return;
+      }
+
+      let totalSpend = 0;
+      let totalSales = 0;
+      let totalOrders = 0;
+
+      tbody.innerHTML = items.map(d => {
+        totalSpend += d.meta.spendWithGST || 0;
+        totalSales += d.shopify.totalRevenue || 0;
+        totalOrders += d.shopify.ordersCount || 0;
+
+        let roasColor = 'var(--red)';
+        if (d.blendedRoas >= 3.0) roasColor = 'var(--green)';
+        else if (d.blendedRoas >= 2.0) roasColor = 'var(--gold)';
+
+        return \`
+          <tr class="clickable-row" onclick="onCustomDateChange('\${d.date}')" title="Click to view full metrics for \${d.date}">
+            <td><b>\${d.date}</b></td>
+            <td><b>₹\${Math.round(d.meta.spendWithGST).toLocaleString('en-IN')}</b> <span style="font-size:11px; color:var(--text-muted);">(base: ₹\${Math.round(d.meta.baseSpend)})</span></td>
+            <td><b>\${d.shopify.ordersCount}</b> <span style="font-size:11px; color:var(--text-muted);">(\${d.shopify.codOrders} COD)</span></td>
+            <td style="color:var(--green); font-weight:700;">₹\${Math.round(d.shopify.totalRevenue).toLocaleString('en-IN')}</td>
+            <td style="color:\${roasColor}; font-weight:800;">\${d.blendedRoas > 0 ? d.blendedRoas.toFixed(2) + 'x' : '-'}</td>
+            <td>₹\${Math.round(d.cpo)}</td>
+            <td>₹\${Math.round(d.aov)}</td>
+            <td><button style="background:#191d26; border:1px solid rgba(223,186,115,0.3); color:var(--gold); padding:4px 8px; border-radius:6px; font-size:11px; cursor:pointer;">Inspect</button></td>
+          </tr>
+        \`;
+      }).join('');
+
+      // Summary Banner
+      document.getElementById('sum30Spend').innerText = '₹' + Math.round(totalSpend).toLocaleString('en-IN');
+      document.getElementById('sum30Sales').innerText = '₹' + Math.round(totalSales).toLocaleString('en-IN');
+      document.getElementById('sum30Orders').innerText = totalOrders.toLocaleString('en-IN');
+      const overallRoas = totalSpend > 0 ? (totalSales / totalSpend).toFixed(2) : '0.00';
+      document.getElementById('sum30Roas').innerText = overallRoas + 'x';
+    }
+
+    function onCustomDateChange(dateStr) {
+      if (!dateStr) return;
+      document.getElementById('customDateInput').value = dateStr;
+      document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+
+      // Find in history
+      const matched = globalHistory.find(h => h.date === dateStr);
+      if (matched) {
+        // Construct metric object for the selected day
+        const customMetrics = {
+          datePreset: dateStr,
+          dateIST: dateStr,
+          meta: {
+            accountName: 'Mahekh',
+            baseSpend: matched.meta.baseSpend,
+            gstAmount: matched.meta.gstAmount,
+            spendWithGST: matched.meta.spendWithGST,
+          },
+          shopify: {
+            totalOrders: matched.shopify.ordersCount,
+            totalSales: matched.shopify.totalRevenue,
+            codOrders: matched.shopify.codOrders,
+            codSales: matched.shopify.codRevenue,
+            prepaidOrders: matched.shopify.prepaidOrders,
+            prepaidSales: matched.shopify.prepaidRevenue,
+            aov: matched.aov,
+            orders: matched.shopify.orders || []
+          },
+          blended: {
+            grossRoas: matched.blendedRoas,
+            costPerOrder: matched.cpo
+          }
+        };
+
+        globalData = customMetrics;
+        renderMetrics(customMetrics);
+        recalcProfit();
+        document.getElementById('ordersPanelTitle').innerText = 'Orders on ' + dateStr;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
     function refreshCurrent() {
       loadData(currentPreset);
+      loadHistory30Days();
     }
 
     function renderMetrics(data) {
@@ -636,7 +896,7 @@ const htmlContent = `<!DOCTYPE html>
       document.getElementById('prepRev').innerText = '₹' + Math.round(data.shopify.prepaidSales).toLocaleString('en-IN');
 
       const roasElem = document.getElementById('blendedRoas');
-      roasElem.innerText = data.blended.grossRoas + 'x';
+      roasElem.innerText = (data.blended.grossRoas || 0) + 'x';
       if (data.blended.grossRoas >= 3.0) {
         roasElem.style.color = 'var(--green)';
       } else if (data.blended.grossRoas >= 2.0) {
@@ -651,7 +911,7 @@ const htmlContent = `<!DOCTYPE html>
 
       // Orders Feed
       const ordersBody = document.getElementById('ordersBody');
-      if (data.shopify.orders.length === 0) {
+      if (!data.shopify.orders || data.shopify.orders.length === 0) {
         ordersBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--text-muted);">No orders in this period</td></tr>';
       } else {
         ordersBody.innerHTML = data.shopify.orders.map(o => \`
@@ -668,7 +928,7 @@ const htmlContent = `<!DOCTYPE html>
 
     function renderCampaigns(campaigns) {
       const campBody = document.getElementById('campaignsBody');
-      const activeOrSpent = campaigns.filter(c => c.spendWithGST > 0 || c.effective_status === 'ACTIVE');
+      const activeOrSpent = (campaigns || []).filter(c => c.spendWithGST > 0 || c.effective_status === 'ACTIVE');
       document.getElementById('campCount').innerText = activeOrSpent.length + ' Active/Running';
 
       if (activeOrSpent.length === 0) {
@@ -695,9 +955,9 @@ const htmlContent = `<!DOCTYPE html>
       const shipping = parseFloat(document.getElementById('shippingInput').value || 0);
       const rtoPercent = parseFloat(document.getElementById('rtoInput').value || 0) / 100;
 
-      const totalSales = globalData.shopify.totalSales;
-      const orders = globalData.shopify.totalOrders;
-      const spendWithGST = globalData.meta.spendWithGST;
+      const totalSales = globalData.shopify.totalSales || 0;
+      const orders = globalData.shopify.totalOrders || 0;
+      const spendWithGST = globalData.meta.spendWithGST || 0;
 
       // Estimated delivered orders
       const deliveredOrders = orders * (1 - rtoPercent);
@@ -705,8 +965,8 @@ const htmlContent = `<!DOCTYPE html>
 
       // Costs
       const totalCogs = deliveredOrders * cogs;
-      const totalShipping = orders * shipping; // Shipping charged on all dispatched
-      const rtoReverseCost = (orders * rtoPercent) * (shipping * 0.7); // Reverse shipment cost
+      const totalShipping = orders * shipping;
+      const rtoReverseCost = (orders * rtoPercent) * (shipping * 0.7);
 
       const totalCosts = spendWithGST + totalCogs + totalShipping + rtoReverseCost;
       const netProfit = effectiveSales - totalCosts;
@@ -730,6 +990,7 @@ const htmlContent = `<!DOCTYPE html>
 
     // Auto-load on page load
     loadData('today');
+    loadHistory30Days();
 
     // Auto-refresh every 2 minutes
     setInterval(() => {
@@ -766,6 +1027,19 @@ const server = http.createServer(async (req, res) => {
       const data = await getLiveMetrics(preset);
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(data));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: err.message }));
+    }
+    return;
+  }
+
+  // API Endpoint: 30-Day Daily Breakdown History
+  if (parsedUrl.pathname === '/api/history-30d') {
+    try {
+      const history = await historyMgr.getDailyHistory30Days();
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(history));
     } catch (err) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: err.message }));
