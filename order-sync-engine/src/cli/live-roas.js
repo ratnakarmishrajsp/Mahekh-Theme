@@ -13,6 +13,7 @@ export async function getLiveMetrics(datePreset = 'today') {
   // 2. Fetch Shopify Orders for the given date
   const todayIST = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
   let createdAtMin;
+  let createdAtMax;
   
   if (datePreset === 'today') {
     createdAtMin = `${todayIST}T00:00:00+05:30`;
@@ -21,6 +22,7 @@ export async function getLiveMetrics(datePreset = 'today') {
     y.setDate(y.getDate() - 1);
     const yStr = y.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
     createdAtMin = `${yStr}T00:00:00+05:30`;
+    createdAtMax = `${yStr}T23:59:59+05:30`;
   } else if (datePreset === 'last_7d') {
     const d7 = new Date();
     d7.setDate(d7.getDate() - 7);
@@ -30,6 +32,7 @@ export async function getLiveMetrics(datePreset = 'today') {
 
   const orders = await shopifyManager.fetchAllOrders({
     created_at_min: createdAtMin,
+    ...(createdAtMax ? { created_at_max: createdAtMax } : {}),
     limit: 100,
   });
 
