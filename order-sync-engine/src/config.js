@@ -47,6 +47,13 @@ export const config = {
     password: process.env.SHIPROCKET_PASSWORD || '',
     baseUrl: 'https://apiv2.shiprocket.in/v1/external',
   },
+  meta: {
+    appId: process.env.META_APP_ID || '',
+    appSecret: process.env.META_APP_SECRET || '',
+    adAccountId: process.env.META_AD_ACCOUNT_ID || 'act_999512922160500',
+    accessToken: process.env.META_ACCESS_TOKEN || '',
+    gstRate: 0.18,
+  },
   cacheTtlMinutes: parseInt(process.env.CACHE_TTL_MINUTES || '15', 10),
 };
 

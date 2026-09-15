@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
+    "dashboard": "node src/dashboard/server.js",
+    "roas": "node src/cli/live-roas.js",
     "sync": "node src/index.js --sync",
     "inspect": "node src/cli/inspect.js",
     "export": "node src/cli/export.js"
