@@ -1134,7 +1134,7 @@
     // ==========================================
     // DASHBOARD DATA FETCHING
     // ==========================================
-        window.loadData = async function(preset, btnElem) {
+    async function loadData(preset, btnElem) {
       currentPreset = preset;
       if (btnElem) {
         document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
@@ -1143,7 +1143,7 @@
       }
 
       const refreshBtn = document.getElementById('refreshBtn');
-      refreshBtn.style.opacity = '0.5';
+      if (refreshBtn) refreshBtn.style.opacity = '0.5';
 
       try {
         const [resMetrics, resCamps] = await Promise.all([
@@ -1159,7 +1159,7 @@
       } catch (err) {
         console.warn('Local engine offline, rendering embedded dataset...', err);
       } finally {
-        refreshBtn.style.opacity = '1';
+        if (refreshBtn) refreshBtn.style.opacity = '1';
       }
 
       // Offline/Mobile fallback
@@ -1199,9 +1199,10 @@
         renderCampaigns(FALLBACK_CAMPAIGNS);
         recalcProfit();
       }
-    };
+    }
+    window.loadData = loadData;
 
-    window.loadHistory30Days = async function() {
+    async function loadHistory30Days() {
       try {
         const res = await fetch(API_BASE + '/api/history-30d');
         const data = await res.json();
@@ -1213,7 +1214,8 @@
       }
       globalHistory = EMBEDDED_FALLBACK_HISTORY;
       renderHistoryTable(EMBEDDED_FALLBACK_HISTORY);
-    };
+    }
+    window.loadHistory30Days = loadHistory30Days;
 
     function renderHistoryTable(items) {
       const tbody = document.getElementById('historyBody');
