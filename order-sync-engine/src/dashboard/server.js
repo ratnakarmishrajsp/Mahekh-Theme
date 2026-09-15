@@ -574,14 +574,29 @@ const htmlContent = `<!DOCTYPE html>
     let globalData = null;
     let globalHistory = [];
 
+    let lastPinActionTime = 0;
+    let lastEnteredDigit = '';
+
     // 3D Vault PIN
-    function enterPin(digit) {
+    function enterPin(digit, evt) {
+      if (evt) {
+        if (evt.cancelable) evt.preventDefault();
+        evt.stopPropagation();
+      }
+      const now = Date.now();
+      if (now - lastPinActionTime < 140) return;
+      if (digit === lastEnteredDigit && (now - lastPinActionTime < 240)) return;
+      lastPinActionTime = now;
+      lastEnteredDigit = digit;
+
       if (enteredPin.length < 4) {
-        enteredPin += digit;
+        enteredPin += String(digit);
         updateDots();
         const tumbler = document.getElementById('vaultTumbler');
-        const rot = enteredPin.length * 35;
-        tumbler.style.transform = 'rotate(' + rot + 'deg) translateZ(10px)';
+        if (tumbler) {
+          const rot = enteredPin.length * 35;
+          tumbler.style.transform = 'rotate(' + rot + 'deg) translateZ(10px)';
+        }
 
         if (enteredPin.length === 4) {
           setTimeout(verifyPin, 180);
@@ -589,18 +604,40 @@ const htmlContent = `<!DOCTYPE html>
       }
     }
 
-    function clearPin() {
+    function clearPin(evt) {
+      if (evt) {
+        if (evt.cancelable) evt.preventDefault();
+        evt.stopPropagation();
+      }
+      const now = Date.now();
+      if (now - lastPinActionTime < 150) return;
+      lastPinActionTime = now;
+      lastEnteredDigit = '';
+
       enteredPin = '';
       updateDots();
-      document.getElementById('vaultTumbler').style.transform = 'rotate(0deg)';
+      const tumbler = document.getElementById('vaultTumbler');
+      if (tumbler) tumbler.style.transform = 'rotate(0deg)';
     }
 
-    function backspacePin() {
+    function backspacePin(evt) {
+      if (evt) {
+        if (evt.cancelable) evt.preventDefault();
+        evt.stopPropagation();
+      }
+      const now = Date.now();
+      if (now - lastPinActionTime < 150) return;
+      lastPinActionTime = now;
+      lastEnteredDigit = '';
+
       if (enteredPin.length > 0) {
         enteredPin = enteredPin.slice(0, -1);
         updateDots();
-        const rot = enteredPin.length * 35;
-        document.getElementById('vaultTumbler').style.transform = 'rotate(' + rot + 'deg)';
+        const tumbler = document.getElementById('vaultTumbler');
+        if (tumbler) {
+          const rot = enteredPin.length * 35;
+          tumbler.style.transform = 'rotate(' + rot + 'deg)';
+        }
       }
     }
 
