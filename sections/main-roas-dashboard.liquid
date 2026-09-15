@@ -214,6 +214,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
   }
 
   .key-btn span.letters {
@@ -222,6 +225,7 @@
     font-weight: 600;
     letter-spacing: 0.1em;
     margin-top: -2px;
+    pointer-events: none;
   }
 
   .key-btn:hover {
@@ -770,19 +774,23 @@
         <div class="pin-dot" id="dot3"></div>
       </div>
 
+      <div style="margin-top: -12px; margin-bottom: 22px; display: flex; justify-content: center;">
+        <input type="password" id="manualPinInput" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="Enter PIN 1409" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(223,186,115,0.4); border-radius: 12px; color: #dfba73; font-size: 15px; font-weight: 700; text-align: center; letter-spacing: 0.25em; padding: 8px 14px; width: 170px; outline: none;" oninput="onManualPinInput(this.value)">
+      </div>
+
       <div class="keypad-grid">
-        <button class="key-btn" onclick="enterPin('1')">1</button>
-        <button class="key-btn" onclick="enterPin('2')">2<span class="letters">ABC</span></button>
-        <button class="key-btn" onclick="enterPin('3')">3<span class="letters">DEF</span></button>
-        <button class="key-btn" onclick="enterPin('4')">4<span class="letters">GHI</span></button>
-        <button class="key-btn" onclick="enterPin('5')">5<span class="letters">JKL</span></button>
-        <button class="key-btn" onclick="enterPin('6')">6<span class="letters">MNO</span></button>
-        <button class="key-btn" onclick="enterPin('7')">7<span class="letters">PQRS</span></button>
-        <button class="key-btn" onclick="enterPin('8')">8<span class="letters">TUV</span></button>
-        <button class="key-btn" onclick="enterPin('9')">9<span class="letters">WXYZ</span></button>
-        <button class="key-btn action-key" onclick="clearPin()">C</button>
-        <button class="key-btn" onclick="enterPin('0')">0</button>
-        <button class="key-btn action-key" onclick="backspacePin()">⌫</button>
+        <button type="button" class="key-btn" onclick="enterPin('1')">1</button>
+        <button type="button" class="key-btn" onclick="enterPin('2')">2<span class="letters">ABC</span></button>
+        <button type="button" class="key-btn" onclick="enterPin('3')">3<span class="letters">DEF</span></button>
+        <button type="button" class="key-btn" onclick="enterPin('4')">4<span class="letters">GHI</span></button>
+        <button type="button" class="key-btn" onclick="enterPin('5')">5<span class="letters">JKL</span></button>
+        <button type="button" class="key-btn" onclick="enterPin('6')">6<span class="letters">MNO</span></button>
+        <button type="button" class="key-btn" onclick="enterPin('7')">7<span class="letters">PQRS</span></button>
+        <button type="button" class="key-btn" onclick="enterPin('8')">8<span class="letters">TUV</span></button>
+        <button type="button" class="key-btn" onclick="enterPin('9')">9<span class="letters">WXYZ</span></button>
+        <button type="button" class="key-btn action-key" onclick="clearPin()">C</button>
+        <button type="button" class="key-btn" onclick="enterPin('0')">0</button>
+        <button type="button" class="key-btn action-key" onclick="backspacePin()">⌫</button>
       </div>
     </div>
   </div>
@@ -1059,13 +1067,32 @@
       }
     };
 
+    window.onManualPinInput = function(val) {
+      enteredPin = val.slice(0, 4);
+      updateDots();
+      const tumbler = document.getElementById('vaultTumbler');
+      if (tumbler) {
+        const rot = enteredPin.length * 35;
+        tumbler.style.transform = 'rotate(' + rot + 'deg) translateZ(10px)';
+      }
+      if (enteredPin.length === 4) {
+        setTimeout(verifyPin, 150);
+      }
+    };
+
     function updateDots() {
+      const manualInput = document.getElementById('manualPinInput');
+      if (manualInput && manualInput.value !== enteredPin) {
+        manualInput.value = enteredPin;
+      }
       for (let i = 0; i < 4; i++) {
         const dot = document.getElementById('dot' + i);
-        if (i < enteredPin.length) {
-          dot.classList.add('filled');
-        } else {
-          dot.classList.remove('filled');
+        if (dot) {
+          if (i < enteredPin.length) {
+            dot.classList.add('filled');
+          } else {
+            dot.classList.remove('filled');
+          }
         }
       }
     }
