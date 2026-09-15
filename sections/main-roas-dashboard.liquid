@@ -1,317 +1,752 @@
-import http from 'node:http';
-import url from 'node:url';
-import { getLiveMetrics } from '../cli/live-roas.js';
-import { MetaAdsClient } from '../meta/client.js';
-import { HistoricalAnalyticsManager } from '../meta/history.js';
+{% comment %}
+  Mahekh Luxury Perfumes - Real-Time ROAS & Profit Cockpit
+  Internal Executive Dashboard with 3D Vault Lock Screen
+  Shopify OS 2.0 Compliant
+{% endcomment %}
 
-const PORT = process.env.PORT || 4040;
-const historyMgr = new HistoricalAnalyticsManager();
+<!-- Prevent search engines from indexing internal executive tool -->
+<meta name="robots" content="noindex, nofollow">
 
-const htmlContent = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mahekh - Real-Time ROAS & Profit Cockpit</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --m-bg-dark: #090a0f;
-      --m-card-bg: #12141c;
-      --m-card-border: rgba(223, 186, 115, 0.18);
-      --m-gold: #dfba73;
-      --m-gold-grad: linear-gradient(135deg, #f8ecc8 0%, #dfba73 50%, #b38238 100%);
-      --m-text-main: #f3f4f6;
-      --m-text-muted: #94a3b8;
-      --m-green: #10b981;
-      --m-green-bg: rgba(16, 185, 129, 0.12);
-      --m-red: #ef4444;
-      --m-red-bg: rgba(239, 68, 68, 0.12);
-      --m-blue: #3b82f6;
-      --m-blue-bg: rgba(59, 130, 246, 0.12);
-    }
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background-color: var(--m-bg-dark);
-      color: var(--m-text-main);
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+<style>
+  /* Suppress default theme header/footer for dedicated executive dashboard */
+  #shopify-section-sections--header-group,
+  #shopify-section-sections--footer-group,
+  #shopify-section-header,
+  #shopify-section-footer,
+  .header-wrapper,
+  .section-header,
+  sticky-header,
+  header-drawer,
+  .footer,
+  footer,
+  #shopify-section-announcement-bar,
+  .announcement-bar-section,
+  .announcement-bar,
+  .localization-form {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 
-    /* 3D VAULT LOCK SCREEN */
-    .vault-lock-screen {
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: radial-gradient(circle at 50% 30%, #151824 0%, #08090d 100%);
-      z-index: 999999;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 20px;
-      perspective: 1200px;
-      transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
+  :root {
+    --m-bg-dark: #090a0f;
+    --m-card-bg: #12141c;
+    --m-card-border: rgba(223, 186, 115, 0.18);
+    --m-gold: #dfba73;
+    --m-gold-grad: linear-gradient(135deg, #f8ecc8 0%, #dfba73 50%, #b38238 100%);
+    --m-gold-glow: rgba(223, 186, 115, 0.25);
+    --m-text-main: #f3f4f6;
+    --m-text-muted: #94a3b8;
+    --m-green: #10b981;
+    --m-green-bg: rgba(16, 185, 129, 0.12);
+    --m-red: #ef4444;
+    --m-red-bg: rgba(239, 68, 68, 0.12);
+    --m-blue: #3b82f6;
+    --m-blue-bg: rgba(59, 130, 246, 0.12);
+  }
 
-    .vault-lock-screen.unlocked {
-      opacity: 0;
-      transform: scale(1.08) translateZ(100px);
-      pointer-events: none;
-    }
+  .roas-cockpit-root {
+    background-color: var(--m-bg-dark);
+    color: var(--m-text-main);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
 
-    .vault-card {
-      background: linear-gradient(180deg, rgba(25, 29, 41, 0.92) 0%, rgba(14, 16, 24, 0.97) 100%);
-      border: 1px solid rgba(223, 186, 115, 0.28);
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 50px rgba(223, 186, 115, 0.12);
-      border-radius: 28px;
-      padding: 38px 34px;
-      max-width: 420px; width: 100%;
-      text-align: center;
-      position: relative;
-      transform-style: preserve-3d;
-      backdrop-filter: blur(20px);
-      transition: transform 0.2s ease;
-    }
+  /* ========================================================
+     3D VAULT PASSCODE GATE (LOCK SCREEN)
+     ======================================================== */
+  .vault-lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at 50% 30%, #151824 0%, #08090d 100%);
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    perspective: 1200px;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 
-    .vault-3d-tumbler {
-      width: 96px; height: 96px;
-      margin: 0 auto 20px auto;
-      position: relative;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #fceecb 0%, #d4aa55 45%, #7a581a 100%);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.6), inset 0 4px 8px rgba(255, 255, 255, 0.6), inset 0 -6px 12px rgba(0, 0, 0, 0.7);
-      display: flex; align-items: center; justify-content: center;
-      transform-style: preserve-3d;
-      transition: transform 0.5s ease;
-    }
+  .vault-lock-screen.unlocked {
+    opacity: 0;
+    transform: scale(1.08) translateZ(100px);
+    pointer-events: none;
+  }
 
-    .vault-3d-inner-rim {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      background: #11131a;
-      border: 3px solid #dfba73;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.9);
-    }
+  .vault-card {
+    background: linear-gradient(180deg, rgba(25, 29, 41, 0.9) 0%, rgba(14, 16, 24, 0.95) 100%);
+    border: 1px solid rgba(223, 186, 115, 0.28);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7), 0 0 50px rgba(223, 186, 115, 0.12);
+    border-radius: 28px;
+    padding: 38px 34px;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    transform-style: preserve-3d;
+    backdrop-filter: blur(20px);
+    transition: transform 0.2s ease;
+  }
 
-    .vault-lock-icon {
-      width: 28px; height: 28px;
-      color: var(--m-gold);
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
+  /* 3D Vault Shackle & Dial */
+  .vault-3d-tumbler {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 20px auto;
+    position: relative;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #fceecb 0%, #d4aa55 45%, #7a581a 100%);
+    box-shadow: 
+      0 12px 28px rgba(0, 0, 0, 0.6),
+      inset 0 4px 8px rgba(255, 255, 255, 0.6),
+      inset 0 -6px 12px rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+  }
 
-    .vault-brand-tag {
-      font-family: 'Outfit', sans-serif;
-      font-size: 13px; font-weight: 700;
-      letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--m-gold); margin-bottom: 6px;
-    }
+  .vault-3d-inner-rim {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #11131a;
+    border: 3px solid #dfba73;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 3px 10px rgba(0, 0, 0, 0.9);
+  }
 
-    .vault-title {
-      font-family: 'Outfit', sans-serif;
-      font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 8px;
-    }
+  .vault-lock-icon {
+    width: 28px;
+    height: 28px;
+    color: var(--m-gold);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
 
-    .vault-subtitle {
-      font-size: 13px; color: var(--m-text-muted); margin-bottom: 24px;
-    }
+  .vault-brand-tag {
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--m-gold);
+    margin-bottom: 6px;
+  }
 
-    .pin-dots-row {
-      display: flex; justify-content: center; gap: 14px; margin-bottom: 26px;
-    }
+  .vault-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 8px;
+  }
 
-    .pin-dot {
-      width: 16px; height: 16px;
-      border-radius: 50%;
-      background: #1c202d;
-      border: 1.5px solid rgba(223, 186, 115, 0.3);
-      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
+  .vault-subtitle {
+    font-size: 13px;
+    color: var(--m-text-muted);
+    margin-bottom: 24px;
+  }
 
-    .pin-dot.filled {
-      background: var(--m-gold-grad);
-      border-color: #f7e8c4;
-      box-shadow: 0 0 14px rgba(223, 186, 115, 0.7);
-      transform: scale(1.15);
-    }
+  /* PIN Dots Indicator */
+  .pin-dots-row {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 26px;
+  }
 
-    .keypad-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
-    }
+  .pin-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #1c202d;
+    border: 1.5px solid rgba(223, 186, 115, 0.3);
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
 
-    .key-btn {
-      height: 60px;
-      background: linear-gradient(180deg, #222634 0%, #171a24 100%);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-bottom: 3px solid rgba(0, 0, 0, 0.5);
-      border-radius: 16px;
-      color: #fff;
-      font-family: 'Outfit', sans-serif;
-      font-size: 20px; font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.15);
-      transition: all 0.1s ease;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
+  .pin-dot.filled {
+    background: var(--m-gold-grad);
+    border-color: #f7e8c4;
+    box-shadow: 0 0 14px rgba(223, 186, 115, 0.7);
+    transform: scale(1.15);
+  }
 
-    .key-btn span.letters {
-      font-size: 9px; color: var(--m-text-muted); font-weight: 600; letter-spacing: 0.1em; margin-top: -2px;
-    }
+  /* 3D Tactile Keypad */
+  .keypad-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
 
-    .key-btn:hover {
-      background: linear-gradient(180deg, #2a2f40 0%, #1e222f 100%);
-      border-color: rgba(223, 186, 115, 0.3);
-    }
+  .key-btn {
+    height: 60px;
+    background: linear-gradient(180deg, #222634 0%, #171a24 100%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-bottom: 3px solid rgba(0, 0, 0, 0.5);
+    border-radius: 16px;
+    color: #fff;
+    font-family: 'Outfit', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    transition: all 0.1s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 
-    .key-btn:active {
-      transform: translateY(2px);
-      border-bottom-width: 1px;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
-    }
+  .key-btn span.letters {
+    font-size: 9px;
+    color: var(--m-text-muted);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    margin-top: -2px;
+  }
 
-    .key-btn.action-key {
-      font-size: 14px; font-weight: 600; color: var(--m-text-muted); background: #151822;
-    }
+  .key-btn:hover {
+    background: linear-gradient(180deg, #2a2f40 0%, #1e222f 100%);
+    border-color: rgba(223, 186, 115, 0.3);
+  }
 
-    .vault-card.shake {
-      animation: shake3d 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-      border-color: var(--m-red);
-    }
+  .key-btn:active {
+    transform: translateY(2px);
+    border-bottom-width: 1px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  }
 
-    @keyframes shake3d {
-      10%, 90% { transform: translate3d(-3px, 0, 0); }
-      20%, 80% { transform: translate3d(5px, 0, 0); }
-      30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
-      40%, 60% { transform: translate3d(6px, 0, 0); }
-    }
+  .key-btn.action-key {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--m-text-muted);
+    background: #151822;
+  }
 
-    /* DASHBOARD */
-    .container { max-width: 1440px; margin: 0 auto; padding: 24px 20px; }
-    header.dash-header {
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
-      padding-bottom: 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); margin-bottom: 28px;
-    }
-    .brand-group { display: flex; align-items: center; gap: 16px; }
-    .brand-logo {
-      width: 44px; height: 44px; background: var(--m-gold-grad); border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; color: #0b0d11;
-      box-shadow: 0 4px 20px rgba(223, 186, 115, 0.3);
-    }
-    .brand-title h1 { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 700; margin: 0; }
-    .brand-title p { font-size: 13px; color: var(--m-text-muted); display: flex; align-items: center; gap: 8px; margin: 4px 0 0 0; }
-    .live-dot {
-      width: 8px; height: 8px; border-radius: 50%; background: var(--m-green);
-      box-shadow: 0 0 10px var(--m-green); animation: pulse 2s infinite;
-    }
-    @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.15); } }
+  /* Wrong PIN Shake */
+  .vault-card.shake {
+    animation: shake3d 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    border-color: var(--m-red);
+  }
 
-    .dash-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
-    .preset-pills {
-      display: flex; background: #191d26; padding: 4px; border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .preset-btn {
-      background: none; border: none; padding: 8px 14px; color: var(--m-text-muted);
-      font-size: 13px; font-weight: 600; border-radius: 7px; cursor: pointer; transition: all 0.2s ease;
-    }
-    .preset-btn.active {
-      background: var(--m-gold-grad); color: #0b0d11; box-shadow: 0 2px 10px rgba(223, 186, 115, 0.25);
-    }
-    .custom-date-box {
-      display: flex; align-items: center; gap: 8px; background: #191d26;
-      border: 1px solid rgba(255, 255, 255, 0.1); padding: 4px 10px; border-radius: 10px;
-    }
-    .custom-date-box label { font-size: 11px; color: var(--m-text-muted); font-weight: 600; text-transform: uppercase; }
-    .custom-date-box input[type="date"] {
-      background: transparent; border: none; color: #fff; font-size: 13px; font-weight: 600; outline: none; color-scheme: dark;
-    }
-    .btn-action {
-      background: #191d26; border: 1px solid rgba(255, 255, 255, 0.1); color: var(--m-text-main);
-      padding: 9px 16px; border-radius: 10px; font-size: 13px; font-weight: 600;
-      display: flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s;
-    }
-    .btn-action:hover { background: #222733; border-color: var(--m-gold); }
+  @keyframes shake3d {
+    10%, 90% { transform: translate3d(-3px, 0, 0); }
+    20%, 80% { transform: translate3d(5px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+    40%, 60% { transform: translate3d(6px, 0, 0); }
+  }
 
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 28px; }
-    .stat-card {
-      background: var(--m-card-bg); border: 1px solid var(--m-card-border); border-radius: 16px;
-      padding: 22px 24px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-    .stat-card:hover { transform: translateY(-2px); border-color: rgba(223, 186, 115, 0.35); }
-    .stat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .stat-label { font-size: 13px; font-weight: 600; color: var(--m-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
-    .stat-tag { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
-    .stat-tag.gst { background: rgba(223, 186, 115, 0.15); color: var(--m-gold); }
-    .stat-tag.success { background: var(--m-green-bg); color: var(--m-green); }
-    .stat-value { font-family: 'Outfit', sans-serif; font-size: 34px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-    .stat-value.gold { background: var(--m-gold-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .stat-value.green { color: var(--m-green); }
-    .stat-subtext { font-size: 12.5px; color: var(--m-text-muted); display: flex; align-items: center; gap: 6px; }
+  /* ========================================================
+     MAIN EXECUTIVE COCKPIT DASHBOARD (INSIDE)
+     ======================================================== */
+  .dashboard-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 24px 20px;
+  }
 
-    .calculator-panel {
-      background: linear-gradient(180deg, #161922 0%, #11131a 100%);
-      border: 1px solid rgba(223, 186, 115, 0.25); border-radius: 18px;
-      padding: 24px 28px; margin-bottom: 32px; box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
-    }
-    .calc-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
-    .calc-title { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; color: var(--m-gold); display: flex; align-items: center; gap: 10px; }
-    .calc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; align-items: center; }
-    .input-box label { display: block; font-size: 12px; color: var(--m-text-muted); margin-bottom: 6px; font-weight: 600; }
-    .input-box input {
-      width: 100%; background: #0d0f15; border: 1px solid rgba(255, 255, 255, 0.12); color: #fff;
-      padding: 10px 14px; border-radius: 10px; font-size: 14px; font-weight: 600; outline: none;
-    }
-    .profit-output-card {
-      background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 14px;
-      padding: 16px 20px; text-align: right;
-    }
-    .profit-output-card.loss { background: rgba(239, 68, 68, 0.08); border-color: rgba(239, 68, 68, 0.3); }
-    .profit-output-label { font-size: 12px; color: var(--m-text-muted); font-weight: 600; }
-    .profit-output-val { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800; color: var(--m-green); }
-    .profit-output-val.loss { color: var(--m-red); }
+  header.dash-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 28px;
+  }
 
-    .history-section {
-      background: var(--m-card-bg); border: 1px solid var(--m-card-border); border-radius: 18px;
-      padding: 24px; margin-bottom: 32px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .brand-logo {
+    width: 44px;
+    height: 44px;
+    background: var(--m-gold-grad);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: #0b0d11;
+    box-shadow: 0 4px 20px rgba(223, 186, 115, 0.3);
+  }
+
+  .brand-title h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .brand-title p {
+    font-size: 13px;
+    color: var(--m-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0 0 0;
+  }
+
+  .live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--m-green);
+    box-shadow: 0 0 10px var(--m-green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.15); }
+  }
+
+  /* Controls */
+  .dash-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .preset-pills {
+    display: flex;
+    background: #191d26;
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .preset-btn {
+    background: none;
+    border: none;
+    padding: 8px 14px;
+    color: var(--m-text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .preset-btn.active {
+    background: var(--m-gold-grad);
+    color: #0b0d11;
+    box-shadow: 0 2px 10px rgba(223, 186, 115, 0.25);
+  }
+
+  .custom-date-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #191d26;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 4px 10px;
+    border-radius: 10px;
+  }
+
+  .custom-date-box label {
+    font-size: 11px;
+    color: var(--m-text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .custom-date-box input[type="date"] {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    outline: none;
+    color-scheme: dark;
+  }
+
+  .btn-action {
+    background: #191d26;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--m-text-main);
+    padding: 9px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-action:hover {
+    background: #222733;
+    border-color: var(--m-gold);
+  }
+
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--m-card-bg);
+    border: 1px solid var(--m-card-border);
+    border-radius: 16px;
+    padding: 22px 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(223, 186, 115, 0.35);
+  }
+
+  .stat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--m-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .stat-tag {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+
+  .stat-tag.gst {
+    background: rgba(223, 186, 115, 0.15);
+    color: var(--m-gold);
+  }
+
+  .stat-tag.success {
+    background: var(--m-green-bg);
+    color: var(--m-green);
+  }
+
+  .stat-value {
+    font-family: 'Outfit', sans-serif;
+    font-size: 34px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .stat-value.gold {
+    background: var(--m-gold-grad);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .stat-value.green {
+    color: var(--m-green);
+  }
+
+  .stat-subtext {
+    font-size: 12.5px;
+    color: var(--m-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Profitability Calculator */
+  .calculator-panel {
+    background: linear-gradient(180deg, #161922 0%, #11131a 100%);
+    border: 1px solid rgba(223, 186, 115, 0.25);
+    border-radius: 18px;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
+  }
+
+  .calc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .calc-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--m-gold);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .calc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    align-items: center;
+  }
+
+  .input-box label {
+    display: block;
+    font-size: 12px;
+    color: var(--m-text-muted);
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .input-box input {
+    width: 100%;
+    background: #0d0f15;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-box input:focus {
+    border-color: var(--m-gold);
+  }
+
+  .profit-output-card {
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 14px;
+    padding: 16px 20px;
+    text-align: right;
+  }
+
+  .profit-output-card.loss {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.3);
+  }
+
+  .profit-output-label {
+    font-size: 12px;
+    color: var(--m-text-muted);
+    font-weight: 600;
+  }
+
+  .profit-output-val {
+    font-family: 'Outfit', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--m-green);
+  }
+
+  .profit-output-val.loss {
+    color: var(--m-red);
+  }
+
+  /* 30-Day Historical Table */
+  .history-section {
+    background: var(--m-card-bg);
+    border: 1px solid var(--m-card-border);
+    border-radius: 18px;
+    padding: 24px;
+    margin-bottom: 32px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  }
+
+  .history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .history-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--m-gold);
+  }
+
+  .history-badge {
+    background: rgba(223, 186, 115, 0.15);
+    color: var(--m-gold);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 8px;
+  }
+
+  .summary-banner {
+    display: flex;
+    gap: 20px;
+    background: #0d0f15;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .summary-item {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .summary-label {
+    font-size: 11px;
+    color: var(--m-text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .summary-val {
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* Split Layout */
+  .dashboard-split {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 24px;
+  }
+
+  @media (max-width: 1024px) {
+    .dashboard-split {
+      grid-template-columns: 1fr;
     }
-    .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
-    .history-title { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--m-gold); }
-    .history-badge { background: rgba(223, 186, 115, 0.15); color: var(--m-gold); font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 8px; }
-    .summary-banner {
-      display: flex; gap: 20px; background: #0d0f15; padding: 12px 18px; border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.06); margin-bottom: 18px; flex-wrap: wrap;
-    }
-    .summary-item { display: flex; flex-direction: column; }
-    .summary-label { font-size: 11px; color: var(--m-text-muted); font-weight: 600; text-transform: uppercase; }
-    .summary-val { font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; color: #fff; }
+  }
 
-    .dashboard-split { display: grid; grid-template-columns: 3fr 2fr; gap: 24px; }
-    @media (max-width: 1024px) { .dashboard-split { grid-template-columns: 1fr; } }
-    .panel { background: var(--m-card-bg); border: 1px solid var(--m-card-border); border-radius: 16px; padding: 22px; }
-    .panel-title { font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+  .panel {
+    background: var(--m-card-bg);
+    border: 1px solid var(--m-card-border);
+    border-radius: 16px;
+    padding: 22px;
+  }
 
-    .custom-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    .custom-table th {
-      text-align: left; padding: 10px 12px; color: var(--m-text-muted); border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      font-weight: 600; font-size: 12px; text-transform: uppercase;
-    }
-    .custom-table td { padding: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); color: var(--m-text-main); }
-    .custom-table tr.clickable-row { cursor: pointer; transition: background 0.15s ease; }
-    .custom-table tr.clickable-row:hover { background: rgba(223, 186, 115, 0.08); }
+  .panel-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    .badge { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; }
-    .badge-active { background: var(--m-green-bg); color: var(--m-green); }
-    .badge-paused { background: rgba(255, 255, 255, 0.08); color: var(--m-text-muted); }
-    .badge-cod { background: rgba(223, 186, 115, 0.15); color: var(--m-gold); }
-    .badge-prepaid { background: var(--m-blue-bg); color: var(--m-blue); }
-    .truncate { max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  </style>
-</head>
-<body>
+  .custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
 
+  .custom-table th {
+    text-align: left;
+    padding: 10px 12px;
+    color: var(--m-text-muted);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+
+  .custom-table td {
+    padding: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--m-text-main);
+  }
+
+  .custom-table tr.clickable-row {
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .custom-table tr.clickable-row:hover {
+    background: rgba(223, 186, 115, 0.08);
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .badge-active {
+    background: var(--m-green-bg);
+    color: var(--m-green);
+  }
+
+  .badge-paused {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--m-text-muted);
+  }
+
+  .badge-cod {
+    background: rgba(223, 186, 115, 0.15);
+    color: var(--m-gold);
+  }
+
+  .badge-prepaid {
+    background: var(--m-blue-bg);
+    color: var(--m-blue);
+  }
+
+  .truncate {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
+
+<div class="roas-cockpit-root" id="roasCockpitRoot">
   <!-- 3D VAULT LOCK SCREEN -->
   <div class="vault-lock-screen" id="vaultLockScreen">
     <div class="vault-card" id="vaultCard">
@@ -352,8 +787,8 @@ const htmlContent = `<!DOCTYPE html>
     </div>
   </div>
 
-  <!-- MAIN COCKPIT DASHBOARD -->
-  <div class="container">
+  <!-- DASHBOARD COCKPIT (REVEALED ONCE UNLOCKED) -->
+  <div class="dashboard-container">
     <header class="dash-header">
       <div class="brand-group">
         <div class="brand-logo">M</div>
@@ -389,6 +824,7 @@ const htmlContent = `<!DOCTYPE html>
 
     <!-- Top Key Metrics Cards -->
     <section class="stats-grid">
+      <!-- Card 1: Total Ad Spend (w/ GST) -->
       <div class="stat-card">
         <div class="stat-header">
           <span class="stat-label">Total Spend (w/ 18% GST)</span>
@@ -400,6 +836,7 @@ const htmlContent = `<!DOCTYPE html>
         </div>
       </div>
 
+      <!-- Card 2: Shopify Revenue -->
       <div class="stat-card">
         <div class="stat-header">
           <span class="stat-label">Shopify Revenue</span>
@@ -411,15 +848,19 @@ const htmlContent = `<!DOCTYPE html>
         </div>
       </div>
 
+      <!-- Card 3: Real Blended ROAS -->
       <div class="stat-card">
         <div class="stat-header">
           <span class="stat-label">Real Blended ROAS</span>
           <span class="stat-tag" id="roasBadge" style="background: rgba(16, 185, 129, 0.15); color: var(--m-green);">Gross</span>
         </div>
         <div class="stat-value" id="blendedRoas">0.00x</div>
-        <div class="stat-subtext">Revenue ÷ Total Ad Spend with GST</div>
+        <div class="stat-subtext">
+          Revenue ÷ Total Ad Spend with GST
+        </div>
       </div>
 
+      <!-- Card 4: Orders & Cost Per Order -->
       <div class="stat-card">
         <div class="stat-header">
           <span class="stat-label">Orders & CPO</span>
@@ -432,30 +873,30 @@ const htmlContent = `<!DOCTYPE html>
       </div>
     </section>
 
-    <!-- Profitability Calculator -->
+    <!-- Profitability & In-Hand Cashflow Calculator -->
     <section class="calculator-panel">
       <div class="calc-header">
         <div class="calc-title">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h0M12 15h0M17 15h0M7 11h0M12 11h0M17 11h0M7 7h10"/></svg>
           In-Hand Net Profit Estimator (Live Calculator)
         </div>
-        <span style="font-size: 12px; color: var(--m-text-muted);">Adjust values below to compute instant net profit</span>
+        <span style="font-size: 12px; color: var(--m-text-muted);">Adjust values below to compute instant net profit for selected period</span>
       </div>
 
       <div class="calc-grid">
         <div class="input-box">
           <label>Product Cost (COGS) / Bottle (₹)</label>
-          <input type="number" id="cogsInput" value="180" oninput="recalcProfit()">
+          <input type="number" id="cogsInput" value="{{ section.settings.cogs_default | default: 180 }}" oninput="recalcProfit()">
         </div>
 
         <div class="input-box">
           <label>Shipping Cost / Order (₹)</label>
-          <input type="number" id="shippingInput" value="70" oninput="recalcProfit()">
+          <input type="number" id="shippingInput" value="{{ section.settings.shipping_default | default: 70 }}" oninput="recalcProfit()">
         </div>
 
         <div class="input-box">
           <label>Expected RTO Rate (%)</label>
-          <input type="number" id="rtoInput" value="20" oninput="recalcProfit()">
+          <input type="number" id="rtoInput" value="{{ section.settings.rto_default | default: 20 }}" oninput="recalcProfit()">
         </div>
 
         <div class="profit-output-card" id="profitBox">
@@ -466,7 +907,7 @@ const htmlContent = `<!DOCTYPE html>
       </div>
     </section>
 
-    <!-- 30-Day History Section -->
+    <!-- 30-Day Historical Day-by-Day Table -->
     <section class="history-section">
       <div class="history-header">
         <div class="history-title">
@@ -516,7 +957,7 @@ const htmlContent = `<!DOCTYPE html>
       </div>
     </section>
 
-    <!-- Lower Split: Campaigns vs Orders -->
+    <!-- Lower Split: Campaigns Breakdown vs Verified Orders Feed -->
     <div class="dashboard-split">
       <div class="panel">
         <div class="panel-title">
@@ -566,19 +1007,27 @@ const htmlContent = `<!DOCTYPE html>
       </div>
     </div>
   </div>
+</div>
 
-  <script>
-    const TARGET_PIN = '1409';
+<script>
+  (function() {
+    const TARGET_PIN = "{{ section.settings.cockpit_passcode | default: '1409' }}";
+    const API_BASE = "{{ section.settings.api_endpoint | default: 'http://localhost:4040' }}";
+    
     let enteredPin = '';
     let currentPreset = 'today';
     let globalData = null;
     let globalHistory = [];
 
-    // 3D Vault PIN
-    function enterPin(digit) {
+    // ==========================================
+    // 3D VAULT PIN LOGIC
+    // ==========================================
+    window.enterPin = function(digit) {
       if (enteredPin.length < 4) {
         enteredPin += digit;
         updateDots();
+        
+        // Slight 3D rotation of tumbler on each key press
         const tumbler = document.getElementById('vaultTumbler');
         const rot = enteredPin.length * 35;
         tumbler.style.transform = 'rotate(' + rot + 'deg) translateZ(10px)';
@@ -587,22 +1036,22 @@ const htmlContent = `<!DOCTYPE html>
           setTimeout(verifyPin, 180);
         }
       }
-    }
+    };
 
-    function clearPin() {
+    window.clearPin = function() {
       enteredPin = '';
       updateDots();
       document.getElementById('vaultTumbler').style.transform = 'rotate(0deg)';
-    }
+    };
 
-    function backspacePin() {
+    window.backspacePin = function() {
       if (enteredPin.length > 0) {
         enteredPin = enteredPin.slice(0, -1);
         updateDots();
         const rot = enteredPin.length * 35;
         document.getElementById('vaultTumbler').style.transform = 'rotate(' + rot + 'deg)';
       }
-    }
+    };
 
     function updateDots() {
       for (let i = 0; i < 4; i++) {
@@ -621,6 +1070,7 @@ const htmlContent = `<!DOCTYPE html>
       const lockIcon = document.getElementById('vaultLockIcon');
 
       if (enteredPin === TARGET_PIN) {
+        // Unlock Success
         lockIcon.innerHTML = '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path>';
         document.getElementById('vaultTumbler').style.transform = 'rotate(360deg) scale(1.15)';
         
@@ -631,6 +1081,7 @@ const htmlContent = `<!DOCTYPE html>
           loadHistory30Days();
         }, 300);
       } else {
+        // Wrong PIN Shake
         card.classList.add('shake');
         setTimeout(() => {
           card.classList.remove('shake');
@@ -639,19 +1090,21 @@ const htmlContent = `<!DOCTYPE html>
       }
     }
 
-    function lockSession() {
+    window.lockSession = function() {
       sessionStorage.removeItem('mahekh_cockpit_unlocked');
       clearPin();
       document.getElementById('vaultLockIcon').innerHTML = '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>';
       document.getElementById('vaultLockScreen').classList.remove('unlocked');
-    }
+    };
 
+    // Auto-unlock if session active
     if (sessionStorage.getItem('mahekh_cockpit_unlocked') === 'true') {
       document.getElementById('vaultLockScreen').classList.add('unlocked');
       loadData('today');
       loadHistory30Days();
     }
 
+    // Keydown listener for physical keyboard support
     document.addEventListener('keydown', function(e) {
       if (document.getElementById('vaultLockScreen').classList.contains('unlocked')) return;
       if (e.key >= '0' && e.key <= '9') {
@@ -663,8 +1116,10 @@ const htmlContent = `<!DOCTYPE html>
       }
     });
 
-    // Data Fetching
-    async function loadData(preset, btnElem) {
+    // ==========================================
+    // DASHBOARD DATA FETCHING
+    // ==========================================
+    window.loadData = async function(preset, btnElem) {
       currentPreset = preset;
       if (btnElem) {
         document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
@@ -677,8 +1132,8 @@ const htmlContent = `<!DOCTYPE html>
 
       try {
         const [resMetrics, resCamps] = await Promise.all([
-          fetch('/api/metrics?preset=' + preset).then(r => r.json()),
-          fetch('/api/campaigns?preset=' + preset).then(r => r.json())
+          fetch(API_BASE + '/api/metrics?preset=' + preset).then(r => r.json()),
+          fetch(API_BASE + '/api/campaigns?preset=' + preset).then(r => r.json())
         ]);
 
         globalData = resMetrics;
@@ -686,22 +1141,22 @@ const htmlContent = `<!DOCTYPE html>
         renderCampaigns(resCamps);
         recalcProfit();
       } catch (err) {
-        console.error('Failed to load data:', err);
+        console.warn('Local engine API not responding, showing fallback...', err);
       } finally {
         refreshBtn.style.opacity = '1';
       }
-    }
+    };
 
-    async function loadHistory30Days() {
+    window.loadHistory30Days = async function() {
       try {
-        const res = await fetch('/api/history-30d');
+        const res = await fetch(API_BASE + '/api/history-30d');
         const data = await res.json();
         globalHistory = data;
         renderHistoryTable(data);
       } catch (e) {
-        console.error('History fetch error:', e);
+        console.warn('History fetch error:', e);
       }
-    }
+    };
 
     function renderHistoryTable(items) {
       const tbody = document.getElementById('historyBody');
@@ -744,7 +1199,7 @@ const htmlContent = `<!DOCTYPE html>
       document.getElementById('sum30Roas').innerText = overallRoas + 'x';
     }
 
-    function onCustomDateChange(dateStr) {
+    window.onCustomDateChange = function(dateStr) {
       if (!dateStr) return;
       document.getElementById('customDateInput').value = dateStr;
       document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
@@ -782,12 +1237,12 @@ const htmlContent = `<!DOCTYPE html>
         document.getElementById('ordersPanelTitle').innerText = 'Orders on ' + dateStr;
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-    }
+    };
 
-    function refreshCurrent() {
+    window.refreshCurrent = function() {
       loadData(currentPreset);
       loadHistory30Days();
-    }
+    };
 
     function renderMetrics(data) {
       document.getElementById('spendWithGst').innerText = '₹' + Math.round(data.meta.spendWithGST).toLocaleString('en-IN');
@@ -800,9 +1255,13 @@ const htmlContent = `<!DOCTYPE html>
 
       const roasElem = document.getElementById('blendedRoas');
       roasElem.innerText = (data.blended.grossRoas || 0) + 'x';
-      if (data.blended.grossRoas >= 3.0) roasElem.style.color = 'var(--m-green)';
-      else if (data.blended.grossRoas >= 2.0) roasElem.style.color = 'var(--m-gold)';
-      else roasElem.style.color = 'var(--m-red)';
+      if (data.blended.grossRoas >= 3.0) {
+        roasElem.style.color = 'var(--m-green)';
+      } else if (data.blended.grossRoas >= 2.0) {
+        roasElem.style.color = 'var(--m-gold)';
+      } else {
+        roasElem.style.color = 'var(--m-red)';
+      }
 
       document.getElementById('ordersCount').innerText = data.shopify.totalOrders + ' Orders';
       document.getElementById('costPerOrder').innerText = '₹' + Math.round(data.blended.costPerOrder).toLocaleString('en-IN');
@@ -846,7 +1305,7 @@ const htmlContent = `<!DOCTYPE html>
       \`).join('');
     }
 
-    function recalcProfit() {
+    window.recalcProfit = function() {
       if (!globalData) return;
 
       const cogs = parseFloat(document.getElementById('cogsInput').value || 0);
@@ -882,75 +1341,48 @@ const htmlContent = `<!DOCTYPE html>
         profitElem.className = 'profit-output-val loss';
         profitBox.className = 'profit-output-card loss';
       }
+    };
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "ROAS & Profit Cockpit",
+  "tag": "section",
+  "class": "section-roas-cockpit",
+  "settings": [
+    {
+      "type": "text",
+      "id": "cockpit_passcode",
+      "label": "4-Digit Security Passcode",
+      "default": "1409",
+      "info": "Security PIN required to unlock this dashboard"
+    },
+    {
+      "type": "text",
+      "id": "api_endpoint",
+      "label": "Live Sync Engine API Endpoint",
+      "default": "http://localhost:4040",
+      "info": "Local engine or hosted API base URL"
+    },
+    {
+      "type": "number",
+      "id": "cogs_default",
+      "label": "Default Product Cost (COGS) in INR",
+      "default": 180
+    },
+    {
+      "type": "number",
+      "id": "shipping_default",
+      "label": "Default Shipping Cost in INR",
+      "default": 70
+    },
+    {
+      "type": "number",
+      "id": "rto_default",
+      "label": "Default Expected RTO %",
+      "default": 20
     }
-  </script>
-</body>
-</html>`;
-
-const server = http.createServer(async (req, res) => {
-  const parsedUrl = url.parse(req.url, true);
-
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-
-  if (req.method === 'OPTIONS') {
-    res.writeHead(200);
-    res.end();
-    return;
-  }
-
-  if (parsedUrl.pathname === '/' || parsedUrl.pathname === '/dashboard') {
-    res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
-    res.end(htmlContent);
-    return;
-  }
-
-  if (parsedUrl.pathname === '/api/metrics') {
-    const preset = parsedUrl.query.preset || 'today';
-    try {
-      const data = await getLiveMetrics(preset);
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(data));
-    } catch (err) {
-      res.writeHead(500, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: err.message }));
-    }
-    return;
-  }
-
-  if (parsedUrl.pathname === '/api/history-30d') {
-    try {
-      const history = await historyMgr.getDailyHistory30Days();
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(history));
-    } catch (err) {
-      res.writeHead(500, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: err.message }));
-    }
-    return;
-  }
-
-  if (parsedUrl.pathname === '/api/campaigns') {
-    const preset = parsedUrl.query.preset || 'today';
-    try {
-      const meta = new MetaAdsClient();
-      const camps = await meta.getCampaigns(preset);
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(camps));
-    } catch (err) {
-      res.writeHead(500, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: err.message }));
-    }
-    return;
-  }
-
-  res.writeHead(404, { 'Content-Type': 'text/plain' });
-  res.end('Not Found');
-});
-
-server.listen(PORT, () => {
-  console.log(`\n======================================================`);
-  console.log(`  MAHEKH LIVE ROAS & EXPENSE COCKPIT STARTED! `);
-  console.log(`  Open in browser: http://localhost:${PORT}`);
-  console.log(`======================================================\n`);
-});
+  ]
+}
+{% endschema %}

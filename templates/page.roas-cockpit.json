@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-roas-dashboard",
+      "settings": {
+        "cockpit_passcode": "1409",
+        "api_endpoint": "http://localhost:4040",
+        "cogs_default": 180,
+        "shipping_default": 70,
+        "rto_default": 20
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
