@@ -1,11 +1,31 @@
 import http from 'node:http';
 import url from 'node:url';
-import { getLiveMetrics } from '../cli/live-roas.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { getLiveMetrics, getISTDateString } from '../cli/live-roas.js';
 import { MetaAdsClient } from '../meta/client.js';
 import { HistoricalAnalyticsManager } from '../meta/history.js';
+import { adSpendStore } from '../meta/spend-store.js';
+import { config } from '../config.js';
 
 const PORT = process.env.PORT || 4040;
 const historyMgr = new HistoricalAnalyticsManager();
+
+function parseBody(req) {
+  return new Promise((resolve, reject) => {
+    let body = '';
+    req.on('data', (chunk) => {
+      body += chunk;
+    });
+    req.on('end', () => {
+      try {
+        resolve(body ? JSON.parse(body) : {});
+      } catch (e) {
+        reject(e);
+      }
+    });
+  });
+}
 
 const htmlContent = `<!DOCTYPE html>
 <html lang="en">
@@ -148,55 +168,65 @@ const htmlContent = `<!DOCTYPE html>
       border-radius: 16px;
       color: #fff;
       font-family: 'Outfit', sans-serif;
-      font-size: 20px; font-weight: 700;
+      font-size: 22px;
+      font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.15);
-      transition: all 0.1s ease;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-
-    .key-btn span.letters {
-      font-size: 9px; color: var(--m-text-muted); font-weight: 600; letter-spacing: 0.1em; margin-top: -2px;
-    }
-
-    .key-btn:hover {
-      background: linear-gradient(180deg, #2a2f40 0%, #1e222f 100%);
-      border-color: rgba(223, 186, 115, 0.3);
+      transition: all 0.1s ease;
+      user-select: none;
     }
 
     .key-btn:active {
       transform: translateY(2px);
       border-bottom-width: 1px;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+      background: #2c3244;
+    }
+
+    .key-btn .letters {
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--m-text-muted);
+      letter-spacing: 0.1em;
+      margin-top: 1px;
     }
 
     .key-btn.action-key {
-      font-size: 14px; font-weight: 600; color: var(--m-text-muted); background: #151822;
+      background: #141720;
+      color: var(--m-gold);
+      font-size: 16px;
     }
 
-    .vault-card.shake {
-      animation: shake3d 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-      border-color: var(--m-red);
+    /* MAIN COCKPIT DASHBOARD */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px 60px 24px;
     }
 
-    @keyframes shake3d {
-      10%, 90% { transform: translate3d(-3px, 0, 0); }
-      20%, 80% { transform: translate3d(5px, 0, 0); }
-      30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
-      40%, 60% { transform: translate3d(6px, 0, 0); }
+    .dash-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      flex-wrap: wrap;
+      gap: 16px;
     }
 
-    /* DASHBOARD */
-    .container { max-width: 1440px; margin: 0 auto; padding: 24px 20px; }
-    header.dash-header {
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
-      padding-bottom: 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); margin-bottom: 28px;
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
-    .brand-group { display: flex; align-items: center; gap: 16px; }
+
     .brand-logo {
-      width: 44px; height: 44px; background: var(--m-gold-grad); border-radius: 12px;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--m-gold-grad);
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 20px; color: #0b0d11;
+      font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 800; color: #000;
       box-shadow: 0 4px 20px rgba(223, 186, 115, 0.3);
     }
     .brand-title h1 { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 700; margin: 0; }
@@ -233,6 +263,21 @@ const htmlContent = `<!DOCTYPE html>
       display: flex; align-items: center; gap: 8px; cursor: pointer; transition: all 0.2s;
     }
     .btn-action:hover { background: #222733; border-color: var(--m-gold); }
+
+    /* STATUS PILLS */
+    .status-badge {
+      font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px;
+    }
+    .status-badge.connected { background: rgba(16, 185, 129, 0.15); color: var(--m-green); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .status-badge.manual { background: rgba(223, 186, 115, 0.15); color: var(--m-gold); border: 1px solid rgba(223, 186, 115, 0.3); }
+    .status-badge.error { background: rgba(239, 68, 68, 0.15); color: var(--m-red); border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .btn-edit-spend {
+      background: rgba(223, 186, 115, 0.15); border: 1px solid rgba(223, 186, 115, 0.4);
+      color: var(--m-gold); font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 6px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-edit-spend:hover { background: var(--m-gold); color: #0b0d11; }
 
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 28px; }
     .stat-card {
@@ -307,7 +352,38 @@ const htmlContent = `<!DOCTYPE html>
     .badge-paused { background: rgba(255, 255, 255, 0.08); color: var(--m-text-muted); }
     .badge-cod { background: rgba(223, 186, 115, 0.15); color: var(--m-gold); }
     .badge-prepaid { background: var(--m-blue-bg); color: var(--m-blue); }
+    .badge-cancelled { background: rgba(239, 68, 68, 0.18); color: var(--m-red); }
     .truncate { max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* EDIT SPEND MODAL */
+    .modal-backdrop {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.78); backdrop-filter: blur(8px);
+      z-index: 99999; display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      background: #141722; border: 1px solid rgba(223, 186, 115, 0.35); border-radius: 24px;
+      max-width: 440px; width: 100%; padding: 28px; box-shadow: 0 30px 70px rgba(0,0,0,0.85);
+    }
+    .modal-title { font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .modal-sub { font-size: 13px; color: var(--m-text-muted); margin-bottom: 20px; line-height: 1.5; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--m-text-muted); margin-bottom: 6px; }
+    .form-group input {
+      width: 100%; background: #0b0d11; border: 1px solid rgba(255, 255, 255, 0.12); color: #fff;
+      padding: 10px 14px; border-radius: 10px; font-size: 14px; font-weight: 600; outline: none;
+    }
+    .form-group input:focus { border-color: var(--m-gold); }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+    .btn-save-spend {
+      background: var(--m-gold-grad); border: none; color: #000; font-weight: 700;
+      padding: 10px 20px; border-radius: 10px; cursor: pointer;
+    }
+    .btn-cancel {
+      background: #1f2430; border: 1px solid rgba(255, 255, 255, 0.1); color: #fff;
+      padding: 10px 16px; border-radius: 10px; cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -352,6 +428,34 @@ const htmlContent = `<!DOCTYPE html>
     </div>
   </div>
 
+  <!-- EDIT SPEND MODAL -->
+  <div class="modal-backdrop" id="spendModal">
+    <div class="modal-box">
+      <h3 class="modal-title">Edit / Set Meta Ad Spend</h3>
+      <p class="modal-sub">Directly enter ad spend for this date to compute real-time blended ROAS, CPO, and profit margin instantly.</p>
+      
+      <div class="form-group">
+        <label>Target Date (IST)</label>
+        <input type="date" id="modalSpendTargetDate" color-scheme="dark">
+      </div>
+
+      <div class="form-group">
+        <label>Base Meta Spend (before GST) ₹</label>
+        <input type="number" id="modalBaseSpend" placeholder="e.g. 2500" step="0.01" oninput="onBaseSpendInput(this.value)">
+      </div>
+
+      <div class="form-group">
+        <label>Total Ad Spend (w/ 18% GST) ₹</label>
+        <input type="number" id="modalSpendWithGst" placeholder="e.g. 2950" step="0.01" oninput="onSpendWithGstInput(this.value)">
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeSpendModal()">Cancel</button>
+        <button class="btn-save-spend" id="btnSaveSpend" onclick="saveAdSpend()">Save Spend</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MAIN COCKPIT DASHBOARD -->
   <div class="container">
     <header class="dash-header">
@@ -359,7 +463,11 @@ const htmlContent = `<!DOCTYPE html>
         <div class="brand-logo">M</div>
         <div class="brand-title">
           <h1>MAHEKH LUXURY PERFUMES</h1>
-          <p><span class="live-dot"></span> Live Sync: Meta Ads Manager + Shopify Store (Asia/Kolkata)</p>
+          <p>
+            <span class="live-dot"></span> Live Sync: Shopify Store (Asia/Kolkata)
+            <span class="status-badge connected" style="margin-left: 8px;">Shopify: Connected</span>
+            <span class="status-badge manual" id="metaHeaderBadge">Meta: Checking...</span>
+          </p>
         </div>
       </div>
 
@@ -392,7 +500,10 @@ const htmlContent = `<!DOCTYPE html>
       <div class="stat-card">
         <div class="stat-header">
           <span class="stat-label">Total Spend (w/ 18% GST)</span>
-          <span class="stat-tag gst">Meta + GST</span>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <span class="stat-tag gst" id="metaCardBadge">Meta + GST</span>
+            <button class="btn-edit-spend" onclick="openSpendModal()" title="Edit or Enter Ad Spend">✏️ Edit Spend</button>
+          </div>
         </div>
         <div class="stat-value gold" id="spendWithGst">₹0</div>
         <div class="stat-subtext">
@@ -403,7 +514,7 @@ const htmlContent = `<!DOCTYPE html>
       <div class="stat-card">
         <div class="stat-header">
           <span class="stat-label">Shopify Revenue</span>
-          <span class="stat-tag success">Verified</span>
+          <span class="stat-tag success">Verified Live</span>
         </div>
         <div class="stat-value green" id="shopifyRevenue">₹0</div>
         <div class="stat-subtext">
@@ -425,7 +536,7 @@ const htmlContent = `<!DOCTYPE html>
           <span class="stat-label">Orders & CPO</span>
           <span class="stat-tag" style="background: rgba(59, 130, 246, 0.15); color: var(--m-blue);">Shipments</span>
         </div>
-        <div class="stat-value" id="ordersCount">0</div>
+        <div class="stat-value" id="ordersCount">0 Orders</div>
         <div class="stat-subtext">
           Cost Per Order: <b id="costPerOrder" style="color:#fff;">₹0</b> • AOV: <b id="aovVal" style="color:#fff;">₹0</b>
         </div>
@@ -449,54 +560,54 @@ const htmlContent = `<!DOCTYPE html>
         </div>
 
         <div class="input-box">
-          <label>Shipping Cost / Order (₹)</label>
-          <input type="number" id="shippingInput" value="70" oninput="recalcProfit()">
+          <label>Avg Shipping Cost / Shipment (₹)</label>
+          <input type="number" id="shippingInput" value="95" oninput="recalcProfit()">
         </div>
 
         <div class="input-box">
-          <label>Expected RTO Rate (%)</label>
-          <input type="number" id="rtoInput" value="20" oninput="recalcProfit()">
+          <label>Estimated RTO Rate (%)</label>
+          <input type="number" id="rtoInput" value="18" oninput="recalcProfit()">
         </div>
 
         <div class="profit-output-card" id="profitBox">
           <div class="profit-output-label">ESTIMATED NET PROFIT</div>
           <div class="profit-output-val" id="netProfitVal">₹0</div>
-          <div style="font-size: 11.5px; color: var(--m-text-muted);" id="netMarginPercent">Margin: 0%</div>
+          <div style="font-size: 11px; color: var(--m-text-muted); margin-top: 4px;" id="netMarginPercent">Net Margin: 0%</div>
         </div>
       </div>
     </section>
 
-    <!-- 30-Day History Section -->
+    <!-- 30-Day Historical Matrix -->
     <section class="history-section">
       <div class="history-header">
         <div class="history-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          Last 30 Days Day-by-Day Performance History
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          30-Day Performance & ROAS Matrix
         </div>
-        <span class="history-badge">Click any row to inspect that day</span>
+        <span class="history-badge">Daily Breakdown</span>
       </div>
 
-      <div class="summary-banner" id="historySummaryBanner">
+      <div class="summary-banner">
         <div class="summary-item">
-          <span class="summary-label">30-Day Total Ad Spend (w/ GST)</span>
-          <span class="summary-val" id="sum30Spend" style="color:var(--m-gold);">₹0</span>
+          <span class="summary-label">30-Day Ad Spend (w/ GST)</span>
+          <span class="summary-val" id="sum30Spend" style="color: var(--m-gold);">₹0</span>
         </div>
         <div class="summary-item">
-          <span class="summary-label">30-Day Total Shopify Sales</span>
-          <span class="summary-val" id="sum30Sales" style="color:var(--m-green);">₹0</span>
+          <span class="summary-label">30-Day Shopify Sales</span>
+          <span class="summary-val" id="sum30Sales" style="color: var(--m-green);">₹0</span>
         </div>
         <div class="summary-item">
           <span class="summary-label">30-Day Total Orders</span>
           <span class="summary-val" id="sum30Orders">0</span>
         </div>
         <div class="summary-item">
-          <span class="summary-label">30-Day Blended ROAS</span>
-          <span class="summary-val" id="sum30Roas" style="color:var(--m-green);">0.00x</span>
+          <span class="summary-label">30-Day Overall ROAS</span>
+          <span class="summary-val" id="sum30Roas">0.00x</span>
         </div>
       </div>
 
-      <div style="overflow-x: auto; max-height: 380px; overflow-y: auto;">
-        <table class="custom-table" id="historyTable">
+      <div style="overflow-x: auto;">
+        <table class="custom-table">
           <thead>
             <tr>
               <th>Date (IST)</th>
@@ -510,7 +621,7 @@ const htmlContent = `<!DOCTYPE html>
             </tr>
           </thead>
           <tbody id="historyBody">
-            <tr><td colspan="8" style="text-align:center; color: var(--m-text-muted); padding: 20px;">Loading 30-day historical data...</td></tr>
+            <tr><td colspan="8" style="text-align:center; color: var(--m-text-muted); padding: 20px;">Loading historical data...</td></tr>
           </tbody>
         </table>
       </div>
@@ -571,6 +682,7 @@ const htmlContent = `<!DOCTYPE html>
     const TARGET_PIN = '1409';
     let enteredPin = '';
     let currentPreset = 'today';
+    let currentActiveDate = '';
     let globalData = null;
     let globalHistory = [];
 
@@ -604,46 +716,24 @@ const htmlContent = `<!DOCTYPE html>
       }
     }
 
-    function clearPin(evt) {
-      if (evt) {
-        if (evt.cancelable) evt.preventDefault();
-        evt.stopPropagation();
+    function backspacePin() {
+      if (enteredPin.length > 0) {
+        enteredPin = enteredPin.slice(0, -1);
+        updateDots();
       }
-      const now = Date.now();
-      if (now - lastPinActionTime < 150) return;
-      lastPinActionTime = now;
-      lastEnteredDigit = '';
+    }
 
+    function clearPin() {
       enteredPin = '';
       updateDots();
       const tumbler = document.getElementById('vaultTumbler');
       if (tumbler) tumbler.style.transform = 'rotate(0deg)';
     }
 
-    function backspacePin(evt) {
-      if (evt) {
-        if (evt.cancelable) evt.preventDefault();
-        evt.stopPropagation();
-      }
-      const now = Date.now();
-      if (now - lastPinActionTime < 150) return;
-      lastPinActionTime = now;
-      lastEnteredDigit = '';
-
-      if (enteredPin.length > 0) {
-        enteredPin = enteredPin.slice(0, -1);
-        updateDots();
-        const tumbler = document.getElementById('vaultTumbler');
-        if (tumbler) {
-          const rot = enteredPin.length * 35;
-          tumbler.style.transform = 'rotate(' + rot + 'deg)';
-        }
-      }
-    }
-
     function updateDots() {
       for (let i = 0; i < 4; i++) {
         const dot = document.getElementById('dot' + i);
+        if (!dot) continue;
         if (i < enteredPin.length) {
           dot.classList.add('filled');
         } else {
@@ -715,13 +805,19 @@ const htmlContent = `<!DOCTYPE html>
       try {
         const [resMetrics, resCamps] = await Promise.all([
           fetch('/api/metrics?preset=' + preset).then(r => r.json()),
-          fetch('/api/campaigns?preset=' + preset).then(r => r.json())
+          fetch('/api/campaigns?preset=' + preset).then(r => r.json()).catch(() => ({ campaigns: [] }))
         ]);
 
-        globalData = resMetrics;
-        renderMetrics(resMetrics);
-        renderCampaigns(resCamps);
-        recalcProfit();
+        if (resMetrics && !resMetrics.error) {
+          globalData = resMetrics;
+          currentActiveDate = resMetrics.dateIST;
+          renderMetrics(resMetrics);
+          renderCampaigns(resCamps?.campaigns || resCamps || []);
+          recalcProfit();
+          document.getElementById('ordersPanelTitle').innerText = 'Verified Orders (' + (resMetrics.dateIST || preset) + ')';
+        } else {
+          console.error('Metrics API error:', resMetrics?.error);
+        }
       } catch (err) {
         console.error('Failed to load data:', err);
       } finally {
@@ -733,8 +829,10 @@ const htmlContent = `<!DOCTYPE html>
       try {
         const res = await fetch('/api/history-30d');
         const data = await res.json();
-        globalHistory = data;
-        renderHistoryTable(data);
+        if (Array.isArray(data)) {
+          globalHistory = data;
+          renderHistoryTable(data);
+        }
       } catch (e) {
         console.error('History fetch error:', e);
       }
@@ -752,24 +850,31 @@ const htmlContent = `<!DOCTYPE html>
       let totalOrders = 0;
 
       tbody.innerHTML = items.map(d => {
-        totalSpend += d.meta.spendWithGST || 0;
-        totalSales += d.shopify.totalRevenue || 0;
-        totalOrders += d.shopify.ordersCount || 0;
+        const spendWithGST = d.meta?.spendWithGST || 0;
+        const totalRevenue = d.shopify?.totalRevenue || 0;
+        const ordersCount = d.shopify?.ordersCount || 0;
+        const codOrders = d.shopify?.codOrders || 0;
+
+        totalSpend += spendWithGST;
+        totalSales += totalRevenue;
+        totalOrders += ordersCount;
 
         let roasColor = 'var(--m-red)';
         if (d.blendedRoas >= 3.0) roasColor = 'var(--m-green)';
         else if (d.blendedRoas >= 2.0) roasColor = 'var(--m-gold)';
 
         return \`
-          <tr class="clickable-row" onclick="onCustomDateChange('\${d.date}')" title="Click to view full metrics for \${d.date}">
+          <tr class="clickable-row" onclick="onCustomDateChange('\${d.date}')" title="Click to inspect \${d.date}">
             <td><b>\${d.date}</b></td>
-            <td><b>₹\${Math.round(d.meta.spendWithGST).toLocaleString('en-IN')}</b> <span style="font-size:11px; color:var(--m-text-muted);">(base: ₹\${Math.round(d.meta.baseSpend)})</span></td>
-            <td><b>\${d.shopify.ordersCount}</b> <span style="font-size:11px; color:var(--m-text-muted);">(\${d.shopify.codOrders} COD)</span></td>
-            <td style="color:var(--m-green); font-weight:700;">₹\${Math.round(d.shopify.totalRevenue).toLocaleString('en-IN')}</td>
+            <td><b>₹\${Math.round(spendWithGST).toLocaleString('en-IN')}</b> <span style="font-size:11px; color:var(--m-text-muted);">(base: ₹\${Math.round(d.meta?.baseSpend || 0)})</span></td>
+            <td><b>\${ordersCount}</b> <span style="font-size:11px; color:var(--m-text-muted);">(\${codOrders} COD)</span></td>
+            <td style="color:var(--m-green); font-weight:700;">₹\${Math.round(totalRevenue).toLocaleString('en-IN')}</td>
             <td style="color:\${roasColor}; font-weight:800;">\${d.blendedRoas > 0 ? d.blendedRoas.toFixed(2) + 'x' : '-'}</td>
-            <td>₹\${Math.round(d.cpo)}</td>
-            <td>₹\${Math.round(d.aov)}</td>
-            <td><button style="background:#191d26; border:1px solid rgba(223,186,115,0.3); color:var(--m-gold); padding:4px 8px; border-radius:6px; font-size:11px; cursor:pointer;">Inspect</button></td>
+            <td>₹\${Math.round(d.cpo || 0)}</td>
+            <td>₹\${Math.round(d.aov || 0)}</td>
+            <td>
+              <button onclick="event.stopPropagation(); openSpendModalForDate('\${d.date}', \${d.meta?.baseSpend || 0}, \${spendWithGST})" class="btn-edit-spend">✏️ Edit Spend</button>
+            </td>
           </tr>
         \`;
       }).join('');
@@ -786,39 +891,8 @@ const htmlContent = `<!DOCTYPE html>
       document.getElementById('customDateInput').value = dateStr;
       document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
 
-      const matched = globalHistory.find(h => h.date === dateStr);
-      if (matched) {
-        const customMetrics = {
-          datePreset: dateStr,
-          dateIST: dateStr,
-          meta: {
-            accountName: 'Mahekh',
-            baseSpend: matched.meta.baseSpend,
-            gstAmount: matched.meta.gstAmount,
-            spendWithGST: matched.meta.spendWithGST,
-          },
-          shopify: {
-            totalOrders: matched.shopify.ordersCount,
-            totalSales: matched.shopify.totalRevenue,
-            codOrders: matched.shopify.codOrders,
-            codSales: matched.shopify.codRevenue,
-            prepaidOrders: matched.shopify.prepaidOrders,
-            prepaidSales: matched.shopify.prepaidRevenue,
-            aov: matched.aov,
-            orders: matched.shopify.orders || []
-          },
-          blended: {
-            grossRoas: matched.blendedRoas,
-            costPerOrder: matched.cpo
-          }
-        };
-
-        globalData = customMetrics;
-        renderMetrics(customMetrics);
-        recalcProfit();
-        document.getElementById('ordersPanelTitle').innerText = 'Orders on ' + dateStr;
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+      loadData(dateStr);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function refreshCurrent() {
@@ -827,34 +901,65 @@ const htmlContent = `<!DOCTYPE html>
     }
 
     function renderMetrics(data) {
-      document.getElementById('spendWithGst').innerText = '₹' + Math.round(data.meta.spendWithGST).toLocaleString('en-IN');
-      document.getElementById('baseSpend').innerText = '₹' + Math.round(data.meta.baseSpend).toLocaleString('en-IN');
-      document.getElementById('gstAmount').innerText = '₹' + Math.round(data.meta.gstAmount).toLocaleString('en-IN');
+      if (!data) return;
 
-      document.getElementById('shopifyRevenue').innerText = '₹' + Math.round(data.shopify.totalSales).toLocaleString('en-IN');
-      document.getElementById('codRev').innerText = '₹' + Math.round(data.shopify.codSales).toLocaleString('en-IN');
-      document.getElementById('prepRev').innerText = '₹' + Math.round(data.shopify.prepaidSales).toLocaleString('en-IN');
+      const meta = data.meta || {};
+      const shopify = data.shopify || {};
+      const blended = data.blended || {};
+
+      document.getElementById('spendWithGst').innerText = '₹' + Math.round(meta.spendWithGST || 0).toLocaleString('en-IN');
+      document.getElementById('baseSpend').innerText = '₹' + Math.round(meta.baseSpend || 0).toLocaleString('en-IN');
+      document.getElementById('gstAmount').innerText = '₹' + Math.round(meta.gstAmount || 0).toLocaleString('en-IN');
+
+      document.getElementById('shopifyRevenue').innerText = '₹' + Math.round(shopify.totalSales || 0).toLocaleString('en-IN');
+      document.getElementById('codRev').innerText = '₹' + Math.round(shopify.codSales || 0).toLocaleString('en-IN');
+      document.getElementById('prepRev').innerText = '₹' + Math.round(shopify.prepaidSales || 0).toLocaleString('en-IN');
 
       const roasElem = document.getElementById('blendedRoas');
-      roasElem.innerText = (data.blended.grossRoas || 0) + 'x';
-      if (data.blended.grossRoas >= 3.0) roasElem.style.color = 'var(--m-green)';
-      else if (data.blended.grossRoas >= 2.0) roasElem.style.color = 'var(--m-gold)';
+      roasElem.innerText = (blended.grossRoas || 0) + 'x';
+      if (blended.grossRoas >= 3.0) roasElem.style.color = 'var(--m-green)';
+      else if (blended.grossRoas >= 2.0) roasElem.style.color = 'var(--m-gold)';
       else roasElem.style.color = 'var(--m-red)';
 
-      document.getElementById('ordersCount').innerText = data.shopify.totalOrders + ' Orders';
-      document.getElementById('costPerOrder').innerText = '₹' + Math.round(data.blended.costPerOrder).toLocaleString('en-IN');
-      document.getElementById('aovVal').innerText = '₹' + Math.round(data.shopify.aov).toLocaleString('en-IN');
+      document.getElementById('ordersCount').innerText = (shopify.totalOrders || 0) + ' Orders';
+      document.getElementById('costPerOrder').innerText = '₹' + Math.round(blended.costPerOrder || 0).toLocaleString('en-IN');
+      document.getElementById('aovVal').innerText = '₹' + Math.round(shopify.aov || 0).toLocaleString('en-IN');
+
+      // Update Status Badges
+      const headerBadge = document.getElementById('metaHeaderBadge');
+      const cardBadge = document.getElementById('metaCardBadge');
+      if (meta.isLive) {
+        headerBadge.innerText = 'Meta: Live Connected';
+        headerBadge.className = 'status-badge connected';
+        cardBadge.innerText = 'Meta Live';
+      } else if (meta.isManual) {
+        headerBadge.innerText = 'Meta: Stored Spend';
+        headerBadge.className = 'status-badge manual';
+        cardBadge.innerText = 'Stored Spend';
+      } else if (meta.status === 'error') {
+        headerBadge.innerText = 'Meta: Restrained (Code 200)';
+        headerBadge.className = 'status-badge error';
+        cardBadge.innerText = 'Restrained (Code 200)';
+      } else {
+        headerBadge.innerText = 'Meta: Ready';
+        headerBadge.className = 'status-badge manual';
+        cardBadge.innerText = 'Meta + GST';
+      }
 
       const ordersBody = document.getElementById('ordersBody');
-      if (!data.shopify.orders || data.shopify.orders.length === 0) {
-        ordersBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--m-text-muted);">No orders in this period</td></tr>';
+      if (!shopify.orders || shopify.orders.length === 0) {
+        ordersBody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: var(--m-text-muted);">No orders found for this period</td></tr>';
       } else {
-        ordersBody.innerHTML = data.shopify.orders.map(o => \`
+        ordersBody.innerHTML = shopify.orders.map(o => \`
           <tr>
             <td><b>\${o.name}</b></td>
             <td><div class="truncate">\${o.customerName}</div></td>
             <td><span style="color:var(--m-text-muted)">\${o.city || 'India'}</span></td>
-            <td><span class="badge \${o.payment_mode === 'COD' ? 'badge-cod' : 'badge-prepaid'}">\${o.payment_mode}</span></td>
+            <td>
+              <span class="badge \${o.is_cancelled ? 'badge-cancelled' : (o.payment_mode === 'COD' ? 'badge-cod' : 'badge-prepaid')}">
+                \${o.is_cancelled ? 'CANCELLED' : o.payment_mode}
+              </span>
+            </td>
             <td><b>₹\${Math.round(o.total_price)}</b></td>
           </tr>
         \`).join('');
@@ -863,11 +968,11 @@ const htmlContent = `<!DOCTYPE html>
 
     function renderCampaigns(campaigns) {
       const campBody = document.getElementById('campaignsBody');
-      const activeOrSpent = (campaigns || []).filter(c => c.spendWithGST > 0 || c.effective_status === 'ACTIVE');
+      const activeOrSpent = (campaigns || []).filter(c => (c.spendWithGST || 0) > 0 || c.effective_status === 'ACTIVE');
       document.getElementById('campCount').innerText = activeOrSpent.length + ' Active/Running';
 
       if (activeOrSpent.length === 0) {
-        campBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--m-text-muted);">No active campaigns found.</td></tr>';
+        campBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color: var(--m-text-muted); padding: 18px;">No active campaigns reported or Meta token restricted.</td></tr>';
         return;
       }
 
@@ -876,9 +981,9 @@ const htmlContent = `<!DOCTYPE html>
           <td><div class="truncate" title="\${c.name}"><b>\${c.name}</b></div></td>
           <td><span class="badge \${c.effective_status === 'ACTIVE' ? 'badge-active' : 'badge-paused'}">\${c.effective_status}</span></td>
           <td>\${c.daily_budget ? '₹' + c.daily_budget : 'CBO/AdSet'}</td>
-          <td><b>₹\${Math.round(c.spendWithGST)}</b></td>
-          <td>\${c.purchases}</td>
-          <td><b>\${c.metaRoas.toFixed(2)}x</b></td>
+          <td><b>₹\${Math.round(c.spendWithGST || 0)}</b></td>
+          <td>\${c.purchases || 0}</td>
+          <td><b>\${(c.metaRoas || 0).toFixed(2)}x</b></td>
         </tr>
       \`).join('');
     }
@@ -890,9 +995,9 @@ const htmlContent = `<!DOCTYPE html>
       const shipping = parseFloat(document.getElementById('shippingInput').value || 0);
       const rtoPercent = parseFloat(document.getElementById('rtoInput').value || 0) / 100;
 
-      const totalSales = globalData.shopify.totalSales || 0;
-      const orders = globalData.shopify.totalOrders || 0;
-      const spendWithGST = globalData.meta.spendWithGST || 0;
+      const totalSales = globalData.shopify?.totalSales || 0;
+      const orders = globalData.shopify?.totalOrders || 0;
+      const spendWithGST = globalData.meta?.spendWithGST || 0;
 
       const deliveredOrders = orders * (1 - rtoPercent);
       const effectiveSales = totalSales * (1 - rtoPercent);
@@ -920,6 +1025,79 @@ const htmlContent = `<!DOCTYPE html>
         profitBox.className = 'profit-output-card loss';
       }
     }
+
+    // SPEND MODAL LOGIC
+    function openSpendModal() {
+      const targetDate = currentActiveDate || globalData?.dateIST || new Date().toISOString().slice(0, 10);
+      const currentBase = globalData?.meta?.baseSpend || 0;
+      const currentWithGst = globalData?.meta?.spendWithGST || 0;
+      openSpendModalForDate(targetDate, currentBase, currentWithGst);
+    }
+
+    function openSpendModalForDate(dateStr, baseSpend, spendWithGst) {
+      document.getElementById('modalSpendTargetDate').value = dateStr;
+      document.getElementById('modalBaseSpend').value = baseSpend ? Math.round(baseSpend) : '';
+      document.getElementById('modalSpendWithGst').value = spendWithGst ? Math.round(spendWithGst) : '';
+      document.getElementById('spendModal').classList.add('open');
+    }
+
+    function closeSpendModal() {
+      document.getElementById('spendModal').classList.remove('open');
+    }
+
+    function onBaseSpendInput(val) {
+      const base = parseFloat(val);
+      if (!isNaN(base) && base > 0) {
+        document.getElementById('modalSpendWithGst').value = Math.round(base * 1.18);
+      } else {
+        document.getElementById('modalSpendWithGst').value = '';
+      }
+    }
+
+    function onSpendWithGstInput(val) {
+      const withGst = parseFloat(val);
+      if (!isNaN(withGst) && withGst > 0) {
+        document.getElementById('modalBaseSpend').value = Math.round(withGst / 1.18);
+      } else {
+        document.getElementById('modalBaseSpend').value = '';
+      }
+    }
+
+    async function saveAdSpend() {
+      const date = document.getElementById('modalSpendTargetDate').value;
+      const baseSpend = parseFloat(document.getElementById('modalBaseSpend').value || 0);
+      const spendWithGST = parseFloat(document.getElementById('modalSpendWithGst').value || 0);
+
+      if (!date) {
+        alert('Please select a date.');
+        return;
+      }
+
+      const saveBtn = document.getElementById('btnSaveSpend');
+      saveBtn.innerText = 'Saving...';
+      saveBtn.disabled = true;
+
+      try {
+        const res = await fetch('/api/spend/update', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ date, baseSpend, spendWithGST })
+        });
+        const data = await res.json();
+        if (data.success) {
+          closeSpendModal();
+          // Reload current and history
+          await Promise.all([loadData(currentPreset), loadHistory30Days()]);
+        } else {
+          alert('Failed to save spend: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Save error: ' + err.message);
+      } finally {
+        saveBtn.innerText = 'Save Spend';
+        saveBtn.disabled = false;
+      }
+    }
   </script>
 </body>
 </html>`;
@@ -928,7 +1106,8 @@ const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url, true);
 
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (req.method === 'OPTIONS') {
     res.writeHead(200);
@@ -974,6 +1153,55 @@ const server = http.createServer(async (req, res) => {
       const camps = await meta.getCampaigns(preset);
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify(camps));
+    } catch (err) {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: err.message, campaigns: [] }));
+    }
+    return;
+  }
+
+  if (parsedUrl.pathname === '/api/spend/update' && req.method === 'POST') {
+    try {
+      const body = await parseBody(req);
+      const { date, baseSpend, spendWithGST } = body;
+      if (!date) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Date is required' }));
+        return;
+      }
+      const saved = adSpendStore.setSpend(date, { baseSpend, spendWithGST, isManual: true });
+      // Refresh recent cache
+      await historyMgr.getDailyHistory30Days();
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, saved }));
+    } catch (err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: err.message }));
+    }
+    return;
+  }
+
+  if (parsedUrl.pathname === '/api/meta/token' && req.method === 'POST') {
+    try {
+      const { accessToken } = await parseBody(req);
+      if (!accessToken) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'accessToken is required' }));
+        return;
+      }
+      process.env.META_ACCESS_TOKEN = accessToken;
+      const envPath = path.join(config.rootDir, '.env');
+      if (fs.existsSync(envPath)) {
+        let content = fs.readFileSync(envPath, 'utf8');
+        if (content.includes('META_ACCESS_TOKEN=')) {
+          content = content.replace(/META_ACCESS_TOKEN=.*/g, `META_ACCESS_TOKEN=${accessToken}`);
+        } else {
+          content += `\nMETA_ACCESS_TOKEN=${accessToken}\n`;
+        }
+        fs.writeFileSync(envPath, content, 'utf8');
+      }
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, message: 'Meta access token updated.' }));
     } catch (err) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: err.message }));
