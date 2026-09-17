@@ -129,15 +129,20 @@ async function syncOnce() {
 
   console.log(`[Daemon] Verified: Today=${todayMetrics.shopify.totalOrders} orders, Yesterday=${yesterdayMetrics.shopify.totalOrders} orders (₹${yesterdayMetrics.shopify.totalSales})`);
 
-  if (hasChanged) {
+  let statusOutput = '';
+  try {
+    statusOutput = execSync('git status --porcelain sections/main-roas-dashboard.liquid', { cwd: themeRoot, encoding: 'utf8' }).trim();
+  } catch {}
+
+  if (statusOutput) {
     try {
-      console.log('[Daemon] Change detected. Committing and pushing to GitHub so Shopify theme updates live...');
+      console.log('[Daemon] New data changes detected. Committing and pushing to GitHub so Shopify theme updates live...');
       execSync('git add sections/main-roas-dashboard.liquid', { cwd: themeRoot, stdio: 'inherit' });
       execSync(`git commit -m "Auto-sync live data: Today ${todayMetrics.shopify.totalOrders} orders, Yesterday ${yesterdayMetrics.shopify.totalOrders} orders"`, { cwd: themeRoot, stdio: 'inherit' });
       execSync('git push origin main', { cwd: themeRoot, stdio: 'inherit' });
       console.log('[Daemon] ✅ Successfully pushed update to Shopify GitHub branch.');
     } catch (gitErr) {
-      console.warn('[Daemon] Git commit/push notice (maybe no diff or network):', gitErr.message);
+      console.warn('[Daemon] Git commit/push notice:', gitErr.message);
     }
   }
 }
