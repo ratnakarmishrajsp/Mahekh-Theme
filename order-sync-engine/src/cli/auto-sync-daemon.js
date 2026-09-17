@@ -3,17 +3,57 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getLiveMetrics, getISTDateString } from './live-roas.js';
 import { HistoricalAnalyticsManager } from '../meta/history.js';
+import { MetaAdsClient } from '../meta/client.js';
 import { config } from '../config.js';
 import fs from 'node:fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const themeRoot = path.resolve(config.rootDir, '..');
+const TOKEN_REFRESH_FILE = path.join(config.dataDir, 'token-auto-refresh.json');
 
 let lastOrdersSummary = '';
 let lastSpendSummary = '';
 
+async function autoRefreshMetaTokenIfNeeded() {
+  try {
+    let metaData = { lastRefreshed: 0 };
+    if (fs.existsSync(TOKEN_REFRESH_FILE)) {
+      try {
+        metaData = JSON.parse(fs.readFileSync(TOKEN_REFRESH_FILE, 'utf8'));
+      } catch {}
+    }
+
+    const now = Date.now();
+    const daysSince = (now - (metaData.lastRefreshed || 0)) / (1000 * 60 * 60 * 24);
+
+    // Automatically re-exchange every 15 days so the 60-day token rolls over perpetually
+    if (daysSince >= 15) {
+      const client = new MetaAdsClient();
+      const currentToken = process.env.META_ACCESS_TOKEN || config.meta?.accessToken;
+      if (currentToken) {
+        const res = await client.exchangeForLongLivedToken(currentToken);
+        if (res && res.access_token) {
+          process.env.META_ACCESS_TOKEN = res.access_token;
+          const envPath = path.join(config.rootDir, '.env');
+          if (fs.existsSync(envPath)) {
+            let content = fs.readFileSync(envPath, 'utf8');
+            content = content.replace(/META_ACCESS_TOKEN=.*/g, `META_ACCESS_TOKEN=${res.access_token}`);
+            fs.writeFileSync(envPath, content, 'utf8');
+          }
+          fs.writeFileSync(TOKEN_REFRESH_FILE, JSON.stringify({ lastRefreshed: now, expires_in: res.expires_in }, null, 2), 'utf8');
+          console.log(`[Daemon] 🔄 Meta Token perpetually auto-renewed for another 60 days (expires in: ${Math.round(res.expires_in / 86400)} days)!`);
+        }
+      }
+    }
+  } catch (err) {
+    // Non-fatal notice
+  }
+}
+
 async function syncOnce() {
+  await autoRefreshMetaTokenIfNeeded();
+
   const todayIST = getISTDateString(0);
   const yesterdayIST = getISTDateString(-1);
 
