@@ -8,6 +8,7 @@
     "start": "node src/index.js",
     "dashboard": "node src/dashboard/server.js",
     "sync-theme": "node src/cli/sync-theme-dashboard.js",
+    "sync-daemon": "node src/cli/auto-sync-daemon.js",
     "roas": "node src/cli/live-roas.js",
     "sync": "node src/index.js --sync",
     "inspect": "node src/cli/inspect.js",

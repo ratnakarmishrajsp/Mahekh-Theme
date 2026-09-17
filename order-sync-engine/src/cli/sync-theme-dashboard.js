@@ -11,11 +11,15 @@ async function syncThemeDashboard() {
   // Fetch latest 30-day history with yesterday & today refreshed
   const historyList = await historyMgr.getDailyHistory30Days();
 
-  // Also get today's live metrics
-  const todayMetrics = await getLiveMetrics('today');
+  // Also get today's and yesterday's live metrics
+  const [todayMetrics, yesterdayMetrics] = await Promise.all([
+    getLiveMetrics('today'),
+    getLiveMetrics('yesterday'),
+  ]);
   const todayIST = getISTDateString(0);
+  const yesterdayIST = getISTDateString(-1);
 
-  // Ensure today's entry is at index 0 and fully updated
+  // Ensure today's entry is fully updated
   const todayIdx = historyList.findIndex((h) => h.date === todayIST);
   const todayEntry = {
     date: todayIST,
@@ -56,6 +60,49 @@ async function syncThemeDashboard() {
     historyList[todayIdx] = todayEntry;
   } else {
     historyList.unshift(todayEntry);
+  }
+
+  // Ensure yesterday's entry is fully updated with all orders & accurate spend
+  const yesterdayIdx = historyList.findIndex((h) => h.date === yesterdayIST);
+  const yesterdayEntry = {
+    date: yesterdayIST,
+    meta: {
+      date: yesterdayIST,
+      baseSpend: yesterdayMetrics.meta.baseSpend,
+      gstAmount: yesterdayMetrics.meta.gstAmount,
+      spendWithGST: yesterdayMetrics.meta.spendWithGST,
+      impressions: yesterdayMetrics.meta.impressions,
+      clicks: yesterdayMetrics.meta.clicks,
+      cpc: yesterdayMetrics.meta.cpc,
+      cpm: yesterdayMetrics.meta.cpm,
+      ctr: yesterdayMetrics.meta.ctr,
+      metaPurchases: yesterdayMetrics.meta.metaReportedPurchases,
+    },
+    shopify: {
+      ordersCount: yesterdayMetrics.shopify.totalOrders,
+      totalRevenue: yesterdayMetrics.shopify.totalSales,
+      codOrders: yesterdayMetrics.shopify.codOrders,
+      codRevenue: yesterdayMetrics.shopify.codSales,
+      prepaidOrders: yesterdayMetrics.shopify.prepaidOrders,
+      prepaidRevenue: yesterdayMetrics.shopify.prepaidSales,
+      aov: yesterdayMetrics.shopify.aov,
+      orders: yesterdayMetrics.shopify.orders.map((o) => ({
+        name: o.name,
+        customerName: o.customerName,
+        city: o.city,
+        payment_mode: o.payment_mode,
+        total_price: o.total_price,
+      })),
+    },
+    blendedRoas: yesterdayMetrics.blended.grossRoas,
+    cpo: yesterdayMetrics.blended.costPerOrder,
+    aov: yesterdayMetrics.shopify.aov,
+  };
+
+  if (yesterdayIdx >= 0) {
+    historyList[yesterdayIdx] = yesterdayEntry;
+  } else {
+    historyList.push(yesterdayEntry);
   }
 
   // Sort descending by date

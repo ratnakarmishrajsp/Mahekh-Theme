@@ -74,10 +74,14 @@ export class HistoricalAnalyticsManager {
         });
       }
 
-      // Check if live Meta can be fetched for today
+      // Check if live Meta can be fetched for today & yesterday
       let todayMetaInsights = null;
+      let yesterdayMetaInsights = null;
       try {
-        todayMetaInsights = await this.meta.getInsights('today');
+        [todayMetaInsights, yesterdayMetaInsights] = await Promise.all([
+          this.meta.getInsights('today').catch(() => null),
+          this.meta.getInsights('yesterday').catch(() => null),
+        ]);
       } catch {
         // Safe fallback
       }
@@ -102,19 +106,28 @@ export class HistoricalAnalyticsManager {
 
         // Determine Meta spend for this day
         let m = null;
-        if (day === todayIST && todayMetaInsights) {
+        const liveInsight = day === todayIST ? todayMetaInsights : (day === yesterdayIST ? yesterdayMetaInsights : null);
+        if (liveInsight) {
           m = {
             date: day,
-            baseSpend: todayMetaInsights.baseSpend,
-            gstAmount: todayMetaInsights.gstAmount,
-            spendWithGST: todayMetaInsights.spendWithGST,
-            impressions: todayMetaInsights.impressions,
-            clicks: todayMetaInsights.clicks,
-            cpc: todayMetaInsights.cpc,
-            cpm: todayMetaInsights.cpm,
-            ctr: todayMetaInsights.ctr,
-            metaPurchases: todayMetaInsights.purchases,
+            baseSpend: liveInsight.baseSpend,
+            gstAmount: liveInsight.gstAmount,
+            spendWithGST: liveInsight.spendWithGST,
+            impressions: liveInsight.impressions,
+            clicks: liveInsight.clicks,
+            cpc: liveInsight.cpc,
+            cpm: liveInsight.cpm,
+            ctr: liveInsight.ctr,
+            metaPurchases: liveInsight.purchases,
           };
+          adSpendStore.setSpend(day, {
+            baseSpend: liveInsight.baseSpend,
+            spendWithGST: liveInsight.spendWithGST,
+            impressions: liveInsight.impressions,
+            clicks: liveInsight.clicks,
+            metaPurchases: liveInsight.purchases,
+            isManual: false,
+          });
         } else {
           const stored = adSpendStore.getSpend(day);
           const existingItem = historyMap.get(day);
