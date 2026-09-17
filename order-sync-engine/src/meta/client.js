@@ -26,6 +26,29 @@ export class MetaAdsClient {
     return data;
   }
 
+  async exchangeForLongLivedToken(shortLivedToken) {
+    const tokenToExchange = shortLivedToken || this.accessToken;
+    const appId = config.meta?.appId || process.env.META_APP_ID;
+    const appSecret = config.meta?.appSecret || process.env.META_APP_SECRET;
+
+    if (!appId || !appSecret || !tokenToExchange) {
+      throw new Error('Missing META_APP_ID, META_APP_SECRET, or token to exchange');
+    }
+
+    const url = new URL(`${this.baseUrl}/${this.apiVersion}/oauth/access_token`);
+    url.searchParams.set('grant_type', 'fb_exchange_token');
+    url.searchParams.set('client_id', appId);
+    url.searchParams.set('client_secret', appSecret);
+    url.searchParams.set('fb_exchange_token', tokenToExchange);
+
+    const res = await fetch(url.toString());
+    const data = await res.json();
+    if (data.error) {
+      throw new Error(`[Meta Token Exchange] ${data.error.message}`);
+    }
+    return data;
+  }
+
   async getAccountOverview() {
     const data = await this.fetch(this.adAccountId, {
       fields: 'name,currency,account_status,timezone_name,balance,amount_spent',

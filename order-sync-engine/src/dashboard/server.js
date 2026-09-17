@@ -1189,19 +1189,38 @@ const server = http.createServer(async (req, res) => {
         res.end(JSON.stringify({ error: 'accessToken is required' }));
         return;
       }
-      process.env.META_ACCESS_TOKEN = accessToken;
+      let finalToken = accessToken.trim();
+      let isLongLived = false;
+
+      try {
+        const meta = new MetaAdsClient({ accessToken: finalToken });
+        const exchanged = await meta.exchangeForLongLivedToken(finalToken);
+        if (exchanged && exchanged.access_token) {
+          finalToken = exchanged.access_token;
+          isLongLived = true;
+          console.log('[Server] Successfully exchanged token for 60-day long-lived token!');
+        }
+      } catch (exErr) {
+        console.warn('[Server] Token exchange notice:', exErr.message);
+      }
+
+      process.env.META_ACCESS_TOKEN = finalToken;
       const envPath = path.join(config.rootDir, '.env');
       if (fs.existsSync(envPath)) {
         let content = fs.readFileSync(envPath, 'utf8');
         if (content.includes('META_ACCESS_TOKEN=')) {
-          content = content.replace(/META_ACCESS_TOKEN=.*/g, `META_ACCESS_TOKEN=${accessToken}`);
+          content = content.replace(/META_ACCESS_TOKEN=.*/g, `META_ACCESS_TOKEN=${finalToken}`);
         } else {
-          content += `\nMETA_ACCESS_TOKEN=${accessToken}\n`;
+          content += `\nMETA_ACCESS_TOKEN=${finalToken}\n`;
         }
         fs.writeFileSync(envPath, content, 'utf8');
       }
       res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ success: true, message: 'Meta access token updated.' }));
+      res.end(JSON.stringify({
+        success: true,
+        isLongLived,
+        message: isLongLived ? 'Meta token upgraded to 60-day token and saved!' : 'Meta access token updated and saved.'
+      }));
     } catch (err) {
       res.writeHead(500, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ error: err.message }));
