@@ -138,12 +138,15 @@ console.log(`1. Delivered Customers: ${deliveredList.length}`);
 console.log(`2. RTO Customers (Delivered Excluded): ${rtoList.length}`);
 console.log(`3. Unshipped / Pending Customers (Delivered & RTO Excluded): ${unshippedList.length}`);
 
-// Write DELIVERED batches (1000, 1000, 1000, 312 + Master)
-writeCsv(path.join(DELIVERED_DIR, '01-delivered-batch-1-1000.csv'), deliveredList.slice(0, 1000));
-writeCsv(path.join(DELIVERED_DIR, '02-delivered-batch-2-1000.csv'), deliveredList.slice(1000, 2000));
-writeCsv(path.join(DELIVERED_DIR, '03-delivered-batch-3-1000.csv'), deliveredList.slice(2000, 3000));
-writeCsv(path.join(DELIVERED_DIR, '04-delivered-batch-4-312.csv'), deliveredList.slice(3000));
+// Clean old files in DELIVERED_DIR if any
+fs.readdirSync(DELIVERED_DIR).forEach(file => fs.unlinkSync(path.join(DELIVERED_DIR, file)));
+
+// Write DELIVERED batches (2000, 1000, 312 + Master)
+writeCsv(path.join(DELIVERED_DIR, '01-delivered-batch-1-2000.csv'), deliveredList.slice(0, 2000));
+writeCsv(path.join(DELIVERED_DIR, '02-delivered-batch-2-1000.csv'), deliveredList.slice(2000, 3000));
+writeCsv(path.join(DELIVERED_DIR, '03-delivered-batch-3-312.csv'), deliveredList.slice(3000));
 writeCsv(path.join(DELIVERED_DIR, 'delivered-all-3312.csv'), deliveredList);
+
 
 // Write RTO batches (1000 + remaining 359 + Master)
 writeCsv(path.join(RTO_DIR, '01-rto-batch-1-1000.csv'), rtoList.slice(0, 1000));
