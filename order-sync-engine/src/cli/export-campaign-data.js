@@ -141,10 +141,15 @@ console.log(`3. Unshipped / Pending Customers (Delivered & RTO Excluded): ${unsh
 // Clean old files in DELIVERED_DIR if any
 fs.readdirSync(DELIVERED_DIR).forEach(file => fs.unlinkSync(path.join(DELIVERED_DIR, file)));
 
-// Write DELIVERED batches (1000 Morning Test + 2000 Evening Prime + 312 Remaining + Master)
+// Write DELIVERED batches
+// 1. Morning Test (first 1000 - already messaged)
 writeCsv(path.join(DELIVERED_DIR, '01-morning-test-1000.csv'), deliveredList.slice(0, 1000));
-writeCsv(path.join(DELIVERED_DIR, '02-evening-prime-2000.csv'), deliveredList.slice(1000, 3000));
-writeCsv(path.join(DELIVERED_DIR, '03-remaining-vip-312.csv'), deliveredList.slice(3000));
+// 2. All Remaining Delivered Customers (2312 customers - excluding first 1000)
+writeCsv(path.join(DELIVERED_DIR, '02-remaining-delivered-all-2312.csv'), deliveredList.slice(1000));
+// Split variants in case required:
+writeCsv(path.join(DELIVERED_DIR, 'evening-prime-2000.csv'), deliveredList.slice(1000, 3000));
+writeCsv(path.join(DELIVERED_DIR, 'remaining-vip-312.csv'), deliveredList.slice(3000));
+// Master file
 writeCsv(path.join(DELIVERED_DIR, 'delivered-all-3312.csv'), deliveredList);
 
 
