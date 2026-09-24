@@ -17,8 +17,8 @@
         "desktop_alignment": "center center",
         "mobile_height": "350px",
         "mobile_alignment": "center center",
-        "link": "",
-        "button_label": "",
+        "link": "/collections/best-selling-attars",
+        "button_label": "Shop Best Sellers",
         "color_scheme": "",
         "padding_top": 0,
         "padding_bottom": 0
@@ -83,7 +83,7 @@
           "settings": {
             "title": "Royal Oudh",
             "subtitle": "Warm & Intense",
-            "link": ""
+            "link": "/collections/royel-attars"
           }
         },
         "cat_2": {
@@ -91,7 +91,7 @@
           "settings": {
             "title": "Classic Rose",
             "subtitle": "Floral & Romantic",
-            "link": ""
+            "link": "/products/mahekh-asli-rose-gold-attar-premium-luxury-perfume-oil-12-ml"
           }
         },
         "cat_3": {
@@ -99,7 +99,7 @@
           "settings": {
             "title": "Earthy Khus",
             "subtitle": "Fresh & Calming",
-            "link": ""
+            "link": "/products/first-rain-attar-mitti-ki-khushboo-monsoon-magic-in-a-bottle"
           }
         },
         "cat_4": {
@@ -107,7 +107,7 @@
           "settings": {
             "title": "Exotic Musk",
             "subtitle": "Powdery & Sensual",
-            "link": ""
+            "link": "/products/mahekh-kasturi-attar-long-lasting-exotic-musk-fragrance"
           }
         }
       },
@@ -303,9 +303,9 @@
       "settings": {
         "title": "Find Your Signature Scent",
         "subtitle": "Fragrance Matchmaker",
-        "product_floral": "",
-        "product_woody": "",
-        "product_combo": "",
+        "product_floral": "flora-royale-attar",
+        "product_woody": "mahekh-black-oud-attar-premium-long-lasting-perfume-oil-12-ml",
+        "product_combo": "✨-mahekh-premium-attar-combo-set-of-3-✨-katcha-bel-kesar-chandan-mogra",
         "padding_top": 48,
         "padding_bottom": 48
       }
