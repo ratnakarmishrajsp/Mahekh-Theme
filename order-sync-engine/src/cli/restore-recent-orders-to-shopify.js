@@ -61,9 +61,12 @@ async function restoreOrdersToShopify() {
     const price = o.total_price ? String(o.total_price) : '999.00';
     const itemName = o.items || 'Mahekh Fragrance Attar';
 
+    const dateObj = new Date(o.created_at);
+    const cleanCreatedAt = !isNaN(dateObj.getTime()) ? dateObj.toISOString() : new Date().toISOString();
+
     const orderPayload = {
       name: orderName,
-      created_at: o.created_at,
+      created_at: cleanCreatedAt,
       financial_status: o.payment_mode === 'COD' ? 'pending' : 'paid',
       send_receipt: false,
       send_fulfillment_receipt: false,
