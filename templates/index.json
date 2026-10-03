@@ -99,7 +99,7 @@
           "settings": {
             "title": "Earthy Khus",
             "subtitle": "Fresh & Calming",
-            "link": "/products/first-rain-attar-mitti-ki-khushboo-monsoon-magic-in-a-bottle"
+            "link": "/products/mahekh-ruh-khus-attar-earthy-luxury-perfume-oil-12-ml"
           }
         },
         "cat_4": {
@@ -107,7 +107,7 @@
           "settings": {
             "title": "Exotic Musk",
             "subtitle": "Powdery & Sensual",
-            "link": "/products/mahekh-kasturi-attar-long-lasting-exotic-musk-fragrance"
+            "link": "/products/mahekh-kasturi-musk-eau-de-parfum-rich-musky-long-lasting-fragrance-50ml"
           }
         }
       },
@@ -177,7 +177,7 @@
       ],
       "name": "t:sections.featured-product.presets.name",
       "settings": {
-        "product": "mahekh-kasturi-attar-long-lasting-exotic-musk-fragrance",
+        "product": "mahekh-kasturi-musk-eau-de-parfum-rich-musky-long-lasting-fragrance-50ml",
         "color_scheme": "scheme-2",
         "secondary_background": false,
         "media_size": "medium",
@@ -304,8 +304,8 @@
         "title": "Find Your Signature Scent",
         "subtitle": "Fragrance Matchmaker",
         "product_floral": "flora-royale-attar",
-        "product_woody": "mahekh-black-oud-attar-premium-long-lasting-perfume-oil-12-ml",
-        "product_combo": "✨-mahekh-premium-attar-combo-set-of-3-✨-katcha-bel-kesar-chandan-mogra",
+        "product_woody": "🌹-rose-oud-attar-luxurious-blend-of-roses-exotic-oud-long-lasting-alcohol-free-✨",
+        "product_combo": "👑✨-katcha-bela-kasturi-rose-premium-attar-combo-set-pack-of-3-✨👑",
         "padding_top": 48,
         "padding_bottom": 48
       }
