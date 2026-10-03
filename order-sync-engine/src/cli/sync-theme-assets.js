@@ -3,7 +3,11 @@ import path from 'node:path';
 import { ShopifyClient } from '../shopify/client.js';
 
 const workspaceRoot = 'c:\\Users\\Ratnakar\\Desktop\\Mahekh theme';
-const themeId = 151435608142; // Mahekh-Theme/main
+async function getMainThemeId(shopify) {
+  const { data } = await shopify.request('/themes.json');
+  const mainTheme = data.themes.find(t => t.role === 'main');
+  return mainTheme ? mainTheme.id : data.themes[0].id;
+}
 
 const filesToSync = [
   'snippets/pincode-checker.liquid',
@@ -20,8 +24,9 @@ const filesToSync = [
 ];
 
 async function syncThemeAssets() {
-  console.log(`\nStarting direct Asset API sync to Theme ${themeId} (${filesToSync.length} files)...\n`);
   const shopify = new ShopifyClient();
+  const themeId = await getMainThemeId(shopify);
+  console.log(`\nStarting direct Asset API sync to Theme ${themeId} (${filesToSync.length} files)...\n`);
 
   for (const relPath of filesToSync) {
     const fullPath = path.join(workspaceRoot, relPath);

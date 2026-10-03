@@ -104,7 +104,7 @@ export class ShopifyClient {
     };
 
     let retries = 0;
-    const maxRetries = 5;
+    const maxRetries = 10;
 
     while (retries <= maxRetries) {
       try {
@@ -122,15 +122,15 @@ export class ShopifyClient {
         if (apiLimit) {
           const [used, total] = apiLimit.split('/').map(Number);
           if (used / total > 0.8) {
-            await new Promise((resolve) => setTimeout(resolve, 500));
+            await new Promise((resolve) => setTimeout(resolve, 800));
           }
         }
 
         if (response.status === 429) {
           retries++;
           const retryAfter = parseFloat(response.headers.get('Retry-After') || '2.0');
-          console.warn(`[Shopify] Rate limited (429). Retrying in ${retryAfter}s...`);
-          await new Promise((resolve) => setTimeout(resolve, retryAfter * 1000));
+          console.warn(`[Shopify] Rate limited (429). Waiting ${retryAfter}s (attempt ${retries}/${maxRetries})...`);
+          await new Promise((resolve) => setTimeout(resolve, retryAfter * 1000 + 500));
           continue;
         }
 
@@ -151,6 +151,7 @@ export class ShopifyClient {
         await new Promise((resolve) => setTimeout(resolve, backoff));
       }
     }
+    throw new Error(`Shopify request to ${endpoint} failed after ${maxRetries} retries.`);
   }
 
   parseNextPageUrl(linkHeader) {
