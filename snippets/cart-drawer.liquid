@@ -747,6 +747,7 @@
             {% if cart == empty %}
               disabled
             {% endif %}
+            onclick="if(window.shiprocketCheckoutEvents && window.shiprocketCheckoutEvents.buyCart){ window.shiprocketCheckoutEvents.buyCart(event); return false; } else if(window.shiprocketCheckoutBuyCartHandler){ window.shiprocketCheckoutBuyCartHandler(event); return false; }"
             style="background: linear-gradient(135deg, #10b981 0%, #047857 100%) !important; color: #ffffff !important; font-size: 1.35rem !important; font-weight: 800 !important; letter-spacing: 0.04em !important; padding: 1.4rem !important; border-radius: 8px !important; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35) !important;"
           >
             PROCEED TO CHECKOUT (COD AVAILABLE) ➔
