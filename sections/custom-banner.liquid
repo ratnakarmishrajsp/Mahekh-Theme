@@ -98,7 +98,7 @@
     <a href="{{ section.settings.link }}" class="custom-banner__link">
   {%- endif -%}
 
-    {%- if section.settings.image_desktop != blank -%}
+    {%- if section.settings.image_desktop != blank and section.settings.image_desktop.width > 0 -%}
       <img
         src="{{ section.settings.image_desktop | image_url: width: 2400 }}"
         alt="{{ section.settings.image_desktop.alt | escape }}"
@@ -129,7 +129,7 @@
       >
     {%- else -%}
       {% comment %} Fallback to desktop image on mobile {% endcomment %}
-      {%- if section.settings.image_desktop != blank -%}
+      {%- if section.settings.image_desktop != blank and section.settings.image_desktop.width > 0 -%}
         <img
           src="{{ section.settings.image_desktop | image_url: width: 1200 }}"
           alt="{{ section.settings.image_desktop.alt | escape }}"

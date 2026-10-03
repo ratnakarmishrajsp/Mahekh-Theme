@@ -173,7 +173,9 @@
                 }}
               </div>
             {%- else -%}
-              <span class="h2 visually-hidden">{{ shop.name }}</span>
+              <div class="header__heading-logo-wrapper">
+                <img src="{{ 'logo.jpg' | asset_url }}" alt="{{ shop.name | escape }}" class="header__heading-logo motion-reduce" width="{{ settings.logo_width | default: 70 }}" style="height: auto; max-width: 100%; display: block;">
+              </div>
             {%- endif -%}
           </a>
       {%- if request.page_type == 'index' -%}
@@ -213,7 +215,9 @@
                 }}
               </div>
             {%- else -%}
-              <span class="h2 visually-hidden">{{ shop.name }}</span>
+              <div class="header__heading-logo-wrapper">
+                <img src="{{ 'logo.jpg' | asset_url }}" alt="{{ shop.name | escape }}" class="header__heading-logo" width="{{ settings.logo_width | default: 70 }}" style="height: auto; max-width: 100%; display: block;">
+              </div>
             {%- endif -%}
           </a>
       {%- if request.page_type == 'index' -%}
