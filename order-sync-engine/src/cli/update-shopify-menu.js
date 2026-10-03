@@ -4,6 +4,7 @@ async function main() {
   const token = JSON.parse(fs.readFileSync('order-sync-engine/data/shopify_token.json')).access_token;
   const store = 'ju1pns-qf.myshopify.com';
 
+  // 1. Fetch current Main Menu
   const query = `
     query {
       menus(first: 10) {
@@ -14,11 +15,14 @@ async function main() {
           items {
             id
             title
-            url
             type
+            resourceId
+            url
             items {
               id
               title
+              type
+              resourceId
               url
             }
           }
@@ -27,7 +31,7 @@ async function main() {
     }
   `;
 
-  const res = await fetch(`https://${store}/admin/api/2024-01/graphql.json`, {
+  const res = await fetch(`https://${store}/admin/api/2024-07/graphql.json`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -37,82 +41,107 @@ async function main() {
   });
 
   const data = await res.json();
-  if (data.errors) {
-    console.error('API Error:', JSON.stringify(data.errors, null, 2));
-    if (JSON.stringify(data.errors).includes('ACCESS_DENIED') || JSON.stringify(data.errors).includes('menus')) {
-      console.log('\n[SCOPE REQUIRED]: The app needs "read_online_store_navigation" and "write_online_store_navigation" permissions.');
-    }
-    return;
-  }
-
   const menus = data.data?.menus?.nodes || [];
-  console.log('Available menus:', menus.map(m => ({ id: m.id, title: m.title, handle: m.handle })));
-
-  const mainMenu = menus.find(m => m.handle === 'main-menu') || menus[0];
+  const mainMenu = menus.find(m => m.handle === 'main-menu');
   if (!mainMenu) {
-    console.error('Main menu not found');
+    console.error('Main menu not found!', data);
     return;
   }
 
-  console.log(`\nFound Main Menu (${mainMenu.id}):`);
-  mainMenu.items.forEach(item => console.log(`  - ${item.title} (${item.url})`));
+  console.log(`Found Main Menu (${mainMenu.id}):`);
+  mainMenu.items.forEach(i => console.log(`  * ${i.title} [${i.type}] -> ${i.url || i.resourceId}`));
 
-  // Check if Car Perfumes and Perfumes are already in the menu
-  const hasCarPerfumes = mainMenu.items.some(i => i.title.toLowerCase().includes('car') || i.url?.includes('car-perfumes'));
-  const hasPerfumes = mainMenu.items.some(i => (i.title.toLowerCase() === 'perfumes' || i.title.toLowerCase() === 'luxury perfumes') || i.url?.includes('/collections/perfumes'));
+  // 2. Prepare items for menuUpdate
+  const newItems = mainMenu.items.map(item => ({
+    id: item.id,
+    title: item.title,
+    type: item.type,
+    resourceId: item.resourceId,
+    url: item.url,
+    items: (item.items || []).map(sub => ({
+      id: sub.id,
+      title: sub.title,
+      type: sub.type,
+      resourceId: sub.resourceId,
+      url: sub.url
+    }))
+  }));
 
-  console.log('\nHas Car Perfumes:', hasCarPerfumes);
-  console.log('Has Perfumes:', hasPerfumes);
+  // Check if Perfumes already present
+  const hasPerfumes = newItems.some(i => i.title.toLowerCase() === 'perfumes' || i.resourceId === 'gid://shopify/Collection/482298822848');
+  if (!hasPerfumes) {
+    console.log('Adding "Perfumes" item...');
+    newItems.push({
+      title: 'Perfumes',
+      type: 'COLLECTION',
+      resourceId: 'gid://shopify/Collection/482298822848'
+    });
+  }
 
-  // Helper to add menu item
-  async function addMenuItem(title, url) {
-    console.log(`Adding "${title}" (${url}) to menu ${mainMenu.id}...`);
-    const mutation = `
-      mutation menuItemCreate($menuId: ID!, $item: MenuItemCreateInput!) {
-        menuItemCreate(menuId: $menuId, item: $item) {
-          userErrors {
-            field
-            message
-          }
-          menuItem {
+  // Check if Car Perfumes already present
+  const hasCarPerfumes = newItems.some(i => i.title.toLowerCase().includes('car') || i.resourceId === 'gid://shopify/Collection/482298757312');
+  if (!hasCarPerfumes) {
+    console.log('Adding "Car Perfumes" item...');
+    newItems.push({
+      title: 'Car Perfumes',
+      type: 'COLLECTION',
+      resourceId: 'gid://shopify/Collection/482298757312'
+    });
+  }
+
+  // 3. Execute menuUpdate mutation
+  const updateMutation = `
+    mutation menuUpdate($id: ID!, $title: String!, $handle: String!, $items: [MenuItemUpdateInput!]!) {
+      menuUpdate(id: $id, title: $title, handle: $handle, items: $items) {
+        userErrors {
+          field
+          message
+        }
+        menu {
+          id
+          title
+          handle
+          items {
             id
             title
+            type
             url
+            resourceId
           }
         }
       }
-    `;
+    }
+  `;
 
-    const mutRes = await fetch(`https://${store}/admin/api/2024-01/graphql.json`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Shopify-Access-Token': token
-      },
-      body: JSON.stringify({
-        query: mutation,
-        variables: {
-          menuId: mainMenu.id,
-          item: {
-            title,
-            url
-          }
-        }
-      })
+  console.log('\nSending menuUpdate mutation...');
+  const mutRes = await fetch(`https://${store}/admin/api/2024-07/graphql.json`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Shopify-Access-Token': token
+    },
+    body: JSON.stringify({
+      query: updateMutation,
+      variables: {
+        id: mainMenu.id,
+        title: mainMenu.title,
+        handle: mainMenu.handle,
+        items: newItems
+      }
+    })
+  });
+
+  const mutData = await mutRes.json();
+  if (mutData.data?.menuUpdate?.userErrors?.length > 0) {
+    console.error('User errors:', mutData.data.menuUpdate.userErrors);
+  } else if (mutData.data?.menuUpdate?.menu) {
+    console.log('\n🎉 SUCCESS! Updated Main Menu:');
+    mutData.data.menuUpdate.menu.items.forEach(i => {
+      console.log(`  * ${i.title} (${i.type}) -> ${i.url || i.resourceId}`);
     });
-
-    const mutData = await mutRes.json();
-    console.log('Result:', JSON.stringify(mutData, null, 2));
+  } else {
+    console.error('Error updating menu:', mutData);
   }
-
-  if (!hasPerfumes) {
-    await addMenuItem('Perfumes', '/collections/perfumes');
-  }
-  if (!hasCarPerfumes) {
-    await addMenuItem('Car Perfumes', '/collections/car-perfumes');
-  }
-
-  console.log('\nMenu update process completed.');
 }
 
 main().catch(console.error);
