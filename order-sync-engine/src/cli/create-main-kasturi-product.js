@@ -17,25 +17,25 @@ async function main() {
       published: true,
       options: [
         {
-          name: 'Size',
-          values: ['Pack of 1', 'Pack of 2 (Buy 1 Get 1 Free)']
+          name: 'Pack',
+          values: ['Pack of 2 (Buy 1 Get 1 Free)', 'Pack of 3']
         }
       ],
       variants: [
-        {
-          option1: 'Pack of 1',
-          price: '699.00',
-          compare_at_price: '1199.00',
-          sku: 'MH-KASTURI-P1',
-          inventory_management: 'shopify',
-          inventory_policy: 'continue',
-          requires_shipping: true
-        },
         {
           option1: 'Pack of 2 (Buy 1 Get 1 Free)',
           price: '999.00',
           compare_at_price: '1999.00',
           sku: 'MH-KASTURI-P2-BOGO',
+          inventory_management: 'shopify',
+          inventory_policy: 'continue',
+          requires_shipping: true
+        },
+        {
+          option1: 'Pack of 3',
+          price: '1299.00',
+          compare_at_price: '2499.00',
+          sku: 'MH-KASTURI-P3',
           inventory_management: 'shopify',
           inventory_policy: 'continue',
           requires_shipping: true
