@@ -1,3 +1,7 @@
+// DISABLED PER USER INSTRUCTION
+console.log('❌ Order restore script is completely DISABLED to prevent unwanted orders from pushing to Shiprocket.');
+process.exit(0);
+
 import fs from 'node:fs';
 import path from 'node:path';
 import { ShopifyClient } from '../shopify/client.js';

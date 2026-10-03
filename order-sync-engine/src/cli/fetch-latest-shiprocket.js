@@ -1,3 +1,7 @@
+// DISABLED PER USER INSTRUCTION
+console.log('❌ Fetch Shiprocket script is completely DISABLED.');
+process.exit(0);
+
 import fs from 'node:fs';
 import path from 'node:path';
 import { ShiprocketClient } from '../shiprocket/client.js';
