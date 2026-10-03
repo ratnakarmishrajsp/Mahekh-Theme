@@ -376,7 +376,7 @@ button[name="sr-headless-button"]::before,
 }
 
 .shopify-payment-button .shopify-payment-button__button--unbranded:after {
-    content: "⚡ Order Now — Cash On Delivery / UPI ⚡";
+    content: "🎁 Pay Prepaid, Get ₹100 OFF Instantly! 💸";
     background: inherit;
     font-size: inherit;
     color: inherit;
@@ -474,7 +474,7 @@ main,
 
   
     {% render 'sr-checkout' %}
-    
+    <script src="https://unpkg.com/spf-analytics@1.0.0/index.js" defer></script>
 </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
