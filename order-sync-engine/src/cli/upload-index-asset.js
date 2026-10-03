@@ -5,10 +5,12 @@ async function main() {
   const store = 'ju1pns-qf.myshopify.com';
   const themeId = '158843044032';
 
-  const indexContent = fs.readFileSync('templates/index.json', 'utf8');
+  let indexContent = fs.readFileSync('templates/index.json', 'utf8');
+  const cleanJson = indexContent.replace(/\/\*[\s\S]*?\*\//g, '').trim();
 
   console.log('Validating local JSON...');
-  const parsed = JSON.parse(indexContent);
+  const parsed = JSON.parse(cleanJson);
+  indexContent = cleanJson;
   console.log('Local JSON valid. Sections count:', Object.keys(parsed.sections).length);
   console.log('Order:', parsed.order);
 
