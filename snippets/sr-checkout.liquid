@@ -1,11 +1,31 @@
 <input type="hidden" value="true" id="srCheckoutAutoOnboardClient"/>
-<input type="hidden" value="true" id="shiprocketAddressAppEnabled"/>
-<input type="hidden" value="true" id="shiprocketCODAppEnabled"/>
-<input type="hidden" value="true" id="fastrrCollectionPage"/>
-<input type="hidden" value="{{ shop.domain }}" id="sellerDomain"/>
 <input type="hidden" value="true" id="shiprocketCheckoutBtnStylesCheck"/>
 
 <link rel="stylesheet" href="https://fastrr-boost-ui.pickrr.com/assets/styles/sr-checkout.css">
+<script>
+  // Prevent unwanted redirects to Shopify default checkout
+  window.addEventListener('message', function(e) {
+    try {
+      if (e.data && e.data.actions && Array.isArray(e.data.actions)) {
+        const redir = e.data.actions.find(a => a && a.action === 'redirectTo');
+        if (redir && redir.data && redir.data.url) {
+          if (redir.data.url.includes('/checkout') || redir.data.url.includes('attributes[fastrr_redirect]=1')) {
+            console.warn('[Shiprocket/Fastrr] Blocked fallback redirect to Shopify checkout:', redir.data.url);
+            e.stopImmediatePropagation();
+            // Show helpful notice on modal if needed
+            const preloader = document.getElementById('fastrr-pre-loader');
+            if (preloader) {
+              const splash = preloader.querySelector('.splash__text');
+              if (splash) splash.textContent = 'Loading Shiprocket Checkout...';
+            }
+          }
+        }
+      }
+    } catch(err) {
+      console.error('[Shiprocket Interceptor Error]', err);
+    }
+  }, true);
+</script>
 <script src="https://fastrr-boost-ui.pickrr.com/assets/js/channels/shopify.js"></script>
 <script src="https://fastrr-boost-ui.pickrr.com/assets/js/channels/shiprocketMarketing.js" defer></script>
 
@@ -299,15 +319,15 @@
             if (window.shiprocketCheckoutEvents && window.shiprocketCheckoutEvents.buyCart) {
               clearInterval(poll);
               window.shiprocketCheckoutEvents.buyCart(event);
-            } else if (attempts > 20) {
+            } else if (attempts > 25) {
               clearInterval(poll);
-              window.location.href = '/checkout';
+              console.warn('[Shiprocket] Checkout events took too long to load');
             }
           }, 150);
         }
       })
-      .catch(() => {
-        window.location.href = '/checkout';
+      .catch((err) => {
+        console.error('[Shiprocket] Cart fetch failed', err);
       });
 
     return false;
