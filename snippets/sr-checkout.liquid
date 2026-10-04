@@ -1,6 +1,4 @@
 <input type="hidden" value="true" id="srCheckoutAutoOnboardClient"/>
-<input type="hidden" value="true" id="shiprocketCheckoutBtnStylesCheck"/>
-
 <link rel="stylesheet" href="https://fastrr-boost-ui.pickrr.com/assets/styles/sr-checkout.css">
 <script>
   // Prevent unwanted redirects to Shopify default checkout
@@ -26,385 +24,77 @@
     }
   }, true);
 </script>
-<script src="https://fastrr-boost-ui.pickrr.com/assets/js/channels/shopify.js"></script>
+<script src="https://fastrr-boost-ui.pickrr.com/assets/js/channels/shopify.js" defer></script>
 <script src="https://fastrr-boost-ui.pickrr.com/assets/js/channels/shiprocketMarketing.js" defer></script>
 
-<!-- BTN - CUST - SCRIPT - START -->
-<style>
-  @keyframes srPulseHighlight {
-    0%, 100% {
-      transform: scale(1);
-      box-shadow: 0 3px 10px rgba(204, 164, 59, 0.2) !important;
-    }
-    50% {
-      transform: scale(1.015);
-      box-shadow: 0 6px 18px rgba(204, 164, 59, 0.45) !important;
-    }
-  }
-
-  .shiprocket-headless {
-    width: 100% !important;
-    display: block !important;
-  }
-
-  .shiprocket-headless, .sr-headless-checkout {
-    width: 100% !important;
-    height: 44px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background: #cca43b !important;
-    color: #1a1107 !important;
-    font-weight: 700 !important;
-    font-size: 14px !important;
-    letter-spacing: 0.08em !important;
-    border: none !important;
-    border-radius: 6px !important;
-    text-transform: uppercase !important;
-    cursor: pointer !important;
-    transition: all 0.3s ease !important;
-    animation: srPulseHighlight 2.5s infinite ease-in-out !important;
-    box-sizing: border-box !important;
-  }
-  
-  .shiprocket-headless:hover, .sr-headless-checkout:hover {
-    transform: scale(1.02) !important;
-    filter: brightness(1.08) !important;
-    box-shadow: 0 6px 18px rgba(204, 164, 59, 0.5) !important;
-  }
-
-  /* Payment icons (GPay, PhonePe, UPI) */
-  .shiprocket-headless .sr-payment-icons, .sr-headless-checkout .sr-payment-icons {
-    max-height: 18px !important;
-    width: auto !important;
-    margin-left: 8px !important;
-    vertical-align: middle !important;
-    align-self: center !important;
-    opacity: 0.95 !important;
-  }
-
-  /* Hide the powered by Shiprocket badge & raw discount label overlay */
-  .shiprocket-headless .sr-brand-badge-container,
-  .sr-headless-checkout .sr-brand-badge-container,
-  .sr-brand-badge-container,
-  .sr-powered-by {
-    display: none !important;
-  }
-
-  .shiprocket-headless .sr-discount-label,
-  .sr-headless-checkout .sr-discount-label,
-  .sr-discount-label {
-    display: none !important;
-  }
-
-  /* Inline COD Badge */
-  .sr-cod-icon {
-    display: inline-flex !important;
-    align-items: center !important;
-    margin-left: 8px !important;
-    vertical-align: middle !important;
-    flex-shrink: 0 !important;
-    align-self: center !important;
-  }
-</style>
-
-<script>
-  // 1. Metafield Button Styles Override (if configured in Shopify)
-  let btnStyles = null;
-  {% if shop.metafields.shiprocketCheckoutButton.shiprocketCheckoutButtonStyles %}
-    btnStyles = {{ shop.metafields.shiprocketCheckoutButton.shiprocketCheckoutButtonStyles }};
-  {% endif %}
-      
-  if (btnStyles && typeof btnStyles === 'object') {
-    const styleElement = document.createElement("style");
-    styleElement.type = "text/css";
-    let cssRules = "";
-
-    Object.entries(btnStyles).forEach(([className, styles]) => {
-      const isButton = className === 'shiprocket-headless' || className === 'sr-headless-checkout';
-      let cssRule = "";
-      
-      if (isButton) {
-        const stylesString = Object.entries(styles)
-          .filter(([key]) => key !== "text" && key !== "animation" && key !== "background-color" && key !== "background" && key !== "color" && key !== "height" && key !== "display")
-          .map(([key, value]) => `${key}: ${value} !important;`)
-          .join(" ");
-
-        cssRule = `
-          .${className} {
-            ${stylesString}
-            background: #cca43b !important;
-            color: #1a1107 !important;
-            font-weight: 700 !important;
-            font-size: 14px !important;
-            letter-spacing: 0.08em !important;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
-            animation: srPulseHighlight 2.5s infinite ease-in-out !important;
-            transition: all 0.3s ease !important;
-            height: 44px !important;
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            border: none !important;
-            border-radius: 6px !important;
-            text-transform: uppercase !important;
-          }
-          .${className}:hover {
-            transform: scale(1.025) !important;
-            filter: brightness(1.08) !important;
-            box-shadow: 0 5px 15px rgba(204, 164, 59, 0.45) !important;
-          }
-          .${className} .sr-payment-icons {
-            max-height: 18px !important;
-            width: auto !important;
-            margin-left: 8px !important;
-            vertical-align: middle !important;
-            align-self: center !important;
-            opacity: 0.95 !important;
-          }
-          .${className} .sr-brand-badge-container,
-          .${className} .sr-discount-label {
-            display: none !important;
-          }
-        `;
-        
-        if (styles.text) {
-          cssRule += `
-            .${className}:after {
-              content: "${styles.text}";
-              color: #1a1107 !important;
-            }
-            .${className} span {
-              display: none !important;
-            }
-          `;
-        }
-      } else if (className === 'sr-discount-label') {
-        cssRule = `.sr-discount-label { display: none !important; }`;
-      } else {
-        const stylesString = Object.entries(styles)
-          .map(([key, value]) => `${key}: ${value} !important;`)
-          .join(" ");
-        cssRule = `.${className} { ${stylesString} }`;
-      }
-
-      cssRules += cssRule;
-    });
-
-    styleElement.textContent = cssRules;
-    document.head.appendChild(styleElement);
-  }
-
-  // 2. Dynamic Injection of COD Badge onto Shiprocket Buttons
-  function addCodIcon() {
-    const paymentIcons = document.querySelectorAll('.sr-payment-icons');
-    paymentIcons.forEach(paymentIcon => {
-      const parent = paymentIcon.parentElement;
-      if (parent && !parent.querySelector('.sr-cod-icon')) {
-        const codHtml = `
-          <div class="sr-cod-icon">
-            <svg viewBox="0 0 24 16" width="22" height="15" fill="none" stroke="#1a1107" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
-              <rect x="1" y="1" width="22" height="14" rx="2" />
-              <circle cx="12" cy="8" r="3.2" />
-              <path d="M10.5 6.5h3" stroke-width="1.1" />
-              <path d="M10.5 7.5h3" stroke-width="1.1" />
-              <path d="M11 6.5c1 0 1.8.4 1.8 1.4s-.8 1.4-1.8 1.4h-0.8" stroke-width="1.1" />
-              <path d="M11.5 9.3l1.3 1.8" stroke-width="1.1" />
-              <path d="M3.5 3.5h.01 M20.5 3.5h.01 M3.5 12.5h.01 M20.5 12.5h.01" stroke-width="1.5" />
-            </svg>
-            <span style="font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 10px; font-weight: 700; color: #1a1107; margin-left: 4px; letter-spacing: 0.02em; line-height: 1; vertical-align: middle;">COD</span>
-          </div>
-        `;
-        paymentIcon.insertAdjacentHTML('afterend', codHtml);
-      }
-    });
-  }
-
-  // 3. Robust Native Button Replacement & Shiprocket Button Builder
-  function buildShiprocketButton(container, type) {
-    if (!container || container.querySelector('.sr-headless-checkout')) return;
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'sr-headless-checkout';
-    btn.setAttribute('name', 'sr-headless-button');
-    
-    if (type === 'product') {
-      btn.setAttribute('onclick', 'if(window.shiprocketCheckoutEvents&&window.shiprocketCheckoutEvents.buyProduct){shiprocketCheckoutEvents.buyProduct(event);}else if(window.shiprocketCheckoutBuyProductHandler){shiprocketCheckoutBuyProductHandler(event);}');
-      btn.innerHTML = `
-        <div class="sr-d-flex flex-center" style="display:flex;align-items:center;justify-content:center;width:100%;">
-          <div class="sr-button-text-container">
-            <span class="sr-checkout-visible2">ORDER NOW (COD / UPI)</span>
-          </div>
-          <img src="https://fastrr-boost-ui.pickrr.com/assets/images/boost_button/upi_options.svg" alt="UPI / Cards" class="sr-pl-15 sr-checkout-visible sr-payment-icons" />
-        </div>
-      `;
-    } else {
-      btn.setAttribute('onclick', 'if(window.shiprocketCheckoutEvents&&window.shiprocketCheckoutEvents.buyCart){shiprocketCheckoutEvents.buyCart(event);}else if(window.shiprocketCheckoutBuyCartHandler){shiprocketCheckoutBuyCartHandler(event);}');
-      btn.innerHTML = `
-        <div class="sr-d-flex flex-center" style="display:flex;align-items:center;justify-content:center;width:100%;">
-          <div class="sr-button-text-container">
-            <span class="sr-checkout-visible2">PROCEED TO CHECKOUT (COD / UPI) ➔</span>
-          </div>
-          <img src="https://fastrr-boost-ui.pickrr.com/assets/images/boost_button/upi_options.svg" alt="UPI / Cards" class="sr-pl-15 sr-checkout-visible sr-payment-icons" />
-        </div>
-      `;
-    }
-    
-    container.innerHTML = '';
-    container.appendChild(btn);
-    addCodIcon();
-  }
-
-  function ensureShiprocketCheckoutMounted() {
-    // A. Replace native dynamic product payment buttons
-    const nativeProductPaymentBtns = document.querySelectorAll('.shopify-payment-button:not([data-sr-handled])');
-    nativeProductPaymentBtns.forEach(btn => {
-      btn.setAttribute('data-sr-handled', 'true');
-      const srDiv = document.createElement('div');
-      srDiv.className = 'shiprocket-headless';
-      srDiv.setAttribute('data-type', 'product');
-      buildShiprocketButton(srDiv, 'product');
-      btn.replaceWith(srDiv);
-    });
-
-    // Populate any existing empty .shiprocket-headless elements
-    document.querySelectorAll('.shiprocket-headless').forEach(el => {
-      if (el.children.length === 0) {
-        const type = el.getAttribute('data-type') || 'product';
-        buildShiprocketButton(el, type);
-      }
-    });
-
-    addCodIcon();
-  }
-
-  // 4. Universal Interceptor: Force Shiprocket Checkout on ANY checkout click
-  function triggerShiprocketCartCheckout(event) {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-      if (event.stopImmediatePropagation) event.stopImmediatePropagation();
-    }
-
-    if (window.shiprocketCheckoutEvents && typeof window.shiprocketCheckoutEvents.buyCart === 'function') {
-      window.shiprocketCheckoutEvents.buyCart(event);
-      return false;
-    }
-    if (typeof window.shiprocketCheckoutBuyCartHandler === 'function') {
-      window.shiprocketCheckoutBuyCartHandler(event);
-      return false;
-    }
-
-    // Fallback: fetch /cart.js and trigger direct handler
-    fetch('/cart.js')
-      .then(res => res.json())
-      .then(cart => {
-        if (typeof window.shiprocketCheckoutDirectHandler === 'function') {
-          const items = (cart.items || []).map(i => ({
-            productId: i.product_id,
-            variantId: i.variant_id,
-            quantity: i.quantity,
-            title: i.title,
-            selling_price: String(i.price / 100)
-          }));
-          window.shiprocketCheckoutDirectHandler({
-            type: 'cart',
-            products: items
-          });
-        } else {
-          // If script still downloading, poll briefly
-          let attempts = 0;
-          const poll = setInterval(() => {
-            attempts++;
-            if (window.shiprocketCheckoutEvents && window.shiprocketCheckoutEvents.buyCart) {
-              clearInterval(poll);
-              window.shiprocketCheckoutEvents.buyCart(event);
-            } else if (attempts > 25) {
-              clearInterval(poll);
-              console.warn('[Shiprocket] Checkout events took too long to load');
-            }
-          }, 150);
-        }
-      })
-      .catch((err) => {
-        console.error('[Shiprocket] Cart fetch failed', err);
-      });
-
-    return false;
-  }
-
-  function triggerShiprocketProductCheckout(event, form) {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-      if (event.stopImmediatePropagation) event.stopImmediatePropagation();
-    }
-
-    // Check if an existing shiprocket button is in DOM
-    const srBtn = (form || document).querySelector('.sr-headless-checkout, .shiprocket-headless button');
-    if (srBtn) {
-      srBtn.click();
-      return false;
-    }
-
-    if (window.shiprocketCheckoutEvents && typeof window.shiprocketCheckoutEvents.buyProduct === 'function') {
-      window.shiprocketCheckoutEvents.buyProduct(event);
-      return false;
-    }
-
-    // Add active variant to cart, then open Shiprocket cart checkout
-    const variantInput = (form || document).querySelector('input[name="id"], .product-variant-id');
-    const qtyInput = (form || document).querySelector('input[name="quantity"]');
-    const variantId = variantInput ? variantInput.value : null;
-    const qty = qtyInput ? parseInt(qtyInput.value) || 1 : 1;
-
-    if (variantId) {
-      fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items: [{ id: variantId, quantity: qty }] })
-      })
-      .then(res => res.json())
-      .then(() => {
-        triggerShiprocketCartCheckout(event);
-      })
-      .catch(() => {
-        triggerShiprocketCartCheckout(event);
-      });
-    } else {
-      triggerShiprocketCartCheckout(event);
-    }
-
-    return false;
-  }
-
-  // Global Capture Click Listener: Intercepts all default checkout redirects
-  document.addEventListener('click', function(e) {
-    const target = e.target;
-    if (!target) return;
-
-    // A. Intercept Cart Drawer & Cart Page Checkout buttons
-    const cartCheckoutBtn = target.closest('#CartDrawer-Checkout, #checkout, [name="checkout"], .cart__checkout-button, a[href="/checkout"], a[href*="/checkout"]');
-    if (cartCheckoutBtn) {
-      triggerShiprocketCartCheckout(e);
-      return;
-    }
-
-    // B. Intercept Native Shopify Payment Buttons or Sticky Buy Bar
-    const buyNowBtn = target.closest('.shopify-payment-button__button, .shopify-payment-button, .sticky-buy-bar__btn');
-    if (buyNowBtn) {
-      const form = buyNowBtn.closest('form[action*="/cart/add"]') || document.querySelector('form[action*="/cart/add"]');
-      triggerShiprocketProductCheckout(e, form);
-      return;
-    }
-  }, true); // Use capture phase so we intercept before Shopify's native listeners
-
-  // 5. Lifecycle Attachments
-  setInterval(ensureShiprocketCheckoutMounted, 400);
-  document.addEventListener('DOMContentLoaded', ensureShiprocketCheckoutMounted);
-  window.addEventListener('load', ensureShiprocketCheckoutMounted);
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    ensureShiprocketCheckoutMounted();
-  }
-</script>
-<!-- BTN - CUST - SCRIPT - END -->
+ <!-- BTN - CUST - SCRIPT - START  -->
+ <input type="hidden" value="true" id="shiprocketCheckoutBtnStylesCheck"/>
+ <style>
+  .shiprocket-headless{
+  width:100%!important;
+}
+ </style>
+ <script>
+   let btnStyles = null;
+   {% if shop.metafields.shiprocketCheckoutButton.shiprocketCheckoutButtonStyles %}
+     btnStyles = {{ shop.metafields.shiprocketCheckoutButton.shiprocketCheckoutButtonStyles }}
+   {%  endif %}
+       
+   if (btnStyles && typeof btnStyles === 'object') {
+     const styleElement = document.createElement("style");
+     styleElement.type = "text/css";
+     let cssRules = "";
+ 
+     Object.entries(btnStyles).forEach(([className, styles]) => {
+       // Convert styles object to CSS rules with !important
+       const stylesString = Object.entries(styles)
+         .filter(([key]) => key !== "text" && key !== "animation") // Exclude text and animation
+         .map(([key, value]) => key + ': ' + value + ' !important;')
+         .join(" ");
+ 
+       // Define the animation keyframes if needed
+       let animationRule = "";
+       if (styles.animation === "horizontal-jiggle") {
+         animationRule = `
+           @keyframes horizontal-jiggle {
+             0%, 100% { transform: translateX(0); }
+             25% { transform: translateX(-5px); }
+             50% { transform: translateX(5px); }
+             75% { transform: translateX(-5px); }
+           }
+         `;
+       }
+ 
+       // Base CSS rule for the class
+       let cssRule = `
+         ${animationRule}
+ 
+         .${className} {
+           ${stylesString}
+           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+           ${styles.animation === "horizontal-jiggle" ? "animation: horizontal-jiggle 1s ease-in-out infinite;" : ""}
+         }
+       `;
+ 
+       // If 'text' key exists, append additional CSS rules
+       if (styles.text) {
+         cssRule += `
+           .${className}:after {
+             content: "${styles.text}";
+           }
+           .${className} span {
+             display: none !important;
+           }
+         `;
+       }
+ 
+       cssRules += cssRule;
+     });
+ 
+     // Set the CSS rules in the style element
+     styleElement.textContent = cssRules;
+     // Append the style element to the head
+     document.head.appendChild(styleElement);
+   }
+ </script>
+  <!-- BTN - CUST - SCRIPT - END  -->

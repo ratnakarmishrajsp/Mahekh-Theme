@@ -102,9 +102,7 @@
           {%- if show_dynamic_checkout -%}
             <input type="hidden" value="true" id="fastrrCollectionPage" />
 <input type="hidden" value={{ product.url }} name="productUrl" />
-            <div class="shiprocket-headless" data-type="product">
-              {{ form | payment_button }}
-            </div>
+            {{ form | payment_button }}
           {%- endif -%}
 
           <div class="prepaid-savings-pill" style="margin-top: 0.8rem; background: linear-gradient(135deg, #fffdf5 0%, #fff8e6 100%); border: 1.5px dashed #cca43b; border-radius: 6px; padding: 7px 12px; font-size: 1.25rem; font-weight: 600; color: #855d00; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
