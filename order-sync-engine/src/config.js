@@ -54,6 +54,10 @@ export const config = {
     accessToken: process.env.META_ACCESS_TOKEN || '',
     gstRate: 0.18,
   },
+  fastrr: {
+    apiKey: process.env.FASTRR_API_KEY || '',
+    apiSecret: process.env.FASTRR_API_SECRET || '',
+  },
   cacheTtlMinutes: parseInt(process.env.CACHE_TTL_MINUTES || '15', 10),
 };
 
