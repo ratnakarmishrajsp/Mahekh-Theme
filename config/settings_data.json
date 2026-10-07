@@ -1,7 +1,16 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
-    "logo": "shopify://shop_images/Mahekh_final_Logo_Logo_20251213_134001_0000_page-0001.jpg",
-    "logo_width": 70,
+    "logo": "shopify://shop_images/Screenshot_20261007_122748.jpg",
+    "logo_width": 120,
     "type_header_font": "dm_sans_n5",
     "heading_scale": 105,
     "type_body_font": "jost_n4",
@@ -130,16 +139,17 @@
         "settings": {
           "color_scheme": "scheme-1"
         }
+      },
+      "floating-call-widget": {
+        "type": "floating-call-widget",
+        "settings": {
+          "enable_support_widget": true,
+          "avatar_label": "Need Help?",
+          "phone_number": "919321868526"
+        }
       }
     },
     "content_for_index": [],
-    "blocks": {
-      "13669795325273674392": {
-        "type": "shopify://apps/releasit-cod-form/blocks/app-embed/72faf214-4174-4fec-886b-0d0e8d3af9a2",
-        "disabled": true,
-        "settings": {}
-      }
-    },
     "color_schemes": {
       "scheme-1": {
         "settings": {
