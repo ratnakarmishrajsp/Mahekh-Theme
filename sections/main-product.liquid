@@ -437,18 +437,7 @@
                     </a>
                   </div>
                 {%- endif -%}
-                <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }}>
-                  <div class="description-scent-mist" aria-hidden="true">
-                    <div class="description-scent-mist__cloud description-scent-mist__cloud--1"></div>
-                    <div class="description-scent-mist__cloud description-scent-mist__cloud--2"></div>
-                    <div class="description-scent-mist__cloud description-scent-mist__cloud--3"></div>
-                    <div class="description-scent-mist__petals">
-                      <div class="description-scent-mist__petal description-scent-mist__petal--1">🌸</div>
-                      <div class="description-scent-mist__petal description-scent-mist__petal--2">🌼</div>
-                      <div class="description-scent-mist__petal description-scent-mist__petal--3">🌺</div>
-                      <div class="description-scent-mist__petal description-scent-mist__petal--4">✨</div>
-                    </div>
-                  </div>
+                {%- capture mh_full_description -%}
                   {%- if product.description != blank -%}
                     {{ product.description }}
                   {%- else -%}
@@ -457,7 +446,7 @@
                       <p style="font-size: 1.4rem; line-height: 1.65; color: #4a453e; margin: 0 0 1rem 0;">Experience the royal essence of 100% pure concentrated perfume oil distilled in copper pots from Kannauj. Completely alcohol-free, skin-safe, and formulated for 24+ hour long-lasting projection.</p>
                     </div>
                   {%- endif -%}
-                </div>
+                {%- endcapture -%}
               {%- when 'sku' -%}
                 <p
                   class="product__sku{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.sku.size == 0 %} visibility-hidden{% endif %}"
@@ -1005,6 +994,11 @@
         </section>
       </div>
     </div>
+
+    {%- if mh_full_description != blank -%}
+      {{ 'mahekh-description.css' | asset_url | stylesheet_tag }}
+      <div class="mh-desc-full quick-add-hidden">{{ mh_full_description }}</div>
+    {%- endif -%}
 
     {% render 'product-media-modal', variant_images: variant_images %}
 
