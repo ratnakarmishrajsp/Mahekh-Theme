@@ -340,13 +340,13 @@
 .mh-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   line-height: 1.45;
 }
 
 .mh-table th,
 .mh-table td {
-  padding: 1.1rem 1rem;
+  padding: 1rem 0.7rem;
   overflow-wrap: anywhere;
   hyphens: auto;
   border-bottom: 1px solid var(--mh-line);
