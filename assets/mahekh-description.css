@@ -339,14 +339,14 @@
 
 .mh-table {
   width: 100%;
-  min-width: 52rem;
   border-collapse: collapse;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
+  line-height: 1.45;
 }
 
 .mh-table th,
 .mh-table td {
-  padding: 1.3rem 1.6rem;
+  padding: 1.1rem 1rem;
   border-bottom: 1px solid var(--mh-line);
   text-align: left;
   vertical-align: top;
@@ -558,6 +558,15 @@
 
   .mh-steps {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .mh-table {
+    font-size: 1.5rem;
+  }
+
+  .mh-table th,
+  .mh-table td {
+    padding: 1.4rem 1.8rem;
   }
 
   .mh-trust {
