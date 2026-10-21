@@ -358,10 +358,6 @@
                 </div>
                 {%- if has_conversion_urgency == false -%}
                   <div class="product__conversion-urgency">
-                    <div class="urgency-stock-ticker">
-                      <span class="pulse-red-dot"></span>
-                      <span class="ticker-text">Only <strong class="highlight-urgency" id="UrgencyStockCount">9</strong> sets left in this handcrafted batch!</span>
-                    </div>
                     <div class="urgency-shipping-countdown">
                       📦 Order within <strong class="highlight-urgency" id="UrgencyCountdown">00h 00m 00s</strong> to dispatch tomorrow morning!
                     </div>
@@ -753,13 +749,6 @@
 
                 {%- if has_social_proof == false -%}
                   <div class="product__social-proof">
-                    <div class="social-live-view">
-                      <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px; margin-right:8px; vertical-align:middle; color:#cca43b; fill:none;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                      <span id="LiveViewCount" style="color:#cca43b; font-weight:700; margin-right:4px;">14</span> people are looking at this fragrance right now
-                    </div>
-                    <div class="social-recent-purchase" id="RecentPurchaseTicker" style="transition: opacity 0.5s ease-in-out;">
-                      🛒 Recent order: Priya from Mumbai bought this combo 8 mins ago!
-                    </div>
                   </div>
                 {%- endif -%}
                 {%- if has_trust_badges == false -%}
@@ -791,23 +780,12 @@
                 {%- render 'pincode-checker' -%}
               {%- when 'conversion_urgency' -%}
                 <div class="product__conversion-urgency" {{ block.shopify_attributes }}>
-                  <div class="urgency-stock-ticker">
-                    <span class="pulse-red-dot"></span>
-                    <span class="ticker-text">Only <strong class="highlight-urgency" id="UrgencyStockCount">{{ block.settings.stock_threshold }}</strong> sets left in this handcrafted batch!</span>
-                  </div>
                   <div class="urgency-shipping-countdown">
                     📦 Order within <strong class="highlight-urgency" id="UrgencyCountdown">00h 00m 00s</strong> to dispatch tomorrow morning!
                   </div>
                 </div>
               {%- when 'social_proof' -%}
                 <div class="product__social-proof" {{ block.shopify_attributes }}>
-                  <div class="social-live-view">
-                    <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:16px; height:16px; margin-right:8px; vertical-align:middle; color:#cca43b; fill:none;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                    <span id="LiveViewCount" style="color:#cca43b; font-weight:700; margin-right:4px;">14</span> people are looking at this fragrance right now
-                  </div>
-                  <div class="social-recent-purchase" id="RecentPurchaseTicker" style="transition: opacity 0.5s ease-in-out;">
-                    🛒 Recent order: Priya from Mumbai bought this combo 8 mins ago!
-                  </div>
                 </div>
               {%- when 'trust_badges' -%}
                 <div class="product__trust-badges" {{ block.shopify_attributes }}>
@@ -1107,27 +1085,6 @@
   </div>
 {%- endif -%}
 
-<div id="SalesNotificationPopup" class="sales-notification-popup quick-add-hidden">
-  <button id="SalesNotificationClose" class="sales-notification-close" aria-label="Dismiss">&times;</button>
-  <div class="sales-notification-content">
-    {%- if product.featured_media -%}
-      <img id="SalesNotificationImage" src="{{ product.featured_media | image_url: width: 120 }}" alt="{{ product.title | escape }}" class="sales-notification-img" width="48" height="48" loading="lazy">
-    {%- endif -%}
-    <div class="sales-notification-info">
-      <div class="sales-notification-buyer-badge">
-        <span id="SalesNotificationBuyer">Priya from Delhi</span>
-        <span class="sales-notification-verified">
-          <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" width="10" height="10" style="vertical-align: middle; margin-left: 3px; fill: #cca43b;">
-            <path d="M12 6C12 9.31371 9.31371 12 6 12C2.68629 12 0 9.31371 0 6C0 2.68629 2.68629 0 6 0C9.31371 0 12 2.68629 12 6ZM5.4857 8.48528L9.02123 4.94975L8.31412 4.24264L5.4857 7.07107L3.71802 5.30339L3.01091 6.0105L5.4857 8.48528Z" fill="currentColor"/>
-          </svg>
-          Verified
-        </span>
-      </div>
-      <p class="sales-notification-text">purchased <strong id="SalesNotificationProduct">{{ product.title | escape }}</strong></p>
-      <p class="sales-notification-time" id="SalesNotificationTime">2 minutes ago</p>
-    </div>
-  </div>
-</div>
 
 {%- if section.settings.enable_exit_popup -%}
   <div id="ExitIntentPopup" class="exit-intent-overlay quick-add-hidden">
