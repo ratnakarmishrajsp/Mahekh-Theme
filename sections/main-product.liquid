@@ -748,8 +748,6 @@
                 -%}
 
                 {%- if has_social_proof == false -%}
-                  <div class="product__social-proof">
-                  </div>
                 {%- endif -%}
                 {%- if has_trust_badges == false -%}
                   <div class="product__trust-badges">
@@ -785,8 +783,6 @@
                   </div>
                 </div>
               {%- when 'social_proof' -%}
-                <div class="product__social-proof" {{ block.shopify_attributes }}>
-                </div>
               {%- when 'trust_badges' -%}
                 <div class="product__trust-badges" {{ block.shopify_attributes }}>
                   <div class="trust-badge-item">
