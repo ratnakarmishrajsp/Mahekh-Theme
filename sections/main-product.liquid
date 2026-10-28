@@ -40,6 +40,20 @@
       }
     }
 
+    /* BOGO line under the price (products tagged BOGO) */
+    #ProductInfo-{{ section.id }} .mh-bogo-line {
+      display: inline-block;
+      margin: -1.2rem 0 1.4rem;
+      padding: 0.7rem 1.2rem;
+      border: 1px dashed #cca43b;
+      border-radius: 8px;
+      background: #faf3e0;
+      color: #543516;
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
     /* Luxury Product Detail Overrides */
     #ProductInfo-{{ section.id }} .product__title h1 {
       animation: slideUp 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
@@ -330,6 +344,9 @@
                     price_class: 'price--large'
                   -%}
                 </div>
+                {%- if product.tags contains 'BOGO' -%}
+                  <p class="mh-bogo-line">🎁 BUY 1 GET 1 FREE · Pack of 2 = 2 bottles (1 + 1 FREE)</p>
+                {%- endif -%}
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
                     <span>{{ 'products.product.volume_pricing.note' | t }}</span>
@@ -3395,15 +3412,26 @@
             stickyBar.classList.remove('is-visible');
             if (salesPopup) salesPopup.classList.remove('sticky-visible');
           } else {
-            if (window.scrollY > entry.boundingClientRect.top + window.scrollY) {
-              stickyBar.classList.add('is-visible');
-              if (salesPopup) salesPopup.classList.add('sticky-visible');
-            }
+            // Shown whenever the main buy button is off screen, also before the first scroll
+            stickyBar.classList.add('is-visible');
+            if (salesPopup) salesPopup.classList.add('sticky-visible');
           }
         });
       }, { threshold: 0 });
 
       observer.observe(buyButton);
+    }
+
+    // 4b. Sticky bar price follows the selected pack
+    const priceBox = document.getElementById('price-{{ section.id }}');
+    const stickyPrice = document.querySelector('.sticky-buy-bar__price');
+    if (priceBox && stickyPrice) {
+      const syncStickyPrice = () => {
+        const onSale = priceBox.querySelector('.price--on-sale');
+        const el = priceBox.querySelector(onSale ? '.price__sale .price-item--sale' : '.price__regular .price-item--regular');
+        if (el && el.textContent.trim()) stickyPrice.textContent = el.textContent.trim();
+      };
+      new MutationObserver(syncStickyPrice).observe(priceBox, { childList: true, subtree: true });
     }
 
     // 5. Live Sales Notification Loop (Deterministic Unique Buyers per Product)
