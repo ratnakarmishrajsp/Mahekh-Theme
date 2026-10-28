@@ -1,0 +1,191 @@
+{%- comment -%}
+  Mahekh reels strip (28 Oct 2026): this product's own ad videos from the product metafield
+  mahekh.reel_videos (list of video files). Cards play muted while on screen (480p rendition);
+  a tap opens the video full screen with sound and a Buy Now button. Renders nothing without videos.
+{%- endcomment -%}
+{%- assign mh_reels = product.metafields.mahekh.reel_videos.value -%}
+{%- if mh_reels != blank -%}
+  <div class="mh-reels" data-mh-reels>
+    <p class="mh-reels__title">🎬 Watch before you buy <span>· tap for sound</span></p>
+    <div class="mh-reels__track">
+      {%- for v in mh_reels -%}
+        {%- liquid
+          assign mh_small = ''
+          assign mh_big = ''
+          assign mh_max = 0
+          for s in v.sources
+            if s.format == 'mp4' and s.height > mh_max
+              assign mh_max = s.height
+              assign mh_big = s.url
+            endif
+          endfor
+          comment
+            Liquid lists only the top mp4; Shopify also stores a 480p rendition under the same name pattern.
+            The card tries it first and falls back to the top mp4 on error (script below).
+          endcomment
+          assign mh_small = mh_big | replace: 'HD-1080p-2.5Mbps', 'SD-480p-0.9Mbps' | replace: 'HD-720p-1.6Mbps', 'SD-480p-0.9Mbps'
+        -%}
+        <button type="button" class="mh-reels__card" aria-label="Play video {{ forloop.index }}: {{ v.alt | escape }}">
+          <video
+            class="mh-reels__video"
+            muted
+            loop
+            playsinline
+            preload="none"
+            poster="{{ v.preview_image | image_url: width: 360 }}"
+            data-src="{{ mh_small }}"
+            data-big="{{ mh_big }}"
+          ></video>
+          <span class="mh-reels__sound" aria-hidden="true">🔊</span>
+        </button>
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div id="MhReelsModal" class="mh-reels-modal" role="dialog" aria-modal="true" aria-label="Video" hidden>
+    <video class="mh-reels-modal__video" playsinline controls></video>
+    <button type="button" class="mh-reels-modal__close" aria-label="Close video">✕</button>
+    <button type="button" class="mh-reels-modal__buy">BUY NOW</button>
+  </div>
+
+  <style>
+    .mh-reels { margin: 1.6rem 0 0.4rem; }
+    .mh-reels__title { margin: 0 0 0.8rem; font-size: 1.4rem; font-weight: 700; color: #543516; letter-spacing: 0.02em; }
+    .mh-reels__title span { font-weight: 400; color: #8a7a66; }
+    .mh-reels__track {
+      display: flex;
+      gap: 0.8rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 0.4rem;
+    }
+    .mh-reels__track::-webkit-scrollbar { display: none; }
+    .mh-reels__card {
+      position: relative;
+      flex: 0 0 calc((100% - 1.6rem) / 2.6);
+      max-width: 160px;
+      aspect-ratio: 9 / 16;
+      padding: 0;
+      border: 1px solid #e8dcc0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #1a120a;
+      cursor: pointer;
+      scroll-snap-align: start;
+    }
+    .mh-reels__video { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+    .mh-reels__sound {
+      position: absolute;
+      right: 6px;
+      bottom: 6px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.55);
+      font-size: 1.1rem;
+    }
+    .mh-reels-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 10050;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.94);
+    }
+    .mh-reels-modal[hidden] { display: none; }
+    .mh-reels-modal__video { width: 100%; height: 100%; max-width: 480px; object-fit: contain; background: #000; }
+    .mh-reels-modal__close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 40px;
+      height: 40px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+      font-size: 1.8rem;
+      cursor: pointer;
+    }
+    .mh-reels-modal__buy {
+      position: absolute;
+      left: 50%;
+      bottom: 72px;
+      transform: translateX(-50%);
+      width: min(90%, 420px);
+      padding: 1.4rem;
+      border: 1px solid #cca43b;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #3b2410, #5d4227);
+      color: #cca43b;
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+    }
+  </style>
+
+  <script>
+    (function () {
+      const root = document.querySelector('[data-mh-reels]');
+      const modal = document.getElementById('MhReelsModal');
+      if (!root || !modal || root.dataset.ready) return;
+      root.dataset.ready = '1';
+      document.body.appendChild(modal); // fixed overlay must not sit inside a transformed column
+
+      const big = modal.querySelector('video');
+      const vids = [...root.querySelectorAll('.mh-reels__video')];
+      const visible = new Set();
+      const start = (v) => {
+        if (!v.src) {
+          v.addEventListener('error', () => {
+            if (v.dataset.big && !v.src.endsWith(v.dataset.big)) { v.src = v.dataset.big; v.play().catch(() => {}); }
+          }, { once: true });
+          v.src = v.dataset.src;
+        }
+        v.play().catch(() => {});
+      };
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) { visible.add(e.target); if (modal.hidden) start(e.target); }
+          else { visible.delete(e.target); e.target.pause(); }
+        });
+      }, { threshold: 0.9 }); // only fully visible cards play (2 at a time on a phone)
+      vids.forEach((v) => io.observe(v));
+
+      root.querySelectorAll('.mh-reels__card').forEach((card, i) => {
+        card.addEventListener('click', () => {
+          const v = vids[i];
+          vids.forEach((x) => x.pause());
+          big.src = v.dataset.big; // top mp4 starts faster than HLS here (0.7 s vs 2.1 s, 28 Oct test)
+          big.poster = v.poster;
+          big.muted = false;
+          modal.hidden = false;
+          document.body.style.overflow = 'hidden';
+          big.play().catch(() => {});
+        });
+      });
+
+      const close = () => {
+        big.pause();
+        big.removeAttribute('src');
+        big.load();
+        modal.hidden = true;
+        document.body.style.overflow = '';
+        visible.forEach(start);
+      };
+      modal.querySelector('.mh-reels-modal__close').addEventListener('click', close);
+      modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) close(); });
+      modal.querySelector('.mh-reels-modal__buy').addEventListener('click', () => {
+        close();
+        // same path as the sticky bar: Fastrr Buy Now first, normal add-to-cart as fallback
+        const sr = document.querySelector("form[action*='/cart/add'] .sr-headless-checkout");
+        if (sr && !sr.disabled) sr.click();
+        else document.querySelector("form[action='/cart/add'] [name='add']")?.click();
+      });
+    })();
+  </script>
+{%- endif -%}
