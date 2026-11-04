@@ -378,6 +378,20 @@
 
   var D = JSON.parse(document.getElementById('mhc-data').textContent);
   var PIXEL = '596578329419010';
+  // safety net: the Meta pixel normally comes from Shopify's Facebook app; if it is missing, load and init it ourselves
+  (function ensurePixel() {
+    var go = function () {
+      try {
+        if (!window.fbq) {
+          !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s); }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+          fbq('init', PIXEL);
+        } else if (fbq.instance && fbq.instance.pixelsByID && !fbq.instance.pixelsByID[PIXEL]) {
+          fbq('init', PIXEL);
+        }
+      } catch (e) {}
+    };
+    if (document.readyState === 'complete') setTimeout(go, 2000); else window.addEventListener('load', function () { setTimeout(go, 2000); });
+  })();
   var API = (root.getAttribute('data-api') || '').replace(/\/$/, '');
   var qs = new URLSearchParams(location.search);
   var DEMO = !API || qs.get('mh_demo') === '1';
