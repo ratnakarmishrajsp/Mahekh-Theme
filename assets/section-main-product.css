@@ -1572,3 +1572,16 @@ button[name="sr-headless-button"]:hover,
   box-shadow: 0 20px 42px rgba(204, 164, 59, 0.85), 0 10px 30px rgba(0, 0, 0, 0.35) !important;
 }
 
+
+/* MAHEKH mobile gallery full width (Claude 4 Nov 2026) START */
+@media screen and (max-width: 749px) {
+  .product__media-wrapper slider-component.slider-mobile-gutter:not(.thumbnail-slider--no-slide) {
+    max-width: none;
+    width: calc(100% + 3rem);
+  }
+  .product__media-wrapper .product__media-list.slider--mobile .product__media-item {
+    width: calc(100% - 3rem);
+    box-sizing: border-box;
+  }
+}
+/* MAHEKH mobile gallery full width END */
