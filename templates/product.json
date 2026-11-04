@@ -44,7 +44,7 @@
           "settings": {
             "heading": "Shipping & Delivery",
             "icon": "truck",
-            "content": "<p>We offer fast delivery across India. Orders are typically shipped within 24-48 hours and delivered in 3-7 business days. Free shipping is available on all prepaid orders.</p>",
+            "content": "<p>We offer fast delivery across India. Orders are typically shipped within 24-48 hours and delivered in 3-7 business days. Free shipping is available on all prepaid orders.<\/p>",
             "page": ""
           }
         },
@@ -53,7 +53,7 @@
           "settings": {
             "heading": "The Kannauj Heritage",
             "icon": "leaf",
-            "content": "<p>Each drop of Mahekh attar is distilled using traditional copper pots (Degs) and clay receivers (Bhapkas) in Kannauj, the perfume capital of India. We source only the purest natural blossoms and ingredients.</p>",
+            "content": "<p>Each drop of Mahekh attar is distilled using traditional copper pots (Degs) and clay receivers (Bhapkas) in Kannauj, the perfume capital of India. We source only the purest natural blossoms and ingredients.<\/p>",
             "page": ""
           }
         }
@@ -82,7 +82,7 @@
         "enable_video_looping": false,
         "padding_top": 36,
         "padding_bottom": 36,
-        "enable_exit_popup": true,
+        "enable_exit_popup": false,
         "exit_popup_discount_code": "MAHEKH100",
         "exit_popup_discount_amount": "₹100"
       }

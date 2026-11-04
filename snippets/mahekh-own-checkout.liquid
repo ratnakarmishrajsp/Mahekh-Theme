@@ -1,0 +1,768 @@
+{%- comment -%}
+  Mahekh own checkout (Claude, 4 Nov 2026, v2 after the owner's phone recording).
+  Two buttons: Cash on Delivery popup + Pay Online (PayU).
+  Render OUTSIDE the product <form>: {% render 'mahekh-own-checkout', product: product, form_id: product_form_id %}
+  Server: set mhc_api below once the order server is live. Until then the popup runs in DEMO mode (no real order).
+  Add ?mh_demo=1 to any product URL to force demo mode.
+{%- endcomment -%}
+{%- assign mhc_api = 'https://mahekh-checkout.ratnakar-auto-dm.workers.dev' -%}
+{%- assign mhc_prepaid_off = 100 -%}
+{%- assign mhc_variant = product.selected_or_first_available_variant -%}
+
+<div class="mhc" id="mhc-root" data-api="{{ mhc_api }}" data-form-id="{{ form_id }}">
+  <div class="mhc-btns">
+    <button type="button" class="mhc-btn mhc-btn--cod" data-mhc-open="cod" {% unless product.available %}disabled{% endunless %}>
+      <span class="mhc-btn__shine" aria-hidden="true"></span>
+      <span class="mhc-btn__row">
+        <svg class="mhc-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v8H3zM14 10h4l3 3v2h-7z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="7" cy="17" r="1.8" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="17.5" cy="17" r="1.8" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
+        <span class="mhc-btn__main">BUY NOW &middot; CASH ON DELIVERY</span>
+      </span>
+      <span class="mhc-btn__sub">Pay when your order reaches you</span>
+    </button>
+
+    <button type="button" class="mhc-btn mhc-btn--pre" data-mhc-open="prepaid" {% unless product.available %}disabled{% endunless %}>
+      <span class="mhc-btn__shine" aria-hidden="true"></span>
+      <span class="mhc-btn__tag">EXTRA ₹{{ mhc_prepaid_off }} OFF</span>
+      <span class="mhc-btn__row">
+        <svg class="mhc-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3 10h18" stroke="currentColor" stroke-width="1.7"/><path d="M7 14.5h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span class="mhc-btn__main">PAY ONLINE &middot; <span data-mhc-btnprice></span></span>
+      </span>
+      <span class="mhc-btn__sub">UPI &middot; Cards &middot; Netbanking &middot; <s data-mhc-btnmrp></s></span>
+    </button>
+  </div>
+</div>
+
+<div class="mhc-overlay" id="mhc-overlay" hidden>
+  <div class="mhc-sheet" role="dialog" aria-modal="true" aria-labelledby="mhc-title">
+
+    <div class="mhc-top">
+      <div class="mhc-grab" aria-hidden="true"><span></span></div>
+      <div class="mhc-head">
+        {%- if product.featured_media -%}
+          <img class="mhc-head__img" src="{{ product.featured_media | image_url: width: 120 }}" alt="" width="44" height="44">
+        {%- endif -%}
+        <div class="mhc-head__txt">
+          <p class="mhc-head__eyebrow">Mahekh &middot; Kannauj</p>
+          <h2 class="mhc-head__title" id="mhc-title">{{ product.title | split: '–' | first | strip | escape }}</h2>
+        </div>
+        <button type="button" class="mhc-x" data-mhc-close aria-label="Close">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- FORM VIEW: scrolling body + fixed footer with the button -->
+    <form class="mhc-main mhc-view" data-view="form" novalidate autocomplete="on">
+      <div class="mhc-body">
+        {%- if product.has_only_default_variant == false -%}
+          <p class="mhc-step">1. Choose your pack</p>
+          <div class="mhc-chips" role="radiogroup" aria-label="Choose pack">
+            {%- for v in product.variants -%}
+              <button type="button" class="mhc-chip" role="radio" data-mhc-variant="{{ v.id }}" {% unless v.available %}disabled{% endunless %}>
+                <span class="mhc-chip__t">{{ v.title | escape }}</span>
+                <span class="mhc-chip__p"></span>
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
+        <p class="mhc-step">{% if product.has_only_default_variant == false %}2{% else %}1{% endif %}. How will you pay?</p>
+        <div class="mhc-pay" role="radiogroup" aria-label="Payment method">
+          <button type="button" class="mhc-pay__opt" role="radio" data-mhc-mode="cod">
+            <span class="mhc-radio" aria-hidden="true"></span>
+            <span class="mhc-pay__txt"><b>Cash on Delivery</b><small>Pay when it arrives</small></span>
+            <span class="mhc-pay__amt" data-mhc-amt="cod"></span>
+          </button>
+          <button type="button" class="mhc-pay__opt" role="radio" data-mhc-mode="prepaid">
+            <span class="mhc-radio" aria-hidden="true"></span>
+            <span class="mhc-pay__txt"><b>Pay Online</b><small>UPI / Cards &middot; <em>Save ₹{{ mhc_prepaid_off }}</em></small></span>
+            <span class="mhc-pay__amt" data-mhc-amt="prepaid"></span>
+          </button>
+        </div>
+
+        <p class="mhc-step">{% if product.has_only_default_variant == false %}3{% else %}2{% endif %}. Delivery details</p>
+        <div class="mhc-fields">
+          <div class="mhc-f">
+            <input class="mhc-in" id="mhc-name" name="name" type="text" placeholder=" " autocomplete="name" autocapitalize="words" enterkeyhint="next" maxlength="60" required>
+            <label for="mhc-name">Full name</label>
+            <small class="mhc-err">Please enter your full name</small>
+          </div>
+          <div class="mhc-f mhc-f--phone">
+            <label for="mhc-phone">Mobile number</label>
+            <span class="mhc-cc" aria-hidden="true"><i class="mhc-flag"></i>+91</span>
+            <input class="mhc-in" id="mhc-phone" name="phone" type="tel" inputmode="numeric" placeholder="98765 43210" autocomplete="tel-national" enterkeyhint="next" maxlength="11" required>
+            <span class="mhc-ok" aria-hidden="true"></span>
+            <small class="mhc-err">Enter a valid 10-digit mobile number</small>
+          </div>
+          <div class="mhc-grid">
+            <div class="mhc-f mhc-f--pin">
+              <input class="mhc-in" id="mhc-pin" name="pincode" type="tel" inputmode="numeric" placeholder=" " autocomplete="postal-code" enterkeyhint="next" maxlength="6" required>
+              <label for="mhc-pin">Pincode</label>
+              <span class="mhc-ok" aria-hidden="true"></span>
+              <small class="mhc-err">6-digit pincode</small>
+            </div>
+            <div class="mhc-f">
+              <input class="mhc-in" id="mhc-city" name="city" type="text" placeholder=" " autocomplete="address-level2" autocapitalize="words" enterkeyhint="next" maxlength="40" required>
+              <label for="mhc-city">City / District</label>
+              <small class="mhc-err">Enter city</small>
+            </div>
+          </div>
+          <small class="mhc-pinok" hidden></small>
+          <div class="mhc-f mhc-f--select">
+            <select class="mhc-in" id="mhc-state" name="state" autocomplete="address-level1" required>
+              <option value=""></option>
+            </select>
+            <label for="mhc-state">State</label>
+            <small class="mhc-err">Select your state</small>
+          </div>
+          <div class="mhc-f">
+            <input class="mhc-in" id="mhc-address" name="address" type="text" placeholder=" " autocomplete="street-address" enterkeyhint="next" maxlength="160" required>
+            <label for="mhc-address">House no., street, area / village</label>
+            <small class="mhc-count" data-count="address">0/20</small>
+            <small class="mhc-err">Please write your full address (at least 20 letters)</small>
+          </div>
+          <div class="mhc-f">
+            <input class="mhc-in" id="mhc-landmark" name="landmark" type="text" placeholder=" " enterkeyhint="done" maxlength="100" required>
+            <label for="mhc-landmark">Landmark (near school, temple, shop…)</label>
+            <small class="mhc-count" data-count="landmark">0/20</small>
+            <small class="mhc-err">Please write a nearby landmark (at least 20 letters)</small>
+          </div>
+          <div class="mhc-f mhc-f--email" data-mhc-email hidden>
+            <input class="mhc-in" id="mhc-email" name="email" type="email" placeholder=" " autocomplete="email" enterkeyhint="done" maxlength="80">
+            <label for="mhc-email">Email for payment receipt (optional)</label>
+          </div>
+          <input type="text" name="company_website" class="mhc-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        </div>
+
+        <div class="mhc-sum">
+          <div><span>Item total</span><span data-mhc-sum="mrp"></span></div>
+          <div class="mhc-sum__off" data-mhc-sum-offrow hidden><span>Online payment discount</span><span>−₹{{ mhc_prepaid_off }}</span></div>
+          <div><span>Delivery</span><span class="mhc-free">FREE</span></div>
+          <div class="mhc-sum__tot"><span>To pay</span><span data-mhc-sum="total"></span></div>
+        </div>
+      </div>
+
+      <div class="mhc-foot">
+        <p class="mhc-msg" role="alert" hidden></p>
+        <button type="submit" class="mhc-submit">
+          <span class="mhc-submit__shine" aria-hidden="true"></span>
+          <span class="mhc-submit__txt" data-mhc-cta></span>
+          <span class="mhc-submit__bar" aria-hidden="true"><i></i></span>
+        </button>
+        <p class="mhc-trust"><span>🚚 Free delivery</span><span>💵 Cash on delivery</span><span>🔒 Safe &amp; secure</span></p>
+      </div>
+    </form>
+
+    <!-- PAYMENT REDIRECT VIEW -->
+    <div class="mhc-view mhc-view--wait" data-view="wait" hidden>
+      <div class="mhc-spin" aria-hidden="true"></div>
+      <h3>Opening secure payment…</h3>
+      <p>Please don't close this page. You will come back here after paying.</p>
+    </div>
+
+    <!-- SUCCESS VIEW -->
+    <div class="mhc-view mhc-view--ok" data-view="ok" hidden>
+      <div class="mhc-ok__inner">
+        <div class="mhc-burst" aria-hidden="true"></div>
+        <svg class="mhc-check" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="29"/><path d="M19 33l9 9 17-19"/></svg>
+        <h3 class="mhc-ok__title">Order Confirmed!</h3>
+        <p class="mhc-ok__no" data-mhc-okno></p>
+        <div class="mhc-ok__card">
+          <div><span>Product</span><b data-mhc-okprod></b></div>
+          <div><span>Payment</span><b data-mhc-okpay></b></div>
+          <div><span>Delivery to</span><b data-mhc-okaddr></b></div>
+          <div><span>Arrives in</span><b>3–5 days &middot; FREE</b></div>
+        </div>
+        <p class="mhc-ok__note" data-mhc-oknote></p>
+        <button type="button" class="mhc-submit mhc-submit--light" data-mhc-close>Continue shopping</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="application/json" id="mhc-data">
+{
+  "product": {{ product.title | json }},
+  "handle": {{ product.handle | json }},
+  "off": {{ mhc_prepaid_off | times: 100 }},
+  "variant": {{ mhc_variant.id | json }},
+  "variants": [{%- for v in product.variants -%}{"id": {{ v.id }}, "title": {{ v.title | json }}, "price": {{ v.price }}, "available": {{ v.available | json }}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
+}
+</script>
+
+<style>
+  .mhc,.mhc-sheet{--mhc-gold:#cca43b;--mhc-gold2:#e9cf7a;--mhc-brown:#1d1107;--mhc-brown2:#3a2211;--mhc-ink:#1a1107;--mhc-muted:#76644a;--mhc-line:#e6dcc7;--mhc-bg:#fffdf8;--mhc-ease:cubic-bezier(.22,1,.36,1)}
+  .mhc{margin:.4rem 0 .2rem;display:none}
+  .mhc.is-ready{display:block}
+  /* only where our script is running: hide Fastrr's button, Add to cart and the old prepaid pill of THIS product form */
+  .mhc-on-form .product-form__submit,.mhc-on-form .shiprocket-headless,.mhc-on-form .sr-headless-checkout,.mhc-on-form .shopify-payment-button,.mhc-on-form .prepaid-savings-pill{display:none!important}
+  .mhc [hidden],.mhc-sheet [hidden]{display:none!important}
+
+  /* ---------- page buttons ---------- */
+  .mhc-btns{display:flex;flex-direction:column;gap:1rem}
+  .mhc-btn{position:relative;overflow:hidden;width:100%;min-height:6.2rem;padding:1rem 1.4rem;border-radius:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25rem;font-family:var(--font-body-family);-webkit-tap-highlight-color:transparent;transition:transform .18s var(--mhc-ease),box-shadow .25s var(--mhc-ease);letter-spacing:.06em;touch-action:manipulation}
+  .mhc-btn:active{transform:scale(.975)}
+  .mhc-btn[disabled]{opacity:.5;cursor:not-allowed;animation:none}
+  .mhc-btn--cod{background:linear-gradient(135deg,var(--mhc-brown) 0%,var(--mhc-brown2) 100%);color:var(--mhc-gold);border:1.5px solid rgba(204,164,59,.55);box-shadow:0 10px 24px -8px rgba(29,17,7,.55),inset 0 1px 0 rgba(233,207,122,.18);animation:mhcGlow 3.2s ease-in-out infinite}
+  .mhc-btn--pre{background:linear-gradient(135deg,#f3dc8e 0%,var(--mhc-gold) 55%,#b18a2b 100%);color:var(--mhc-ink);border:1.5px solid #b18a2b;box-shadow:0 10px 22px -10px rgba(177,138,43,.8),inset 0 1px 0 rgba(255,255,255,.45);padding-top:2.3rem}
+  .mhc-btn__row{display:flex;align-items:center;gap:.7rem}
+  .mhc-btn__main{font-family:var(--font-heading-family);font-weight:700;font-size:1.55rem;line-height:1.2}
+  .mhc-btn__sub{font-size:1.15rem;letter-spacing:.02em;opacity:.85;font-weight:500}
+  .mhc-btn--cod .mhc-btn__sub{color:#e9d9a8}
+  .mhc-btn__sub s{opacity:.7}
+  .mhc-ico{width:2.2rem;height:2.2rem;flex:none}
+  .mhc-btn__tag{position:absolute;top:0;left:50%;transform:translateX(-50%);white-space:nowrap;background:var(--mhc-brown);color:var(--mhc-gold2);font-size:.95rem;font-weight:800;letter-spacing:.08em;padding:.3rem .8rem;border-radius:0 0 10px 10px}
+  .mhc-btn__shine{position:absolute;top:-60%;left:-40%;width:35%;height:220%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent);transform:rotate(22deg) translateX(-160%);animation:mhcShine 4.2s ease-in-out infinite;pointer-events:none}
+  .mhc-btn--pre .mhc-btn__shine{animation-delay:2.1s;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent)}
+  @keyframes mhcShine{0%{transform:rotate(22deg) translateX(-160%)}28%,100%{transform:rotate(22deg) translateX(520%)}}
+  @keyframes mhcGlow{0%,100%{box-shadow:0 10px 24px -8px rgba(29,17,7,.55),0 0 0 0 rgba(204,164,59,0)}50%{box-shadow:0 12px 28px -8px rgba(29,17,7,.6),0 0 0 6px rgba(204,164,59,.14)}}
+
+  /* ---------- overlay + full-height sheet ---------- */
+  .mhc-overlay{position:fixed;inset:0;z-index:2147483647;background:rgba(18,11,4,0);transition:background .3s ease;-webkit-tap-highlight-color:transparent}
+  .mhc-overlay.is-open{background:rgba(18,11,4,.6)}
+  html.mhc-on #PBarNextFrameWrapper,html.mhc-on #PBarNextFrame,html.mhc-on #preview-bar-iframe{display:none!important}
+  .mhc-sheet{position:absolute;left:0;right:0;top:10px;bottom:0;display:flex;flex-direction:column;background:var(--mhc-bg);border-radius:18px 18px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.28);transform:translateY(105%);transition:transform .45s var(--mhc-ease);font-family:var(--font-body-family);color:var(--mhc-ink);overflow:hidden;will-change:transform}
+  .mhc-overlay.is-open .mhc-sheet{transform:translateY(0)}
+  .mhc-sheet.is-drag{transition:none}
+  @media (min-width:750px){
+    .mhc-sheet{left:50%;right:auto;top:50%;bottom:auto;width:460px;height:min(760px,90vh);border-radius:18px;transform:translate(-50%,-46%) scale(.97);opacity:0;transition:transform .38s var(--mhc-ease),opacity .25s ease}
+    .mhc-overlay.is-open .mhc-sheet{transform:translate(-50%,-50%);opacity:1}
+    .mhc-grab{visibility:hidden;height:.6rem!important;padding:0!important}
+  }
+
+  .mhc-top{flex:none;background:var(--mhc-bg);border-bottom:1px solid #f0e7d6;padding:0 1.6rem 1rem;touch-action:none;cursor:grab}
+  .mhc-grab{display:flex;justify-content:center;padding:.8rem 0 .9rem}
+  .mhc-grab span{width:4.4rem;height:.45rem;border-radius:9px;background:#ddd0b6}
+  .mhc-head{display:flex;align-items:center;gap:1.1rem}
+  .mhc-head__img{width:4.4rem;height:4.4rem;border-radius:10px;object-fit:cover;border:1px solid var(--mhc-line);flex:none}
+  .mhc-head__txt{flex:1;min-width:0}
+  .mhc-head__eyebrow{margin:0;font-size:1rem;letter-spacing:.14em;text-transform:uppercase;color:#a07f2a;font-weight:600}
+  .mhc-head__title{margin:.1rem 0 0;font-family:var(--font-heading-family);font-size:1.6rem;line-height:1.25;font-weight:700;color:var(--mhc-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mhc-x{flex:none;width:3.6rem;height:3.6rem;border-radius:50%;border:0;background:#f4ede0;color:#5b4630;display:grid;place-items:center;cursor:pointer;transition:transform .2s,background .2s}
+  .mhc-x:active{transform:scale(.92)}
+  .mhc-x svg{width:1.8rem;height:1.8rem}
+
+  .mhc-main{flex:1;min-height:0;display:flex;flex-direction:column;margin:0}
+  .mhc-body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:1.4rem 1.6rem 2.4rem;scroll-behavior:smooth;scroll-padding:2rem}
+  .mhc-body::-webkit-scrollbar{width:0}
+  .mhc-step{margin:1.4rem 0 .8rem;font-size:1.15rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9c7a24}
+  .mhc-step:first-child{margin-top:0}
+
+  .mhc-chips{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:.8rem}
+  .mhc-chip{display:flex;flex-direction:column;align-items:flex-start;gap:.2rem;padding:1rem 1.2rem;border-radius:12px;border:1.5px solid var(--mhc-line);background:#fff;cursor:pointer;font-family:inherit;color:var(--mhc-ink);transition:border-color .2s,box-shadow .2s,transform .15s;text-align:left}
+  .mhc-chip__t{font-size:1.25rem;font-weight:600;line-height:1.3}
+  .mhc-chip__p{font-size:1.35rem;color:#8a6a1d;font-weight:700}
+  .mhc-chip.is-on{border-color:var(--mhc-gold);background:linear-gradient(180deg,#fffaf0,#fff4dc);box-shadow:0 0 0 3px rgba(204,164,59,.18)}
+  .mhc-chip:active{transform:scale(.98)}
+
+  .mhc-pay{display:grid;gap:.8rem}
+  .mhc-pay__opt{display:flex;align-items:center;gap:1.1rem;width:100%;padding:1.1rem 1.3rem;border-radius:14px;border:1.5px solid var(--mhc-line);background:#fff;cursor:pointer;text-align:left;font-family:inherit;color:var(--mhc-ink);transition:border-color .2s,background .2s,box-shadow .2s}
+  .mhc-pay__opt.is-on{border-color:var(--mhc-gold);background:#fffaf0;box-shadow:0 0 0 3px rgba(204,164,59,.16)}
+  .mhc-pay__txt{display:flex;flex-direction:column;flex:1;gap:.1rem}
+  .mhc-pay__txt b{font-size:1.4rem;font-weight:700}
+  .mhc-pay__txt small{font-size:1.15rem;color:var(--mhc-muted)}
+  .mhc-pay__txt em{font-style:normal;color:#1f7a3d;font-weight:700}
+  .mhc-pay__amt{font-family:var(--font-heading-family);font-weight:700;font-size:1.55rem}
+  .mhc-radio{width:2rem;height:2rem;border-radius:50%;border:2px solid #cdbf9f;flex:none;position:relative;transition:border-color .2s}
+  .mhc-radio::after{content:'';position:absolute;inset:3px;border-radius:50%;background:var(--mhc-gold);transform:scale(0);transition:transform .25s var(--mhc-ease)}
+  .is-on>.mhc-radio{border-color:var(--mhc-gold)}
+  .is-on>.mhc-radio::after{transform:scale(1)}
+
+  /* ---------- fields ---------- */
+  .mhc-fields{display:grid;gap:1rem}
+  .mhc-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:1rem}
+  .mhc-f{position:relative}
+  .mhc-in{display:block;width:100%;height:5.4rem;padding:1.9rem 1.3rem .6rem;border-radius:12px;border:1.5px solid #e2d7c1;background:#fff;font-family:var(--font-body-family);font-size:16px;line-height:2.2rem;color:var(--mhc-ink);outline:none;transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none;box-sizing:border-box;margin:0}
+  .mhc-in:-webkit-autofill{-webkit-box-shadow:0 0 0 40px #fff inset;-webkit-text-fill-color:var(--mhc-ink)}
+  .mhc-f label{position:absolute;left:1.35rem;top:1.7rem;font-size:1.45rem;line-height:2rem;color:#8e7f68;pointer-events:none;transform-origin:left top;transition:transform .2s var(--mhc-ease),color .2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 2.6rem)}
+  .mhc-in:focus{border-color:var(--mhc-gold);box-shadow:0 0 0 3px rgba(204,164,59,.18)}
+  .mhc-in:focus+label,.mhc-in:not(:placeholder-shown)+label{transform:translateY(-1.15rem) scale(.78);color:#9c7a24}
+  .mhc-f--select .mhc-in+label{transform:none;color:#8e7f68}
+  .mhc-f--select.has-val .mhc-in+label,.mhc-f--select .mhc-in:focus+label{transform:translateY(-1.15rem) scale(.78);color:#9c7a24}
+  .mhc-f--select select{padding-right:3.6rem;background-image:linear-gradient(45deg,transparent 50%,#9c7a24 50%),linear-gradient(135deg,#9c7a24 50%,transparent 50%);background-position:calc(100% - 2rem) 2.5rem,calc(100% - 1.5rem) 2.5rem;background-size:5px 5px;background-repeat:no-repeat}
+  /* phone: label always on top, +91 sits on the same line as the number */
+  .mhc-f--phone label{left:1.35rem;transform:translateY(-1.15rem) scale(.78);color:#9c7a24;z-index:1}
+  .mhc-f--phone .mhc-in{padding-left:7.6rem;letter-spacing:.06em;font-weight:500}
+  .mhc-f--phone .mhc-in::placeholder{color:#c9bba0;letter-spacing:.06em;font-weight:400}
+  .mhc-cc{position:absolute;left:1.35rem;top:1.9rem;height:2.2rem;display:flex;align-items:center;gap:.45rem;font-size:16px;line-height:2.2rem;font-weight:600;color:#3d2c19;padding-right:.9rem;border-right:1.5px solid #e2d7c1;pointer-events:none}
+  .mhc-flag{display:block;width:1.9rem;height:1.3rem;border-radius:2px;background:linear-gradient(#ff9933 0 33.3%,#fff 33.3% 66.6%,#138808 66.6%);box-shadow:0 0 0 1px rgba(0,0,0,.12);position:relative}
+  .mhc-flag::after{content:'';position:absolute;left:50%;top:50%;width:.36rem;height:.36rem;margin:-.18rem 0 0 -.18rem;border-radius:50%;border:1px solid #000080}
+  .mhc-f--phone .mhc-in{padding-left:8.4rem}
+  .mhc-ok{position:absolute;right:1.2rem;top:1.7rem;width:2rem;height:2rem;border-radius:50%;background:#1f7a3d;opacity:0;transform:scale(.4);transition:opacity .2s,transform .25s var(--mhc-ease)}
+  .mhc-ok::after{content:'';position:absolute;left:.7rem;top:.35rem;width:.5rem;height:.95rem;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .mhc-f.is-valid .mhc-ok{opacity:1;transform:scale(1)}
+  .mhc-err{display:none;color:#b3261e;font-size:1.2rem;margin:.4rem 0 0 .3rem}
+  .mhc-count{display:block;text-align:right;font-size:1.1rem;color:#a3937a;margin:.35rem .4rem 0 0;transition:color .2s}
+  .mhc-count.is-ok{color:#1f7a3d;font-weight:600}
+  .mhc-f.is-bad .mhc-count{color:#b3261e}
+  .mhc-f.is-bad .mhc-in{border-color:#d9534f;box-shadow:0 0 0 3px rgba(217,83,79,.12)}
+  .mhc-f.is-bad .mhc-err{display:block}
+  .mhc-f.is-bad{animation:mhcShake .35s}
+  @keyframes mhcShake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+  .mhc-hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0}
+  .mhc-pinok{display:block;font-size:1.2rem;color:#1f7a3d;margin:-.3rem 0 0 .3rem;font-weight:500}
+
+  .mhc-sum{margin-top:1.6rem;padding:1.1rem 1.3rem;border-radius:12px;background:#faf5ea;border:1px dashed rgba(204,164,59,.4);display:grid;gap:.5rem;font-size:1.3rem;color:#5b4630}
+  .mhc-sum>div{display:flex;justify-content:space-between;gap:1rem}
+  .mhc-sum__off{color:#1f7a3d;font-weight:600}
+  .mhc-free{color:#1f7a3d;font-weight:700}
+  .mhc-sum__tot{padding-top:.5rem;border-top:1px solid #eadfc8;font-size:1.5rem;font-weight:700;color:var(--mhc-ink)}
+
+  /* ---------- fixed footer ---------- */
+  .mhc-foot{flex:none;padding:1rem 1.6rem calc(.9rem + env(safe-area-inset-bottom));background:var(--mhc-bg);border-top:1px solid #f0e7d6;box-shadow:0 -10px 24px -16px rgba(29,17,7,.35)}
+  .mhc-msg{margin:0 0 .8rem;padding:.9rem 1.2rem;border-radius:10px;background:#fdecea;color:#8c1d18;font-size:1.3rem;line-height:1.4}
+  .mhc-submit{position:relative;overflow:hidden;width:100%;height:5.6rem;border:0;border-radius:14px;cursor:pointer;background:linear-gradient(135deg,var(--mhc-brown) 0%,var(--mhc-brown2) 100%);color:var(--mhc-gold2);font-family:var(--font-heading-family);font-weight:700;font-size:1.6rem;letter-spacing:.05em;box-shadow:0 12px 26px -12px rgba(29,17,7,.7);transition:transform .15s var(--mhc-ease);-webkit-tap-highlight-color:transparent}
+  .mhc-submit:active{transform:scale(.98)}
+  .mhc-submit.is-pre{background:linear-gradient(135deg,#f3dc8e 0%,var(--mhc-gold) 55%,#b18a2b 100%);color:var(--mhc-ink)}
+  .mhc-submit--light{background:#fff;color:var(--mhc-ink);border:1.5px solid var(--mhc-gold);box-shadow:none;margin-top:1.6rem}
+  .mhc-submit__shine{position:absolute;top:-60%;left:-40%;width:30%;height:220%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:rotate(22deg) translateX(-160%);animation:mhcShine 3.6s ease-in-out infinite;pointer-events:none}
+  .mhc-submit__txt{position:relative;z-index:1;display:inline-flex;align-items:center;gap:.8rem}
+  .mhc-submit__bar{position:absolute;left:0;right:0;bottom:0;height:4px;background:rgba(255,255,255,.12);opacity:0;transition:opacity .2s}
+  .mhc-submit__bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--mhc-gold),#fff3c4,var(--mhc-gold));border-radius:0 4px 4px 0}
+  .mhc-submit.is-busy{pointer-events:none}
+  .mhc-submit.is-busy .mhc-submit__bar{opacity:1}
+  .mhc-submit.is-busy .mhc-submit__bar i{animation:mhcLoad 2.4s cubic-bezier(.1,.7,.3,1) forwards}
+  .mhc-submit.is-done .mhc-submit__bar i{animation:none;width:100%;transition:width .25s ease}
+  @keyframes mhcLoad{0%{width:0}60%{width:72%}100%{width:90%}}
+  .mhc-dots{display:inline-flex;gap:3px}
+  .mhc-dots i{width:5px;height:5px;border-radius:50%;background:currentColor;animation:mhcDot 1s infinite ease-in-out}
+  .mhc-dots i:nth-child(2){animation-delay:.15s}.mhc-dots i:nth-child(3){animation-delay:.3s}
+  @keyframes mhcDot{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+  .mhc-trust{display:flex;justify-content:center;flex-wrap:wrap;gap:.3rem 1.3rem;margin:.7rem 0 0;font-size:1.1rem;color:var(--mhc-muted)}
+  .mhc-sheet.kb .mhc-trust{display:none}
+
+  /* ---------- wait + success ---------- */
+  .mhc-view{animation:mhcIn .35s var(--mhc-ease)}
+  @keyframes mhcIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .mhc-view--wait{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem 2.4rem 6rem}
+  .mhc-view--wait h3{font-family:var(--font-heading-family);font-size:1.9rem;margin:1.8rem 0 .6rem}
+  .mhc-view--wait p{font-size:1.35rem;color:var(--mhc-muted);margin:0;max-width:30rem}
+  .mhc-spin{width:5.2rem;height:5.2rem;border-radius:50%;border:4px solid #f0e6d0;border-top-color:var(--mhc-gold);animation:mhcRot .8s linear infinite}
+  @keyframes mhcRot{to{transform:rotate(360deg)}}
+  .mhc-view--ok{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;display:flex}
+  .mhc-ok__inner{margin:auto;width:100%;max-width:42rem;text-align:center;padding:2.4rem 2rem calc(2.4rem + env(safe-area-inset-bottom));position:relative}
+  .mhc-check{width:9rem;height:9rem;margin:0 auto;display:block}
+  .mhc-check circle{fill:#1f7a3d;stroke:none;transform-origin:center;animation:mhcPop .5s var(--mhc-ease) both}
+  .mhc-check path{fill:none;stroke:#fff;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:48;stroke-dashoffset:48;animation:mhcDraw .45s .35s ease-out forwards}
+  @keyframes mhcPop{0%{transform:scale(0)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
+  @keyframes mhcDraw{to{stroke-dashoffset:0}}
+  .mhc-ok__title{font-family:var(--font-heading-family);font-size:2.5rem;margin:1.4rem 0 .3rem;color:var(--mhc-ink)}
+  .mhc-ok__no{margin:0 0 1.6rem;font-size:1.4rem;color:var(--mhc-muted)}
+  .mhc-ok__no b{color:var(--mhc-ink);letter-spacing:.04em}
+  .mhc-ok__card{display:grid;gap:.7rem;text-align:left;padding:1.3rem 1.4rem;border-radius:14px;background:#faf5ea;border:1px solid #efe4cc;font-size:1.3rem}
+  .mhc-ok__card div{display:flex;justify-content:space-between;gap:1.2rem}
+  .mhc-ok__card span{color:var(--mhc-muted);flex:none}
+  .mhc-ok__card b{text-align:right;font-weight:600}
+  .mhc-ok__note{font-size:1.3rem;color:var(--mhc-muted);margin:1.3rem 0 0;line-height:1.5}
+  .mhc-burst{position:absolute;left:50%;top:7rem;width:0;height:0;pointer-events:none}
+  .mhc-burst i{position:absolute;width:8px;height:12px;border-radius:2px;opacity:0;animation:mhcConf 1.1s cubic-bezier(.15,.7,.3,1) forwards}
+  @keyframes mhcConf{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(var(--x),var(--y)) rotate(var(--r))}}
+
+  @media (prefers-reduced-motion:reduce){.mhc-btn,.mhc-btn__shine,.mhc-submit__shine{animation:none!important}.mhc-sheet,.mhc-overlay{transition:none}.mhc-burst{display:none}}
+</style>
+
+<script>
+(function () {
+  if (window.MHC) return;
+  var root = document.getElementById('mhc-root');
+  var ov = document.getElementById('mhc-overlay');
+  if (!root || !ov) return;
+  document.body.appendChild(ov); // escape transformed parents so the sheet is truly fixed
+  // switch this product form over to our buttons (quick-add modals, where this script never runs, keep Fastrr)
+  (function () {
+    var pf = document.getElementById(root.getAttribute('data-form-id') || '');
+    var wrap = pf && (pf.closest('product-form') || pf.closest('.product-form') || pf.parentElement);
+    if (wrap) wrap.classList.add('mhc-on-form');
+    root.classList.add('is-ready');
+  })();
+
+  var D = JSON.parse(document.getElementById('mhc-data').textContent);
+  var PIXEL = '596578329419010';
+  var API = (root.getAttribute('data-api') || '').replace(/\/$/, '');
+  var qs = new URLSearchParams(location.search);
+  var DEMO = !API || qs.get('mh_demo') === '1';
+  var TEST_KEY = (function () { try { var k = qs.get('mh_test'); if (k) sessionStorage.setItem('mh_test', k); return k || sessionStorage.getItem('mh_test') || ''; } catch (e) { return qs.get('mh_test') || ''; } })();
+  var sheet = ov.querySelector('.mhc-sheet');
+  var form = ov.querySelector('.mhc-main');
+  var body = ov.querySelector('.mhc-body');
+  var $ = function (s, c) { return (c || ov).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || ov).querySelectorAll(s)); };
+  var state = { mode: 'cod', variant: null, busy: false, audio: null, eid: '' };
+
+  var STATES = ['Andaman and Nicobar Islands','Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chandigarh','Chhattisgarh','Dadra and Nagar Haveli and Daman and Diu','Delhi','Goa','Gujarat','Haryana','Himachal Pradesh','Jammu and Kashmir','Jharkhand','Karnataka','Kerala','Ladakh','Lakshadweep','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Puducherry','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal'];
+  var sel = $('#mhc-state');
+  STATES.forEach(function (s) { var o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o); });
+
+  // ---------- helpers ----------
+  var rupee = function (paise) { return '₹' + Math.round(paise / 100).toLocaleString('en-IN'); };
+  var store = {
+    get: function (k) { try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  };
+  var uid = function () { return 'mh' + Date.now().toString(36) + Math.random().toString(36).slice(2, 9); };
+  var cookie = function (n) { var m = document.cookie.match('(?:^|; )' + n + '=([^;]*)'); return m ? decodeURIComponent(m[1]) : ''; };
+  var vib = function (p) { try { navigator.vibrate && navigator.vibrate(p); } catch (e) {} };
+  var track = function (ev, params, eventID) { try { if (window.fbq) fbq('trackSingle', PIXEL, ev, params || {}, eventID ? { eventID: eventID } : undefined); } catch (e) {} };
+  var gtagEv = function (ev, p) { try { if (window.gtag) gtag('event', ev, p); } catch (e) {} };
+  var digits = function (s) { return String(s || '').replace(/\D/g, ''); };
+
+  // attribution (same note keys Fastrr used)
+  (function captureAttr() {
+    var keys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'fbclid', 'gclid'];
+    var hit = keys.some(function (k) { return qs.get(k); });
+    if (hit) {
+      var a = { landing_page_url: location.href, ts: Date.now() };
+      keys.forEach(function (k) { if (qs.get(k)) a[k] = qs.get(k); });
+      store.set('mh_attr', a);
+    } else if (!store.get('mh_attr')) store.set('mh_attr', { landing_page_url: location.href, ts: Date.now() });
+  })();
+
+  // ---------- variant + prices ----------
+  function pageVariantId() {
+    var pf = document.getElementById(root.getAttribute('data-form-id') || '');
+    var inp = (pf && pf.querySelector('input[name="id"]')) || document.querySelector('form[action*="/cart/add"] input[name="id"]');
+    return inp && inp.value ? Number(inp.value) : D.variant;
+  }
+  function variantById(id) { for (var i = 0; i < D.variants.length; i++) if (D.variants[i].id === Number(id)) return D.variants[i]; return D.variants[0]; }
+  function price() { return state.variant.price; }
+  function prepaidPrice(p) { return Math.max(p - D.off, 100); }
+  function payable() { return state.mode === 'prepaid' ? prepaidPrice(price()) : price(); }
+
+  function render() {
+    $$('.mhc-chip').forEach(function (c) { var v = variantById(c.dataset.mhcVariant), on = v.id === state.variant.id; c.classList.toggle('is-on', on); c.setAttribute('aria-checked', on); c.querySelector('.mhc-chip__p').textContent = rupee(v.price); });
+    $$('.mhc-pay__opt').forEach(function (b) { var on = b.dataset.mhcMode === state.mode; b.classList.toggle('is-on', on); b.setAttribute('aria-checked', on); });
+    $('[data-mhc-amt="cod"]').textContent = rupee(price());
+    $('[data-mhc-amt="prepaid"]').textContent = rupee(prepaidPrice(price()));
+    $('[data-mhc-sum="mrp"]').textContent = rupee(price());
+    $('[data-mhc-sum="total"]').textContent = rupee(payable());
+    $('[data-mhc-sum-offrow]').hidden = state.mode !== 'prepaid';
+    $('[data-mhc-email]').hidden = state.mode !== 'prepaid';
+    $('.mhc-submit').classList.toggle('is-pre', state.mode === 'prepaid');
+    $('[data-mhc-cta]').textContent = state.mode === 'prepaid' ? 'PAY ' + rupee(payable()) + ' SECURELY →' : 'CONFIRM ORDER · ' + rupee(payable()) + ' COD';
+  }
+  function syncPageButtons() {
+    var v = variantById(pageVariantId());
+    var p = root.querySelector('[data-mhc-btnprice]'), m = root.querySelector('[data-mhc-btnmrp]');
+    if (p) p.textContent = rupee(prepaidPrice(v.price));
+    if (m) m.textContent = rupee(v.price);
+  }
+  document.addEventListener('change', function (e) { if (e.target && e.target.closest && e.target.closest('variant-selects, variant-radios, .product-form__input')) setTimeout(syncPageButtons, 60); });
+  syncPageButtons(); setTimeout(syncPageButtons, 400);
+
+  // ---------- sheet sizing: always fits the visible screen, also with the keyboard open ----------
+  var GAP = 10;
+  function fit() {
+    if (ov.hidden) return;
+    if (window.innerWidth >= 750) { sheet.style.top = sheet.style.height = sheet.style.bottom = ''; sheet.classList.remove('kb'); return; }
+    var vv = window.visualViewport;
+    var h = vv ? vv.height : window.innerHeight, top = vv ? vv.offsetTop : 0;
+    sheet.style.top = (top + GAP) + 'px';
+    sheet.style.height = Math.max(h - GAP, 320) + 'px';
+    sheet.style.bottom = 'auto';
+    sheet.classList.toggle('kb', h < window.innerHeight - 140);
+  }
+  if (window.visualViewport) { visualViewport.addEventListener('resize', fit); visualViewport.addEventListener('scroll', fit); }
+  window.addEventListener('resize', fit);
+
+  // ---------- open / close (+ phone back button closes the popup) ----------
+  var lastFocus = null, pushed = false;
+  function open(mode) {
+    if (state.busy) return;
+    state.mode = mode === 'prepaid' ? 'prepaid' : 'cod';
+    state.variant = variantById(pageVariantId());
+    restore(); showView('form'); render(); msg('');
+    lastFocus = document.activeElement;
+    ov.hidden = false; fit(); void ov.offsetHeight;
+    ov.classList.add('is-open');
+    document.documentElement.style.overflow = 'hidden';
+    document.documentElement.classList.add('mhc-on');
+    body.scrollTop = 0;
+    try { history.pushState({ mhc: 1 }, ''); pushed = true; } catch (e) {}
+    vib(12);
+    state.eid = uid();
+    track('InitiateCheckout', { value: payable() / 100, currency: 'INR', content_ids: [String(state.variant.id)], content_type: 'product', num_items: 1 }, 'ic_' + state.eid);
+    gtagEv('begin_checkout', { currency: 'INR', value: payable() / 100, items: [{ item_id: String(state.variant.id), item_name: D.product, item_variant: state.variant.title, price: price() / 100, quantity: 1 }] });
+  }
+  function hide() {
+    ov.classList.remove('is-open');
+    sheet.style.transform = '';
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    setTimeout(function () { ov.hidden = true; document.documentElement.style.overflow = ''; document.documentElement.classList.remove('mhc-on'); }, 420);
+    if (lastFocus && lastFocus.focus) try { lastFocus.focus({ preventScroll: true }); } catch (e) {}
+  }
+  function close() {
+    if (state.busy || ov.hidden) return;
+    if (pushed) { pushed = false; history.back(); return; } // popstate below hides it
+    hide();
+  }
+  window.addEventListener('popstate', function () { if (!ov.hidden && !state.busy) { pushed = false; hide(); } });
+  function showView(v) { $$('.mhc-view').forEach(function (el) { el.hidden = el.dataset.view !== v; }); }
+
+  root.addEventListener('click', function (e) { var b = e.target.closest('[data-mhc-open]'); if (b && !b.disabled) open(b.dataset.mhcOpen); });
+  ov.addEventListener('click', function (e) {
+    if (e.target === ov || e.target.closest('[data-mhc-close]')) return close();
+    var c = e.target.closest('.mhc-chip'); if (c && !c.disabled) { state.variant = variantById(c.dataset.mhcVariant); render(); vib(8); return; }
+    var p = e.target.closest('.mhc-pay__opt'); if (p) { state.mode = p.dataset.mhcMode; render(); vib(8); }
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !ov.hidden) close(); });
+
+  // drag the header down to close
+  (function swipe() {
+    var top = $('.mhc-top'), y0 = null, dy = 0;
+    top.addEventListener('touchstart', function (e) { if (e.target.closest('.mhc-x')) return; y0 = e.touches[0].clientY; dy = 0; sheet.classList.add('is-drag'); }, { passive: true });
+    top.addEventListener('touchmove', function (e) { if (y0 === null) return; dy = Math.max(0, e.touches[0].clientY - y0); sheet.style.transform = 'translateY(' + dy + 'px)'; }, { passive: true });
+    top.addEventListener('touchend', function () { if (y0 === null) return; sheet.classList.remove('is-drag'); y0 = null; if (dy > 120) close(); else sheet.style.transform = ''; });
+  })();
+
+  // ---------- form ----------
+  var F = { name: $('#mhc-name'), phone: $('#mhc-phone'), pincode: $('#mhc-pin'), city: $('#mhc-city'), state: sel, address: $('#mhc-address'), landmark: $('#mhc-landmark'), email: $('#mhc-email') };
+  var ORDER = ['name', 'phone', 'pincode', 'city', 'state', 'address', 'landmark', 'email'];
+  function fmtPhone(d) { return d.length > 5 ? d.slice(0, 5) + ' ' + d.slice(5) : d; }
+  function restore() {
+    var s = store.get('mh_ck_addr');
+    if (s) Object.keys(F).forEach(function (k) { if (s[k] && !F[k].value) F[k].value = k === 'phone' ? fmtPhone(digits(s[k]).slice(-10)) : s[k]; });
+    sel.closest('.mhc-f').classList.toggle('has-val', !!sel.value);
+    markValid();
+  }
+  var saveT = null;
+  function save() { clearTimeout(saveT); saveT = setTimeout(function () { var s = {}; Object.keys(F).forEach(function (k) { s[k] = k === 'phone' ? digits(F[k].value) : F[k].value.trim(); }); store.set('mh_ck_addr', s); }, 300); }
+  var MIN_ADDR = 20;
+  function markValid() {
+    F.phone.closest('.mhc-f').classList.toggle('is-valid', /^[6-9]\d{9}$/.test(digits(F.phone.value)));
+    F.pincode.closest('.mhc-f').classList.toggle('is-valid', /^[1-9]\d{5}$/.test(F.pincode.value));
+    ['address', 'landmark'].forEach(function (k) {
+      var n = F[k].value.trim().length, c = $('[data-count="' + k + '"]');
+      if (c) { c.textContent = n >= MIN_ADDR ? '✓ ' + n + ' letters' : n + '/' + MIN_ADDR; c.classList.toggle('is-ok', n >= MIN_ADDR); }
+    });
+  }
+  F.address.addEventListener('input', markValid);
+  F.landmark.addEventListener('input', markValid);
+
+  F.phone.addEventListener('input', function () {
+    var d = digits(F.phone.value);
+    if (d.length > 10 && (d.indexOf('91') === 0 || d.indexOf('0') === 0)) d = d.slice(-10);
+    F.phone.value = fmtPhone(d.slice(0, 10));
+    markValid();
+    if (d.length === 10 && /^[6-9]/.test(d) && document.activeElement === F.phone) setTimeout(function () { if (!F.pincode.value) F.pincode.focus(); }, 120);
+  });
+  sel.addEventListener('change', function () { sel.closest('.mhc-f').classList.toggle('has-val', !!sel.value); clearBad(sel); save(); });
+
+  // pincode -> state at once (prefix), city from India Post (slow, best effort)
+  var PFX3 = { '160': 'Chandigarh', '194': 'Ladakh', '403': 'Goa', '605': 'Puducherry', '737': 'Sikkim', '744': 'Andaman and Nicobar Islands', '790': 'Arunachal Pradesh', '791': 'Arunachal Pradesh', '792': 'Arunachal Pradesh', '793': 'Meghalaya', '794': 'Meghalaya', '795': 'Manipur', '796': 'Mizoram', '797': 'Nagaland', '798': 'Nagaland', '799': 'Tripura', '246': 'Uttarakhand', '247': 'Uttarakhand', '248': 'Uttarakhand', '249': 'Uttarakhand', '262': 'Uttarakhand', '263': 'Uttarakhand', '396': 'Gujarat' };
+  var PFX2 = { '11': 'Delhi', '12': 'Haryana', '13': 'Haryana', '14': 'Punjab', '15': 'Punjab', '16': 'Punjab', '17': 'Himachal Pradesh', '18': 'Jammu and Kashmir', '19': 'Jammu and Kashmir', '20': 'Uttar Pradesh', '21': 'Uttar Pradesh', '22': 'Uttar Pradesh', '23': 'Uttar Pradesh', '24': 'Uttar Pradesh', '25': 'Uttar Pradesh', '26': 'Uttar Pradesh', '27': 'Uttar Pradesh', '28': 'Uttar Pradesh', '30': 'Rajasthan', '31': 'Rajasthan', '32': 'Rajasthan', '33': 'Rajasthan', '34': 'Rajasthan', '36': 'Gujarat', '37': 'Gujarat', '38': 'Gujarat', '39': 'Gujarat', '40': 'Maharashtra', '41': 'Maharashtra', '42': 'Maharashtra', '43': 'Maharashtra', '44': 'Maharashtra', '45': 'Madhya Pradesh', '46': 'Madhya Pradesh', '47': 'Madhya Pradesh', '48': 'Madhya Pradesh', '49': 'Chhattisgarh', '50': 'Telangana', '51': 'Andhra Pradesh', '52': 'Andhra Pradesh', '53': 'Andhra Pradesh', '56': 'Karnataka', '57': 'Karnataka', '58': 'Karnataka', '59': 'Karnataka', '60': 'Tamil Nadu', '61': 'Tamil Nadu', '62': 'Tamil Nadu', '63': 'Tamil Nadu', '64': 'Tamil Nadu', '67': 'Kerala', '68': 'Kerala', '69': 'Kerala', '70': 'West Bengal', '71': 'West Bengal', '72': 'West Bengal', '73': 'West Bengal', '74': 'West Bengal', '75': 'Odisha', '76': 'Odisha', '77': 'Odisha', '78': 'Assam', '80': 'Bihar', '81': 'Jharkhand', '82': 'Jharkhand', '83': 'Jharkhand', '84': 'Bihar', '85': 'Bihar' };
+  var pinSeq = 0, pinHint = $('.mhc-pinok');
+  F.pincode.addEventListener('input', function () {
+    F.pincode.value = digits(F.pincode.value).slice(0, 6);
+    var pin = F.pincode.value;
+    markValid();
+    pinHint.hidden = true;
+    if (!/^[1-9]\d{5}$/.test(pin)) return;
+    var guess = PFX3[pin.slice(0, 3)] || PFX2[pin.slice(0, 2)];
+    if (guess) { sel.value = guess; sel.closest('.mhc-f').classList.add('has-val'); clearBad(sel); }
+    if (document.activeElement === F.pincode) setTimeout(function () { (F.city.value ? F.address : F.city).focus(); }, 150);
+    var my = ++pinSeq, ctl = window.AbortController ? new AbortController() : null;
+    var t = setTimeout(function () { ctl && ctl.abort(); }, 7000);
+    fetch('https://api.postalpincode.in/pincode/' + pin, ctl ? { signal: ctl.signal } : {})
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        clearTimeout(t);
+        if (my !== pinSeq) return;
+        var po = j && j[0] && j[0].Status === 'Success' && j[0].PostOffice && j[0].PostOffice[0];
+        if (!po) return;
+        if (!F.city.value) F.city.value = po.District;
+        var st = STATES.filter(function (s) { return s.toLowerCase() === String(po.State).toLowerCase(); })[0];
+        if (st) { sel.value = st; sel.closest('.mhc-f').classList.add('has-val'); }
+        clearBad(F.city); clearBad(sel); save();
+        pinHint.textContent = '📍 Delivering to ' + po.District + ', ' + po.State;
+        pinHint.hidden = false;
+        if (document.activeElement === F.city && F.city.value) F.address.focus();
+      }).catch(function () {});
+  });
+
+  function bad(el) { var f = el.closest('.mhc-f'); f.classList.remove('is-bad'); void f.offsetWidth; f.classList.add('is-bad'); }
+  function clearBad(el) { var f = el.closest('.mhc-f'); f && f.classList.remove('is-bad'); }
+  Object.keys(F).forEach(function (k) { F[k].addEventListener('input', function () { clearBad(F[k]); save(); }); });
+
+  // keyboard "Next" moves to the next field; the last one submits
+  ORDER.forEach(function (k, i) {
+    F[k].addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter' || F[k].tagName === 'SELECT') return;
+      e.preventDefault();
+      for (var j = i + 1; j < ORDER.length; j++) { var n = F[ORDER[j]]; if (n && !n.closest('[hidden]') && n.offsetParent !== null) { if (n.tagName === 'SELECT' && n.value) continue; n.focus(); return; } }
+      F[k].blur();
+      if (form.requestSubmit) form.requestSubmit(); else form.dispatchEvent(new Event('submit', { cancelable: true }));
+    });
+  });
+  // keep the focused field in the middle of the visible area (keyboard open)
+  body.addEventListener('focusin', function (e) {
+    var el = e.target; if (!el.matches || !el.matches('.mhc-in')) return;
+    setTimeout(function () { fit(); var f = el.closest('.mhc-f') || el; var r = f.getBoundingClientRect(), b = body.getBoundingClientRect(); if (r.top < b.top + 12 || r.bottom > b.bottom - 12) body.scrollTo({ top: body.scrollTop + (r.top - b.top) - (b.height - r.height) / 2, behavior: 'smooth' }); }, 320);
+  });
+
+  function validate() {
+    var ok = true, first = null;
+    var chk = function (el, cond) { if (!cond) { bad(el); ok = false; first = first || el; } };
+    chk(F.name, /[A-Za-zऀ-ॿ]{2,}/.test(F.name.value) && F.name.value.trim().length >= 3);
+    chk(F.phone, /^[6-9]\d{9}$/.test(digits(F.phone.value)));
+    chk(F.pincode, /^[1-9]\d{5}$/.test(F.pincode.value));
+    chk(F.city, F.city.value.trim().length >= 2);
+    chk(sel, !!sel.value);
+    chk(F.address, F.address.value.trim().length >= MIN_ADDR);
+    chk(F.landmark, F.landmark.value.trim().length >= MIN_ADDR);
+    if (state.mode === 'prepaid' && F.email.value && !/^\S+@\S+\.\S+$/.test(F.email.value)) chk(F.email, false);
+    if (first) {
+      var f = first.closest('.mhc-f'), r = f.getBoundingClientRect(), b = body.getBoundingClientRect();
+      body.scrollTo({ top: body.scrollTop + (r.top - b.top) - 70, behavior: 'smooth' });
+      msg('Please fill the highlighted details.');
+      vib([20, 40, 20]);
+    }
+    return ok;
+  }
+  function msg(t) { var m = $('.mhc-msg'); m.textContent = t || ''; m.hidden = !t; }
+
+  // ---------- sound + confetti ----------
+  function primeAudio() { try { var C = window.AudioContext || window.webkitAudioContext; if (!C) return; state.audio = state.audio || new C(); state.audio.resume && state.audio.resume(); } catch (e) {} }
+  function chime() {
+    var a = state.audio; if (!a) return;
+    try {
+      var now = a.currentTime;
+      [[880, 0], [1318.5, 0.13], [1760, 0.26]].forEach(function (n) {
+        var o = a.createOscillator(), g = a.createGain();
+        o.type = 'sine'; o.frequency.value = n[0];
+        g.gain.setValueAtTime(0.0001, now + n[1]);
+        g.gain.exponentialRampToValueAtTime(0.25, now + n[1] + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + n[1] + 0.7);
+        o.connect(g); g.connect(a.destination); o.start(now + n[1]); o.stop(now + n[1] + 0.75);
+      });
+    } catch (e) {}
+  }
+  function confetti() {
+    var b = $('.mhc-burst'); b.innerHTML = '';
+    var cols = ['#cca43b', '#e9cf7a', '#1f7a3d', '#3a2211', '#f3dc8e'];
+    for (var i = 0; i < 28; i++) {
+      var p = document.createElement('i'), ang = Math.random() * Math.PI * 2, d = 70 + Math.random() * 120;
+      p.style.background = cols[i % cols.length];
+      p.style.setProperty('--x', Math.cos(ang) * d + 'px');
+      p.style.setProperty('--y', Math.sin(ang) * d + 40 + 'px');
+      p.style.setProperty('--r', (Math.random() * 540 - 270) + 'deg');
+      p.style.animationDelay = (Math.random() * 0.12) + 's';
+      b.appendChild(p);
+    }
+  }
+
+  function success(o) {
+    var btn = $('.mhc-submit');
+    btn.classList.add('is-done');
+    setTimeout(function () {
+      state.busy = false;
+      btn.classList.remove('is-busy', 'is-done');
+      if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+      $('[data-mhc-okno]').innerHTML = 'Order number <b>' + (o.order || '') + '</b>';
+      $('[data-mhc-okprod]').textContent = (o.variantTitle || state.variant.title);
+      $('[data-mhc-okpay]').textContent = o.mode === 'prepaid' ? 'Paid online · ' + rupee(o.total) : 'Cash on Delivery · ' + rupee(o.total);
+      $('[data-mhc-okaddr]').textContent = [F.city.value.trim(), F.pincode.value].filter(Boolean).join(' - ') || '—';
+      $('[data-mhc-oknote]').textContent = o.mode === 'prepaid'
+        ? 'Payment received. We will pack and ship your order soon.'
+        : 'Please keep ' + rupee(o.total) + ' ready at delivery. Our team may call you on +91 ' + fmtPhone(digits(F.phone.value)) + ' to confirm.';
+      showView('ok'); confetti(); chime(); vib([30, 50, 30]);
+      // after the PayU redirect the browser blocks sound until the first touch: play the chime on that touch
+      if (state.audio && state.audio.state !== 'running') {
+        var once = function () { ov.removeEventListener('pointerdown', once, true); primeAudio(); setTimeout(chime, 60); };
+        ov.addEventListener('pointerdown', once, true);
+      }
+    }, 260);
+    var params = { value: o.total / 100, currency: 'INR', content_ids: [String(o.variantId || state.variant.id)], content_type: 'product', num_items: 1, order_id: o.order };
+    if (!o.demo && !o.test) {
+      track('Purchase', params, o.eventId);
+      gtagEv('purchase', { transaction_id: o.order, value: o.total / 100, currency: 'INR', items: [{ item_id: String(o.variantId || state.variant.id), item_name: D.product, price: o.total / 100, quantity: 1 }] });
+      gtagEv('conversion', { send_to: 'AW-18555004443/CmsoCNH23bEdEJvM249F', value: o.total / 100, currency: 'INR', transaction_id: o.order });
+    }
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (state.busy) return;
+    msg('');
+    if (!validate()) return;
+    if (form.company_website && form.company_website.value) return;
+    primeAudio();
+    state.busy = true;
+    if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    var btn = $('.mhc-submit');
+    btn.classList.add('is-busy');
+    $('[data-mhc-cta]').innerHTML = (state.mode === 'prepaid' ? 'Opening payment' : 'Placing your order') + ' <span class="mhc-dots"><i></i><i></i><i></i></span>';
+    vib(15);
+    track('AddPaymentInfo', { value: payable() / 100, currency: 'INR', content_ids: [String(state.variant.id)], content_type: 'product' }, 'api_' + state.eid);
+    gtagEv('add_payment_info', { currency: 'INR', value: payable() / 100, payment_type: state.mode === 'prepaid' ? 'online' : 'cod' });
+
+    var payload = {
+      mode: state.mode, variant_id: state.variant.id, quantity: 1, idem: state.eid,
+      name: F.name.value.trim(), phone: digits(F.phone.value), address: F.address.value.trim(), landmark: F.landmark.value.trim(),
+      pincode: F.pincode.value, city: F.city.value.trim(), state: sel.value, email: F.email.value.trim(),
+      attr: store.get('mh_attr') || {}, page_url: location.href, fbp: cookie('_fbp'), fbc: cookie('_fbc'), ua: navigator.userAgent,
+      test_key: TEST_KEY
+    };
+
+    if (DEMO) {
+      setTimeout(function () {
+        var demoNo = '#DEMO-' + Math.floor(1000 + Math.random() * 9000);
+        if (state.mode === 'prepaid') { showView('wait'); setTimeout(function () { success({ demo: true, mode: 'prepaid', order: demoNo, total: payable() }); }, 1600); }
+        else success({ demo: true, mode: 'cod', order: demoNo, total: payable() });
+      }, 1100);
+      return;
+    }
+
+    var ctl = window.AbortController ? new AbortController() : null;
+    var tm = setTimeout(function () { ctl && ctl.abort(); }, 20000);
+    fetch(API + (state.mode === 'prepaid' ? '/prepaid/start' : '/cod'), {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload), signal: ctl ? ctl.signal : undefined
+    }).then(function (r) { return r.json().catch(function () { return { ok: false }; }); })
+      .then(function (j) {
+        clearTimeout(tm);
+        if (!j || !j.ok) throw new Error((j && j.error) || 'Order could not be placed. Please try again.');
+        if (state.mode === 'prepaid') return goPayU(j.payu);
+        success({ mode: 'cod', order: j.order, total: j.total, eventId: j.event_id, variantId: state.variant.id, variantTitle: j.variant_title, test: !!j.test });
+      })
+      .catch(function (err) {
+        clearTimeout(tm);
+        state.busy = false;
+        btn.classList.remove('is-busy');
+        render();
+        msg(err && err.name === 'AbortError' ? 'Network is slow. Please check your internet and tap again.' : (err && err.message ? err.message : 'Network problem. Please try again.'));
+        vib([20, 40, 20]);
+      });
+  });
+
+  function goPayU(p) {
+    showView('wait');
+    var f = document.createElement('form');
+    f.method = 'POST'; f.action = p.action; f.style.display = 'none';
+    Object.keys(p.fields).forEach(function (k) { var i = document.createElement('input'); i.type = 'hidden'; i.name = k; i.value = p.fields[k]; f.appendChild(i); });
+    document.body.appendChild(f);
+    setTimeout(function () { f.submit(); }, 350);
+  }
+
+  // ---------- back from PayU ----------
+  (function returnFromPayU() {
+    var ord = qs.get('mh_order'), paid = qs.get('mh_paid'), fail = qs.get('mh_pay');
+    if (!ord && !fail) return;
+    var total = Number(qs.get('mh_total') || 0), eid = qs.get('mh_eid'), vId = Number(qs.get('mh_v')) || 0, isT = qs.get('mh_t') === '1';
+    var clean = function () { ['mh_order', 'mh_paid', 'mh_pay', 'mh_total', 'mh_eid', 'mh_v', 'mh_t', 'mh_test'].forEach(function (k) { qs.delete(k); }); history.replaceState(null, '', location.pathname + (qs.toString() ? '?' + qs : '') + location.hash); };
+    setTimeout(function () {
+      clean();
+      state.variant = variantById(vId || pageVariantId());
+      if (ord && paid === '1') {
+        restore(); ov.hidden = false; fit(); void ov.offsetHeight; ov.classList.add('is-open'); document.documentElement.style.overflow = 'hidden'; document.documentElement.classList.add('mhc-on');
+        try { history.pushState({ mhc: 1 }, ''); pushed = true; } catch (e) {}
+        primeAudio();
+        success({ mode: 'prepaid', order: ord, total: total, eventId: eid, variantId: state.variant.id, test: isT });
+      } else if (fail) {
+        open('prepaid');
+        msg('Payment was not completed. Please try again, or choose Cash on Delivery.');
+      }
+    }, 300);
+  })();
+
+  window.MHC = { open: open, close: close };
+})();
+</script>
