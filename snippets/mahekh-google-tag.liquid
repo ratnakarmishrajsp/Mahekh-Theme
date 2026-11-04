@@ -1,0 +1,41 @@
+{%- comment -%}
+  Google tag for mahekh.in (Claude, 4 Nov 2026, owner OK "Haan, tag lagao").
+  GA4 G-W2TG8R79DY (property 540213718) + Google Ads AW-18555004443 (account 821-235-0080).
+  Rendered twice from layout/theme.liquid: in <head> (gtag + shop events) and right after <body> with part: 'body'
+  (hidden inputs that Fastrr's storefront script reads: it passes the GA4 session to its checkout and
+  fires Google conversions from the checkout on this page).
+  Purchase conversions come from Fastrr (orders don't use Shopify checkout); Ads label: AW-18555004443/CmsoCNH23bEdEJvM249F.
+{%- endcomment -%}
+{%- if part == 'body' -%}
+  <input type="hidden" id="shiprocket-checkout-gtag-id" value="G-W2TG8R79DY">
+  <input type="hidden" id="fastrr-ga-measurement-id" value="G-W2TG8R79DY">
+{%- else -%}
+  {%- liquid
+    assign mh_variant = product.selected_or_first_available_variant
+    assign mh_price = mh_variant.price | divided_by: 100.0
+  -%}
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-W2TG8R79DY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-W2TG8R79DY');
+    gtag('config', 'AW-18555004443');
+    (function () {
+      var currency = {{ cart.currency.iso_code | json }};
+      {%- if template.name == 'product' %}
+      var item = { item_id: {{ mh_variant.id | json }}, item_name: {{ product.title | json }}, item_variant: {{ mh_variant.title | json }}, price: {{ mh_price }}, quantity: 1 };
+      gtag('event', 'view_item', { currency: currency, value: {{ mh_price }}, items: [item] });
+      {%- else %}
+      var item = null;
+      {%- endif %}
+      var ev = function (name) { gtag('event', name, item ? { currency: currency, value: item.price, items: [item] } : { currency: currency }); };
+      document.addEventListener('submit', function (e) {
+        if (e.target && /\/cart\/add/.test(e.target.getAttribute('action') || '')) ev('add_to_cart');
+      }, true);
+      document.addEventListener('click', function (e) {
+        if (e.target.closest && e.target.closest('.sr-headless-checkout, button[name="sr-headless-button"]')) ev('begin_checkout');
+      }, true);
+    })();
+  </script>
+{%- endif -%}
