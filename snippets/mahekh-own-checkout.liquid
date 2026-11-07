@@ -4,6 +4,10 @@
   Render OUTSIDE the product <form>: {% render 'mahekh-own-checkout', product: product, form_id: product_form_id %}
   Server: set mhc_api below once the order server is live. Until then the popup runs in DEMO mode (no real order).
   Add ?mh_demo=1 to any product URL to force demo mode.
+  Step tracking (7 Nov 2026, owner: "Haan, add karo"): GA4-only events, no visible change. Each fires once per popup opening:
+  mhc_prefilled, mhc_f_<field> (field became valid), mhc_mode_cod/online, mhc_pack_change, mhc_submit_tap, mhc_err_<field>,
+  mhc_err_server / mhc_err_network, mhc_payu_go, mhc_payu_back_ok / _fail, mhc_exit_<first missing field|ready> (closed),
+  mhc_away_<first missing field|ready> (page hidden / app left while the popup was open).
 {%- endcomment -%}
 {%- assign mhc_api = 'https://mahekh-checkout.ratnakar-auto-dm.workers.dev' -%}
 {%- assign mhc_prepaid_off = 100 -%}
@@ -494,10 +498,12 @@
     try { history.pushState({ mhc: 1 }, ''); pushed = true; } catch (e) {}
     vib(12);
     state.eid = uid();
+    trkStart();
     track('InitiateCheckout', { value: payable() / 100, currency: 'INR', content_ids: [String(state.variant.id)], content_type: 'product', num_items: 1 }, 'ic_' + state.eid);
     gtagEv('begin_checkout', { currency: 'INR', value: payable() / 100, items: [{ item_id: String(state.variant.id), item_name: D.product, item_variant: state.variant.title, price: price() / 100, quantity: 1 }] });
   }
   function hide() {
+    exitAt('mhc_exit_', 'exited');
     ov.classList.remove('is-open');
     sheet.style.transform = '';
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
@@ -515,8 +521,8 @@
   root.addEventListener('click', function (e) { var b = e.target.closest('[data-mhc-open]'); if (b && !b.disabled) open(b.dataset.mhcOpen); });
   ov.addEventListener('click', function (e) {
     if (e.target === ov || e.target.closest('[data-mhc-close]')) return close();
-    var c = e.target.closest('.mhc-chip'); if (c && !c.disabled) { state.variant = variantById(c.dataset.mhcVariant); render(); vib(8); return; }
-    var p = e.target.closest('.mhc-pay__opt'); if (p) { state.mode = p.dataset.mhcMode; render(); vib(8); }
+    var c = e.target.closest('.mhc-chip'); if (c && !c.disabled) { var v0 = state.variant; state.variant = variantById(c.dataset.mhcVariant); render(); vib(8); if (state.variant !== v0) step('mhc_pack_change'); return; }
+    var p = e.target.closest('.mhc-pay__opt'); if (p) { var m0 = state.mode; state.mode = p.dataset.mhcMode; render(); vib(8); if (state.mode !== m0) step(state.mode === 'prepaid' ? 'mhc_mode_online' : 'mhc_mode_cod'); }
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !ov.hidden) close(); });
 
@@ -634,6 +640,45 @@
   }
   function msg(t) { var m = $('.mhc-msg'); m.textContent = t || ''; m.hidden = !t; }
 
+  // ---------- step tracking (GA4 only, once per popup opening; never changes what the customer sees) ----------
+  var REQ = ['name', 'phone', 'pincode', 'city', 'state', 'address', 'landmark'];
+  var OKF = { // same rules as validate()
+    name: function () { return /[A-Za-zऀ-ॿ]{2,}/.test(F.name.value) && F.name.value.trim().length >= 3; },
+    phone: function () { return /^[6-9]\d{9}$/.test(digits(F.phone.value)); },
+    pincode: function () { return /^[1-9]\d{5}$/.test(F.pincode.value); },
+    city: function () { return F.city.value.trim().length >= 2; },
+    state: function () { return !!sel.value; },
+    address: function () { return F.address.value.trim().length >= MIN_ADDR; },
+    landmark: function () { return F.landmark.value.trim().length >= MIN_ADDR; }
+  };
+  function okf(k) { try { return OKF[k](); } catch (e) { return false; } }
+  function step(ev, p) {
+    try {
+      if (!state.trk || state.trk[ev]) return;
+      state.trk[ev] = 1;
+      gtagEv(ev, Object.assign({ mhc_mode: state.mode, mhc_variant: state.variant ? String(state.variant.id) : '' }, p || {}));
+    } catch (e) {}
+  }
+  function firstMissing() { for (var i = 0; i < REQ.length; i++) if (!okf(REQ[i])) return REQ[i]; return 'ready'; }
+  function filledCount() { return REQ.filter(okf).length; }
+  function trkStart() {
+    state.trk = {}; state.done = false; state.exited = false; state.away = false;
+    var pre = REQ.filter(okf);
+    pre.forEach(function (k) { state.trk['mhc_f_' + k] = 1; }); // saved details: not counted as typed
+    if (pre.length) step('mhc_prefilled', { mhc_filled: pre.length });
+  }
+  function trkFields() { if (!state.trk || state.done) return; REQ.forEach(function (k) { if (okf(k)) step('mhc_f_' + k); }); }
+  function exitAt(prefix, flag) {
+    if (!state.trk || state.done || state[flag]) return;
+    state[flag] = true;
+    step(prefix + firstMissing(), { mhc_filled: filledCount() });
+  }
+  form.addEventListener('input', trkFields, true);
+  form.addEventListener('change', trkFields, true);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden' && !ov.hidden && !state.busy) exitAt('mhc_away_', 'away');
+  });
+
   // ---------- sound + confetti ----------
   function primeAudio() { try { var C = window.AudioContext || window.webkitAudioContext; if (!C) return; state.audio = state.audio || new C(); state.audio.resume && state.audio.resume(); } catch (e) {} }
   function chime() {
@@ -665,6 +710,7 @@
   }
 
   function success(o) {
+    state.done = true;
     var btn = $('.mhc-submit');
     btn.classList.add('is-done');
     setTimeout(function () {
@@ -697,7 +743,12 @@
     e.preventDefault();
     if (state.busy) return;
     msg('');
-    if (!validate()) return;
+    step('mhc_submit_tap', { mhc_filled: filledCount() });
+    if (!validate()) {
+      REQ.forEach(function (k) { if (!okf(k)) step('mhc_err_' + k); });
+      if (state.mode === 'prepaid' && F.email.value && !/^\S+@\S+\.\S+$/.test(F.email.value)) step('mhc_err_email');
+      return;
+    }
     if (form.company_website && form.company_website.value) return;
     primeAudio();
     state.busy = true;
@@ -739,6 +790,7 @@
       })
       .catch(function (err) {
         clearTimeout(tm);
+        step(err && err.name === 'AbortError' ? 'mhc_err_network' : 'mhc_err_server', { mhc_msg: String((err && err.message) || '').slice(0, 90) });
         state.busy = false;
         btn.classList.remove('is-busy');
         render();
@@ -748,6 +800,8 @@
   });
 
   function goPayU(p) {
+    step('mhc_payu_go');
+    state.done = true; // leaving for PayU is not an exit
     showView('wait');
     var f = document.createElement('form');
     f.method = 'POST'; f.action = p.action; f.style.display = 'none';
@@ -769,9 +823,11 @@
         restore(); ov.hidden = false; fit(); void ov.offsetHeight; ov.classList.add('is-open'); document.documentElement.style.overflow = 'hidden'; document.documentElement.classList.add('mhc-on');
         try { history.pushState({ mhc: 1 }, ''); pushed = true; } catch (e) {}
         primeAudio();
+        gtagEv('mhc_payu_back_ok', { mhc_mode: 'prepaid', mhc_variant: String(state.variant.id) });
         success({ mode: 'prepaid', order: ord, total: total, eventId: eid, variantId: state.variant.id, test: isT });
       } else if (fail) {
         open('prepaid');
+        step('mhc_payu_back_fail');
         msg('Payment was not completed. Please try again, or choose Cash on Delivery.');
       }
     }, 300);
