@@ -1,33 +1,50 @@
 {%- comment -%}
-  Mahekh own checkout (Claude, 4 Nov 2026, v2 after the owner's phone recording).
+  mahekh.in v2 (Claude, 19 Nov 2026, owner request): copy of the checkout live on ayushadivasi.in (red shake COD button,
+  Releasit-style popup, blur loader, D1 step tracking) with mahekh's settings and Pay Online (PayU) kept visible.
+  The PayU flow (/prepaid/start → PayU → /payu/return → success on the same page) is the same as mahekh's v1 (4 Nov).
+  Previous live file (v1): backups/own_checkout_v2_nov19/live_158843044032_mahekh-own-checkout.before.liquid
+  16 Nov 2026 (v2): popup restyled like the Releasit COD form (see cod_popup_redesign/). Order logic unchanged.
+  Own checkout (same popup, styling and behaviour as the one live on mahekh.in since 4 Nov 2026; kit version 10 Nov 2026).
   Two buttons: Cash on Delivery popup + Pay Online (PayU).
-  Render OUTSIDE the product <form>: {% render 'mahekh-own-checkout', product: product, form_id: product_form_id %}
+  Save as snippets/own-checkout.liquid and render it OUTSIDE (right after) the product <form> / </product-form>:
+    {% render 'own-checkout', product: product, form_id: product_form_id %}
   Server: set mhc_api below once the order server is live. Until then the popup runs in DEMO mode (no real order).
   Add ?mh_demo=1 to any product URL to force demo mode.
+  Sizes are in rem with 1rem = 10px (Dawn-family themes set html{font-size:62.5%}). If this theme's root font is 16px,
+  convert the <style> block rem → px (x10) first (install_theme.mjs --rem-to-px does it).
+  Step tracking: GA4-only events, no visible change. Each fires once per popup opening:
+  mhc_prefilled, mhc_f_<field> (field became valid), mhc_mode_cod/online, mhc_pack_change, mhc_submit_tap, mhc_err_<field>,
+  mhc_err_server / mhc_err_network, mhc_payu_go, mhc_payu_back_ok / _fail, mhc_exit_<first missing field|ready> (closed),
+  mhc_away_<first missing field|ready> (page hidden / app left while the popup was open).
 {%- endcomment -%}
-{%- assign mhc_api = 'https://mahekh-checkout.ratnakar-auto-dm.workers.dev' -%}
-{%- assign mhc_prepaid_off = 100 -%}
+{%- comment -%} ===== SETTINGS: change only these lines ===== {%- endcomment -%}
+{%- assign mhc_api = 'https://mahekh-checkout.ratnakar-auto-dm.workers.dev' -%}{%- comment -%} worker URL from deploy.mjs, e.g. https://brand-checkout.xxxx.workers.dev — empty = DEMO mode {%- endcomment -%}
+{%- assign mhc_prepaid_off = 100 -%}{%- comment -%} rupees off for Pay Online; MUST equal PREPAID_OFF in wrangler.toml {%- endcomment -%}
+{%- assign mhc_min_addr = 10 -%}{%- comment -%} min letters for address; MUST equal MIN_ADDR in wrangler.toml {%- endcomment -%}
+{%- assign mhc_min_landmark = 5 -%}{%- comment -%} min letters for landmark (required again 18 Nov 2026); MUST equal MIN_LANDMARK in wrangler.toml {%- endcomment -%}
+{%- assign mhc_pixel_id = '596578329419010' -%}{%- comment -%} this store's Meta pixel id (same as PIXEL_ID in wrangler.toml) {%- endcomment -%}
+{%- assign mhc_gads_send_to = 'AW-18555004443/CmsoCNH23bEdEJvM249F' -%}{%- comment -%} optional Google Ads conversion, e.g. AW-123456789/AbCdEf {%- endcomment -%}
+{%- assign mhc_brand_line = 'Mahekh · Kannauj' -%}{%- comment -%} small gold line above the product name in the popup, e.g. 'Brand · City' {%- endcomment -%}
+{%- assign mhc_delivery_days = '3–5 days' -%}{%- comment -%} shown on the success screen {%- endcomment -%}
+{%- comment -%} ===== end of settings ===== {%- endcomment -%}
 {%- assign mhc_variant = product.selected_or_first_available_variant -%}
 
 <div class="mhc" id="mhc-root" data-api="{{ mhc_api }}" data-form-id="{{ form_id }}">
   <div class="mhc-btns">
-    <button type="button" class="mhc-btn mhc-btn--cod" data-mhc-open="cod" {% unless product.available %}disabled{% endunless %}>
-      <span class="mhc-btn__shine" aria-hidden="true"></span>
-      <span class="mhc-btn__row">
-        <svg class="mhc-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v8H3zM14 10h4l3 3v2h-7z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="7" cy="17" r="1.8" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="17.5" cy="17" r="1.8" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
-        <span class="mhc-btn__main">BUY NOW &middot; CASH ON DELIVERY</span>
-      </span>
-      <span class="mhc-btn__sub">Pay when your order reaches you</span>
-    </button>
+    {%- comment -%} 19 Nov 2026: same red shake button as ayushadivasi.in (owner request). Old brown button: backups/own_checkout_v2_nov19/ {%- endcomment -%}
+    {%- assign mhc_jost600 = settings.type_body_font | font_modify: 'weight', '600' -%}
+    {%- if mhc_jost600 and settings.type_body_font.family == 'Jost' -%}<style id="mhc-jost600">{{ mhc_jost600 | font_face: font_display: 'swap' }}</style>{%- endif -%}
+    <style id="ay-rsi-btn">.mhc-btns .mhc-btn.mhc-btn--cod.ay-rsi{background:#f50e0e!important;color:#fff!important;border:0!important;border-radius:2px!important;box-shadow:0 2px 7px 0 rgba(0,0,0,.1)!important;width:100%!important;min-height:51px!important;height:auto!important;padding:12px 20px 14px!important;margin:0!important;display:flex!important;flex-direction:row!important;justify-content:center!important;align-items:center!important;gap:0!important;font-family:Jost,sans-serif!important;font-size:16px!important;font-weight:600!important;line-height:1.3!important;letter-spacing:.6px!important;text-transform:none!important;text-align:center!important;text-shadow:none!important;overflow:visible!important;animation:ayRsiShake 3s cubic-bezier(.35,.06,.2,.98) infinite both!important}.mhc-btns .mhc-btn.mhc-btn--cod.ay-rsi .ay-rsi__ico{width:23px;height:23px;flex:none;margin:0 7px 0 0;fill:#fff}.mhc-btns .mhc-btn.mhc-btn--cod.ay-rsi span{font:inherit!important;letter-spacing:inherit!important;color:inherit!important}.mhc-btns .mhc-btn.mhc-btn--cod.ay-rsi[disabled]{animation:none!important}@keyframes ayRsiShake{0%,28.667%,100%{transform:scaleX(1)}2.867%,5.733%{transform:scale3d(.97,.97,.97) rotate(-1deg)}8.6%,14.333%,20.067%,25.8%{transform:scale3d(1.03,1.03,1.03) rotate(1deg)}11.467%,17.2%,22.933%{transform:scale3d(1.03,1.03,1.03) rotate(-1deg)}}@media (prefers-reduced-motion:reduce){.mhc-btns .mhc-btn.mhc-btn--cod.ay-rsi{animation:none!important}}</style>
+    <button type="button" class="mhc-btn mhc-btn--cod ay-rsi" data-mhc-open="cod" {% unless product.available %}disabled{% endunless %}><svg class="ay-rsi__ico" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.55 13c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.37-.66-.11-1.48-.87-1.48H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.37 5.48 17 7 17h12v-2H7l1.1-2h7.45zM6.16 6h12.15l-2.76 5H8.53L6.16 6zM7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg><span>Order Now - Cash on Delivery</span></button>
 
-    <button type="button" class="mhc-btn mhc-btn--pre" data-mhc-open="prepaid" {% unless product.available %}disabled{% endunless %}>
+    <button type="button" class="mhc-btn mhc-btn--pre{% if mhc_prepaid_off <= 0 %} mhc-btn--notag{% endif %}" data-mhc-open="prepaid" {% unless product.available %}disabled{% endunless %}>
       <span class="mhc-btn__shine" aria-hidden="true"></span>
-      <span class="mhc-btn__tag">EXTRA ₹{{ mhc_prepaid_off }} OFF</span>
+      {%- if mhc_prepaid_off > 0 -%}<span class="mhc-btn__tag">EXTRA ₹{{ mhc_prepaid_off }} OFF</span>{%- endif -%}
       <span class="mhc-btn__row">
         <svg class="mhc-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3 10h18" stroke="currentColor" stroke-width="1.7"/><path d="M7 14.5h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         <span class="mhc-btn__main">PAY ONLINE &middot; <span data-mhc-btnprice></span></span>
       </span>
-      <span class="mhc-btn__sub">UPI &middot; Cards &middot; Netbanking &middot; <s data-mhc-btnmrp></s></span>
+      <span class="mhc-btn__sub">UPI &middot; Cards &middot; Netbanking{% if mhc_prepaid_off > 0 %} &middot; <s data-mhc-btnmrp></s>{% endif %}</span>
     </button>
   </div>
 </div>
@@ -36,27 +53,33 @@
   <div class="mhc-sheet" role="dialog" aria-modal="true" aria-labelledby="mhc-title">
 
     <div class="mhc-top">
-      <div class="mhc-grab" aria-hidden="true"><span></span></div>
       <div class="mhc-head">
-        {%- if product.featured_media -%}
-          <img class="mhc-head__img" src="{{ product.featured_media | image_url: width: 120 }}" alt="" width="44" height="44">
-        {%- endif -%}
-        <div class="mhc-head__txt">
-          <p class="mhc-head__eyebrow">Mahekh &middot; Kannauj</p>
-          <h2 class="mhc-head__title" id="mhc-title">{{ product.title | split: '–' | first | strip | escape }}</h2>
-        </div>
+        <h2 class="mhc-head__title" id="mhc-title" data-mhc-title>CASH ON DELIVERY</h2>
         <button type="button" class="mhc-x" data-mhc-close aria-label="Close">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
         </button>
       </div>
     </div>
 
-    <!-- FORM VIEW: scrolling body + fixed footer with the button -->
+    <!-- FORM VIEW (16 Nov 2026 layout): order line, totals, address fields, button at the end of the scroll -->
     <form class="mhc-main mhc-view" data-view="form" novalidate autocomplete="on">
       <div class="mhc-body">
+        <div class="mhc-li">
+          <div class="mhc-li__img">
+            {%- if product.featured_media -%}<img src="{{ product.featured_media | image_url: width: 160 }}" alt="" width="58" height="58" loading="lazy">{%- endif -%}
+            <span class="mhc-li__qty">1</span>
+          </div>
+          <div class="mhc-li__info">
+            <span class="mhc-li__title">{{ product.title | split: '–' | first | strip | escape }}</span>
+            {%- if product.has_only_default_variant == false -%}<span class="mhc-li__var" data-mhc-li-var></span>{%- endif -%}
+          </div>
+          <div class="mhc-li__price" data-mhc-li-price></div>
+        </div>
+
+        <div class="mhc-opts">
         {%- if product.has_only_default_variant == false -%}
-          <p class="mhc-step">1. Choose your pack</p>
-          <div class="mhc-chips" role="radiogroup" aria-label="Choose pack">
+          <p class="mhc-step" hidden>1. Choose your pack</p>
+          <div class="mhc-chips" role="radiogroup" aria-label="Choose pack" hidden>
             {%- for v in product.variants -%}
               <button type="button" class="mhc-chip" role="radio" data-mhc-variant="{{ v.id }}" {% unless v.available %}disabled{% endunless %}>
                 <span class="mhc-chip__t">{{ v.title | escape }}</span>
@@ -66,7 +89,7 @@
           </div>
         {%- endif -%}
 
-        <p class="mhc-step">{% if product.has_only_default_variant == false %}2{% else %}1{% endif %}. How will you pay?</p>
+        <p class="mhc-step mhc-step--pay">How will you pay?</p>
         <div class="mhc-pay" role="radiogroup" aria-label="Payment method">
           <button type="button" class="mhc-pay__opt" role="radio" data-mhc-mode="cod">
             <span class="mhc-radio" aria-hidden="true"></span>
@@ -75,83 +98,105 @@
           </button>
           <button type="button" class="mhc-pay__opt" role="radio" data-mhc-mode="prepaid">
             <span class="mhc-radio" aria-hidden="true"></span>
-            <span class="mhc-pay__txt"><b>Pay Online</b><small>UPI / Cards &middot; <em>Save ₹{{ mhc_prepaid_off }}</em></small></span>
+            <span class="mhc-pay__txt"><b>Pay Online</b><small>UPI / Cards{% if mhc_prepaid_off > 0 %} &middot; <em>Save ₹{{ mhc_prepaid_off }}</em>{% endif %}</small></span>
             <span class="mhc-pay__amt" data-mhc-amt="prepaid"></span>
           </button>
         </div>
+        </div>
 
-        <p class="mhc-step">{% if product.has_only_default_variant == false %}3{% else %}2{% endif %}. Delivery details</p>
+        <div class="mhc-sum">
+          <div><span>Subtotal</span><span data-mhc-sum="mrp"></span></div>
+          <div class="mhc-sum__off" data-mhc-sum-offrow hidden><span>Online payment discount</span><span>−₹{{ mhc_prepaid_off }}</span></div>
+          <div><span>Shipping</span><span class="mhc-free">Free</span></div>
+          <div class="mhc-sum__tot"><span>Total</span><span data-mhc-sum="total"></span></div>
+        </div>
+
+        <p class="mhc-addr-h">Enter your shipping address</p>
         <div class="mhc-fields">
           <div class="mhc-f">
-            <input class="mhc-in" id="mhc-name" name="name" type="text" placeholder=" " autocomplete="name" autocapitalize="words" enterkeyhint="next" maxlength="60" required>
-            <label for="mhc-name">Full name</label>
+            <label for="mhc-name">Full name<span class="mhc-req" aria-hidden="true">*</span></label>
+            <div class="mhc-iw"><span class="mhc-ib" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-2.67 0-8 1.34-8 4v1a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-1c0-2.66-5.33-4-8-4z"/></svg></span>
+              <input class="mhc-in" id="mhc-name" name="name" type="text" placeholder="Full name" autocomplete="name" autocapitalize="words" enterkeyhint="next" maxlength="60" required>
+            </div>
             <small class="mhc-err">Please enter your full name</small>
           </div>
-          <div class="mhc-f mhc-f--phone">
-            <label for="mhc-phone">Mobile number</label>
-            <span class="mhc-cc" aria-hidden="true"><i class="mhc-flag"></i>+91</span>
-            <input class="mhc-in" id="mhc-phone" name="phone" type="tel" inputmode="numeric" placeholder="98765 43210" autocomplete="tel-national" enterkeyhint="next" maxlength="11" required>
-            <span class="mhc-ok" aria-hidden="true"></span>
+          <div class="mhc-f">
+            <label for="mhc-phone">Phone number<span class="mhc-req" aria-hidden="true">*</span></label>
+            <div class="mhc-iw"><span class="mhc-ib" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79a15.15 15.15 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/></svg></span>
+              <input class="mhc-in" id="mhc-phone" name="phone" type="tel" inputmode="numeric" placeholder="Phone" autocomplete="tel-national" enterkeyhint="next" maxlength="11" required>
+              <span class="mhc-ok" aria-hidden="true"></span>
+            </div>
             <small class="mhc-err">Enter a valid 10-digit mobile number</small>
           </div>
-          <div class="mhc-grid">
-            <div class="mhc-f mhc-f--pin">
-              <input class="mhc-in" id="mhc-pin" name="pincode" type="tel" inputmode="numeric" placeholder=" " autocomplete="postal-code" enterkeyhint="next" maxlength="6" required>
-              <label for="mhc-pin">Pincode</label>
-              <span class="mhc-ok" aria-hidden="true"></span>
-              <small class="mhc-err">6-digit pincode</small>
+          <div class="mhc-f">
+            <label for="mhc-address">Address<span class="mhc-req" aria-hidden="true">*</span></label>
+            <div class="mhc-iw"><span class="mhc-ib" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg></span>
+              <input class="mhc-in" id="mhc-address" name="address" type="text" placeholder="Address" autocomplete="street-address" enterkeyhint="next" maxlength="160" required>
             </div>
-            <div class="mhc-f">
-              <input class="mhc-in" id="mhc-city" name="city" type="text" placeholder=" " autocomplete="address-level2" autocapitalize="words" enterkeyhint="next" maxlength="40" required>
-              <label for="mhc-city">City / District</label>
-              <small class="mhc-err">Enter city</small>
-            </div>
+            <small class="mhc-count" data-count="address">0/{{ mhc_min_addr }}</small>
+            <small class="mhc-err">Please write your full address (at least {{ mhc_min_addr }} letters)</small>
           </div>
-          <small class="mhc-pinok" hidden></small>
+          <div class="mhc-f">
+            <label for="mhc-landmark">Landmark<span class="mhc-req" aria-hidden="true">*</span></label>
+            <div class="mhc-iw"><span class="mhc-ib" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg></span>
+              <input class="mhc-in" id="mhc-landmark" name="landmark" type="text" placeholder="Nearby school, hospital, shop" enterkeyhint="next" maxlength="100" required>
+            </div>
+            <small class="mhc-count" data-count="landmark">0/{{ mhc_min_landmark }}</small>
+            <small class="mhc-err">Please write a nearby landmark (at least {{ mhc_min_landmark }} letters)</small>
+          </div>
           <div class="mhc-f mhc-f--select">
-            <select class="mhc-in" id="mhc-state" name="state" autocomplete="address-level1" required>
-              <option value=""></option>
-            </select>
-            <label for="mhc-state">State</label>
+            <label for="mhc-state">State<span class="mhc-req" aria-hidden="true">*</span></label>
+            <div class="mhc-iw">
+              <select class="mhc-in" id="mhc-state" name="state" autocomplete="address-level1" required>
+                <option value="">State</option>
+              </select>
+            </div>
             <small class="mhc-err">Select your state</small>
           </div>
           <div class="mhc-f">
-            <input class="mhc-in" id="mhc-address" name="address" type="text" placeholder=" " autocomplete="street-address" enterkeyhint="next" maxlength="160" required>
-            <label for="mhc-address">House no., street, area / village</label>
-            <small class="mhc-count" data-count="address">0/20</small>
-            <small class="mhc-err">Please write your full address (at least 20 letters)</small>
+            <label for="mhc-city">City<span class="mhc-req" aria-hidden="true">*</span></label>
+            <div class="mhc-iw"><span class="mhc-ib" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg></span>
+              <input class="mhc-in" id="mhc-city" name="city" type="text" placeholder="City" autocomplete="address-level2" autocapitalize="words" enterkeyhint="next" maxlength="40" required>
+            </div>
+            <small class="mhc-err">Enter city</small>
           </div>
           <div class="mhc-f">
-            <input class="mhc-in" id="mhc-landmark" name="landmark" type="text" placeholder=" " enterkeyhint="done" maxlength="100" required>
-            <label for="mhc-landmark">Landmark (near school, temple, shop…)</label>
-            <small class="mhc-count" data-count="landmark">0/20</small>
-            <small class="mhc-err">Please write a nearby landmark (at least 20 letters)</small>
+            <label for="mhc-pin">Pincode<span class="mhc-req" aria-hidden="true">*</span></label>
+            <div class="mhc-iw"><span class="mhc-ib" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3 8.6 21M15.4 3 14 21M4 8.5h17M3 15.5h17" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg></span>
+              <input class="mhc-in" id="mhc-pin" name="pincode" type="tel" inputmode="numeric" placeholder="Pincode" autocomplete="postal-code" enterkeyhint="done" maxlength="6" required>
+              <span class="mhc-ok" aria-hidden="true"></span>
+            </div>
+            <small class="mhc-err">6-digit pincode</small>
           </div>
+          <small class="mhc-pinok" hidden></small>
           <div class="mhc-f mhc-f--email" data-mhc-email hidden>
-            <input class="mhc-in" id="mhc-email" name="email" type="email" placeholder=" " autocomplete="email" enterkeyhint="done" maxlength="80">
             <label for="mhc-email">Email for payment receipt (optional)</label>
+            <div class="mhc-iw"><span class="mhc-ib" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg></span>
+              <input class="mhc-in" id="mhc-email" name="email" type="email" placeholder="Email" autocomplete="email" enterkeyhint="done" maxlength="80">
+            </div>
           </div>
           <input type="text" name="company_website" class="mhc-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         </div>
 
-        <div class="mhc-sum">
-          <div><span>Item total</span><span data-mhc-sum="mrp"></span></div>
-          <div class="mhc-sum__off" data-mhc-sum-offrow hidden><span>Online payment discount</span><span>−₹{{ mhc_prepaid_off }}</span></div>
-          <div><span>Delivery</span><span class="mhc-free">FREE</span></div>
-          <div class="mhc-sum__tot"><span>To pay</span><span data-mhc-sum="total"></span></div>
+        <div class="mhc-foot">
+          <p class="mhc-msg" role="alert" hidden></p>
+          <button type="submit" class="mhc-submit">
+            <span class="mhc-submit__shine" aria-hidden="true"></span>
+            <span class="mhc-submit__txt" data-mhc-cta></span>
+            <span class="mhc-submit__bar" aria-hidden="true"><i></i></span>
+          </button>
         </div>
       </div>
-
-      <div class="mhc-foot">
-        <p class="mhc-msg" role="alert" hidden></p>
-        <button type="submit" class="mhc-submit">
-          <span class="mhc-submit__shine" aria-hidden="true"></span>
-          <span class="mhc-submit__txt" data-mhc-cta></span>
-          <span class="mhc-submit__bar" aria-hidden="true"><i></i></span>
-        </button>
-        <p class="mhc-trust"><span>🚚 Free delivery</span><span>💵 Cash on delivery</span><span>🔒 Safe &amp; secure</span></p>
-      </div>
     </form>
+
+    <!-- 16 Nov 2026: blur + loading bar while the order is being placed -->
+    <div class="mhc-load" role="status" aria-live="polite" hidden>
+      <div class="mhc-load__card">
+        <p class="mhc-load__t" data-mhc-load-t>Confirming your order…</p>
+        <div class="mhc-load__bar" aria-hidden="true"><i></i></div>
+        <p class="mhc-load__s">Please wait, do not close this page</p>
+      </div>
+    </div>
 
     <!-- PAYMENT REDIRECT VIEW -->
     <div class="mhc-view mhc-view--wait" data-view="wait" hidden>
@@ -171,7 +216,7 @@
           <div><span>Product</span><b data-mhc-okprod></b></div>
           <div><span>Payment</span><b data-mhc-okpay></b></div>
           <div><span>Delivery to</span><b data-mhc-okaddr></b></div>
-          <div><span>Arrives in</span><b>3–5 days &middot; FREE</b></div>
+          <div><span>Arrives in</span><b>{{ mhc_delivery_days | escape }} &middot; FREE</b></div>
         </div>
         <p class="mhc-ok__note" data-mhc-oknote></p>
         <button type="button" class="mhc-submit mhc-submit--light" data-mhc-close>Continue shopping</button>
@@ -185,6 +230,10 @@
   "product": {{ product.title | json }},
   "handle": {{ product.handle | json }},
   "off": {{ mhc_prepaid_off | times: 100 }},
+  "minAddr": {{ mhc_min_addr | json }},
+  "minLandmark": {{ mhc_min_landmark | json }},
+  "pixel": {{ mhc_pixel_id | json }},
+  "gads": {{ mhc_gads_send_to | json }},
   "variant": {{ mhc_variant.id | json }},
   "variants": [{%- for v in product.variants -%}{"id": {{ v.id }}, "title": {{ v.title | json }}, "price": {{ v.price }}, "available": {{ v.available | json }}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]
 }
@@ -205,6 +254,7 @@
   .mhc-btn[disabled]{opacity:.5;cursor:not-allowed;animation:none}
   .mhc-btn--cod{background:linear-gradient(135deg,var(--mhc-brown) 0%,var(--mhc-brown2) 100%);color:var(--mhc-gold);border:1.5px solid rgba(204,164,59,.55);box-shadow:0 10px 24px -8px rgba(29,17,7,.55),inset 0 1px 0 rgba(233,207,122,.18);animation:mhcGlow 3.2s ease-in-out infinite}
   .mhc-btn--pre{background:linear-gradient(135deg,#f3dc8e 0%,var(--mhc-gold) 55%,#b18a2b 100%);color:var(--mhc-ink);border:1.5px solid #b18a2b;box-shadow:0 10px 22px -10px rgba(177,138,43,.8),inset 0 1px 0 rgba(255,255,255,.45);padding-top:2.3rem}
+  .mhc-btn--pre.mhc-btn--notag{padding-top:1rem}
   .mhc-btn__row{display:flex;align-items:center;gap:.7rem}
   .mhc-btn__main{font-family:var(--font-heading-family);font-weight:700;font-size:1.55rem;line-height:1.2}
   .mhc-btn__sub{font-size:1.15rem;letter-spacing:.02em;opacity:.85;font-weight:500}
@@ -361,6 +411,89 @@
   @media (prefers-reduced-motion:reduce){.mhc-btn,.mhc-btn__shine,.mhc-submit__shine{animation:none!important}.mhc-sheet,.mhc-overlay{transition:none}.mhc-burst{display:none}}
 </style>
 
+<style id="mhc-rsi">
+  /* 16 Nov 2026: Releasit-style COD card. Sizes from smdneelambariherbals.com at 375 px; fonts = mahekh theme (Jost / DM Sans), colours = mahekh brown-gold (same tokens as mahekh v1). */
+  #mhc-overlay{--rsi-ink:#1a1107;--rsi-line:#e2d7c1;--rsi-bd:#cfc2a6;--rsi-soft:#f5eee0;--rsi-icon:#3a2211;--rsi-req:#c70505}
+  #mhc-overlay.is-open{background:rgba(18,11,4,.45)}
+  #mhc-overlay .mhc-sheet{left:11px;right:11px;top:13px;bottom:13px;border-radius:9px;background:#fffdf8;box-shadow:0 12px 40px rgba(0,0,0,.25);font-family:var(--font-body-family);color:var(--rsi-ink)}
+  #mhc-overlay .mhc-top{padding:11px 16px 0;border:0;background:transparent}
+  #mhc-overlay .mhc-head{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:28px;padding-bottom:7px;border-bottom:1px solid var(--rsi-line)}
+  #mhc-overlay .mhc-head__title{flex:1;min-width:0;margin:0;padding:0 8px 0 0;font-family:var(--font-body-family)!important;font-size:19px;line-height:23px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--rsi-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #mhc-overlay .mhc-x{flex:none;width:28px;height:28px;padding:0;border-radius:0;background:none;color:var(--rsi-ink)}
+  #mhc-overlay .mhc-x svg{width:24px;height:24px}
+  #mhc-overlay .mhc-body{padding:0 16px 22px;scroll-padding:16px}
+  /* order line */
+  #mhc-overlay .mhc-li{display:flex;align-items:flex-start;padding:10px 0 10px;margin:0 0 16px;border-bottom:1px solid var(--rsi-line)}
+  #mhc-overlay .mhc-li__img{position:relative;flex:none;width:58px;height:58px;margin-right:8px}
+  #mhc-overlay .mhc-li__img img{display:block;width:58px;height:58px;border-radius:6px;object-fit:cover;border:1px solid var(--rsi-line);box-sizing:border-box}
+  #mhc-overlay .mhc-li__qty{position:absolute;top:-3px;right:-4px;width:19px;height:19px;border-radius:50%;background:var(--rsi-icon);color:#e9cf7a;font-size:12px;font-weight:700;line-height:19px;text-align:center}
+  #mhc-overlay .mhc-li__info{flex:1;min-width:0;display:flex;flex-direction:column}
+  #mhc-overlay .mhc-li__title{font-size:16px;line-height:19px;font-weight:600;letter-spacing:.3px;text-decoration:underline;color:var(--rsi-ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  #mhc-overlay .mhc-li__var{margin-top:3px;font-size:14.5px;line-height:17.5px;color:var(--rsi-ink)}
+  #mhc-overlay .mhc-li__price{flex:none;align-self:center;padding-left:12px;font-size:16px;line-height:19px;font-weight:700;color:var(--rsi-ink);white-space:nowrap}
+  /* totals box */
+  #mhc-overlay .mhc-sum{display:block;margin:0 0 16px;padding:8px 12px 5px;border:0;border-radius:6px;background:var(--rsi-soft);font-size:16px;color:var(--rsi-ink)}
+  #mhc-overlay .mhc-sum>div{display:flex;justify-content:space-between;align-items:center;gap:10px;min-height:29px;line-height:29px}
+  #mhc-overlay .mhc-sum>div>span:last-child,#mhc-overlay .mhc-free{font-weight:700;color:var(--rsi-ink)}
+  #mhc-overlay .mhc-sum__off,#mhc-overlay .mhc-sum__off span:last-child{color:#1f7a3d}
+  #mhc-overlay .mhc-sum__tot{margin-top:6px;padding-top:6px;border-top:1px solid var(--rsi-line);font-weight:600}
+  #mhc-overlay .mhc-sum__tot span:last-child{font-size:17px}
+  /* address fields */
+  #mhc-overlay .mhc-addr-h{margin:0;text-align:center;font-family:var(--font-heading-family);font-size:20px;line-height:26px;font-weight:700;color:var(--rsi-ink)}
+  #mhc-overlay .mhc-fields{display:block}
+  #mhc-overlay .mhc-f{position:relative;margin-top:18px}
+  #mhc-overlay .mhc-f>label{position:static;display:block;max-width:none;transform:none;white-space:normal;overflow:visible;font-size:16px;line-height:19px;font-weight:600;letter-spacing:.2px;color:var(--rsi-ink);pointer-events:auto}
+  #mhc-overlay .mhc-req{margin-left:3px;color:var(--rsi-req)}
+  #mhc-overlay .mhc-iw{position:relative;margin-top:7px}
+  #mhc-overlay .mhc-in{height:47px;padding:6px 15px 6px 59px;border:1px solid var(--rsi-bd);border-radius:6px;background-color:#fff;font-size:16px;line-height:normal;letter-spacing:.2px;font-weight:400;color:var(--rsi-ink)}
+  #mhc-overlay .mhc-in::placeholder{color:#8e8270;opacity:1;letter-spacing:0;font-weight:400;font-size:15px}
+  #mhc-overlay .mhc-iw:has(.mhc-ok) .mhc-in{padding-right:40px}
+  #mhc-overlay .mhc-in:focus{border-color:#cca43b;box-shadow:0 0 0 3px rgba(204,164,59,.18)}
+  #mhc-overlay .mhc-f.is-bad .mhc-in{border-color:#d9534f;box-shadow:0 0 0 3px rgba(217,83,79,.12)}
+  #mhc-overlay .mhc-ib{position:absolute;left:1px;top:1px;bottom:1px;z-index:1;width:44px;display:flex;align-items:center;justify-content:center;background:var(--rsi-soft);border-right:1.2px solid var(--rsi-bd);border-radius:5px 0 0 5px;color:var(--rsi-icon);pointer-events:none}
+  #mhc-overlay .mhc-ib svg{width:17px;height:17px;fill:currentColor}
+  #mhc-overlay .mhc-f--select select.mhc-in{padding:6px 40px 6px 15px;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%231a1107' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 15px center/12px 8px}
+  #mhc-overlay .mhc-ok{top:50%;right:12px;margin-top:-10px;width:20px;height:20px}
+  #mhc-overlay .mhc-ok::after{left:7px;top:3.5px;width:5px;height:9.5px}
+  #mhc-overlay .mhc-err{margin:5px 0 0 2px;font-size:12.5px;line-height:1.35}
+  #mhc-overlay .mhc-count{margin:4px 2px 0 0;font-size:11.5px;line-height:1.3}
+  #mhc-overlay .mhc-f:has(.mhc-in:placeholder-shown) .mhc-count{display:none}
+  #mhc-overlay .mhc-pinok{margin:6px 0 0 2px;font-size:12.5px;line-height:1.35}
+  /* button at the end of the form */
+  #mhc-overlay .mhc-foot{flex:none;margin-top:20px;padding:0;background:none;border:0;box-shadow:none}
+  #mhc-overlay .mhc-msg{margin:0 0 10px;font-size:13px}
+  #mhc-overlay .mhc-submit{height:51px;border-radius:12px;font-size:16.5px;letter-spacing:.04em}
+  /* blur + loading bar while the order is placed */
+  #mhc-overlay.is-loading{-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+  #mhc-overlay .mhc-sheet>.mhc-top,#mhc-overlay .mhc-sheet>.mhc-main{transition:filter .3s ease}
+  #mhc-overlay .mhc-sheet.is-loading>.mhc-top,#mhc-overlay .mhc-sheet.is-loading>.mhc-main{filter:blur(5px);pointer-events:none;user-select:none}
+  #mhc-overlay .mhc-load{position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(255,253,248,.45);opacity:0;transition:opacity .25s ease}
+  #mhc-overlay .mhc-sheet.is-loading .mhc-load{opacity:1}
+  #mhc-overlay .mhc-load[hidden]{display:none!important}
+  #mhc-overlay .mhc-load__card{width:100%;max-width:280px;padding:22px 20px 18px;border-radius:14px;background:#fffdf8;border:1px solid var(--rsi-line);box-shadow:0 18px 44px -12px rgba(29,17,7,.45);text-align:center;transform:scale(.94);transition:transform .3s cubic-bezier(.22,1,.36,1)}
+  #mhc-overlay .mhc-sheet.is-loading .mhc-load__card{transform:scale(1)}
+  #mhc-overlay .mhc-load__t{margin:0 0 14px;font-family:var(--font-body-family);font-size:16px;line-height:22px;font-weight:600;color:var(--rsi-ink)}
+  #mhc-overlay .mhc-load.is-done .mhc-load__t{color:#1f7a3d}
+  #mhc-overlay .mhc-load__bar{position:relative;height:8px;border-radius:99px;background:#efe4cc;overflow:hidden}
+  #mhc-overlay .mhc-load__bar i{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:99px;background:linear-gradient(90deg,#b18a2b,#e9cf7a,#cca43b);background-size:200% 100%;animation:mhcLoad 2.6s cubic-bezier(.1,.7,.3,1) forwards,mhcBarShine 1.2s linear infinite}
+  #mhc-overlay .mhc-load.is-done .mhc-load__bar i{animation:none;width:100%;transition:width .35s ease}
+  #mhc-overlay .mhc-load__s{margin:12px 0 0;font-size:12px;line-height:16px;color:#76644a}
+  @keyframes mhcBarShine{from{background-position:200% 0}to{background-position:0 0}}
+  @media (prefers-reduced-motion:reduce){#mhc-overlay .mhc-load__bar i{animation:mhcLoad 2.6s linear forwards}}
+  /* mahekh 19 Nov 2026: payment choice (Cash on Delivery / Pay Online) in the same card style */
+  #mhc-overlay .mhc-opts{margin:0 0 16px}
+  #mhc-overlay .mhc-step--pay{margin:0 0 8px;font-family:var(--font-body-family);font-size:16px;line-height:19px;font-weight:600;letter-spacing:.2px;text-transform:none;color:var(--rsi-ink)}
+  #mhc-overlay .mhc-pay{gap:8px}
+  #mhc-overlay .mhc-pay__opt{gap:11px;padding:10px 13px;min-height:52px;border:1px solid var(--rsi-bd);border-radius:6px;background:#fff;color:var(--rsi-ink)}
+  #mhc-overlay .mhc-pay__opt.is-on{border-color:#cca43b;background:#fffaf0;box-shadow:0 0 0 3px rgba(204,164,59,.16)}
+  #mhc-overlay .mhc-pay__txt b{font-size:15.5px;line-height:19px;font-weight:600}
+  #mhc-overlay .mhc-pay__txt small{font-size:13px;line-height:17px;color:#76644a}
+  #mhc-overlay .mhc-pay__amt{font-family:var(--font-body-family);font-size:16px;line-height:19px;font-weight:700}
+  #mhc-overlay .mhc-radio{width:20px;height:20px}
+  @media (min-width:750px){
+    #mhc-overlay .mhc-sheet{left:50%;right:auto;top:50%;bottom:auto;width:460px;height:min(820px,92vh);border-radius:9px}
+  }
+</style>
 <script>
 (function () {
   if (window.MHC) return;
@@ -377,10 +510,11 @@
   })();
 
   var D = JSON.parse(document.getElementById('mhc-data').textContent);
-  var PIXEL = '596578329419010';
+  var PIXEL = String(D.pixel || '');
   // safety net: the Meta pixel normally comes from Shopify's Facebook app; if it is missing, load and init it ourselves
   (function ensurePixel() {
     var go = function () {
+      if (!PIXEL) return;
       try {
         if (!window.fbq) {
           !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s); }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
@@ -414,10 +548,23 @@
     set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   };
   var uid = function () { return 'mh' + Date.now().toString(36) + Math.random().toString(36).slice(2, 9); };
-  var cookie = function (n) { var m = document.cookie.match('(?:^|; )' + n + '=([^;]*)'); return m ? decodeURIComponent(m[1]) : ''; };
+  var cookie = function (n) { try { var m = document.cookie.match('(?:^|; )' + n + '=([^;]*)'); return m ? decodeURIComponent(m[1]) : ''; } catch (e) { return ''; } };
   var vib = function (p) { try { navigator.vibrate && navigator.vibrate(p); } catch (e) {} };
-  var track = function (ev, params, eventID) { try { if (window.fbq) fbq('trackSingle', PIXEL, ev, params || {}, eventID ? { eventID: eventID } : undefined); } catch (e) {} };
+  var track = function (ev, params, eventID) { try { if (!window.fbq) return; if (PIXEL) fbq('trackSingle', PIXEL, ev, params || {}, eventID ? { eventID: eventID } : undefined); else fbq('track', ev, params || {}, eventID ? { eventID: eventID } : undefined); } catch (e) {} };
   var gtagEv = function (ev, p) { try { if (window.gtag) gtag('event', ev, p); } catch (e) {} };
+  // 19 Nov 2026: every checkout step also goes to our own server (POST /t → D1). mahekh.in also keeps the GA4 events (G-W2TG8R79DY).
+  var VID = (function () { try { var v = localStorage.getItem('mh_vid'); if (!v) { v = 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); localStorage.setItem('mh_vid', v); } return v; } catch (e) { return ''; } })();
+  var PVID = 'pv' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  function beacon(ev, p) {
+    try {
+      if (!API) return;
+      var a = store.get('mh_attr') || {};
+      var d = { ev: ev, vid: VID, sid: (p && p.sid) || state.eid || PVID, mode: state.mode, variant: state.variant ? String(state.variant.id) : '', filled: p ? p.mhc_filled : null, msg: p ? p.mhc_msg : null, src: a.utm_source || (a.fbclid ? 'fb' : a.gclid ? 'google' : 'direct'), camp: a.utm_campaign || '', content: a.utm_content || '', test: (DEMO || TEST_KEY) ? 1 : 0 };
+      var body = JSON.stringify(d);
+      if (navigator.sendBeacon && navigator.sendBeacon(API + '/t', body)) return;
+      fetch(API + '/t', { method: 'POST', body: body, keepalive: true, mode: 'no-cors' }).catch(function () {});
+    } catch (e) {}
+  }
   var digits = function (s) { return String(s || '').replace(/\D/g, ''); };
 
   // attribution (same note keys Fastrr used)
@@ -429,6 +576,20 @@
       keys.forEach(function (k) { if (qs.get(k)) a[k] = qs.get(k); });
       store.set('mh_attr', a);
     } else if (!store.get('mh_attr')) store.set('mh_attr', { landing_page_url: location.href, ts: Date.now() });
+  })();
+
+  // 19 Nov 2026: product page view + taps on Call / WhatsApp buttons (other ways people order)
+  beacon('mhc_pv', { sid: PVID });
+  (function trackTaps() {
+    var done = {};
+    document.addEventListener('click', function (e) {
+      try {
+        var el = e.target && e.target.closest && e.target.closest('a[href]'); if (!el) return;
+        var h = el.getAttribute('href') || '';
+        var ev = /^tel:/i.test(h) ? 'mhc_click_call' : /wa\.me|whatsapp/i.test(h) ? (el.classList.contains('whatsapp-order-btn') || el.classList.contains('adivasi-wa-order-btn') ? 'mhc_click_wa_order' : 'mhc_click_wa') : '';
+        if (ev && !done[ev]) { done[ev] = 1; beacon(ev, { sid: PVID }); }
+      } catch (x) {}
+    }, true);
   })();
 
   // ---------- variant + prices ----------
@@ -449,10 +610,13 @@
     $('[data-mhc-amt="prepaid"]').textContent = rupee(prepaidPrice(price()));
     $('[data-mhc-sum="mrp"]').textContent = rupee(price());
     $('[data-mhc-sum="total"]').textContent = rupee(payable());
-    $('[data-mhc-sum-offrow]').hidden = state.mode !== 'prepaid';
+    $('[data-mhc-sum-offrow]').hidden = state.mode !== 'prepaid' || !D.off;
     $('[data-mhc-email]').hidden = state.mode !== 'prepaid';
     $('.mhc-submit').classList.toggle('is-pre', state.mode === 'prepaid');
-    $('[data-mhc-cta]').textContent = state.mode === 'prepaid' ? 'PAY ' + rupee(payable()) + ' SECURELY →' : 'CONFIRM ORDER · ' + rupee(payable()) + ' COD';
+    $('[data-mhc-cta]').textContent = state.mode === 'prepaid' ? 'PAY ' + rupee(payable()) + ' SECURELY →' : 'COMPLETE ORDER - ' + rupee(payable());
+    var tt = $('[data-mhc-title]'); if (tt) tt.textContent = state.mode === 'prepaid' ? 'PAY ONLINE' : 'CASH ON DELIVERY';
+    var lv = $('[data-mhc-li-var]'); if (lv) lv.textContent = String(state.variant.title).replace(/^[^0-9A-Za-z\u0900-\u097F]+/, '');
+    var lp = $('[data-mhc-li-price]'); if (lp) lp.textContent = rupee(price());
   }
   function syncPageButtons() {
     var v = variantById(pageVariantId());
@@ -460,18 +624,18 @@
     if (p) p.textContent = rupee(prepaidPrice(v.price));
     if (m) m.textContent = rupee(v.price);
   }
-  document.addEventListener('change', function (e) { if (e.target && e.target.closest && e.target.closest('variant-selects, variant-radios, .product-form__input')) setTimeout(syncPageButtons, 60); });
+  document.addEventListener('change', function (e) { if (e.target && e.target.closest && (e.target.closest('variant-selects, variant-radios, .product-form__input') || e.target.name === 'id')) setTimeout(syncPageButtons, 60); }); // Ayush Adivasi (Trade 16): the id input changes ~0.5 s after the size click and fires its own change event
   syncPageButtons(); setTimeout(syncPageButtons, 400);
 
   // ---------- sheet sizing: always fits the visible screen, also with the keyboard open ----------
-  var GAP = 10;
+  var GAP = 13; // card sits 13 px from the top and bottom of the screen
   function fit() {
     if (ov.hidden) return;
     if (window.innerWidth >= 750) { sheet.style.top = sheet.style.height = sheet.style.bottom = ''; sheet.classList.remove('kb'); return; }
     var vv = window.visualViewport;
     var h = vv ? vv.height : window.innerHeight, top = vv ? vv.offsetTop : 0;
     sheet.style.top = (top + GAP) + 'px';
-    sheet.style.height = Math.max(h - GAP, 320) + 'px';
+    sheet.style.height = Math.max(h - GAP * 2, 320) + 'px';
     sheet.style.bottom = 'auto';
     sheet.classList.toggle('kb', h < window.innerHeight - 140);
   }
@@ -494,10 +658,13 @@
     try { history.pushState({ mhc: 1 }, ''); pushed = true; } catch (e) {}
     vib(12);
     state.eid = uid();
+    trkStart();
+    step('mhc_open', { mhc_filled: filledCount() });
     track('InitiateCheckout', { value: payable() / 100, currency: 'INR', content_ids: [String(state.variant.id)], content_type: 'product', num_items: 1 }, 'ic_' + state.eid);
     gtagEv('begin_checkout', { currency: 'INR', value: payable() / 100, items: [{ item_id: String(state.variant.id), item_name: D.product, item_variant: state.variant.title, price: price() / 100, quantity: 1 }] });
   }
   function hide() {
+    exitAt('mhc_exit_', 'exited');
     ov.classList.remove('is-open');
     sheet.style.transform = '';
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
@@ -515,8 +682,8 @@
   root.addEventListener('click', function (e) { var b = e.target.closest('[data-mhc-open]'); if (b && !b.disabled) open(b.dataset.mhcOpen); });
   ov.addEventListener('click', function (e) {
     if (e.target === ov || e.target.closest('[data-mhc-close]')) return close();
-    var c = e.target.closest('.mhc-chip'); if (c && !c.disabled) { state.variant = variantById(c.dataset.mhcVariant); render(); vib(8); return; }
-    var p = e.target.closest('.mhc-pay__opt'); if (p) { state.mode = p.dataset.mhcMode; render(); vib(8); }
+    var c = e.target.closest('.mhc-chip'); if (c && !c.disabled) { var v0 = state.variant; state.variant = variantById(c.dataset.mhcVariant); render(); vib(8); if (state.variant !== v0) step('mhc_pack_change'); return; }
+    var p = e.target.closest('.mhc-pay__opt'); if (p) { var m0 = state.mode; state.mode = p.dataset.mhcMode; render(); vib(8); if (state.mode !== m0) step(state.mode === 'prepaid' ? 'mhc_mode_online' : 'mhc_mode_cod'); }
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !ov.hidden) close(); });
 
@@ -530,7 +697,7 @@
 
   // ---------- form ----------
   var F = { name: $('#mhc-name'), phone: $('#mhc-phone'), pincode: $('#mhc-pin'), city: $('#mhc-city'), state: sel, address: $('#mhc-address'), landmark: $('#mhc-landmark'), email: $('#mhc-email') };
-  var ORDER = ['name', 'phone', 'pincode', 'city', 'state', 'address', 'landmark', 'email'];
+  var ORDER = ['name', 'phone', 'address', 'landmark', 'state', 'city', 'pincode', 'email'];
   function fmtPhone(d) { return d.length > 5 ? d.slice(0, 5) + ' ' + d.slice(5) : d; }
   function restore() {
     var s = store.get('mh_ck_addr');
@@ -540,13 +707,15 @@
   }
   var saveT = null;
   function save() { clearTimeout(saveT); saveT = setTimeout(function () { var s = {}; Object.keys(F).forEach(function (k) { s[k] = k === 'phone' ? digits(F[k].value) : F[k].value.trim(); }); store.set('mh_ck_addr', s); }, 300); }
-  var MIN_ADDR = 20;
+  var MIN_ADDR = Number(D.minAddr) || 20;
+  var MIN_LM = Number(D.minLandmark) || 5;
   function markValid() {
     F.phone.closest('.mhc-f').classList.toggle('is-valid', /^[6-9]\d{9}$/.test(digits(F.phone.value)));
     F.pincode.closest('.mhc-f').classList.toggle('is-valid', /^[1-9]\d{5}$/.test(F.pincode.value));
     ['address', 'landmark'].forEach(function (k) {
+      var MIN = k === 'landmark' ? MIN_LM : MIN_ADDR;
       var n = F[k].value.trim().length, c = $('[data-count="' + k + '"]');
-      if (c) { c.textContent = n >= MIN_ADDR ? '✓ ' + n + ' letters' : n + '/' + MIN_ADDR; c.classList.toggle('is-ok', n >= MIN_ADDR); }
+      if (c) { c.textContent = n >= MIN ? '✓ ' + n + ' letters' : n + '/' + MIN; c.classList.toggle('is-ok', n >= MIN); }
     });
   }
   F.address.addEventListener('input', markValid);
@@ -557,7 +726,7 @@
     if (d.length > 10 && (d.indexOf('91') === 0 || d.indexOf('0') === 0)) d = d.slice(-10);
     F.phone.value = fmtPhone(d.slice(0, 10));
     markValid();
-    if (d.length === 10 && /^[6-9]/.test(d) && document.activeElement === F.phone) setTimeout(function () { if (!F.pincode.value) F.pincode.focus(); }, 120);
+    if (d.length === 10 && /^[6-9]/.test(d) && document.activeElement === F.phone) setTimeout(function () { if (!F.address.value) F.address.focus(); }, 120);
   });
   sel.addEventListener('change', function () { sel.closest('.mhc-f').classList.toggle('has-val', !!sel.value); clearBad(sel); save(); });
 
@@ -573,7 +742,7 @@
     if (!/^[1-9]\d{5}$/.test(pin)) return;
     var guess = PFX3[pin.slice(0, 3)] || PFX2[pin.slice(0, 2)];
     if (guess) { sel.value = guess; sel.closest('.mhc-f').classList.add('has-val'); clearBad(sel); }
-    if (document.activeElement === F.pincode) setTimeout(function () { (F.city.value ? F.address : F.city).focus(); }, 150);
+    if (document.activeElement === F.pincode) setTimeout(function () { if (state.mode === 'prepaid') F.email.focus(); else F.pincode.blur(); }, 150);
     var my = ++pinSeq, ctl = window.AbortController ? new AbortController() : null;
     var t = setTimeout(function () { ctl && ctl.abort(); }, 7000);
     fetch('https://api.postalpincode.in/pincode/' + pin, ctl ? { signal: ctl.signal } : {})
@@ -622,7 +791,7 @@
     chk(F.city, F.city.value.trim().length >= 2);
     chk(sel, !!sel.value);
     chk(F.address, F.address.value.trim().length >= MIN_ADDR);
-    chk(F.landmark, F.landmark.value.trim().length >= MIN_ADDR);
+    chk(F.landmark, F.landmark.value.trim().length >= MIN_LM);
     if (state.mode === 'prepaid' && F.email.value && !/^\S+@\S+\.\S+$/.test(F.email.value)) chk(F.email, false);
     if (first) {
       var f = first.closest('.mhc-f'), r = f.getBoundingClientRect(), b = body.getBoundingClientRect();
@@ -633,6 +802,46 @@
     return ok;
   }
   function msg(t) { var m = $('.mhc-msg'); m.textContent = t || ''; m.hidden = !t; }
+
+  // ---------- step tracking (GA4 only, once per popup opening; never changes what the customer sees) ----------
+  var REQ = ['name', 'phone', 'pincode', 'city', 'state', 'address', 'landmark'];
+  var OKF = { // same rules as validate()
+    name: function () { return /[A-Za-zऀ-ॿ]{2,}/.test(F.name.value) && F.name.value.trim().length >= 3; },
+    phone: function () { return /^[6-9]\d{9}$/.test(digits(F.phone.value)); },
+    pincode: function () { return /^[1-9]\d{5}$/.test(F.pincode.value); },
+    city: function () { return F.city.value.trim().length >= 2; },
+    state: function () { return !!sel.value; },
+    address: function () { return F.address.value.trim().length >= MIN_ADDR; },
+    landmark: function () { return F.landmark.value.trim().length >= MIN_LM; }
+  };
+  function okf(k) { try { return OKF[k](); } catch (e) { return false; } }
+  function step(ev, p) {
+    try {
+      if (!state.trk || state.trk[ev]) return;
+      state.trk[ev] = 1;
+      gtagEv(ev, Object.assign({ mhc_mode: state.mode, mhc_variant: state.variant ? String(state.variant.id) : '' }, p || {}));
+      beacon(ev, p);
+    } catch (e) {}
+  }
+  function firstMissing() { for (var i = 0; i < REQ.length; i++) if (!okf(REQ[i])) return REQ[i]; return 'ready'; }
+  function filledCount() { return REQ.filter(okf).length; }
+  function trkStart() {
+    state.trk = {}; state.done = false; state.exited = false; state.away = false;
+    var pre = REQ.filter(okf);
+    pre.forEach(function (k) { state.trk['mhc_f_' + k] = 1; }); // saved details: not counted as typed
+    if (pre.length) step('mhc_prefilled', { mhc_filled: pre.length });
+  }
+  function trkFields() { if (!state.trk || state.done) return; REQ.forEach(function (k) { if (okf(k)) step('mhc_f_' + k); }); }
+  function exitAt(prefix, flag) {
+    if (!state.trk || state.done || state[flag]) return;
+    state[flag] = true;
+    step(prefix + firstMissing(), { mhc_filled: filledCount() });
+  }
+  form.addEventListener('input', trkFields, true);
+  form.addEventListener('change', trkFields, true);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden' && !ov.hidden && !state.busy) exitAt('mhc_away_', 'away');
+  });
 
   // ---------- sound + confetti ----------
   function primeAudio() { try { var C = window.AudioContext || window.webkitAudioContext; if (!C) return; state.audio = state.audio || new C(); state.audio.resume && state.audio.resume(); } catch (e) {} }
@@ -664,7 +873,14 @@
     }
   }
 
+  // ---------- 16 Nov 2026: blur + loading bar while the order is placed ----------
+  var load = $('.mhc-load'), loadT = 0;
+  function loadStart() { if (!load) return; loadT = Date.now(); var t = $('[data-mhc-load-t]'); if (t) t.textContent = state.mode === 'prepaid' ? 'Opening secure payment…' : 'Confirming your order…'; load.classList.remove('is-done'); load.hidden = false; void load.offsetWidth; sheet.classList.add('is-loading'); ov.classList.add('is-loading'); }
+  function loadStop() { if (!load) return; sheet.classList.remove('is-loading'); ov.classList.remove('is-loading'); load.classList.remove('is-done'); load.hidden = true; }
+  function loadFinish() { if (!load || load.hidden) return 260; var t = $('[data-mhc-load-t]'), wait = Math.max(0, 1800 - (Date.now() - loadT)); setTimeout(function () { load.classList.add('is-done'); if (t) t.textContent = 'Order confirmed ✓'; }, wait); return wait + 800; }
   function success(o) {
+    state.done = true;
+    step('mhc_order_ok', { mhc_msg: String(o.order || '') });
     var btn = $('.mhc-submit');
     btn.classList.add('is-done');
     setTimeout(function () {
@@ -672,24 +888,24 @@
       btn.classList.remove('is-busy', 'is-done');
       if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
       $('[data-mhc-okno]').innerHTML = 'Order number <b>' + (o.order || '') + '</b>';
-      $('[data-mhc-okprod]').textContent = (o.variantTitle || state.variant.title);
+      $('[data-mhc-okprod]').textContent = String(o.variantTitle || state.variant.title).replace(/^[^0-9A-Za-z\u0900-\u097F]+/, '');
       $('[data-mhc-okpay]').textContent = o.mode === 'prepaid' ? 'Paid online · ' + rupee(o.total) : 'Cash on Delivery · ' + rupee(o.total);
       $('[data-mhc-okaddr]').textContent = [F.city.value.trim(), F.pincode.value].filter(Boolean).join(' - ') || '—';
       $('[data-mhc-oknote]').textContent = o.mode === 'prepaid'
         ? 'Payment received. We will pack and ship your order soon.'
         : 'Please keep ' + rupee(o.total) + ' ready at delivery. Our team may call you on +91 ' + fmtPhone(digits(F.phone.value)) + ' to confirm.';
-      showView('ok'); confetti(); chime(); vib([30, 50, 30]);
+      loadStop(); showView('ok'); confetti(); chime(); vib([30, 50, 30]);
       // after the PayU redirect the browser blocks sound until the first touch: play the chime on that touch
       if (state.audio && state.audio.state !== 'running') {
         var once = function () { ov.removeEventListener('pointerdown', once, true); primeAudio(); setTimeout(chime, 60); };
         ov.addEventListener('pointerdown', once, true);
       }
-    }, 260);
+    }, loadFinish());
     var params = { value: o.total / 100, currency: 'INR', content_ids: [String(o.variantId || state.variant.id)], content_type: 'product', num_items: 1, order_id: o.order };
     if (!o.demo && !o.test) {
       track('Purchase', params, o.eventId);
       gtagEv('purchase', { transaction_id: o.order, value: o.total / 100, currency: 'INR', items: [{ item_id: String(o.variantId || state.variant.id), item_name: D.product, price: o.total / 100, quantity: 1 }] });
-      gtagEv('conversion', { send_to: 'AW-18555004443/CmsoCNH23bEdEJvM249F', value: o.total / 100, currency: 'INR', transaction_id: o.order });
+      if (D.gads) gtagEv('conversion', { send_to: D.gads, value: o.total / 100, currency: 'INR', transaction_id: o.order });
     }
   }
 
@@ -697,13 +913,20 @@
     e.preventDefault();
     if (state.busy) return;
     msg('');
-    if (!validate()) return;
+    step('mhc_submit_tap', { mhc_filled: filledCount() });
+    if (!validate()) {
+      REQ.forEach(function (k) { if (!okf(k)) step('mhc_err_' + k); });
+      if (state.mode === 'prepaid' && F.email.value && !/^\S+@\S+\.\S+$/.test(F.email.value)) step('mhc_err_email');
+      return;
+    }
     if (form.company_website && form.company_website.value) return;
+    step('mhc_sent', { mhc_filled: filledCount() });
     primeAudio();
     state.busy = true;
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
     var btn = $('.mhc-submit');
     btn.classList.add('is-busy');
+    loadStart();
     $('[data-mhc-cta]').innerHTML = (state.mode === 'prepaid' ? 'Opening payment' : 'Placing your order') + ' <span class="mhc-dots"><i></i><i></i><i></i></span>';
     vib(15);
     track('AddPaymentInfo', { value: payable() / 100, currency: 'INR', content_ids: [String(state.variant.id)], content_type: 'product' }, 'api_' + state.eid);
@@ -739,15 +962,20 @@
       })
       .catch(function (err) {
         clearTimeout(tm);
+        step(err && err.name === 'AbortError' ? 'mhc_err_network' : 'mhc_err_server', { mhc_msg: String((err && err.message) || '').slice(0, 90) });
         state.busy = false;
         btn.classList.remove('is-busy');
+        loadStop();
         render();
-        msg(err && err.name === 'AbortError' ? 'Network is slow. Please check your internet and tap again.' : (err && err.message ? err.message : 'Network problem. Please try again.'));
+        msg(err && err.name === 'AbortError' ? 'Network is slow. Please check your internet and tap again.' : (err && err.name === 'TypeError') ? 'Network problem. Please check your internet and tap again.' : (err && err.message ? err.message : 'Network problem. Please try again.'));
         vib([20, 40, 20]);
       });
   });
 
   function goPayU(p) {
+    loadStop();
+    step('mhc_payu_go');
+    state.done = true; // leaving for PayU is not an exit
     showView('wait');
     var f = document.createElement('form');
     f.method = 'POST'; f.action = p.action; f.style.display = 'none';
@@ -769,9 +997,12 @@
         restore(); ov.hidden = false; fit(); void ov.offsetHeight; ov.classList.add('is-open'); document.documentElement.style.overflow = 'hidden'; document.documentElement.classList.add('mhc-on');
         try { history.pushState({ mhc: 1 }, ''); pushed = true; } catch (e) {}
         primeAudio();
+        state.mode = 'prepaid'; state.eid = String(eid || '').replace(/^pur_/, '') || uid(); state.trk = {}; state.done = false;
+        step('mhc_payu_back_ok');
         success({ mode: 'prepaid', order: ord, total: total, eventId: eid, variantId: state.variant.id, test: isT });
       } else if (fail) {
         open('prepaid');
+        step('mhc_payu_back_fail');
         msg('Payment was not completed. Please try again, or choose Cash on Delivery.');
       }
     }, 300);

@@ -181,6 +181,7 @@
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) close(); });
       modal.querySelector('.mh-reels-modal__buy').addEventListener('click', () => {
         close();
+        if (window.MHC) { window.MHC.open('cod'); return; } // 19 Nov 2026: our own COD popup first (same as the sticky bar)
         // same path as the sticky bar: Fastrr Buy Now first, normal add-to-cart as fallback
         const sr = document.querySelector("form[action*='/cart/add'] .sr-headless-checkout");
         if (sr && !sr.disabled) sr.click();
