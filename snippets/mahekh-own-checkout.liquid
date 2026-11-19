@@ -555,11 +555,19 @@
   // 19 Nov 2026: every checkout step also goes to our own server (POST /t → D1). mahekh.in also keeps the GA4 events (G-W2TG8R79DY).
   var VID = (function () { try { var v = localStorage.getItem('mh_vid'); if (!v) { v = 'v' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); localStorage.setItem('mh_vid', v); } return v; } catch (e) { return ''; } })();
   var PVID = 'pv' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  // mahekh 19 Nov 2026: a real test order (name starts "TEST ORDER") marks the rest of this tab's steps as test too
+  function isTestName() {
+    try {
+      var el = document.getElementById('mhc-name');
+      if (el && /^\s*test order\b/i.test(el.value || '')) { sessionStorage.setItem('mh_tname', '1'); return true; }
+      return sessionStorage.getItem('mh_tname') === '1';
+    } catch (e) { return false; }
+  }
   function beacon(ev, p) {
     try {
       if (!API) return;
       var a = store.get('mh_attr') || {};
-      var d = { ev: ev, vid: VID, sid: (p && p.sid) || state.eid || PVID, mode: state.mode, variant: state.variant ? String(state.variant.id) : '', filled: p ? p.mhc_filled : null, msg: p ? p.mhc_msg : null, src: a.utm_source || (a.fbclid ? 'fb' : a.gclid ? 'google' : 'direct'), camp: a.utm_campaign || '', content: a.utm_content || '', test: (DEMO || TEST_KEY) ? 1 : 0 };
+      var d = { ev: ev, vid: VID, sid: (p && p.sid) || state.eid || PVID, mode: state.mode, variant: state.variant ? String(state.variant.id) : '', filled: p ? p.mhc_filled : null, msg: p ? p.mhc_msg : null, src: a.utm_source || (a.fbclid ? 'fb' : a.gclid ? 'google' : 'direct'), camp: a.utm_campaign || '', content: a.utm_content || '', test: (DEMO || TEST_KEY || isTestName()) ? 1 : 0 };
       var body = JSON.stringify(d);
       if (navigator.sendBeacon && navigator.sendBeacon(API + '/t', body)) return;
       fetch(API + '/t', { method: 'POST', body: body, keepalive: true, mode: 'no-cors' }).catch(function () {});
@@ -937,7 +945,7 @@
       name: F.name.value.trim(), phone: digits(F.phone.value), address: F.address.value.trim(), landmark: F.landmark.value.trim(),
       pincode: F.pincode.value, city: F.city.value.trim(), state: sel.value, email: F.email.value.trim(),
       attr: store.get('mh_attr') || {}, page_url: location.href, fbp: cookie('_fbp'), fbc: cookie('_fbc'), ua: navigator.userAgent,
-      test_key: TEST_KEY
+      test_key: TEST_KEY, vid: VID
     };
 
     if (DEMO) {
