@@ -927,7 +927,10 @@
       if (state.mode === 'prepaid' && F.email.value && !/^\S+@\S+\.\S+$/.test(F.email.value)) step('mhc_err_email');
       return;
     }
-    if (form.company_website && form.company_website.value) return;
+    // 20 Nov 2026: phone/Facebook autofill can fill this hidden anti-spam field. Never stop the order here (it used to return
+    // silently and a real buyer was lost on 19 Nov); the server only tags such an order `mh_hp`.
+    var hp = form.company_website && form.company_website.value ? 1 : 0;
+    if (hp) step('mhc_hp');
     step('mhc_sent', { mhc_filled: filledCount() });
     primeAudio();
     state.busy = true;
@@ -945,7 +948,7 @@
       name: F.name.value.trim(), phone: digits(F.phone.value), address: F.address.value.trim(), landmark: F.landmark.value.trim(),
       pincode: F.pincode.value, city: F.city.value.trim(), state: sel.value, email: F.email.value.trim(),
       attr: store.get('mh_attr') || {}, page_url: location.href, fbp: cookie('_fbp'), fbc: cookie('_fbc'), ua: navigator.userAgent,
-      test_key: TEST_KEY, vid: VID
+      test_key: TEST_KEY, vid: VID, hp: hp
     };
 
     if (DEMO) {
