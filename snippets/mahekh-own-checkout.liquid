@@ -16,6 +16,9 @@
   mhc_prefilled, mhc_f_<field> (field became valid), mhc_mode_cod/online, mhc_pack_change, mhc_submit_tap, mhc_err_<field>,
   mhc_err_server / mhc_err_network, mhc_payu_go, mhc_payu_back_ok / _fail, mhc_exit_<first missing field|ready> (closed),
   mhc_away_<first missing field|ready> (page hidden / app left while the popup was open).
+  Abandoned checkout (20 Nov 2026, owner request): once the phone number is valid, the typed details go to <worker>/ab
+  (4 s after the last change, on close, on leaving the page/app, before PayU). No visible change. The worker turns them into a
+  Shopify DRAFT order tagged `abandoned-checkout` if no order came for that phone within 30 minutes.
 {%- endcomment -%}
 {%- comment -%} ===== SETTINGS: change only these lines ===== {%- endcomment -%}
 {%- assign mhc_api = 'https://mahekh-checkout.ratnakar-auto-dm.workers.dev' -%}{%- comment -%} worker URL from deploy.mjs, e.g. https://brand-checkout.xxxx.workers.dev — empty = DEMO mode {%- endcomment -%}
@@ -672,6 +675,7 @@
     gtagEv('begin_checkout', { currency: 'INR', value: payable() / 100, items: [{ item_id: String(state.variant.id), item_name: D.product, item_variant: state.variant.title, price: price() / 100, quantity: 1 }] });
   }
   function hide() {
+    abSend('closed');
     exitAt('mhc_exit_', 'exited');
     ov.classList.remove('is-open');
     sheet.style.transform = '';
@@ -690,8 +694,8 @@
   root.addEventListener('click', function (e) { var b = e.target.closest('[data-mhc-open]'); if (b && !b.disabled) open(b.dataset.mhcOpen); });
   ov.addEventListener('click', function (e) {
     if (e.target === ov || e.target.closest('[data-mhc-close]')) return close();
-    var c = e.target.closest('.mhc-chip'); if (c && !c.disabled) { var v0 = state.variant; state.variant = variantById(c.dataset.mhcVariant); render(); vib(8); if (state.variant !== v0) step('mhc_pack_change'); return; }
-    var p = e.target.closest('.mhc-pay__opt'); if (p) { var m0 = state.mode; state.mode = p.dataset.mhcMode; render(); vib(8); if (state.mode !== m0) step(state.mode === 'prepaid' ? 'mhc_mode_online' : 'mhc_mode_cod'); }
+    var c = e.target.closest('.mhc-chip'); if (c && !c.disabled) { var v0 = state.variant; state.variant = variantById(c.dataset.mhcVariant); render(); vib(8); if (state.variant !== v0) { step('mhc_pack_change'); abSoon(); } return; }
+    var p = e.target.closest('.mhc-pay__opt'); if (p) { var m0 = state.mode; state.mode = p.dataset.mhcMode; render(); vib(8); if (state.mode !== m0) { step(state.mode === 'prepaid' ? 'mhc_mode_online' : 'mhc_mode_cod'); abSoon(); } }
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !ov.hidden) close(); });
 
@@ -836,6 +840,7 @@
   function trkStart() {
     state.trk = {}; state.done = false; state.exited = false; state.away = false;
     var pre = REQ.filter(okf);
+    state.prefilled = pre.indexOf('phone') >= 0; abN = 0; abLast = '';
     pre.forEach(function (k) { state.trk['mhc_f_' + k] = 1; }); // saved details: not counted as typed
     if (pre.length) step('mhc_prefilled', { mhc_filled: pre.length });
   }
@@ -848,8 +853,37 @@
   form.addEventListener('input', trkFields, true);
   form.addEventListener('change', trkFields, true);
   document.addEventListener('visibilitychange', function () {
-    if (document.visibilityState === 'hidden' && !ov.hidden && !state.busy) exitAt('mhc_away_', 'away');
+    if (document.visibilityState === 'hidden' && !ov.hidden && !state.busy) { abSend('away'); exitAt('mhc_away_', 'away'); }
   });
+
+  // ---------- 20 Nov 2026: abandoned checkout (owner: "कोई फॉर्म भरे और ऑर्डर ना करे तो उसका डिटेल्स हमारे पास आ जाए") ----------
+  // Once the phone number is valid, the typed details go to POST <worker>/ab (one row per popup opening): 4 s after the last change,
+  // when the popup is closed, when the page/app is left, and just before PayU. The worker makes a Shopify draft order
+  // (tag abandoned-checkout) only if no order came for that phone 30 minutes later. Never changes what the customer sees.
+  var abT = null, abN = 0, abLast = '';
+  function abSend(why) {
+    try {
+      clearTimeout(abT);
+      if (!API || !state.eid || (state.done && why !== 'payu') || abN >= 30) return;
+      var ph = digits(F.phone.value);
+      if (!/^[6-9]\d{9}$/.test(ph)) return;
+      var d = {
+        sid: state.eid, vid: VID, why: why, phone: ph, name: F.name.value.trim(), address: F.address.value.trim(), landmark: F.landmark.value.trim(),
+        pincode: F.pincode.value, city: F.city.value.trim(), state: sel.value, email: F.email.value.trim(), variant_id: state.variant ? state.variant.id : '',
+        mode: state.mode, filled: filledCount(), missing: firstMissing(), prefilled: state.prefilled ? 1 : 0, attr: store.get('mh_attr') || {},
+        page_url: location.href, test: (DEMO || TEST_KEY || isTestName()) ? 1 : 0
+      };
+      var key = [why === 'typing' ? '' : why, ph, d.name, d.address, d.landmark, d.pincode, d.city, d.state, d.email, d.variant_id, d.mode].join('|');
+      if (key === abLast) return; // nothing new since the last send
+      abLast = key; abN++;
+      var b = JSON.stringify(d);
+      if (navigator.sendBeacon && navigator.sendBeacon(API + '/ab', b)) return;
+      fetch(API + '/ab', { method: 'POST', body: b, keepalive: true, mode: 'no-cors' }).catch(function () {});
+    } catch (e) {}
+  }
+  function abSoon() { clearTimeout(abT); if (!state.done && !state.busy) abT = setTimeout(function () { abSend('typing'); }, 4000); }
+  form.addEventListener('input', abSoon, true);
+  form.addEventListener('change', abSoon, true);
 
   // ---------- sound + confetti ----------
   function primeAudio() { try { var C = window.AudioContext || window.webkitAudioContext; if (!C) return; state.audio = state.audio || new C(); state.audio.resume && state.audio.resume(); } catch (e) {} }
@@ -888,6 +922,7 @@
   function loadFinish() { if (!load || load.hidden) return 260; var t = $('[data-mhc-load-t]'), wait = Math.max(0, 1800 - (Date.now() - loadT)); setTimeout(function () { load.classList.add('is-done'); if (t) t.textContent = 'Order confirmed ✓'; }, wait); return wait + 800; }
   function success(o) {
     state.done = true;
+    clearTimeout(abT);
     step('mhc_order_ok', { mhc_msg: String(o.order || '') });
     var btn = $('.mhc-submit');
     btn.classList.add('is-done');
@@ -932,6 +967,7 @@
     var hp = form.company_website && form.company_website.value ? 1 : 0;
     if (hp) step('mhc_hp');
     step('mhc_sent', { mhc_filled: filledCount() });
+    clearTimeout(abT); // the order itself is on its way; a failed order is captured again when the buyer leaves
     primeAudio();
     state.busy = true;
     if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
@@ -986,6 +1022,7 @@
   function goPayU(p) {
     loadStop();
     step('mhc_payu_go');
+    abSend('payu'); // paid orders mark this row 'ordered' on the server; unpaid ones become an abandoned-checkout draft
     state.done = true; // leaving for PayU is not an exit
     showView('wait');
     var f = document.createElement('form');
