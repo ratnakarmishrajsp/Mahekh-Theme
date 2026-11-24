@@ -1,0 +1,129 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "variant_picker_VXpTRR": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "buy_buttons_YKNBFb": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true,
+            "show_cod_button": false
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "collapsible_tab_shipping": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Shipping & Delivery",
+            "icon": "truck",
+            "content": "<p>Free shipping and Cash on Delivery are available. Enter your pincode in the delivery checker above for the estimated delivery and COD availability. Pay online to receive the ₹100 prepaid saving shown beside the payment button.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_tab_kannauj": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "What you get",
+            "icon": "leaf",
+            "content": "<p>Pack of 1: one 12 ml bottle of Shukra Attar. Pack of 2: two 12 ml bottles. An alcohol-free rose attar with a natural fragrance, made in Kannauj.</p>",
+            "page": ""
+          }
+        },
+        "shukra_summary": {
+          "type": "custom_liquid",
+          "settings": {
+            "custom_liquid": "<div id=\"mh-shukra-buy\" style=\"scroll-margin-top:110px;margin:8px 0 16px\"><p style=\"margin:0 0 7px;color:#6a1d2b;font-size:15px;line-height:1.6\">Rose attar for your Friday · Shukravaar</p><p style=\"margin:0;color:#5f5349;font-size:14px\">12 ml bottle · Alcohol-free · Natural fragrance · Made in Kannauj</p></div><style>#MainProduct-{{ section.id }} .product__title h1{font-size:32px;line-height:1.25;letter-spacing:-.025em}#MainProduct-{{ section.id }} .product__conversion-urgency{display:none}#MainProduct-{{ section.id }} .product__trust-badges{display:none}#MainProduct-{{ section.id }} .price{margin:12px 0}#MainProduct-{{ section.id }} .product__title{margin-bottom:12px}@media(max-width:749px){#MainProduct-{{ section.id }} .product__title h1{font-size:27px;line-height:1.3}}</style>"
+          }
+        },
+        "whatsapp_shukra": {
+          "type": "whatsapp_button",
+          "settings": {
+            "phone_number": "919321868526",
+            "prefilled_text": "Hello Mahekh, I would like to know more about Shukra Attar (Rose, 12 ml). Please help me.",
+            "button_text": "Ask about Shukra Attar"
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "shukra_summary",
+        "variant_picker_VXpTRR",
+        "price",
+        "buy_buttons_YKNBFb",
+        "whatsapp_shukra",
+        "description",
+        "collapsible_tab_shipping",
+        "collapsible_tab_kannauj"
+      ],
+      "settings": {
+        "enable_mobile_sticky_buy": true,
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-2",
+        "media_size": "medium",
+        "constrain_to_viewport": false,
+        "media_fit": "contain",
+        "gallery_layout": "thumbnail_slider",
+        "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 24,
+        "padding_bottom": 24,
+        "enable_exit_popup": false,
+        "exit_popup_discount_code": "MAHEKH100",
+        "exit_popup_discount_amount": "₹100"
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "Explore more Mahekh attars",
+        "heading_size": "h2",
+        "products_to_show": 5,
+        "columns_desktop": 5,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-1",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 36,
+        "padding_bottom": 44
+      }
+    }
+  },
+  "order": [
+    "main",
+    "related-products"
+  ]
+}
